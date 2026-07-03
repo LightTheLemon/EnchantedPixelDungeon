@@ -2,10 +2,53 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 public class test {
 
+    static float numberUsed = 1; //declaring a variable does not need to be in the method
+
+
+    class ClassName{String variable = "test";}
+
+    public static void main(String[] args) { //main method
+
+        String variable = "test";
+
+        System.out.println("Variable length: " + variable.length());
+
+        /*
+        boolean[] myArray = {true, true, false}; //simple
+
+        System.out.println(myArray.length);
+        */
+
+        while (numberUsed < 2) {
+
+            System.out.println("Counter: " + numberUsed); numberUsed = numberUsed + 1; //change value to increment 1 until condition is met
+
+            //System.out.println("Mwahahaha: " + numberUsed); numberUsed = numberUsed - 0.5f; //change value to increment 1 until condition is met
+
+            //myMethod();
+
+            System.out.println("Method: " + myMethod());
+
+            System.out.println("Method + 1: " + (myMethod() + 1));
+
+        }
+
+
+    }
+
+    public static int myMethod(){
+
+        boolean[] myArray = {true, true, false};
+
+        //System.out.println(myArray.length);
+
+        return 0;
+    }
+
 
 
     // hiiiiiii
-
+    /*
 
     public static void main(String[] args) {
 
@@ -26,4 +69,5 @@ public class test {
         }
 
     }
+    */
 }
