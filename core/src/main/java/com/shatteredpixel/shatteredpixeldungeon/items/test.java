@@ -1,5 +1,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
+
 public class test {
 
     static float numberUsed = 1; //declaring a variable does not need to be in the method
@@ -29,7 +30,9 @@ public class test {
         boolean[] myArray = {true, true, false}; //simple
 
         System.out.println(myArray.length);
+
         */
+
 
         while (numberUsed < 2) {
 
@@ -82,4 +85,7 @@ public class test {
 
     }
     */
+
 }
+
+
