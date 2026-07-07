@@ -12,9 +12,9 @@ allprojects {
 
     ext {
         appName = 'Enchanted Pixel Dungeon'
-        appPackageName = 'com.shatteredpixel.shatteredpixeldungeon'
+        appPackageName = 'com.enchanted.enchantedpixeldungeon'
 
-        appVersionCode = 001
+        appVersionCode = 1000
         appVersionName = '0.0.1'
 
         appJavaCompatibility = JavaVersion.VERSION_11

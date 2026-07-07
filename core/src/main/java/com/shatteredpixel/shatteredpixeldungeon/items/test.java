@@ -5,9 +5,21 @@ public class test {
     static float numberUsed = 1; //declaring a variable does not need to be in the method
 
 
-    class ClassName{String variable = "test";}
+    static class ClassName{
+        String stringObject = "hello everyone";
+    }
 
     public static void main(String[] args) { //main method
+
+        ClassName nameObject = new ClassName();
+
+        System.out.println(nameObject.stringObject.length());
+        // prints "14"
+
+        System.out.println(nameObject.stringObject);
+        //prints "hello everyone"
+        // what this is doing is getting the "stringObject" variable inside the "nameObject" object i created above
+
 
         String variable = "test";
 
