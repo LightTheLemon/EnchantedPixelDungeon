@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -85,12 +87,13 @@ public class Stylus extends Item {
 		return true;
 	}
 	
-	private void inscribe( Armor armor ) {
+	private void inscribe( Item enchantable) {
 
-		if (!armor.cursedKnown){
+
+		if (!enchantable.cursedKnown){
 			GLog.w( Messages.get(this, "identify"));
 			return;
-		} else if (armor.cursed || armor.hasCurseGlyph()){
+		} else if (enchantable.cursed || ( enchantable instanceof Armor && ((Armor) enchantable).hasCurseGlyph()) || ( enchantable instanceof Weapon && ((Weapon) enchantable).hasCurseEnchant())){
 			GLog.w( Messages.get(this, "cursed"));
 			return;
 		}
@@ -100,11 +103,23 @@ public class Stylus extends Item {
 
 		GLog.w( Messages.get(this, "inscribed"));
 
-		armor.inscribe();
+		if(Math.random() >= .5f) {
+			if (enchantable instanceof Armor)
+				((Armor) enchantable).inscribe();
+
+			if (enchantable instanceof Weapon)
+				((Weapon) enchantable).enchant();
+		} else{
+			if (enchantable instanceof Armor)
+				((Armor) enchantable).inscribe(Armor.Glyph.randomCurse(((Armor) enchantable).glyph.getClass()));
+			if (enchantable instanceof Weapon)
+				((Weapon) enchantable).enchant(Weapon.Enchantment.randomCurse(((Weapon) enchantable).enchantment.getClass()));
+		}
+
 
 		curUser.sprite.operate(curUser.pos);
 		curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
-		Enchanting.show(curUser, armor);
+		Enchanting.show(curUser, enchantable);
 		Sample.INSTANCE.play(Assets.Sounds.BURNING);
 		
 		curUser.spend(TIME_TO_INSCRIBE);
@@ -130,13 +145,13 @@ public class Stylus extends Item {
 
 		@Override
 		public boolean itemSelectable(Item item) {
-			return item instanceof Armor;
+			return ScrollOfEnchantment.enchantable(item);
 		}
 
 		@Override
 		public void onSelect( Item item ) {
 			if (item != null) {
-				Stylus.this.inscribe( (Armor)item );
+				Stylus.this.inscribe( item );
 			}
 		}
 	};
