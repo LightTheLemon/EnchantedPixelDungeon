@@ -26,38 +26,8 @@ public class test {
 
         System.out.println("Variable length: " + variable.length());
 
-        /*
-        boolean[] myArray = {true, true, false}; //simple
-
-        System.out.println(myArray.length);
-
-        */
 
 
-        while (numberUsed < 2) {
-
-            System.out.println("Counter: " + numberUsed); numberUsed = numberUsed + 1; //change value to increment 1 until condition is met
-
-            //System.out.println("Mwahahaha: " + numberUsed); numberUsed = numberUsed - 0.5f; //change value to increment 1 until condition is met
-
-            //myMethod();
-
-            System.out.println("Method: " + myMethod());
-
-            System.out.println("Method + 1: " + (myMethod() + 1));
-
-        }
-
-
-    }
-
-    public static int myMethod(){
-
-        boolean[] myArray = {true, true, false};
-
-        //System.out.println(myArray.length);
-
-        return 0;
     }
 
 

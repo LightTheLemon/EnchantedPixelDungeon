@@ -560,7 +560,7 @@ public class Dungeon {
 
 		int floorThisSet = (depth % 5);
 		//chance is floors left / scrolls left
-		return Random.Int(5 - floorThisSet) < asLeftThisSet;
+		return Random.Int(5 - floorThisSet) < asLeftThisSet * 2; //modified, added * 2
 	}
 
 	public static boolean enchStoneNeeded(){
@@ -570,7 +570,7 @@ public class Dungeon {
 			if (region > 1){
 				int floorsVisited = depth - 5;
 				if (floorsVisited > 4) floorsVisited--; //skip floor 10
-				return Random.Int(9-floorsVisited) == 0; //1/8 chance each floor
+				return Random.Int(4-floorsVisited) == 0; //modified from 9-floorsVisited
 			}
 		}
 		return false;
