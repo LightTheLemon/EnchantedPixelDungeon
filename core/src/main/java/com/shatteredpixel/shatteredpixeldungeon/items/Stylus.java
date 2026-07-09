@@ -89,10 +89,11 @@ public class Stylus extends Item {
 	
 	private void inscribe( Item enchantable) {
 
+
 		if (!enchantable.cursedKnown){
 			GLog.w( Messages.get(this, "identify"));
 			return;
-		} else if (enchantable.cursed || ( enchantable instanceof Armor && ((Armor)enchantable).hasCurseGlyph()) || (enchantable instanceof Weapon && ((Weapon)enchantable).hasCurseEnchant())  ){
+		} else if (enchantable.cursed || ( enchantable instanceof Armor && ((Armor) enchantable).hasCurseGlyph()) || ( enchantable instanceof Weapon && ((Weapon) enchantable).hasCurseEnchant())){
 			GLog.w( Messages.get(this, "cursed"));
 			return;
 		}
@@ -102,29 +103,26 @@ public class Stylus extends Item {
 
 		GLog.w( Messages.get(this, "inscribed"));
 
-		if (Math.random() >= 0.5f) {
+		if(Math.random() >= .5f) {
 			if (enchantable instanceof Armor)
-				((Armor)enchantable).inscribe();
-			if (enchantable instanceof Weapon)
-				((Weapon)enchantable).enchant();
-			curUser.spend(TIME_TO_INSCRIBE);
-			Sample.INSTANCE.play(Assets.Sounds.BURNING);
+				((Armor) enchantable).inscribe();
 
-		} else {
-			//
+			if (enchantable instanceof Weapon)
+				((Weapon) enchantable).enchant();
+		} else{
 			if (enchantable instanceof Armor)
-				((Armor)enchantable).inscribe(Armor.Glyph.randomCurse(((Armor)enchantable).glyph.getClass()));
+				((Armor) enchantable).inscribe(Armor.Glyph.randomCurse(((Armor) enchantable).glyph.getClass()));
 			if (enchantable instanceof Weapon)
-				((Weapon)enchantable).enchant(Weapon.Enchantment.randomCurse(((Weapon)enchantable).enchantment.getClass()));
-			curUser.spend(TIME_TO_INSCRIBE * 5);
-			Sample.INSTANCE.play(Assets.Sounds.GHOST);
-
+				((Weapon) enchantable).enchant(Weapon.Enchantment.randomCurse(((Weapon) enchantable).enchantment.getClass()));
 		}
 
-		curUser.sprite.operate(curUser.pos);
-		curUser.sprite.centerEmitter().start(PurpleParticle.MISSILE, 0.05f, 10); //missile
-		Enchanting.show(curUser, enchantable);
 
+		curUser.sprite.operate(curUser.pos);
+		curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
+		Enchanting.show(curUser, enchantable);
+		Sample.INSTANCE.play(Assets.Sounds.BURNING);
+		
+		curUser.spend(TIME_TO_INSCRIBE);
 		curUser.busy();
 	}
 	
