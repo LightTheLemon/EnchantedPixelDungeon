@@ -109,8 +109,10 @@ public class Stylus extends Item {
 			if (enchantable instanceof Weapon)
 				((Weapon) enchantable).enchant();
 
-			Sample.INSTANCE.play(Assets.Sounds.BURNING);
+			curUser.sprite.operate(curUser.pos);
 			curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
+			Enchanting.show(curUser, enchantable);
+			Sample.INSTANCE.play(Assets.Sounds.BURNING);
 			curUser.spend(TIME_TO_INSCRIBE);
 
 		} else{
@@ -119,17 +121,19 @@ public class Stylus extends Item {
 			if (enchantable instanceof Weapon)
 				((Weapon) enchantable).enchant(Weapon.Enchantment.randomCurse(((Weapon) enchantable).enchantment.getClass()));
 
-			Sample.INSTANCE.play(Assets.Sounds.CURSED);
+			curUser.sprite.operate(curUser.pos);
 			curUser.sprite.centerEmitter().start(ShadowParticle.CURSE, 0.05f, 10);
+			Enchanting.show(curUser, enchantable);
+			Sample.INSTANCE.play(Assets.Sounds.CURSED);
 			curUser.spend(TIME_TO_INSCRIBE * 2);
 		}
 
-		curUser.sprite.operate(curUser.pos); //different order
+		 //different order
 		// 	curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
-		Enchanting.show(curUser, enchantable); //different order
+		// Enchanting.show(curUser, enchantable); //different order
 		// 	Sample.INSTANCE.play(Assets.Sounds.BURNING);
 		//curUser.spend(TIME_TO_INSCRIBE);
-		curUser.busy(); //different order
+		curUser.busy();
 	}
 	
 	@Override
