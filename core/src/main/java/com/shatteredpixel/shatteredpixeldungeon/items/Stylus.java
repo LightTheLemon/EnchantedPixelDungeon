@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
@@ -100,30 +101,36 @@ public class Stylus extends Item {
 		
 		detach(curUser.belongings.backpack);
 		Catalog.countUse(getClass());
-
 		GLog.w( Messages.get(this, "inscribed"));
 
 		if(Math.random() >= .5f) {
 			if (enchantable instanceof Armor)
 				((Armor) enchantable).inscribe();
-
 			if (enchantable instanceof Weapon)
 				((Weapon) enchantable).enchant();
+
+			Sample.INSTANCE.play(Assets.Sounds.BURNING);
+			curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
+			curUser.spend(TIME_TO_INSCRIBE);
+
 		} else{
 			if (enchantable instanceof Armor)
 				((Armor) enchantable).inscribe(Armor.Glyph.randomCurse(((Armor) enchantable).glyph.getClass()));
 			if (enchantable instanceof Weapon)
 				((Weapon) enchantable).enchant(Weapon.Enchantment.randomCurse(((Weapon) enchantable).enchantment.getClass()));
+
+			Sample.INSTANCE.play(Assets.Sounds.CURSED);
+			curUser.sprite.centerEmitter().start(ShadowParticle.CURSE, 0.05f, 10);
+			curUser.spend(TIME_TO_INSCRIBE * 2);
+
 		}
 
-
-		curUser.sprite.operate(curUser.pos);
-		curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
-		Enchanting.show(curUser, enchantable);
-		Sample.INSTANCE.play(Assets.Sounds.BURNING);
-		
-		curUser.spend(TIME_TO_INSCRIBE);
-		curUser.busy();
+		curUser.sprite.operate(curUser.pos); //different order
+		// 	curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
+		Enchanting.show(curUser, enchantable); //different order
+		// 	Sample.INSTANCE.play(Assets.Sounds.BURNING);
+		//curUser.spend(TIME_TO_INSCRIBE);
+		curUser.busy(); //different order
 	}
 	
 	@Override
