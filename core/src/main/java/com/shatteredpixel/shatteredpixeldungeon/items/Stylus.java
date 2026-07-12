@@ -31,6 +31,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -94,14 +96,10 @@ public class Stylus extends Item {
 		if (!enchantable.cursedKnown){
 			GLog.w( Messages.get(this, "identify"));
 			return;
-		} else if (enchantable.cursed || ( enchantable instanceof Armor && ((Armor) enchantable).hasCurseGlyph()) || ( enchantable instanceof Weapon && ((Weapon) enchantable).hasCurseEnchant())){
-			GLog.w( Messages.get(this, "cursed"));
-			return;
 		}
 		
 		detach(curUser.belongings.backpack);
 		Catalog.countUse(getClass());
-		GLog.w( Messages.get(this, "inscribed"));
 
 		if(Math.random() >= .5f) {
 			if (enchantable instanceof Armor)
@@ -114,18 +112,20 @@ public class Stylus extends Item {
 			Enchanting.show(curUser, enchantable);
 			Sample.INSTANCE.play(Assets.Sounds.BURNING);
 			curUser.spend(TIME_TO_INSCRIBE);
+			GLog.w( Messages.get(this, "inscribed"));
 
 		} else{
 			if (enchantable instanceof Armor)
-				((Armor) enchantable).inscribe(Armor.Glyph.randomCurse(((Armor) enchantable).glyph.getClass()));
+				((Armor) enchantable).inscribe(Armor.Glyph.randomCurse(((Armor) enchantable).glyph != null ? ((Armor) enchantable).glyph.getClass() : null));
 			if (enchantable instanceof Weapon)
-				((Weapon) enchantable).enchant(Weapon.Enchantment.randomCurse(((Weapon) enchantable).enchantment.getClass()));
+				((Weapon) enchantable).enchant(Weapon.Enchantment.randomCurse(((Weapon) enchantable).enchantment != null ? ((Weapon) enchantable).enchantment.getClass() : null));
 
 			curUser.sprite.operate(curUser.pos);
 			curUser.sprite.centerEmitter().start(ShadowParticle.CURSE, 0.05f, 10);
 			Enchanting.show(curUser, enchantable);
 			Sample.INSTANCE.play(Assets.Sounds.CURSED);
 			curUser.spend(TIME_TO_INSCRIBE * 2);
+			GLog.w( Messages.get(this, "inscribedbad"));
 		}
 
 		 //different order
@@ -155,7 +155,7 @@ public class Stylus extends Item {
 
 		@Override
 		public boolean itemSelectable(Item item) {
-			return ScrollOfEnchantment.enchantable(item);
+			return (ScrollOfEnchantment.enchantable(item) && !(item instanceof MissileWeapon));
 		}
 
 		@Override

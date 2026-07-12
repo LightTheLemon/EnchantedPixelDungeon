@@ -212,7 +212,8 @@ public enum HeroClass {
 		ThrowingKnife knives = new ThrowingKnife();
 		knives.identify().collect();
 
-		Stylus stylus = new Stylus(); //debug
+		Stylus stylus = new Stylus();
+		stylus.quantity(100);//debug
 		stylus.identify().collect();
 
 		Dungeon.quickslot.setSlot(0, cloak);
