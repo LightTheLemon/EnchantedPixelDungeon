@@ -122,7 +122,6 @@ public class Stylus extends Item {
 			Sample.INSTANCE.play(Assets.Sounds.CURSED);
 			curUser.sprite.centerEmitter().start(ShadowParticle.CURSE, 0.05f, 10);
 			curUser.spend(TIME_TO_INSCRIBE * 2);
-
 		}
 
 		curUser.sprite.operate(curUser.pos); //different order
