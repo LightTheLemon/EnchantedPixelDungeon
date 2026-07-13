@@ -148,7 +148,7 @@ public class MagesStaff extends MeleeWeapon {
 				return;
 			}
 
-			if (cursed || hasCurseEnchant()) wand.cursed = true;
+			if (cursed) wand.cursed = true;
 			else                             wand.cursed = false;
 			wand.execute(hero, AC_ZAP);
 		}
@@ -350,7 +350,7 @@ public class MagesStaff extends MeleeWeapon {
 
 		if (wand != null){
 			info += "\n\n" + Messages.get(this, "has_wand", Messages.get(wand, "name"));
-			if ((!cursed && !hasCurseEnchant()) || !cursedKnown)    info += " " + wand.statsDesc();
+			if ((!cursed) || !cursedKnown)    info += " " + wand.statsDesc();
 			else                                                    info += " " + Messages.get(this, "cursed_wand");
 
 			if (Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){

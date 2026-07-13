@@ -35,26 +35,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Regrowth;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.GravityChaosTracker;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HeroDisguise;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SuperNovaTracker;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GoldenMimic;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -82,14 +65,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSir
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.WondrousResin;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.BurningTrap;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ChillingTrap;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.CursingTrap;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.FlockTrap;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GeyserTrap;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.PitfallTrap;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.ShockingTrap;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.*;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
@@ -113,7 +89,10 @@ import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+
+import static java.lang.Math.*;
 
 //helper class to contain all the cursed wand zapping logic, so the main wand class doesn't get huge.
 public class CursedWand {
@@ -136,6 +115,10 @@ public class CursedWand {
 		if (target != null && target != Dungeon.hero && origin instanceof Wand){
 			Wand.wandProc(target, origin.buffedLvl(), 1);
 		}
+	}
+
+	public static boolean randomUsingLevel(int level){
+		return (Math.random() > (1- Math.pow(0.5, level)/5f));
 	}
 
 	//*** Cursed Effects ***
@@ -222,11 +205,11 @@ public class CursedWand {
 			Char target = Actor.findChar(bolt.collisionPos);
 			//doesn't affect caster if positive only
 			if (Random.Int(2) == 0) {
-				if (target != null) Buff.affect(target, Burning.class).reignite(target);
-				if (!positiveOnly) Buff.affect(user, Frost.class, Frost.DURATION);
+				if (target != null) Buff.affect(target, Burning.class).reignite(target, (float) (Burning.DURATION + Math.floor(origin.buffedLvl() *2f)));
+				if (!positiveOnly) Buff.affect(user, Frost.class, (float) (Frost.DURATION + Math.floor(origin.buffedLvl() *2.5f)));
 			} else {
-				if (!positiveOnly)Buff.affect(user, Burning.class).reignite(user);
-				if (target != null) Buff.affect(target, Frost.class, Frost.DURATION);
+				if (!positiveOnly)Buff.affect(user, Burning.class).reignite(user, (float) (Burning.DURATION + Math.floor(origin.buffedLvl() *2f)));
+				if (target != null) Buff.affect(target, Frost.class, (float) (Frost.DURATION + Math.floor(origin.buffedLvl() *2.5f)));
 			}
 			tryForWandProc(target, origin);
 			return true;
@@ -239,7 +222,7 @@ public class CursedWand {
 			if (Actor.findChar(bolt.collisionPos) == null){
 				Dungeon.level.pressCell(bolt.collisionPos);
 			}
-			GameScene.add( Blob.seed(bolt.collisionPos, 30, Regrowth.class));
+			GameScene.add( Blob.seed(bolt.collisionPos, 30 + origin.buffedLvl() * 3, Regrowth.class));
 			tryForWandProc(Actor.findChar(bolt.collisionPos), origin);
 			return true;
 		}
@@ -263,6 +246,8 @@ public class CursedWand {
 			//can only teleport target if positive only
 			if (target != null && !Char.hasProp(target, Char.Property.IMMOVABLE) && (positiveOnly || Random.Int(2) == 0)){
 				ScrollOfTeleportation.teleportChar(target);
+				Buff.affect(target, Daze.class,(float) (Math.floor(origin.buffedLvl() *2.5f)));
+				Buff.affect(target, Haste.class,(float) (Math.floor(origin.buffedLvl() *1.8f)));
 				tryForWandProc(target, origin);
 				return true;
 			} else {
@@ -270,6 +255,8 @@ public class CursedWand {
 					return false;
 				} else {
 					ScrollOfTeleportation.teleportChar(user);
+					Buff.affect(user, Daze.class,(float) (Math.floor(origin.buffedLvl() *2.5f)));
+					Buff.affect(target, Haste.class,(float) (Math.floor(origin.buffedLvl() *1.8f)));
 					return true;
 				}
 			}
@@ -277,6 +264,7 @@ public class CursedWand {
 	}
 
 	public static class RandomGas extends CursedEffect {
+		private static final int LEVELS_REQUIRED_TO_DOUBLE = 10;
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			Sample.INSTANCE.play( Assets.Sounds.GAS );
@@ -286,13 +274,13 @@ public class CursedWand {
 			}
 			switch (Random.Int(3)) {
 				case 0: default:
-					GameScene.add( Blob.seed( bolt.collisionPos, 800, ConfusionGas.class ) );
+					GameScene.add( Blob.seed( bolt.collisionPos, 800 * (1 + origin.buffedLvl()/LEVELS_REQUIRED_TO_DOUBLE), ConfusionGas.class ) );
 					return true;
 				case 1:
-					GameScene.add( Blob.seed( bolt.collisionPos, 500, ToxicGas.class ) );
+					GameScene.add( Blob.seed( bolt.collisionPos, 500 * (1 + origin.buffedLvl()/LEVELS_REQUIRED_TO_DOUBLE), ToxicGas.class ) );
 					return true;
 				case 2:
-					GameScene.add( Blob.seed( bolt.collisionPos, 200, ParalyticGas.class ) );
+					GameScene.add( Blob.seed( bolt.collisionPos, 200 * (1 + origin.buffedLvl()/LEVELS_REQUIRED_TO_DOUBLE), ParalyticGas.class ) );
 					return true;
 			}
 		}
@@ -307,13 +295,22 @@ public class CursedWand {
 			}
 			switch (Random.Int(3)) {
 				case 0: default:
-					new BurningTrap().set(bolt.collisionPos).activate();
+					if (randomUsingLevel(origin.buffedLvl()))
+						new BlazingTrap().set(bolt.collisionPos).activate();
+					else
+						new BurningTrap().set(bolt.collisionPos).activate();
 					return true;
 				case 1:
-					new ChillingTrap().set(bolt.collisionPos).activate();
+					if (randomUsingLevel(origin.buffedLvl()))
+						new FrostTrap().set(bolt.collisionPos).activate();
+					else
+						new ChillingTrap().set(bolt.collisionPos).activate();
 					return true;
 				case 2:
-					new ShockingTrap().set(bolt.collisionPos).activate();
+					if (randomUsingLevel(origin.buffedLvl()))
+						new StormTrap().set(bolt.collisionPos).activate();
+					else
+						new ShockingTrap().set(bolt.collisionPos).activate();
 					return true;
 			}
 		}
@@ -339,7 +336,7 @@ public class CursedWand {
 			tryForWandProc(Actor.findChar(bolt.collisionPos), origin);
 			for (int i : PathFinder.NEIGHBOURS9){
 				if (!Dungeon.level.solid[bolt.collisionPos+i]){
-					CellEmitter.get(bolt.collisionPos+i).start(Speck.factory(Speck.BUBBLE), 0.25f, 40);
+					CellEmitter.get(bolt.collisionPos+i).start(Speck.factory(Speck.BUBBLE), 0.25f * 1/(1 + origin.buffedLvl()), 40 * (1+ origin.buffedLvl()/4));
 				}
 			}
 			return true;
@@ -368,7 +365,15 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			if (wand == null){
-				wand = (Wand)Generator.randomUsingDefaults(Generator.Category.WAND);
+				if (randomUsingLevel(origin.buffedLvl()))
+					try {
+						wand = (Wand) origin.getClass().getConstructor().newInstance();
+					} catch ( NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e){
+						wand = (Wand)Generator.randomUsingDefaults(Generator.Category.WAND);
+						e.printStackTrace();
+					}
+				else
+					wand = (Wand)Generator.randomUsingDefaults(Generator.Category.WAND);
 			}
 			if (origin instanceof Wand){
 				wand.upgrade(origin.level());
@@ -391,14 +396,14 @@ public class CursedWand {
 
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
-			PathFinder.buildDistanceMap(user.pos, BArray.not( Dungeon.level.solid, null ), 2 );
+			PathFinder.buildDistanceMap(user.pos, BArray.not( Dungeon.level.solid, null ), 2 + (int) sqrt(origin.buffedLvl() * 2f) );
 			for (int i = 0; i < PathFinder.distance.length; i++) {
 				if (PathFinder.distance[i] < Integer.MAX_VALUE) {
 					Splash.at( i, 0x000000, 5);
 					Char ch = Actor.findChar(  i );
 					//does not harm hero or allies when positive only
 					if (ch != null && (!positiveOnly || ch.alignment != Char.Alignment.ALLY)){
-						Buff.affect(ch, Ooze.class).set( Ooze.DURATION );
+						Buff.affect(ch, Ooze.class).set( Ooze.DURATION + (float) (Math.floor(origin.buffedLvl() * 3.5f)) );
 					}
 				}
 			}
@@ -455,7 +460,14 @@ public class CursedWand {
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			if (valid(origin, user, bolt, positiveOnly)) {
 				tryForWandProc(Actor.findChar(bolt.collisionPos), origin);
-				Dungeon.level.plant((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED), bolt.collisionPos);
+				Plant.Seed plant =  (Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED);
+				Dungeon.level.plant(plant, bolt.collisionPos);
+				PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not( Dungeon.level.solid, null ), (int) sqrt(origin.buffedLvl() * 2f) );
+				for (int i = 0; i < PathFinder.distance.length; i++) {
+					if (PathFinder.distance[i] < Integer.MAX_VALUE && i != bolt.collisionPos && randomUsingLevel(origin.buffedLvl())) {
+						Dungeon.level.plant(plant, i);
+					}
+				}
 				return true;
 			} else {
 				return false;
@@ -474,7 +486,7 @@ public class CursedWand {
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			final Char target = Actor.findChar( bolt.collisionPos );
 			if (target != null) {
-				int damage = Dungeon.scalingDepth() * 2;
+				int damage = (int) (Dungeon.scalingDepth() * 2 * (1 + origin.buffedLvl()/6f));
 				Char toHeal, toDamage;
 
 				//can only harm target if positive only
@@ -485,7 +497,7 @@ public class CursedWand {
 					toHeal = target;
 					toDamage = user;
 				}
-				toHeal.HP = Math.min(toHeal.HT, toHeal.HP + damage/2);
+				toHeal.HP = min(toHeal.HT, toHeal.HP + damage/2);
 				toHeal.sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
 				toHeal.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(damage/2), FloatingText.HEALING );
 
@@ -519,12 +531,30 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			new Bomb.ConjuredBomb().explode(bolt.collisionPos);
+			PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not( Dungeon.level.solid, null ), (int) sqrt(origin.buffedLvl() * 2f) );
+			for (int i = 0; i < PathFinder.distance.length; i++) {
+				if (PathFinder.distance[i] < Integer.MAX_VALUE && i != bolt.collisionPos && randomUsingLevel(origin.buffedLvl())) {
+					new Bomb.ConjuredBomb().explode(i);
+				}
+			}
 			tryForWandProc(Actor.findChar(bolt.collisionPos), origin);
 			return true;
 		}
 	}
 
 	public static class LightningBolt extends CursedEffect {
+
+		public static boolean isIn(int i, int initial, int radius){
+			if(i <= (initial + radius) && i >= (initial-radius) )
+				return true;
+			if(i % Dungeon.level.width() == (initial) % Dungeon.level.width())
+				return true;
+			if(i % (Dungeon.level.width()-1) == initial % (Dungeon.level.width()-1))
+				return true;
+			if(i % (Dungeon.level.width()+1) == initial % (Dungeon.level.width()+1))
+				return true;
+			return false;
+		}
 
 		@Override
 		public void FX(Item origin, Char user, Ballistica bolt, Callback callback) {
@@ -542,24 +572,27 @@ public class CursedWand {
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 
 			ArrayList<Char> affected = new ArrayList<>();
+			int factor = (int) sqrt(origin.buffedLvl() * 2f);
 
-			user.sprite.parent.add(new Lightning(user.pos - 1, user.pos + 1, null));
-			user.sprite.parent.add(new Lightning(user.pos - Dungeon.level.width(), user.pos + Dungeon.level.width(), null));
-			user.sprite.parent.add(new Lightning(user.pos - 1 - Dungeon.level.width(), user.pos + 1 + Dungeon.level.width(), null));
-			user.sprite.parent.add(new Lightning(user.pos - 1 + Dungeon.level.width(), user.pos + 1 - Dungeon.level.width(), null));
-			for (int i : PathFinder.NEIGHBOURS9){
-				if (Actor.findChar(user.pos+i) != null){
+			PathFinder.buildDistanceMap(user.pos, BArray.not( Dungeon.level.solid, null ), 2 + factor );
+			user.sprite.parent.add(new Lightning(user.pos - (1+factor), user.pos + (1+factor), null));
+			user.sprite.parent.add(new Lightning(user.pos - (Dungeon.level.width()+factor), user.pos + (Dungeon.level.width()+factor), null));
+			user.sprite.parent.add(new Lightning(user.pos - (1+factor) - (Dungeon.level.width()+factor), user.pos + (1+factor) + (Dungeon.level.width()+factor), null));
+			user.sprite.parent.add(new Lightning(user.pos - (1+factor) + (Dungeon.level.width()+factor), user.pos + (1+factor) - (Dungeon.level.width()+factor), null));
+			for (int i : PathFinder.distance){
+				if (Actor.findChar(user.pos+i) != null && isIn(i,user.pos,factor+1)){
 					affected.add(Actor.findChar(user.pos+i));
 				}
 			}
 
 			int pos = bolt.collisionPos;
-			user.sprite.parent.add(new Lightning(pos - 1, user.pos + 1, null));
-			user.sprite.parent.add(new Lightning(pos - Dungeon.level.width(), pos + Dungeon.level.width(), null));
-			user.sprite.parent.add(new Lightning(pos - 1 - Dungeon.level.width(), pos + 1 + Dungeon.level.width(), null));
-			user.sprite.parent.add(new Lightning(pos - 1 + Dungeon.level.width(), pos + 1 - Dungeon.level.width(), null));
-			for (int i : PathFinder.NEIGHBOURS9){
-				if (Actor.findChar(pos+i) != null && !affected.contains(Actor.findChar(pos+i))){
+			PathFinder.buildDistanceMap(pos, BArray.not( Dungeon.level.solid, null ), 2 + factor );
+			user.sprite.parent.add(new Lightning(pos - (1+factor), user.pos + (1+factor), null));
+			user.sprite.parent.add(new Lightning(pos - (Dungeon.level.width()+factor), pos + (Dungeon.level.width()+factor), null));
+			user.sprite.parent.add(new Lightning(pos - (1+factor) - (Dungeon.level.width()+factor), pos + 1 + (Dungeon.level.width()+factor), null));
+			user.sprite.parent.add(new Lightning(pos - (1+factor) + (Dungeon.level.width()+factor), pos + 1 - (Dungeon.level.width()+factor), null));
+			for (int i : PathFinder.distance){
+				if (Actor.findChar(pos+i) != null && !affected.contains(Actor.findChar(pos+i)) && isIn(i,pos,factor+1)){
 					affected.add(Actor.findChar(pos+i));
 				}
 			}
@@ -568,16 +601,16 @@ public class CursedWand {
 
 			for (Char ch : affected){
 				if (ch instanceof Hero) {
-					Buff.prolong(ch, Recharging.class, Recharging.DURATION/3f);
+					Buff.prolong(ch, Recharging.class, (float) (Recharging.DURATION/3f * (1- Math.pow(0.5, origin.buffedLvl())/5f)));
 					ScrollOfRecharging.charge(ch);
 					SpellSprite.show(ch, SpellSprite.CHARGE);
 				}
 				//does not harm allies if positive only
 				if (ch.alignment != Char.Alignment.ALLY || !positiveOnly){
 					//shocking dart damage and a little stun
-					ch.damage(Random.NormalIntRange(5 + Dungeon.scalingDepth() / 4, 10 + Dungeon.scalingDepth() / 4), new Electricity());
+					ch.damage((int) (Random.NormalIntRange(5 + Dungeon.scalingDepth() / 4, 10 + Dungeon.scalingDepth() / 4) * (1- Math.pow(0.5, origin.buffedLvl())/5f)), new Electricity());
 					if (ch.isAlive()) {
-						Buff.affect(ch, Paralysis.class, Paralysis.DURATION / 2f);
+						Buff.affect(ch, Paralysis.class, (float)(Paralysis.DURATION / 2f * (1- Math.pow(0.5, origin.buffedLvl())/5f)));
 					} else if (ch == Dungeon.hero){
 						if (user == Dungeon.hero && origin != null) {
 							Badges.validateDeathFromFriendlyMagic();
@@ -603,6 +636,12 @@ public class CursedWand {
 			geyser.pos = bolt.collisionPos;
 			geyser.source = origin == null ? user : origin;
 			geyser.activate();
+			PathFinder.buildDistanceMap(user.pos, BArray.not( Dungeon.level.solid, null ), 1 + (int) sqrt(origin.buffedLvl() * 2f) );
+			for (int i : PathFinder.distance)
+				if(randomUsingLevel(origin.buffedLvl())){
+					geyser.pos = i;
+					geyser.activate();
+				}
 			return true;
 		}
 	}
@@ -612,6 +651,10 @@ public class CursedWand {
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			tryForWandProc(Actor.findChar(bolt.collisionPos), origin);
 			new FlockTrap().set(bolt.collisionPos).activate();
+			PathFinder.buildDistanceMap(user.pos, BArray.not( Dungeon.level.solid, null ), 5 + (int) sqrt(origin.buffedLvl() * 3f) );
+			for (int i : PathFinder.distance)
+				if(randomUsingLevel(origin.buffedLvl()))
+					new FlockTrap().set(i).activate();
 			return true;
 		}
 	}
@@ -627,9 +670,9 @@ public class CursedWand {
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			Char ch = Actor.findChar(bolt.collisionPos);
 			if ((!positiveOnly || (ch instanceof Piranha)) && ch != null && !ch.flying && !Char.hasProp(ch, Char.Property.IMMOVABLE)) {
-				Buff.affect(ch, Levitation.class, Levitation.DURATION);
+				Buff.affect(ch, Levitation.class,Levitation.DURATION + (1 + origin.buffedLvl()/5f));
 			} else {
-				Buff.affect(user, Levitation.class, Levitation.DURATION);
+				Buff.affect(user, Levitation.class, Levitation.DURATION + (1 + origin.buffedLvl()/5f));
 			}
 			return true;
 		}
@@ -648,7 +691,7 @@ public class CursedWand {
 				mob.beckon( user.pos );
 			}
 			user.sprite.centerEmitter().start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
-			if (positiveOnly){
+			if (positiveOnly || randomUsingLevel(origin.buffedLvl())){
 				Buff.affect(user, ScrollOfChallenge.ChallengeArena.class).setup(user.pos);
 				Sample.INSTANCE.play( Assets.Sounds.CHALLENGE );
 			} else {
@@ -707,7 +750,7 @@ public class CursedWand {
 			if (valid(origin, user, bolt, positiveOnly)){
 				Char ch = Actor.findChar( bolt.collisionPos );
 				Sheep sheep = new Sheep();
-				sheep.initialize(10);
+				sheep.initialize(10 * (1 + origin.buffedLvl()));
 				sheep.pos = ch.pos;
 				ch.destroy();
 				ch.sprite.killAndErase();
@@ -730,14 +773,16 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			//hexes target if positive only or user isn't hero
-			if (positiveOnly || !(user instanceof Hero)){
+			if (positiveOnly || !(user instanceof Hero) || randomUsingLevel(origin.buffedLvl())){
 				Char ch = Actor.findChar( bolt.collisionPos );
 				if (ch != null){
-					Buff.affect(ch, Hex.class, Hex.DURATION);
+					Buff.affect(ch, Hex.class, Hex.DURATION * (1 + origin.buffedLvl()/5f));
 				}
 				return true;
 			} else {
 				CursingTrap.curse( (Hero) user );
+				if(randomUsingLevel(origin.buffedLvl()))
+					CursingTrap.curse( (Hero) user );
 				return true;
 			}
 		}
@@ -752,11 +797,11 @@ public class CursedWand {
 
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
-			if (!positiveOnly && Dungeon.depth > 1 && Dungeon.interfloorTeleportAllowed() && user == Dungeon.hero) {
+			if (!positiveOnly && Dungeon.depth > 1 && Dungeon.interfloorTeleportAllowed() && user == Dungeon.hero && !randomUsingLevel(origin.buffedLvl())) {
 
 				//starting from 10 floors up (or floor 1), each floor has 1 more weight
 				float[] depths = new float[Dungeon.depth-1];
-				int start = Math.max(1, Dungeon.depth-10);
+				int start = Math.max(1, Dungeon.depth-(10 - min((int) (sqrt(4*origin.buffedLvl())),9)));
 				for (int i = start; i < Dungeon.depth; i++) {
 					depths[i-1] = i-start+1;
 				}
@@ -783,10 +828,12 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			//mirror images if positive only and user is hero
-			if (positiveOnly && user == Dungeon.hero){
+			if ((positiveOnly || randomUsingLevel(origin.buffedLvl())) && user == Dungeon.hero){
 				ScrollOfMirrorImage.spawnImages(Dungeon.hero, bolt.collisionPos, 2);
 			} else {
 				new SummoningTrap().set(bolt.collisionPos).activate();
+				if (randomUsingLevel(origin.buffedLvl()))
+					new SummoningTrap().set(bolt.collisionPos).activate();
 			}
 			return true;
 		}
@@ -815,7 +862,7 @@ public class CursedWand {
 						Char ch = Actor.findChar(i);
 						Burning burning = Buff.affect(ch, Burning.class);
 						burning.reignite(ch);
-						int dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
+						int dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2) *  (1 + origin.buffedLvl()/4);
 						ch.damage(dmg, burning);
 					}
 					if (Dungeon.level.flamable[i]){
@@ -843,8 +890,8 @@ public class CursedWand {
 			bolt = new Ballistica(bolt.sourcePos, bolt.collisionPos, Ballistica.STOP_SOLID);
 
 			cone = new ConeAOE( bolt,
-					8,
-					90,
+					8+ origin.buffedLvl() /2f,
+					90+min(origin.buffedLvl()*3,45),
 					Ballistica.STOP_SOLID);
 
 			Ballistica longestRay = null;
@@ -895,35 +942,35 @@ public class CursedWand {
 					continue;
 				} else {
 
-					int dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
+					int dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2) * (1+ origin.buffedLvl()/4);
 					switch (Random.Int(5)){
 						case 0: default:
 							Burning burning = Buff.affect(ch, Burning.class);
-							burning.reignite(ch);
+							burning.reignite(ch,Burning.DURATION*origin.buffedLvl()*2.5f);
 							ch.damage(dmg, burning);
-							ch.sprite.emitter().burst(FlameParticle.FACTORY, 20);
+							ch.sprite.emitter().burst(FlameParticle.FACTORY, 20*origin.buffedLvl()*2);
 							break;
 						case 1:
 							ch.damage(dmg, new Frost());
-							if (ch.isAlive()) Buff.affect(ch, Frost.class, Frost.DURATION);
-							Splash.at( ch.sprite.center(), 0xFFB2D6FF, 20 );
+							if (ch.isAlive()) Buff.affect(ch, Frost.class, Frost.DURATION*origin.buffedLvl()*3f);
+							Splash.at( ch.sprite.center(), 0xFFB2D6FF, 20*origin.buffedLvl()*2 );
 							break;
 						case 2:
 							Poison poison = Buff.affect(ch, Poison.class);
-							poison.set(3 + Dungeon.scalingDepth() / 2);
+							poison.set((3 + Dungeon.scalingDepth() / 2)*origin.buffedLvl()*1.5f);
 							ch.damage(dmg, poison);
-							ch.sprite.emitter().burst(PoisonParticle.SPLASH, 20);
+							ch.sprite.emitter().burst(PoisonParticle.SPLASH, 20*origin.buffedLvl()*2);
 							break;
 						case 3:
 							Ooze ooze = Buff.affect(ch, Ooze.class);
-							ooze.set(Ooze.DURATION);
+							ooze.set(Ooze.DURATION*origin.buffedLvl()*1.5f);
 							ch.damage(dmg, ooze);
-							Splash.at( ch.sprite.center(), 0x000000, 20 );
+							Splash.at( ch.sprite.center(), 0x000000, 20*origin.buffedLvl()*2 );
 							break;
 						case 4:
 							ch.damage(dmg, new Electricity());
-							if (ch.isAlive()) Buff.affect(ch, Paralysis.class, Paralysis.DURATION);
-							ch.sprite.emitter().burst(SparkParticle.FACTORY, 20);
+							if (ch.isAlive()) Buff.affect(ch, Paralysis.class, Paralysis.DURATION*origin.buffedLvl()*1.25f);
+							ch.sprite.emitter().burst(SparkParticle.FACTORY, 20*origin.buffedLvl()*2);
 							break;
 					}
 
@@ -955,11 +1002,11 @@ public class CursedWand {
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 
 			for (Char ch : Actor.chars()){
-				Buff.affect(ch, Invulnerability.class, 10f);
-				Buff.affect(ch, Bless.class, Bless.DURATION);
+				Buff.affect(ch, Invulnerability.class, 10f *origin.buffedLvl()/2);
+				Buff.affect(ch, Bless.class, Bless.DURATION*origin.buffedLvl()/2);
 			}
 
-			new Flare(5, 48).color(0xFFFF00, true).show(user.sprite, 3f);
+			new Flare(5+origin.buffedLvl(), 48*(1+origin.buffedLvl()/4f)).color(0xFFFF00, true).show(user.sprite, 3f);
 			GameScene.flash(0x80FFFF40);
 			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 			GLog.p(Messages.get(CursedWand.class, "mass_invuln"));
@@ -984,10 +1031,10 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 
-			Buff.affect(user, TimeStasis.class, 100f);
+			Buff.affect(user, TimeStasis.class, 100f*(1+origin.buffedLvl()/2f));
 			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
-			user.sprite.emitter().burst(Speck.factory(Speck.STEAM), 10);
+			user.sprite.emitter().burst(Speck.factory(Speck.STEAM), 10*(1+origin.buffedLvl()/2));
 			GLog.w(Messages.get(CursedWand.class, "petrify"));
 
 			return true;
@@ -1026,24 +1073,31 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			for (int i = 0; i < Dungeon.level.length(); i++){
-				GameScene.add( Blob.seed(i, 15, Regrowth.class));
+				GameScene.add( Blob.seed(i, 15*(1+origin.buffedLvl()/2), Regrowth.class));
 			}
 
-			new Flare(8, 32).color(0xFFFF66, true).show(user.sprite, 2f);
+			new Flare(8*(1+origin.buffedLvl()/2), 32*(1+origin.buffedLvl()/2f)).color(0xFFFF66, true).show(user.sprite, 2f*origin.buffedLvl()*1.2f);
 			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 			GLog.p(Messages.get(CursedWand.class, "grass"));
 			//only grass, no fire, if positive only
 			if (!positiveOnly) {
 				GLog.w(Messages.get(CursedWand.class, "fire"));
 				do {
-					GameScene.add(Blob.seed(Dungeon.level.randomDestination(null), 10, Fire.class));
-				} while (Random.Int(5) != 0);
+					GameScene.add(Blob.seed(Dungeon.level.randomDestination(null), 10*(1+origin.buffedLvl()/4), Fire.class));
+				} while (Random.Int(5+((int)(sqrt(origin.buffedLvl())))) != 0);
 			}
 			return true;
 		}
 	}
 
 	public static class SpawnGoldenMimic extends CursedEffect {
+
+		public static float decPart(float num){
+			return (float) (num - floor(num));
+		}
+
+
+
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			Char ch = Actor.findChar(bolt.collisionPos);
@@ -1063,25 +1117,33 @@ public class CursedWand {
 				}
 			}
 
-			Mimic mimic = Mimic.spawnAt(spawnCell, GoldenMimic.class, false);
+			Mimic mimic = Mimic.spawnAt(spawnCell, randomUsingLevel(origin.buffedLvl()) ? EbonyMimic.class : GoldenMimic.class, false);
 			mimic.stopHiding();
 			mimic.alignment = Char.Alignment.ENEMY;
 			//play vfx/sfx manually as mimic isn't in the scene yet
 			Sample.INSTANCE.play(Assets.Sounds.MIMIC, 1, 0.85f);
-			CellEmitter.get(mimic.pos).burst(Speck.factory(Speck.STAR), 10);
+			CellEmitter.get(mimic.pos).burst(Speck.factory(Speck.STAR), (int) (10*origin.buffedLvl()*1.2));
 			mimic.items.clear();
 			GameScene.add(mimic);
 
 			//mimic is enthralled, but also contains no extra reward, if positive only
-			if (positiveOnly){
+			if (positiveOnly || randomUsingLevel(origin.buffedLvl())){
 				Buff.affect(mimic, ScrollOfSirensSong.Enthralled.class);
 			} else {
 				Item reward;
+				float num = (float) (3*(1-pow(0.9,origin.buffedLvl())));
 				do {
 					reward = Generator.randomUsingDefaults(Random.oneOf(Generator.Category.WEAPON, Generator.Category.ARMOR,
 							Generator.Category.RING, Generator.Category.WAND));
-				} while (reward.level() < 1);
+				} while (reward.level() < 1+((int) num + Math.random() < decPart(num) ? 1 : 0 ));
 				mimic.items.add(reward);
+				if(randomUsingLevel(origin.buffedLvl())){
+					do {
+						reward = Generator.randomUsingDefaults(Random.oneOf(Generator.Category.WEAPON, Generator.Category.ARMOR,
+								Generator.Category.RING, Generator.Category.WAND));
+					} while (reward.level() < 1+((int) num + Math.random() < decPart(num) ? 1 : 0 ));
+					mimic.items.add(reward);
+				}
 			}
 
 			Dungeon.level.occupyCell(mimic);
@@ -1097,39 +1159,43 @@ public class CursedWand {
 			//appears to crash the game (actually just closes it)
 			try {
 				Dungeon.saveAll();
-				if(Messages.lang() != Languages.ENGLISH){
-					//Don't bother doing this joke to none-english speakers, I doubt it would translate.
-					//we still consider the effect valid here though as it's cosmetic anyway
-					return false;
-				} else {
-					ShatteredPixelDungeon.runOnRenderThread(
-							new Callback() {
-								@Override
-								public void call() {
-									GameScene.show(
-											new WndOptions(Icons.get(Icons.WARNING),
-													"CURSED WAND ERROR",
-													"this application will now self-destruct",
-													"abort",
-													"retry",
-													"fail") {
+				if(randomUsingLevel(origin.buffedLvl())) {
+					if (Messages.lang() != Languages.ENGLISH) {
+						//Don't bother doing this joke to none-english speakers, I doubt it would translate.
+						//we still consider the effect valid here though as it's cosmetic anyway
+						return false;
+					} else {
+						ShatteredPixelDungeon.runOnRenderThread(
+								new Callback() {
+									@Override
+									public void call() {
+										GameScene.show(
+												new WndOptions(Icons.get(Icons.WARNING),
+														"CURSED WAND ERROR",
+														"this application will now self-destruct",
+														"abort",
+														"retry",
+														"fail") {
 
-												@Override
-												protected void onSelect(int index) {
-													Game.instance.finish();
-												}
+													@Override
+													protected void onSelect(int index) {
+														Game.instance.finish();
+													}
 
-												@Override
-												public void onBackPressed() {
-													//do nothing
+													@Override
+													public void onBackPressed() {
+														//do nothing
+													}
 												}
-											}
-									);
+										);
+									}
 								}
-							}
-					);
-					return false;
+						);
+						return false;
+					}
 				}
+				Game.instance.finish();
+				return false;
 			} catch(IOException e){
 				ShatteredPixelDungeon.reportException(e);
 				//maybe don't kill the game if the save failed, just do nothing
@@ -1154,7 +1220,7 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			//triggers metamorph effect if positive only
-			if (positiveOnly){
+			if (positiveOnly || randomUsingLevel(origin.buffedLvl())){
 				GameScene.show(new ScrollOfMetamorphosis.WndMetamorphChoose());
 				return true;
 			}
@@ -1169,7 +1235,7 @@ public class CursedWand {
 				result = Generator.randomUsingDefaults(Random.oneOf(Generator.Category.WEAPON, Generator.Category.ARMOR,
 						Generator.Category.RING, Generator.Category.ARTIFACT));
 			} while (result.cursed);
-			if (result.isUpgradable()) result.upgrade();
+			if (result.isUpgradable()) result.upgrade(origin.level());
 			result.cursed = result.cursedKnown = true;
 			if (origin instanceof Wand){
 				GLog.w( Messages.get(CursedWand.class, "transmogrify_wand") );
@@ -1191,11 +1257,11 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			if (user instanceof Hero){
-				Buff.affect(user, HeroDisguise.class, HeroDisguise.DURATION);
+				Buff.affect(user, HeroDisguise.class, HeroDisguise.DURATION * origin.buffedLvl()*2);
 				GLog.w( Messages.get(CursedWand.class, "disguise") );
 				return true;
 			} else if (Actor.findChar(bolt.collisionPos) instanceof Hero){
-				Buff.affect(Actor.findChar(bolt.collisionPos), HeroDisguise.class, HeroDisguise.DURATION);
+				Buff.affect(Actor.findChar(bolt.collisionPos), HeroDisguise.class, HeroDisguise.DURATION * origin.buffedLvl()*2);
 				GLog.w( Messages.get(CursedWand.class, "disguise") );
 				return true;
 			}
@@ -1213,6 +1279,12 @@ public class CursedWand {
 				GLog.p(Messages.get(CursedWand.class, "supernova_positive"));
 			} else {
 				GLog.w(Messages.get(CursedWand.class, "supernova"));
+			}
+			if(randomUsingLevel(origin.buffedLvl())) {
+				for (Mob mob : Dungeon.level.mobs) {
+					mob.beckon(user.pos);
+				}
+				GLog.w(Messages.get(CursedWand.class, "supernova_beckon"));
 			}
 
 			return true;
@@ -1239,7 +1311,7 @@ public class CursedWand {
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			boolean[] passable = BArray.not( Dungeon.level.solid, null );
 			BArray.or(passable, Dungeon.level.passable, passable);
-			PathFinder.buildDistanceMap( user.pos, passable, 5 );
+			PathFinder.buildDistanceMap( user.pos, passable, (int) (5*(1+origin.buffedLvl()/3f)));
 			ArrayList<Integer> positions = new ArrayList<>();
 			for (int i = 0; i < PathFinder.distance.length; i++) {
 				if (PathFinder.distance[i] < Integer.MAX_VALUE) {
@@ -1249,7 +1321,7 @@ public class CursedWand {
 					}
 				}
 			}
-			PitfallTrap.DelayedPit p = Buff.append(Dungeon.hero, PitfallTrap.DelayedPit.class, 1);
+			PitfallTrap.DelayedPit p = Buff.append(Dungeon.hero, PitfallTrap.DelayedPit.class, 1*(1+origin.buffedLvl()/2f));
 			p.depth = Dungeon.depth;
 			p.branch = Dungeon.branch;
 			p.setPositions(positions);
@@ -1274,6 +1346,7 @@ public class CursedWand {
 
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
+			positiveOnly = randomUsingLevel(origin.buffedLvl()) ? !positiveOnly : positiveOnly;
 			Buff.append(user, GravityChaosTracker.class).positiveOnly = positiveOnly;
 			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 			if (positiveOnly){

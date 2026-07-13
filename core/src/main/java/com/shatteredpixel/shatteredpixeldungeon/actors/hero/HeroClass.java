@@ -198,6 +198,11 @@ public enum HeroClass {
 
 		Dungeon.quickslot.setSlot(0, staff);
 
+		// TODO: remove ths
+		Stylus stylus = new Stylus();
+		stylus.quantity(100);//debug
+		stylus.identify().collect();
+
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
 	}
@@ -212,6 +217,7 @@ public enum HeroClass {
 		ThrowingKnife knives = new ThrowingKnife();
 		knives.identify().collect();
 
+		// TODO: Remove this
 		Stylus stylus = new Stylus();
 		stylus.quantity(100);//debug
 		stylus.identify().collect();
