@@ -554,7 +554,6 @@ public class Dungeon {
 	}
 	
 	public static boolean asNeeded() {
-		//1 AS each floor set
 		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 2)); //mod, was depth / 5
 		if (asLeftThisSet <= 0) return false;
 

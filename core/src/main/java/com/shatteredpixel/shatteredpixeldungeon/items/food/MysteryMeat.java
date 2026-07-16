@@ -48,8 +48,8 @@ public class MysteryMeat extends Food {
 	}
 
 	public int value() {
-		return 5 * quantity;
-	}
+		return 10 * quantity;
+	} //buffed from 5
 
 	public static void effect(Hero hero){
 		switch (Random.Int( 5 )) {
@@ -59,7 +59,7 @@ public class MysteryMeat extends Food {
 				break;
 			case 1:
 				GLog.w( Messages.get(MysteryMeat.class, "legs") );
-				Buff.prolong( hero, Roots.class, Roots.DURATION*2f );
+				Buff.prolong( hero, Roots.class, Roots.DURATION*2.5f );
 				break;
 			case 2:
 				GLog.w( Messages.get(MysteryMeat.class, "not_well") );

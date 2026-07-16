@@ -21,9 +21,14 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 public class StewedMeat extends Food {
 	
@@ -31,10 +36,22 @@ public class StewedMeat extends Food {
 		image = ItemSpriteSheet.STEWED;
 		energy = Hunger.HUNGRY/2f;
 	}
-	
+	@Override
+	protected void satisfy(Hero hero) {
+		super.satisfy(hero);
+		effect(hero);
+	}
+
 	@Override
 	public int value() {
 		return 8 * quantity;
+	}
+
+	public static void effect(Hero hero){
+		if(Math.random() >= .45f) {
+			GLog.i( Messages.get(FrozenCarpaccio.class, "invis") );
+			Buff.affect( hero, Invisibility.class, Invisibility.DURATION );
+		}
 	}
 	
 	public static class oneMeat extends Recipe.SimpleRecipe{

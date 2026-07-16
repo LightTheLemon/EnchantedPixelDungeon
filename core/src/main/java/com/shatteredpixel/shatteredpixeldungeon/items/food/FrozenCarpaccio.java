@@ -48,10 +48,17 @@ public class FrozenCarpaccio extends Food {
 	}
 	
 	public int value() {
-		return 10 * quantity;
+		return 8 * quantity; //from 10 to 8
 	}
 
 	public static void effect(Hero hero){
+
+		if(Math.random() >= .35f) {
+			GLog.i( Messages.get(FrozenCarpaccio.class, "hard") );
+			Barkskin.conditionallyAppend( hero, hero.HT / 4, 1 );
+
+		}
+		/*
 		switch (Random.Int( 5 )) {
 			case 0:
 				GLog.i( Messages.get(FrozenCarpaccio.class, "invis") );
@@ -71,6 +78,8 @@ public class FrozenCarpaccio extends Food {
 				hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(hero.HT / 4), FloatingText.HEALING );
 				break;
 		}
+
+		 */
 	}
 	
 	public static Food cook( MysteryMeat ingredient ) {

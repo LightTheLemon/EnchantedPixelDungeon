@@ -33,7 +33,7 @@ public class ChargrilledMeat extends Food {
 	
 	@Override
 	public int value() {
-		return 8 * quantity;
+		return 10 * quantity; //buffed from 8 to 10
 	}
 	
 	public static Food cook( int quantity ) {

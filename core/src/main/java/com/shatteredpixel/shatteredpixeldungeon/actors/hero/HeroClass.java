@@ -55,6 +55,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
@@ -198,10 +199,18 @@ public enum HeroClass {
 
 		Dungeon.quickslot.setSlot(0, staff);
 
-		// TODO: remove ths
+		// TODO: remove these
 		Stylus stylus = new Stylus();
 		stylus.quantity(100);//debug
 		stylus.identify().collect();
+
+		ScrollOfUpgrade scroll = new ScrollOfUpgrade();
+		scroll.quantity(100);
+		scroll.identify().collect();
+
+		MysteryMeat meat = new MysteryMeat();
+		meat.quantity(100);
+		meat.identify().collect();
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
@@ -216,11 +225,6 @@ public enum HeroClass {
 
 		ThrowingKnife knives = new ThrowingKnife();
 		knives.identify().collect();
-
-		// TODO: Remove this
-		Stylus stylus = new Stylus();
-		stylus.quantity(100);//debug
-		stylus.identify().collect();
 
 		Dungeon.quickslot.setSlot(0, cloak);
 		Dungeon.quickslot.setSlot(1, knives);
