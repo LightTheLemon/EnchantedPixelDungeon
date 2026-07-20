@@ -53,6 +53,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
@@ -204,13 +206,16 @@ public enum HeroClass {
 		stylus.quantity(100);//debug
 		stylus.identify().collect();
 
-		ScrollOfUpgrade scroll = new ScrollOfUpgrade();
-		scroll.quantity(100);
-		scroll.identify().collect();
-
 		MysteryMeat meat = new MysteryMeat();
 		meat.quantity(100);
 		meat.identify().collect();
+
+		PhantomStopwatch watch = new PhantomStopwatch();
+		watch.identify().collect();
+
+		TimekeepersHourglass time = new TimekeepersHourglass();
+		time.identify().collect();
+
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();

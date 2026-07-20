@@ -4,6 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -23,7 +24,8 @@ public class Covert extends Weapon.Enchantment {
         // lvl 1 - 50%
         // lvl 2 - 60%
 
-        float procChance = (level+1f)/(level+3f) * procChanceMultiplier(attacker);
+        //float procChance = (level+1f)/(level+3f) * procChanceMultiplier(attacker);
+
         if (damage >= defender.HP){
             /*
             float powerMulti = Math.max(1f, procChance);
@@ -42,9 +44,10 @@ public class Covert extends Weapon.Enchantment {
             }
 
              */
-            attacker.buff(Invisibility.class);
-            Buff.prolong( attacker, Invisibility.class, Invisibility.DURATION * procChance);
+            //attacker.buff(Invisibility.class);
             GLog.i( Messages.get(this, "invisible") );
+            //Buff.prolong(attacker, Invisibility.class, 3);
+            Buff.affect(attacker, Invisibility.class, 4f);
             Sample.INSTANCE.play( Assets.Sounds.MELD );
             defender.sprite.emitter().burst( ShadowParticle.MISSILE, level + 1 );
 
