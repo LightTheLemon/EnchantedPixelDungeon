@@ -98,10 +98,11 @@ public class Invisibility extends FlavourBuff {
 		}
 
 		//these aren't forms of invisibility, but do dispel at the same time as it.
-		PhantomStopwatch.timeFreeze timeFreeze = ch.buff( PhantomStopwatch.timeFreeze.class );
-		if (timeFreeze != null) {
-			timeFreeze.detach();
-		}
+
+		//PhantomStopwatch.timeFreeze timeFreeze = ch.buff( PhantomStopwatch.timeFreeze.class );
+		//if (timeFreeze != null) {
+		//	timeFreeze.detach();
+		//}
 
 		Preparation prep = ch.buff( Preparation.class );
 		if (prep != null){

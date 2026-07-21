@@ -42,18 +42,19 @@ public class Covert extends Weapon.Enchantment {
                     defender.damage(burnDamage, this);
                 }
             }
-
              */
-            //attacker.buff(Invisibility.class);
-            GLog.i( Messages.get(this, "invisible") );
-            //Buff.prolong(attacker, Invisibility.class, 3);
+
+            attacker.buff(Invisibility.class);
+            Buff.prolong(attacker, Invisibility.class, 3);
             Buff.affect(attacker, Invisibility.class, 4f);
+
+            GLog.i( Messages.get(this, "invisible") );
             Sample.INSTANCE.play( Assets.Sounds.MELD );
             defender.sprite.emitter().burst( ShadowParticle.MISSILE, level + 1 );
 
         }
 
-        return damage;
+        return damage; //was return damage;
 
     }
 

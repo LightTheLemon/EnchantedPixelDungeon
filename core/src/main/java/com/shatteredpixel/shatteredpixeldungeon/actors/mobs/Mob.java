@@ -669,6 +669,7 @@ public abstract class Mob extends Char {
 			attack( enemy );
 			Invisibility.dispel(this);
 			spend( attackDelay() );
+
 			return true;
 		}
 	}

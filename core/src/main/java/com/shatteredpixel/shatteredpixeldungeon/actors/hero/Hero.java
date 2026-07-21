@@ -105,6 +105,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -198,7 +199,7 @@ public class Hero extends Char {
 	
 	public static final int MAX_LEVEL = 30;
 
-	public static final int STARTING_STR = 10;
+	public static final int STARTING_STR = 8; //fun
 	
 	private static final float TIME_TO_REST		    = 1f;
 	private static final float TIME_TO_SEARCH	    = 2f;
@@ -496,6 +497,13 @@ public class Hero extends Char {
 			} else if (buff(Talent.LiquidAgilACCTracker.class) != null
 						&& buff(Talent.LiquidAgilACCTracker.class).uses <= 0){
 				buff(Talent.LiquidAgilACCTracker.class).detach();
+			}
+		}
+		if (result) {
+			PhantomStopwatch watch = belongings.getItem(PhantomStopwatch.class);
+
+			if (watch != null) {
+				watch.attackCost(4);
 			}
 		}
 		return result;

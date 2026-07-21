@@ -43,11 +43,9 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
@@ -62,10 +60,11 @@ public class PhantomStopwatch extends Artifact {
 		image = ItemSpriteSheet.ARTIFACT_WATCH;
 
 		levelCap = 5;
+		exp = 0;
+		charge = 15+(level() * 3); //value of each charge is decreased
 
-		charge = 5+level();
 		partialCharge = 0;
-		chargeCap = 5+level();
+		chargeCap = 15+(level() * 3);
 
 		defaultAction = AC_ACTIVATE;
 	}
@@ -154,7 +153,7 @@ public class PhantomStopwatch extends Artifact {
 
 	@Override
 	protected ArtifactBuff passiveBuff() {
-		return new hourglassRecharge();
+		return new watchRecharge();
 	} //rename?
 	
 	@Override
@@ -229,7 +228,18 @@ public class PhantomStopwatch extends Artifact {
 		}
 	}
 
-	public class hourglassRecharge extends ArtifactBuff {
+	public void attackCost (int amount) {
+		//charge = Math.max(0, charge - amount);
+
+		charge -= amount;
+
+		//if (activeBuff != null)
+		//	((timeFreeze)activeBuff).processTime(amount);
+
+		updateQuickslot();
+	}
+
+	public class watchRecharge extends ArtifactBuff {
 		@Override
 		public boolean act() {
 
@@ -334,18 +344,18 @@ public class PhantomStopwatch extends Artifact {
 			type = buffType.POSITIVE;
 		}
 
-		float turnsToCost = 2f;
+		float turnsToCost = 0f;
 
 		ArrayList<Integer> presses = new ArrayList<>();
 
 		public void processTime(float time){
-			turnsToCost -= time;
-
+			//turnsToCost -= time;
+			charge --;
 			//use 1/1,000 to account for rounding errors
-			while (turnsToCost < -0.001f){
-				turnsToCost += 2f;
-				charge --;
-			}
+			//while (turnsToCost < -0.001f){
+			//	turnsToCost += 0f;
+			//	charge --;
+			//}
 
 			updateQuickslot();
 
@@ -448,7 +458,7 @@ public class PhantomStopwatch extends Artifact {
 
 		@Override
 		public String desc() {
-			return Messages.get(this, "desc", Messages.decimalFormat("#.##", Math.max(0, turnsToCost)));
+			return Messages.get(this, "desc"); //, Messages.decimalFormat("#.##", Math.max(0, turnsToCost))
 		}
 
 		private static final String PRESSES = "presses";
