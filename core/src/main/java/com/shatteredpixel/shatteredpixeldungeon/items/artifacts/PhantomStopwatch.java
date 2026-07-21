@@ -229,9 +229,9 @@ public class PhantomStopwatch extends Artifact {
 	}
 
 	public void attackCost (int amount) {
-		//charge = Math.max(0, charge - amount);
+		charge = Math.max(0, charge - amount);
 
-		charge -= amount;
+		//charge -= Math.max(0, amount);
 
 		//if (activeBuff != null)
 		//	((timeFreeze)activeBuff).processTime(amount);

@@ -106,6 +106,9 @@ public class Stylus extends Item {
 				((Armor) enchantable).inscribe();
 			if (enchantable instanceof Weapon)
 				((Weapon) enchantable).enchant();
+			if (enchantable instanceof MissileWeapon)
+				((MissileWeapon) enchantable).enchant();
+
 
 			curUser.sprite.operate(curUser.pos);
 			curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
@@ -119,6 +122,8 @@ public class Stylus extends Item {
 				((Armor) enchantable).inscribe(Armor.Glyph.randomCurse(((Armor) enchantable).glyph != null ? ((Armor) enchantable).glyph.getClass() : null));
 			if (enchantable instanceof Weapon)
 				((Weapon) enchantable).enchant(Weapon.Enchantment.randomCurse(((Weapon) enchantable).enchantment != null ? ((Weapon) enchantable).enchantment.getClass() : null));
+			if (enchantable instanceof MissileWeapon)
+				((MissileWeapon) enchantable).enchant(MissileWeapon.Enchantment.randomCurse(((MissileWeapon) enchantable).enchantment != null ? ((MissileWeapon) enchantable).enchantment.getClass() : null));
 
 			curUser.sprite.operate(curUser.pos);
 			curUser.sprite.centerEmitter().start(ShadowParticle.CURSE, 0.05f, 10);
@@ -128,11 +133,6 @@ public class Stylus extends Item {
 			GLog.w( Messages.get(this, "inscribedbad"));
 		}
 
-		 //different order
-		// 	curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
-		// Enchanting.show(curUser, enchantable); //different order
-		// 	Sample.INSTANCE.play(Assets.Sounds.BURNING);
-		//curUser.spend(TIME_TO_INSCRIBE);
 		curUser.busy();
 	}
 	
@@ -155,7 +155,7 @@ public class Stylus extends Item {
 
 		@Override
 		public boolean itemSelectable(Item item) {
-			return (ScrollOfEnchantment.enchantable(item) && !(item instanceof MissileWeapon));
+			return (ScrollOfEnchantment.enchantable(item));
 		}
 
 		@Override

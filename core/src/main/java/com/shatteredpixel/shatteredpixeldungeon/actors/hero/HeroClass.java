@@ -203,7 +203,7 @@ public enum HeroClass {
 
 		// TODO: remove these
 		Stylus stylus = new Stylus();
-		stylus.quantity(100);//debug
+		stylus.quantity(100);
 		stylus.identify().collect();
 
 		MysteryMeat meat = new MysteryMeat();
@@ -216,6 +216,8 @@ public enum HeroClass {
 		TimekeepersHourglass time = new TimekeepersHourglass();
 		time.identify().collect();
 
+		ThrowingStone stone = new ThrowingStone();
+		stone.identify().collect();
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
