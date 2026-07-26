@@ -32,6 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.Random;
 
+import static java.lang.Math.pow;
+
 public class Overgrowth extends Armor.Glyph {
 	
 	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x000000 );
@@ -39,23 +41,23 @@ public class Overgrowth extends Armor.Glyph {
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
 
-		float procChance = 1/20f * procChanceMultiplier(defender);
+		float procChance = 1/20f * procChanceMultiplier(defender) + armor.buffedLvl()/100f ;
 		if ( Random.Float() < procChance ) {
-
-			Plant p = ((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED)).couch(defender.pos, null);
+			do {
+				Plant p = ((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED)).couch(defender.pos, null);
 			
-			//momentarily revoke warden benefits, otherwise this curse would be incredibly powerful
-			if (defender instanceof Hero && ((Hero) defender).subClass == HeroSubClass.WARDEN){
-				((Hero) defender).subClass = HeroSubClass.NONE;
-				p.activate( defender );
-				((Hero) defender).subClass = HeroSubClass.WARDEN;
-			} else {
-				p.activate( defender );
-			}
+				//momentarily revoke warden benefits, otherwise this curse would be incredibly powerful
+				if (defender instanceof Hero && ((Hero) defender).subClass == HeroSubClass.WARDEN){
+					((Hero) defender).subClass = HeroSubClass.NONE;
+					p.activate( defender );
+					((Hero) defender).subClass = HeroSubClass.WARDEN;
+				} else {
+					p.activate( defender );
+				}
 			
 			
-			CellEmitter.get( defender.pos ).burst( LeafParticle.LEVEL_SPECIFIC, 10 );
-			
+				CellEmitter.get( defender.pos ).burst( LeafParticle.LEVEL_SPECIFIC, 10 );
+			} while (Random.Float() <= .5*(1-pow(.5,.2*armor.buffedLvl())) );
 		}
 		
 		return damage;

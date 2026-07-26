@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.curses;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -28,8 +29,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import static java.lang.Math.sqrt;
 
 public class Corrosion extends Armor.Glyph {
 
@@ -41,10 +45,11 @@ public class Corrosion extends Armor.Glyph {
 		float procChance = 1/10f * procChanceMultiplier(defender);
 		if ( Random.Float() < procChance ) {
 			int pos = defender.pos;
-			for (int i : PathFinder.NEIGHBOURS9){
+			PathFinder.buildDistanceMap(attacker.pos, BArray.not( Dungeon.level.solid, null ), 2 + (int) sqrt(armor.buffedLvl() * 3f) );
+			for (int i : PathFinder.distance){
 				Splash.at(pos+i, 0x000000, 5);
 				if (Actor.findChar(pos+i) != null)
-					Buff.affect(Actor.findChar(pos+i), Ooze.class).set( Ooze.DURATION/2 );
+					Buff.affect(Actor.findChar(pos+i), Ooze.class).set( Ooze.DURATION/2 + armor.buffedLvl() * 2f);
 			}
 		}
 

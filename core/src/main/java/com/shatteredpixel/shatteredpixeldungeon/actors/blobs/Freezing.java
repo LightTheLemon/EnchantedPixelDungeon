@@ -105,14 +105,16 @@ public class Freezing extends Blob {
 	}
 	
 	//legacy functionality from before this was a proper blob. Returns true if this cell is visible
-	public static boolean affect( int cell ) {
-		
+	public static boolean affect( int cell,int... extraDuration ) {
+
+		int extra = extraDuration != null ? extraDuration[0] : 0;
+
 		Char ch = Actor.findChar( cell );
 		if (ch != null) {
 			if (Dungeon.level.water[ch.pos]){
-				Buff.prolong(ch, Frost.class, Frost.DURATION * 3);
+				Buff.prolong(ch, Frost.class, (Frost.DURATION + extra) * 3);
 			} else {
-				Buff.prolong(ch, Frost.class, Frost.DURATION);
+				Buff.prolong(ch, Frost.class, (Frost.DURATION + extra));
 			}
 		}
 

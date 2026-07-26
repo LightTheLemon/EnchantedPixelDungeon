@@ -41,15 +41,15 @@ public class AntiEntropy extends Glyph {
 	@Override
 	public int proc( Armor armor, Char attacker, Char defender, int damage) {
 
-		float procChance = 1/8f * procChanceMultiplier(defender);
+		float procChance = (1/8f * procChanceMultiplier(defender) * 1/(1+(armor.buffedLvl()*.1f)));
 		if ( Random.Float() < procChance ) {
 
 			for (int i : PathFinder.NEIGHBOURS8){
-				Freezing.affect(defender.pos+i);
+				Freezing.affect(defender.pos+i, armor.buffedLvl());
 			}
 
 			if (!Dungeon.level.water[defender.pos]) {
-				Buff.affect(defender, Burning.class).reignite(defender, 4);
+				Buff.affect(defender, Burning.class).reignite(defender, 4 + armor.buffedLvl());
 			}
 			defender.sprite.emitter().burst( FlameParticle.FACTORY, 5 );
 

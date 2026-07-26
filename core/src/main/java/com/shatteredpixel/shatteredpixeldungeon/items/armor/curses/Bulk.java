@@ -23,10 +23,14 @@ package com.shatteredpixel.shatteredpixeldungeon.items.armor.curses;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+
+import static java.lang.Math.max;
+import static java.lang.Math.pow;
 
 public class Bulk extends Armor.Glyph {
 	
@@ -34,12 +38,14 @@ public class Bulk extends Armor.Glyph {
 	
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage) {
-		//no proc effect, triggers in Char.speed()
-		return damage;
+		return max(0, (int) (damage-pow(armor.buffedLvl(),1.1f)));
 	}
 
 	//more of a reduction really
 	public static float speedBoost( Char owner, int level ){
+
+		float levelMultiplicator = owner instanceof Hero && ((Hero) owner).belongings.armor != null ? 1/(1+(((Hero) owner).belongings.armor.buffedLvl()*.1f)) : 1;
+
 		if (level == -1 ||
 				(Dungeon.level.map[owner.pos] != Terrain.DOOR && Dungeon.level.map[owner.pos] != Terrain.OPEN_DOOR )) {
 			return 1;
@@ -47,7 +53,7 @@ public class Bulk extends Armor.Glyph {
 			if (owner.sprite != null){
 				owner.sprite.emitter().startDelayed(ShadowParticle.UP, 0.02f, 5, 0.05f);
 			}
-			return 1/3f * genericProcChanceMultiplier(owner);
+			return 1/3f * genericProcChanceMultiplier(owner) * levelMultiplicator;
 		}
 	}
 	

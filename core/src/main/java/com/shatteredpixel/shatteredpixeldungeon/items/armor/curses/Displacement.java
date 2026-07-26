@@ -22,6 +22,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.armor.curses;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -33,14 +36,28 @@ public class Displacement extends Armor.Glyph {
 
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage ) {
-
-		float procChance = 1/20f * procChanceMultiplier(defender);
+		boolean noDamage = false;
+		float procChance = 1/20f * procChanceMultiplier(defender) + armor.buffedLvl()/100f ;
 		if ( Random.Float() < procChance ) {
 			ScrollOfTeleportation.teleportChar(defender);
-			return 0;
+			noDamage = true;
+			Buff.affect(defender, Daze.class, armor.buffedLvl()*1.1f);
+			Buff.affect(defender, Vertigo.class, armor.buffedLvl()*1.1f);
+			Buff.affect(attacker, Daze.class, armor.buffedLvl()*.7f);
+			Buff.affect(attacker, Vertigo.class, armor.buffedLvl()*.7f);
 		}
 
-		return damage;
+		if ( Random.Float() < procChance ) {
+			ScrollOfTeleportation.teleportChar(attacker);
+			noDamage = true;
+			Buff.affect(attacker, Daze.class, armor.buffedLvl()*1.1f);
+			Buff.affect(attacker, Vertigo.class, armor.buffedLvl()*1.1f);
+			Buff.affect(defender, Daze.class, armor.buffedLvl()*.7f);
+			Buff.affect(defender, Vertigo.class, armor.buffedLvl()*.7f);
+		}
+
+
+		return !noDamage ? damage : 0;
 	}
 
 	@Override
