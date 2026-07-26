@@ -60,7 +60,7 @@ public class PhantomStopwatch extends Artifact {
 		image = ItemSpriteSheet.ARTIFACT_WATCH;
 
 		levelCap = 5;
-		exp = 0;
+		//exp = 0;
 		charge = 15+(level() * 3); //value of each charge is decreased
 
 		partialCharge = 0;
@@ -103,11 +103,8 @@ public class PhantomStopwatch extends Artifact {
 
 			if (!isEquipped( hero ))        GLog.i( Messages.get(Artifact.class, "need_to_equip") );
 			else if (activeBuff != null) {
-				if (activeBuff instanceof timeStasis) { //do nothing
-				} else {
 					activeBuff.detach();
 					GLog.i( Messages.get(this, "deactivate") );
-				}
 			} else if (charge <= 0)         GLog.i( Messages.get(this, "no_charge") );
 			else if (cursed)                GLog.i( Messages.get(this, "cursed") );
 			else {
@@ -173,7 +170,7 @@ public class PhantomStopwatch extends Artifact {
 
 	@Override
 	public Item upgrade() {
-		chargeCap+= 1;
+		chargeCap+= 3;
 
 		//for artifact transmutation.
 		while (level()+1 > sandBags)
@@ -221,8 +218,6 @@ public class PhantomStopwatch extends Artifact {
 
 			if (buffBundle.contains( timeFreeze.PRESSES ))
 				activeBuff = new timeFreeze();
-			else
-				activeBuff = new timeStasis();
 
 			activeBuff.restoreFromBundle(buffBundle);
 		}
@@ -230,11 +225,6 @@ public class PhantomStopwatch extends Artifact {
 
 	public void attackCost (int amount) {
 		charge = Math.max(0, charge - amount);
-
-		//charge -= Math.max(0, amount);
-
-		//if (activeBuff != null)
-		//	((timeFreeze)activeBuff).processTime(amount);
 
 		updateQuickslot();
 	}
@@ -271,73 +261,6 @@ public class PhantomStopwatch extends Artifact {
 		}
 	}
 
-	public class timeStasis extends ArtifactBuff {
-		
-		{
-			type = buffType.POSITIVE;
-			actPriority = BUFF_PRIO-3; //acts after all other buffs, so they are prevented
-		}
-
-		@Override
-		public boolean attachTo(Char target) {
-
-			if (super.attachTo(target)) {
-
-				Invisibility.dispel();
-
-				int usedCharge = Math.min(charge, 2);
-				//buffs always act last, so the stasis buff should end a turn early.
-				spend(5*usedCharge);
-
-				//shouldn't punish the player for going into stasis frequently
-				Hunger hunger = Buff.affect(target, Hunger.class);
-				if (hunger != null && !hunger.isStarving()) {
-					hunger.satisfy(5 * usedCharge);
-				}
-
-				charge -= usedCharge;
-
-				target.invisible++;
-				target.paralysed++;
-				target.next();
-
-				updateQuickslot();
-
-				if (Dungeon.hero != null) {
-					Dungeon.observe();
-				}
-
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		@Override
-		public boolean act() {
-			detach();
-			return true;
-		}
-
-		@Override
-		public void detach() {
-			if (target.invisible > 0) target.invisible--;
-			if (target.paralysed > 0) target.paralysed--;
-			super.detach();
-			activeBuff = null;
-			Dungeon.observe();
-		}
-
-		@Override
-		public void fx(boolean on) {
-			if (on) target.sprite.add( CharSprite.State.PARALYSED );
-			else {
-				if (target.paralysed == 0) target.sprite.remove( CharSprite.State.PARALYSED );
-				if (target.invisible == 0) target.sprite.remove( CharSprite.State.INVISIBLE );
-			}
-		}
-	}
-
 	public class timeFreeze extends ArtifactBuff {
 		
 		{
@@ -348,15 +271,8 @@ public class PhantomStopwatch extends Artifact {
 
 		ArrayList<Integer> presses = new ArrayList<>();
 
-		public void processTime(float time){
-			//turnsToCost -= time;
-			charge --;
-			//use 1/1,000 to account for rounding errors
-			//while (turnsToCost < -0.001f){
-			//	turnsToCost += 0f;
-			//	charge --;
-			//}
-
+		public void processTime(float timePass){
+			charge -= (int) timePass;
 			updateQuickslot();
 
 			if (charge < 0 || charge == 0 && turnsToCost <= 0){

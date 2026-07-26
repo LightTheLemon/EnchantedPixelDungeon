@@ -77,7 +77,7 @@ public class ScrollOfSirensSong extends ExoticScroll {
 
 			if (target == null && !anonymous && !identifiedByUse){
 				GLog.w(Messages.get(ScrollOfSirensSong.class, "cancel"));
-				return;
+				//return;
 
 			} else {
 

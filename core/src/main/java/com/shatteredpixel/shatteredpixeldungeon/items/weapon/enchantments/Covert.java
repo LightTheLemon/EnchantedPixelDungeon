@@ -1,8 +1,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -44,9 +47,11 @@ public class Covert extends Weapon.Enchantment {
             }
              */
 
-            attacker.buff(Invisibility.class);
-            Buff.prolong(attacker, Invisibility.class, 3);
-            Buff.affect(attacker, Invisibility.class, 4f);
+            //Buff.affect(attacker, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
+            //Buff.affect(hero, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
+            //Buff.append(hero, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
+            Buff.affect( hero, Charm.class, Charm.DURATION ).object = attacker.id(); //test
+
 
             GLog.i( Messages.get(this, "invisible") );
             Sample.INSTANCE.play( Assets.Sounds.MELD );
@@ -54,7 +59,7 @@ public class Covert extends Weapon.Enchantment {
 
         }
 
-        return damage; //was return damage;
+        return damage;
 
     }
 

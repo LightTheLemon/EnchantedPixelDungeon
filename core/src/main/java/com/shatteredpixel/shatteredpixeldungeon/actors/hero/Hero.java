@@ -199,7 +199,7 @@ public class Hero extends Char {
 	
 	public static final int MAX_LEVEL = 30;
 
-	public static final int STARTING_STR = 8; //fun
+	public static final int STARTING_STR = 10;
 	
 	private static final float TIME_TO_REST		    = 1f;
 	private static final float TIME_TO_SEARCH	    = 2f;
@@ -491,6 +491,7 @@ public class Hero extends Char {
 	@Override
 	public boolean attack(Char enemy, float dmgMulti, float dmgBonus, float accMulti) {
 		boolean result = super.attack(enemy, dmgMulti, dmgBonus, accMulti);
+
 		if (!(belongings.attackingWeapon() instanceof MissileWeapon)){
 			if (buff(Talent.PreciseAssaultTracker.class) != null){
 				buff(Talent.PreciseAssaultTracker.class).detach();
@@ -501,9 +502,10 @@ public class Hero extends Char {
 		}
 		if (result) {
 			PhantomStopwatch watch = belongings.getItem(PhantomStopwatch.class);
+			PhantomStopwatch.timeFreeze buff = buff(PhantomStopwatch.timeFreeze.class);
 
-			if (watch != null) {
-				watch.attackCost(4);
+			if (watch != null &&  buff != null) {
+				watch.attackCost(1);
 			}
 		}
 		return result;

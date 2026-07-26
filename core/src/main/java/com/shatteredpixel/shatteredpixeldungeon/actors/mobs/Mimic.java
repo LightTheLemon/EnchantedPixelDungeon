@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -162,7 +163,7 @@ public class Mimic extends Mob {
 		Dungeon.hero.sprite.operate(pos);
 		if (Dungeon.hero.invisible <= 0
 				&& Dungeon.hero.buff(Swiftthistle.TimeBubble.class) == null
-				&& Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class) == null){
+				&& Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) == null){
 			return doAttack(Dungeon.hero);
 		} else {
 			sprite.idle();

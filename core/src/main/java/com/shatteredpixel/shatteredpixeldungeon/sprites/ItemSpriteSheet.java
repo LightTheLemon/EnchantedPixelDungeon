@@ -488,7 +488,7 @@ public class ItemSpriteSheet {
 		assignItemRect(ARTIFACT_ROSE3,      14, 14);
 		assignItemRect(ARTIFACT_TOME,       14, 16);
 		assignItemRect(ARTIFACT_KEY,        8,  16);
-		assignItemRect(ARTIFACT_WATCH,      12,  15);
+		assignItemRect(ARTIFACT_WATCH,      12,  16);
 	}
 
 	private static final int TRINKETS        =                               xy(1, 18);  //32 slots

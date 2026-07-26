@@ -206,10 +206,6 @@ public enum HeroClass {
 		stylus.quantity(100);
 		stylus.identify().collect();
 
-		MysteryMeat meat = new MysteryMeat();
-		meat.quantity(100);
-		meat.identify().collect();
-
 		PhantomStopwatch watch = new PhantomStopwatch();
 		watch.identify().collect();
 

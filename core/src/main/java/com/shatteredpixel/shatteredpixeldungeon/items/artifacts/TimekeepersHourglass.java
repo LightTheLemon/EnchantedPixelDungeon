@@ -63,9 +63,9 @@ public class TimekeepersHourglass extends Artifact {
 
 		levelCap = 5;
 
-		charge = 5+level();
+		charge = 10+(level() * 3);
 		partialCharge = 0;
-		chargeCap = 5+level();
+		chargeCap = 10+(level() * 3);
 
 		defaultAction = AC_ACTIVATE;
 	}
@@ -210,10 +210,7 @@ public class TimekeepersHourglass extends Artifact {
 		if (bundle.contains( BUFF )){
 			Bundle buffBundle = bundle.getBundle( BUFF );
 
-			if (buffBundle.contains( timeFreeze.PRESSES ))
-				activeBuff = new timeFreeze();
-			else
-				activeBuff = new timeStasis();
+			activeBuff = new timeStasis();
 
 			activeBuff.restoreFromBundle(buffBundle);
 		}
@@ -265,17 +262,17 @@ public class TimekeepersHourglass extends Artifact {
 
 				Invisibility.dispel();
 
-				int usedCharge = Math.min(charge, 2);
+				int usedCharge = 0; //was Math.min(charge, 2). should just use one charge
 				//buffs always act last, so the stasis buff should end a turn early.
-				spend(5*usedCharge);
+				spend(usedCharge); //was 5*usedcharge
 
 				//shouldn't punish the player for going into stasis frequently
 				Hunger hunger = Buff.affect(target, Hunger.class);
 				if (hunger != null && !hunger.isStarving()) {
-					hunger.satisfy(5 * usedCharge);
+					hunger.satisfy(usedCharge); //was 5*usedcharge
 				}
 
-				charge -= usedCharge;
+				charge -= 1;
 
 				target.invisible++;
 				target.paralysed++;
@@ -317,7 +314,7 @@ public class TimekeepersHourglass extends Artifact {
 			}
 		}
 	}
-
+	/*
 	public class timeFreeze extends ArtifactBuff {
 		
 		{
@@ -467,6 +464,8 @@ public class TimekeepersHourglass extends Artifact {
 			turnsToCost = bundle.getFloat( TURNSTOCOST );
 		}
 	}
+
+	 */
 
 	public static class sandBag extends Item {
 
