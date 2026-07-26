@@ -22,6 +22,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.Random;
@@ -35,9 +37,13 @@ public class Polarized extends Weapon.Enchantment {
 
 		float procChance = 1/2f * procChanceMultiplier(attacker);
 		if (Random.Float() < procChance) {
-			return Math.round(1.5f*damage);
+			return (int) Math.round(damage*(1.5+weapon.buffedLvl()*.1f));
 		} else {
-			return 0;
+			float heal = damage * 0.1f * weapon.buffedLvl();
+			float shield = heal - (defender.HT - defender.HP);
+			if (shield > 0)
+				Buff.affect(defender, Barrier.class).setShield((int) shield);
+			return shield > 0 ? defender.HT - defender.HP : (int) heal;
 		}
 		
 	}

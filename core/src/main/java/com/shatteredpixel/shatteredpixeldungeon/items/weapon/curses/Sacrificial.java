@@ -44,7 +44,7 @@ public class Sacrificial extends Weapon.Enchantment {
 			}
 		}
 
-		return damage;
+		return (int) (damage*(1+ weapon.buffedLvl()*.075f));
 	}
 
 	@Override
