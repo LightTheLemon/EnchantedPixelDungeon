@@ -3,6 +3,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
@@ -30,32 +31,18 @@ public class Covert extends Weapon.Enchantment {
         //float procChance = (level+1f)/(level+3f) * procChanceMultiplier(attacker);
 
         if (damage >= defender.HP){
-            /*
-            float powerMulti = Math.max(1f, procChance);
 
-            if (defender.buff(Burning.class) == null){
-                Buff.affect(defender, Burning.class).reignite(defender, 8f);
-                powerMulti -= 1;
-            }
-
-            if (powerMulti > 0){
-                int burnDamage = Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 );
-                burnDamage = Math.round(burnDamage * 0.67f * powerMulti);
-                if (burnDamage > 0) {
-                    defender.damage(burnDamage, this);
-                }
-            }
-             */
 
             //Buff.affect(attacker, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
             //Buff.affect(hero, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
-            //Buff.append(hero, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
-            Buff.affect( hero, Charm.class, Charm.DURATION ).object = attacker.id(); //test
+            //Buff.append(Dungeon.hero, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
+            //Buff.affect( Dungeon.hero, Charm.class, Charm.DURATION ).object = attacker.id(); //test
+            Buff.prolong( attacker, Invisibility.class, Invisibility.DURATION / 3);
 
-
-            GLog.i( Messages.get(this, "invisible") );
+            //GLog.i("You turn invisible!");
+            //GLog.i( Messages.get(this, "invisible") );
             Sample.INSTANCE.play( Assets.Sounds.MELD );
-            defender.sprite.emitter().burst( ShadowParticle.MISSILE, level + 1 );
+            defender.sprite.emitter().burst( ShadowParticle.MISSILE, (level / 2) + 1 );
 
         }
 
