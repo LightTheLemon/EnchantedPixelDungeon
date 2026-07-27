@@ -37,6 +37,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
+import static java.lang.Math.pow;
+
 public class Explosive extends Weapon.Enchantment {
 
 	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x000000 );
@@ -82,9 +84,11 @@ public class Explosive extends Weapon.Enchantment {
 				explosionPos = defender.pos;
 			}
 
-			new ExplosiveCurseBomb().explode(explosionPos);
+			do {
+				new ExplosiveCurseBomb().explode(explosionPos);
+			} while  (Random.Float() <= .5*(1-pow(.5,.2*weapon.buffedLvl())) );
 
-			durability += 100;
+			durability += (100 - weapon.buffedLvl()*2);
 			Item.updateQuickslot();
 
 			if (weapon instanceof MissileWeapon){

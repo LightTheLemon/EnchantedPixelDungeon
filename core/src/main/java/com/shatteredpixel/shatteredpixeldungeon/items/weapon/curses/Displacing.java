@@ -23,6 +23,9 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -45,10 +48,18 @@ public class Displacing extends Weapon.Enchantment {
 			if (ScrollOfTeleportation.teleportChar(defender)){
 				if (Dungeon.level.heroFOV[oldpos]) {
 					CellEmitter.get( oldpos ).start( Speck.factory( Speck.LIGHT ), 0.2f, 3 );
+					if (weapon.buffedLvl() != 0) {
+						Buff.affect(attacker, Daze.class, 5f + weapon.buffedLvl());
+						Buff.affect(attacker, Slow.class, 6f + weapon.buffedLvl());
+					}
 				}
 
 				if (defender instanceof Mob && ((Mob) defender).state == ((Mob) defender).HUNTING){
 					((Mob) defender).state = ((Mob) defender).WANDERING;
+					if (weapon.buffedLvl() != 0) {
+						Buff.affect(attacker, Daze.class, 5f + weapon.buffedLvl() * 1.2f);
+						Buff.affect(attacker, Slow.class, 6f + weapon.buffedLvl() * 1.2f);
+					}
 				}
 			}
 		}
