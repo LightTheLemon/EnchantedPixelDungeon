@@ -50,23 +50,20 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -208,6 +205,13 @@ public enum HeroClass {
 		Stylus stylus = new Stylus();
 		stylus.quantity(100);
 		stylus.identify().collect();
+
+		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
+		upgrade.quantity(100);
+		upgrade.identify().collect();
+
+		RingOfMight ring = new RingOfMight();
+		ring.identify().collect();
 
 		PhantomStopwatch watch = new PhantomStopwatch();
 		watch.identify().collect();

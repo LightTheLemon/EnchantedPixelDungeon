@@ -18,7 +18,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 
 public class Covert extends Weapon.Enchantment {
-
     private static ItemSprite.Glowing BLUE = new ItemSprite.Glowing( 0x0000FF );
 
     @Override
@@ -27,28 +26,18 @@ public class Covert extends Weapon.Enchantment {
         // lvl 0 - 33%
         // lvl 1 - 50%
         // lvl 2 - 60%
-
         //float procChance = (level+1f)/(level+3f) * procChanceMultiplier(attacker);
 
         if (damage >= defender.HP){
-
-
-            //Buff.affect(attacker, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
-            //Buff.affect(hero, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
-            //Buff.append(Dungeon.hero, Invisibility.class, 1 * level * procChanceMultiplier(attacker));
-            //Buff.affect( Dungeon.hero, Charm.class, Charm.DURATION ).object = attacker.id(); //test
-            Buff.prolong( attacker, Invisibility.class, Invisibility.DURATION / 3);
-
-            //GLog.i("You turn invisible!");
-            //GLog.i( Messages.get(this, "invisible") );
+            GLog.i( Messages.get(this, "invisible") );
             Sample.INSTANCE.play( Assets.Sounds.MELD );
             defender.sprite.emitter().burst( ShadowParticle.MISSILE, (level / 2) + 1 );
-
         }
 
         return damage;
 
     }
+
 
     @Override
     public Glowing glowing() {

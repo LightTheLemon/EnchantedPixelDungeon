@@ -118,7 +118,7 @@ public class WandOfRegrowth extends Wand {
 						Statistics.qualifiedForBossChallengeBadge = false;
 					}
 					wandProc(ch, chargesPerCast());
-					Buff.prolong( ch, Roots.class, 4f * chrgUsed );
+					Buff.prolong( ch, Roots.class, 2f * chrgUsed + (buffedLvl() / 2f)); //duration now scales with level
 				}
 			}
 		}

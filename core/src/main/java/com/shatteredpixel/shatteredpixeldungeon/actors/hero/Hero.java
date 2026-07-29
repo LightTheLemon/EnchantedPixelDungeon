@@ -138,6 +138,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Covert;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -1425,7 +1426,6 @@ public class Hero extends Char {
 			ready();
 			return false;
 		}
-
 		if (attackTarget.isAlive() && canAttack(attackTarget) && attackTarget.invisible == 0) {
 
 			if (heroClass != HeroClass.DUELIST
@@ -2341,6 +2341,11 @@ public class Hero extends Char {
 
 		if (hit && heroClass == HeroClass.DUELIST && wasEnemy){
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
+		}
+
+		Weapon weapon = belongings.getItem(Weapon.class);
+		if (weapon != null && weapon.enchantment instanceof Covert && attackTarget.HP <= 0) {
+			Buff.append( this, Invisibility.class, Invisibility.DURATION / 10 * weapon.buffedLvl());
 		}
 
 		curAction = null;

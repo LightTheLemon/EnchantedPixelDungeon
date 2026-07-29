@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
@@ -72,7 +73,7 @@ public class Hunger extends Buff implements Hero.Doom {
 			return true;
 		}
 
-		if (target.isAlive() && target instanceof Hero) {
+		if (target.isAlive() && target instanceof Hero && hero.HP > 1) {
 
 			Hero hero = (Hero)target;
 
