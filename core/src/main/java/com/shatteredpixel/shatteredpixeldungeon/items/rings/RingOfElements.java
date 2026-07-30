@@ -25,13 +25,31 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Foresight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PrismaticGuard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stamina;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WellFed;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -48,10 +66,10 @@ public class RingOfElements extends Ring {
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, soloBuffedBonus()))));
+					Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, soloBuffedBonus()))));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, combinedBuffedBonus(Dungeon.hero)))));
+						Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, combinedBuffedBonus(Dungeon.hero)))));
 			}
 			return info;
 		} else {
@@ -66,7 +84,7 @@ public class RingOfElements extends Ring {
 	
 	@Override
 	protected RingBuff buff( ) {
-		return new Resistance();
+		return new Resistance(); //resistance here means both resistance and buffs
 	}
 
 	public static final HashSet<Class> RESISTS = new HashSet<>();
@@ -84,20 +102,54 @@ public class RingOfElements extends Ring {
 
 		RESISTS.addAll( AntiMagic.RESISTS );
 	}
-	
+
+	public static final HashSet<Class> BUFFS = new HashSet<>();
+	static {
+		BUFFS.add( Healing.class );
+		BUFFS.add( Invisibility.class );
+		BUFFS.add( ArtifactRecharge.class);
+		BUFFS.add( Awareness.class);
+		BUFFS.add( Barkskin.class);
+		BUFFS.add( BlobImmunity.class);
+		BUFFS.add( Foresight.class);
+		BUFFS.add( Haste.class);
+		BUFFS.add( Invulnerability.class);
+		BUFFS.add( Levitation.class);
+		BUFFS.add( MindVision.class);
+		BUFFS.add( Light.class);
+		BUFFS.add( PrismaticGuard.class);
+		BUFFS.add( Regeneration.class);
+		BUFFS.add( ShieldBuff.class);
+		BUFFS.add( WellFed.class);
+		BUFFS.add( Stamina.class);
+	}
+
 	public static float resist( Char target, Class effect ){
 		if (getBuffedBonus(target, Resistance.class) == 0) return 1f;
 		
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
-				return (float)Math.pow(0.825, getBuffedBonus(target, Resistance.class));
+				return (float)Math.pow(0.85f, getBuffedBonus(target, Resistance.class));
 			}
 		}
 		
 		return 1f;
 	}
+
+	public static float buffExtend ( Char target, Class effect) {
+		if (getBuffedBonus(target, Resistance.class) == 0) return 1f;
+
+		for (Class c : BUFFS){
+			if (c.isAssignableFrom(effect)){
+				return 1f + (1.08f * getBuffedBonus(target, Resistance.class));
+			}
+		}
+        return 1f;
+    }
 	
-	public class Resistance extends RingBuff {
+	public class Resistance extends RingBuff { //resistance here means both resistance and buffs
 	
 	}
+
+
 }

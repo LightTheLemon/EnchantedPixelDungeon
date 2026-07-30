@@ -1300,7 +1300,7 @@ public abstract class Char extends Actor {
 	}
 	
 	protected final HashSet<Class> resistances = new HashSet<>();
-	
+
 	//returns percent effectiveness after resistances
 	//TODO currently resistances reduce effectiveness by a static 50%, and do not stack.
 	public float resist( Class effect ){
@@ -1320,7 +1320,27 @@ public abstract class Char extends Actor {
 		}
 		return result * RingOfElements.resist(this, effect);
 	}
-	
+
+	protected final HashSet<Class> extendbuffs = new HashSet<>();
+
+	public float buffExtend( Class effect ){
+		HashSet<Class> buffs = new HashSet<>(extendbuffs);
+		for (Property p : properties()){
+			buffs.addAll(p.extendbuffs());
+		}
+		for (Buff b : buffs()){
+			buffs.addAll(b.extendbuffs());
+		}
+
+		float result = 1f;
+		for (Class c : buffs){
+			if (c.isAssignableFrom(effect)){
+				result *= 0.5f;
+			}
+		}
+		return result * RingOfElements.buffExtend(this, effect);
+	}
+
 	protected final HashSet<Class> immunities = new HashSet<>();
 	
 	public boolean isImmune(Class effect ){
@@ -1388,6 +1408,9 @@ public abstract class Char extends Actor {
 									Paralysis.class, Frost.class, Chill.class, Slow.class, Speed.class) ));
 
 		private HashSet<Class> resistances;
+
+		private HashSet<Class> extendbuffs = new HashSet<>();
+
 		private HashSet<Class> immunities;
 		
 		Property(){
@@ -1402,7 +1425,11 @@ public abstract class Char extends Actor {
 		public HashSet<Class> resistances(){
 			return new HashSet<>(resistances);
 		}
-		
+
+		public HashSet<Class> extendbuffs(){
+			return new HashSet<>(extendbuffs);
+		}
+
 		public HashSet<Class> immunities(){
 			return new HashSet<>(immunities);
 		}

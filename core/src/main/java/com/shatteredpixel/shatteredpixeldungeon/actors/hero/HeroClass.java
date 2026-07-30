@@ -63,6 +63,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
@@ -210,8 +211,8 @@ public enum HeroClass {
 		upgrade.quantity(100);
 		upgrade.identify().collect();
 
-		RingOfMight ring = new RingOfMight();
-		ring.identify().collect();
+		RingOfElements ring = new RingOfElements();
+		ring.collect();
 
 		PhantomStopwatch watch = new PhantomStopwatch();
 		watch.identify().collect();

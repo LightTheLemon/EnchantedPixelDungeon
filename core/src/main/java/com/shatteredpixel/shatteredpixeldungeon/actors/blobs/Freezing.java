@@ -107,7 +107,9 @@ public class Freezing extends Blob {
 	//legacy functionality from before this was a proper blob. Returns true if this cell is visible
 	public static boolean affect( int cell,int... extraDuration ) {
 
-		int extra = extraDuration != null ? extraDuration[0] : 0;
+		//int extra = extraDuration != null ? extraDuration[0] : 0;
+
+		int extra = extraDuration.length > 0 ? extraDuration[0] : 0;
 
 		Char ch = Actor.findChar( cell );
 		if (ch != null) {
