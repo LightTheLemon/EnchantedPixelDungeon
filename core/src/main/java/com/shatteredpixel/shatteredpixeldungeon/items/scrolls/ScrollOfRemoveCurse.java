@@ -88,9 +88,9 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 		} if ((item instanceof EquipableItem || item instanceof Wand) && ((!item.isIdentified() && !item.cursedKnown) || item.cursed)){
 			return true;
 		} else if (item instanceof Weapon){
-			return ((Weapon)item).hasCurseEnchant();
-		} else if (item instanceof Armor){
-			return ((Armor)item).hasCurseGlyph();
+			return (((Weapon)item).hasCurseEnchant() || ((Weapon)item).hasGoodEnchant());
+		} else if (item instanceof Armor) {
+			return ((Armor) item).hasCurseGlyph() || ((Armor)item).hasGoodGlyph();
 		} else {
 			return false;
 		}
@@ -116,12 +116,12 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 
 	public static boolean uncurse( Hero hero, Item... items ) {
 		
-		boolean procced = false;
+		boolean proceed = false;
 		for (Item item : items) {
 			if (item != null) {
 				item.cursedKnown = true;
 				if (item.cursed) {
-					procced = true;
+					proceed = true;
 					item.cursed = false;
 				}
 			}
@@ -129,14 +129,18 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 				Weapon w = (Weapon) item;
 				if (w.hasCurseEnchant()){
 					w.enchant(null);
-					procced = true;
+					proceed = true;
+				}
+				if (w.hasGoodEnchant()) { //should remove enchantment
+					w.enchant(null);
+					proceed = true;
 				}
 			}
 			if (item instanceof Armor){
 				Armor a = (Armor) item;
 				if (a.hasCurseGlyph()){
 					a.inscribe(null);
-					procced = true;
+					proceed = true;
 				}
 			}
 			if (item instanceof Wand){
@@ -144,7 +148,7 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 			}
 		}
 		
-		if (procced) {
+		if (proceed) {
 			if (hero != null) {
 				hero.sprite.emitter().start(ShadowParticle.UP, 0.05f, 10);
 				hero.updateHT(false); //for ring of might
@@ -154,7 +158,7 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 			Badges.validateClericUnlock();
 		}
 		
-		return procced;
+		return proceed;
 	}
 	
 	@Override

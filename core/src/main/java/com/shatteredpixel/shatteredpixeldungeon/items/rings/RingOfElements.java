@@ -60,16 +60,18 @@ public class RingOfElements extends Ring {
 
 	{
 		icon = ItemSpriteSheet.Icons.RING_ELEMENTS;
-		buffClass = Resistance.class;
+		buffClass = Elements.class;
 	}
 
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, soloBuffedBonus()))));
+				Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, soloBuffedBonus()))));
+				Messages.decimalFormat("#.##", 100f *  (1.12f * soloBuffedBonus()));
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, combinedBuffedBonus(Dungeon.hero)))));
+				Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, combinedBuffedBonus(Dungeon.hero)))));
+				Messages.decimalFormat("#.##", 100f *  (1.12f * combinedBuffedBonus(Dungeon.hero)));
 			}
 			return info;
 		} else {
@@ -84,7 +86,7 @@ public class RingOfElements extends Ring {
 	
 	@Override
 	protected RingBuff buff( ) {
-		return new Resistance(); //resistance here means both resistance and buffs
+		return new Elements();
 	}
 
 	public static final HashSet<Class> RESISTS = new HashSet<>();
@@ -125,11 +127,11 @@ public class RingOfElements extends Ring {
 	}
 
 	public static float resist( Char target, Class effect ){
-		if (getBuffedBonus(target, Resistance.class) == 0) return 1f;
+		if (getBuffedBonus(target, Elements.class) == 0) return 1f;
 		
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
-				return (float)Math.pow(0.85f, getBuffedBonus(target, Resistance.class));
+				return (float)Math.pow(0.85f, getBuffedBonus(target, Elements.class));
 			}
 		}
 		
@@ -137,17 +139,17 @@ public class RingOfElements extends Ring {
 	}
 
 	public static float buffExtend ( Char target, Class effect) {
-		if (getBuffedBonus(target, Resistance.class) == 0) return 1f;
+		if (getBuffedBonus(target, Elements.class) == 0) return 1f;
 
 		for (Class c : BUFFS){
 			if (c.isAssignableFrom(effect)){
-				return 1f + (1.08f * getBuffedBonus(target, Resistance.class));
+				return 1f + (1.12f * getBuffedBonus(target, Elements.class));
 			}
 		}
         return 1f;
     }
 	
-	public class Resistance extends RingBuff { //resistance here means both resistance and buffs
+	public class Elements extends RingBuff {
 	
 	}
 

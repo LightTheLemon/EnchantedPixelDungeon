@@ -708,8 +708,12 @@ public class Hero extends Char {
 
 	//damage rolls that come from the hero can have their RNG influenced by clover
 	public static int heroDamageIntRange(int min, int max ){
+		RingOfAccuracy ring = Dungeon.hero.belongings.getItem(RingOfAccuracy.class);
 		if (Random.Float() < ThirteenLeafClover.alterHeroDamageChance()){
 			return ThirteenLeafClover.alterDamageRoll(min, max);
+		} else if (ring != null) {
+			return Random.NormalIntRange(min + (int) RingOfAccuracy.drBonus(), max - (int) RingOfAccuracy.drBonus());
+
 		} else {
 			return Random.NormalIntRange(min, max);
 		}
@@ -2151,11 +2155,13 @@ public class Hero extends Char {
 		if (ankh != null) {
 			interrupt();
 
-			if (ankh.isBlessed()) {
-				this.HP = HT; //fully heals
+			if (ankh.isBlessed()) { //now fully heals and satisfies hunger
+				this.HP = HT;
+				Dungeon.hero.buff( Hunger.class ).satisfy( Hunger.STARVING );
+
 
 				PotionOfHealing.cure(this);
-				Buff.prolong(this, Invulnerability.class, Invulnerability.DURATION);
+				Buff.prolong(this, Invulnerability.class, Invulnerability.DURATION * 2);
 
 				SpellSprite.show(this, SpellSprite.ANKH);
 				GameScene.flash(0x80FFFF40);

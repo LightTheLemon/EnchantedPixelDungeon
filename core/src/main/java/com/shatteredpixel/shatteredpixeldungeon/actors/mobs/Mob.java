@@ -757,7 +757,7 @@ public abstract class Mob extends Char {
 				Buff.affect(Dungeon.hero, Hunger.class).affectHunger(restoration*Dungeon.hero.pointsInTalent(Talent.SOUL_EATER)/3f);
 
 				if (Dungeon.hero.HP < Dungeon.hero.HT) {
-					int heal = (int)Math.ceil(restoration * 0.3f * Dungeon.hero.pointsInTalent(Talent.SOUL_SIPHON)/3f); //changing soul siphon effect. Nerfed base health restore
+					int heal = (int)Math.ceil(restoration * 0.30f * 1 + Dungeon.hero.pointsInTalent(Talent.SOUL_SIPHON)/4f); //changing soul siphon effect. Nerfed base health restore
 					Dungeon.hero.HP = Math.min(Dungeon.hero.HT, Dungeon.hero.HP + heal);
 					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
 				}

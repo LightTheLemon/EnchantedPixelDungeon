@@ -60,6 +60,10 @@ public class RingOfAccuracy extends Ring {
 	public static float accuracyMultiplier( Char target ){
 		return (float)Math.pow(1.3f, getBuffedBonus(target, Accuracy.class));
 	}
+
+	public static float drBonus () {
+		return 1 + 0.5f * RingOfAccuracy.getBuffedBonus(Dungeon.hero, Accuracy.class);
+	}
 	
 	public class Accuracy extends RingBuff {
 	}

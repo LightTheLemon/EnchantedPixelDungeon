@@ -554,7 +554,7 @@ public class Dungeon {
 	}
 	
 	public static boolean asNeeded() {
-		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 2)); //mod, was depth / 5
+		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 3)); //mod, was depth / 5
 		if (asLeftThisSet <= 0) return false;
 
 		int floorThisSet = (depth % 5);
@@ -581,7 +581,7 @@ public class Dungeon {
 		return depth < 5 && !LimitedDrops.INT_STONE.dropped() && Random.Int(4-depth) == 0;
 	}
 
-	public static boolean trinketCataNeeded(){
+	public static boolean trinketCataNeeded(){ //TODO: add more drops on high depths
 		//one trinket catalyst on floors 1-3
 		return depth < 5 && !LimitedDrops.TRINKET_CATA.dropped() && Random.Int(4-depth) == 0;
 	}

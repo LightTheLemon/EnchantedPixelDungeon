@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfAwareness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfHealth;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WellWater;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
@@ -35,7 +36,7 @@ import com.watabou.utils.Random;
 public class MagicWellRoom extends SpecialRoom {
 
 	private static final Class<?>[] WATERS =
-		{WaterOfAwareness.class, WaterOfHealth.class};
+		{WaterOfAwareness.class, WaterOfHealth.class, WaterOfEnchantment.class};
 	
 	public Class<?extends WellWater> overrideWater = null;
 	
