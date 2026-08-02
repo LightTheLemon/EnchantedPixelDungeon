@@ -562,14 +562,14 @@ public class Dungeon {
 		return Random.Int(5 - floorThisSet) < asLeftThisSet;
 	}
 
-	public static boolean enchStoneNeeded(){
+	public static boolean enchStoneNeeded(){ //test
 		//1 enchantment stone, spawns on chapter 2 or 3
 		if (!LimitedDrops.ENCH_STONE.dropped()){
 			int region = 1+depth/5;
 			if (region > 1){
 				int floorsVisited = depth - 5;
-				if (floorsVisited > 4) floorsVisited--; //skip floor 10
-				return Random.Int(4-floorsVisited) == 0; //modified from 9-floorsVisited
+				if (floorsVisited == 5) floorsVisited--; //skip floor 10
+				return Random.Int(floorsVisited) == 0; //modified from 9-floorsVisited
 			}
 
 		}
@@ -583,6 +583,9 @@ public class Dungeon {
 
 	public static boolean trinketCataNeeded(){ //TODO: add more drops on high depths
 		//one trinket catalyst on floors 1-3
+		if (depth > 18) {
+			return Math.random() > 0.2;
+		}
 		return depth < 5 && !LimitedDrops.TRINKET_CATA.dropped() && Random.Int(4-depth) == 0;
 	}
 

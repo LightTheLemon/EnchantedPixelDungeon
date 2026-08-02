@@ -60,10 +60,11 @@ public class WaterOfEnchantment extends WellWater {
 		
 		Sample.INSTANCE.play( Assets.Sounds.DRINK );
 
-		PotionOfHealing.heal( hero );
-		hero.belongings.uncurseEquipped();
-		hero.HP += Math.min(hero.HT, hero.HP + hero.HT / 3);
+		if (!hero.belongings.weapon().cursed && !((Weapon)hero.belongings.weapon()).hasGoodEnchant()) {
+			((Weapon) hero.belongings.weapon()).enchant();
+		}
 
+		hero.belongings.uncurseEquipped();
 
 		hero.sprite.emitter().start(Speck.factory(Speck.BLUE_LIGHT), 0.4f, 4);
 		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(hero.HT), FloatingText.EXPERIENCE);
@@ -82,23 +83,33 @@ public class WaterOfEnchantment extends WellWater {
 	protected Item affectItem( Item item, int pos ) {
 		if (item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
 			item.upgrade();
+			CellEmitter.get( pos ).start( Speck.factory( Speck.BLUE_LIGHT ), 0.4f, 4 );
+			Sample.INSTANCE.play( Assets.Sounds.DRINK );
+			return item;
+		} else if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
+			((Waterskin)item).fill();
 			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
-
+		} else if ( item instanceof Ankh && !(((Ankh) item).isBlessed())) {
+			((Ankh) item).bless();
+			CellEmitter.get(pos).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
+			Sample.INSTANCE.play(Assets.Sounds.DRINK);
+			return item;
 		}
+
 		return null;
 	}
 	
 	@Override
 	public Landmark landmark() {
-		return Landmark.WELL_OF_HEALTH;
+		return Landmark.WELL_OF_ENCHANTMENT;
 	}
 	
 	@Override
 	public void use( BlobEmitter emitter ) {
 		super.use( emitter );
-		emitter.start( Speck.factory( Speck.HEALING ), 0.5f, 0 );
+		emitter.start( Speck.factory( Speck.BLUE_LIGHT ), 0.5f, 0 );
 	}
 	
 	@Override

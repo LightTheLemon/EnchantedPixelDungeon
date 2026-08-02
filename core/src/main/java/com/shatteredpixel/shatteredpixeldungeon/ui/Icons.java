@@ -98,6 +98,7 @@ public enum Icons {
 	STAIRS_SECRETS,
 	WELL_HEALTH,
 	WELL_AWARENESS,
+	WELL_ENCHANTMENT,
 	SACRIFICE_ALTAR,
 	DISTANT_WELL,
 
@@ -325,13 +326,15 @@ public enum Icons {
 			case WELL_AWARENESS:
 				icon.frame( icon.texture.uvRectBySize( 144, 64, 16, 16 ) );
 				break;
-			case SACRIFICE_ALTAR:
+			case WELL_ENCHANTMENT:
 				icon.frame( icon.texture.uvRectBySize( 160, 64, 16, 16 ) );
 				break;
-			case DISTANT_WELL:
+			case SACRIFICE_ALTAR:
 				icon.frame( icon.texture.uvRectBySize( 176, 64, 16, 16 ) );
 				break;
-
+			case DISTANT_WELL:
+				icon.frame( icon.texture.uvRectBySize( 196, 64, 16, 16 ) );
+				break;
 			case SKULL:
 				icon.frame( icon.texture.uvRectBySize( 0, 80, 8, 8 ) );
 				break;

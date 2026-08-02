@@ -42,6 +42,8 @@ public class Waterskin extends Item {
 
 	private static final String AC_DRINK	= "DRINK";
 
+	private static final String AC_SIP	= "SIP";
+
 	private static final float TIME_TO_DRINK = 1f;
 
 	private static final String TXT_STATUS	= "%d/%d";
@@ -49,7 +51,7 @@ public class Waterskin extends Item {
 	{
 		image = ItemSpriteSheet.WATERSKIN;
 
-		defaultAction = AC_DRINK;
+		defaultAction = AC_SIP;
 
 		unique = true;
 	}
@@ -133,6 +135,25 @@ public class Waterskin extends Item {
 			}
 
 		}
+
+		if (action.equals( AC_SIP )) {
+			if (volume > 0) {
+
+				volume -= Math.min(volume, 5); //TODO: make it actually heal
+
+				hero.spend(TIME_TO_DRINK);
+				hero.busy();
+
+				Sample.INSTANCE.play(Assets.Sounds.DRINK);
+				hero.sprite.operate(hero.pos);
+
+				updateQuickslot();
+
+			} else {
+				GLog.w( Messages.get(this, "empty") );
+			}
+		}
+
 	}
 
 	@Override
