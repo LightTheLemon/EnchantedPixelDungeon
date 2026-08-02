@@ -65,7 +65,7 @@ public class WaterOfAwareness extends WellWater {
 			}
 		}
 		
-		Buff.affect( hero, Awareness.class, Awareness.DURATION );
+		Buff.affect( hero, Awareness.class, Awareness.DURATION * 5);
 		Dungeon.observe();
 
 		Dungeon.hero.interrupt();
@@ -77,12 +77,9 @@ public class WaterOfAwareness extends WellWater {
 	
 	@Override
 	protected Item affectItem( Item item, int pos ) {
-		if (item.isIdentified()) {
-			return null;
-		}
-		else if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
+		if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
 			((Waterskin)item).fill();
-			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
+			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.2f, 2 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
 		} else if ( item instanceof Ankh && !(((Ankh) item).isBlessed())){
@@ -90,6 +87,9 @@ public class WaterOfAwareness extends WellWater {
 			CellEmitter.get( pos ).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
+		}
+		if (item.isIdentified()) {
+			return null;
 		} else {
 			ScrollOfIdentify.IDItem(item);
 			

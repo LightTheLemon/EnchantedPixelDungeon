@@ -72,6 +72,7 @@ public class Speck extends Image {
 	public static final int BLIZZARD    = 119;
 	public static final int YELLOW_LIGHT= 120;
 	public static final int BLUE_LIGHT  = 121;
+	public static final int ENCHANT_STAR = 122;
 	
 	private static final int SIZE = 7;
 	
@@ -122,6 +123,9 @@ public class Speck extends Image {
 			frame( film.get( LIGHT ) );
 			break;
 		case EVOKE:
+		case ENCHANT_STAR:
+			frame( film.get( 16 ) );
+			break;
 		case MASK:
 		case CROWN:
 		case FORGE:
@@ -308,6 +312,12 @@ public class Speck extends Image {
 			angularSpeed = Random.Float( -45, +45 );
 			lifespan = 1f;
 			break;
+
+		case ENCHANT_STAR:
+			speed.set( 0, -10 );
+			scale.set( PixelScene.align(Random.Float( 1f, 1.5f )) );
+			lifespan = Random.Float( 0.8f, 1.5f );
+			break;
 			
 		case BUBBLE:
 			speed.set( 0, -15 );
@@ -445,6 +455,7 @@ public class Speck extends Image {
 			case RED_LIGHT:
 			case YELLOW_LIGHT:
 			case BLUE_LIGHT:
+			case ENCHANT_STAR:
 			case LIGHT:
 				am = scale.set( p < 0.2f ? p * 5f : (1 - p) * 1.25f ).x;
 				break;

@@ -78,6 +78,9 @@ public class Waterskin extends Item {
 		if (volume > 0) {
 			actions.add( AC_DRINK );
 		}
+		if (volume >= 5) {
+			actions.add( AC_SIP );
+		}
 		return actions;
 	}
 
@@ -88,7 +91,7 @@ public class Waterskin extends Item {
 
 		if (action.equals( AC_DRINK )) {
 
-			if (volume > 0) {
+			if (volume > 0 && hero.HP != hero.HT) {
 				
 				float missingHealthPercent = 1f - (hero.HP / (float)hero.HT);
 
@@ -129,7 +132,8 @@ public class Waterskin extends Item {
 					updateQuickslot();
 				}
 
-
+			} else if (volume > 0) {
+				GLog.w( Messages.get(this, "cant_drink") );
 			} else {
 				GLog.w( Messages.get(this, "empty") );
 			}
@@ -137,18 +141,45 @@ public class Waterskin extends Item {
 		}
 
 		if (action.equals( AC_SIP )) {
-			if (volume > 0) {
+			if (volume > 0 && hero.HP != hero.HT) {
 
-				volume -= Math.min(volume, 5); //TODO: make it actually heal
+				float missingHealthPercent = 1f - (hero.HP / (float)hero.HT);
+				float dropsNeeded = Math.min(5, missingHealthPercent / 0.04f);
+				//if (volume < 5) {
+				//	float dropsNeeded = Math.min(5, missingHealthPercent / 0.05f); 	//Code copied from AC_DRINK with this one change you see here
+				//}
 
-				hero.spend(TIME_TO_DRINK);
-				hero.busy();
+				if (dropsNeeded > 1.01f && VialOfBlood.delayBurstHealing()){
+					dropsNeeded /= VialOfBlood.totalHealMultiplier();
+				}
+				int curShield = 0;
+				if (hero.buff(Barrier.class) != null) curShield = hero.buff(Barrier.class).shielding();
+				int maxShield = Math.round(hero.HT *0.2f*hero.pointsInTalent(Talent.SHIELDING_DEW));
+				if (hero.hasTalent(Talent.SHIELDING_DEW)){
+					float missingShieldPercent = 1f - (curShield / (float)maxShield);
+					missingShieldPercent *= 0.2f*hero.pointsInTalent(Talent.SHIELDING_DEW);
+					if (missingShieldPercent > 0){
+						dropsNeeded += Math.min(5, missingShieldPercent / 0.04f);
+					}
+				}
+				int dropsToConsume = (int)Math.ceil(dropsNeeded - 0.01f);
+				dropsToConsume = (int)GameMath.gate(1, dropsToConsume, volume);
 
-				Sample.INSTANCE.play(Assets.Sounds.DRINK);
-				hero.sprite.operate(hero.pos);
+				if (Dewdrop.consumeDew(dropsToConsume, hero, true)){
+					volume -= dropsToConsume;
+					Catalog.countUses(Dewdrop.class, dropsToConsume);
 
-				updateQuickslot();
+					hero.spend(TIME_TO_DRINK);
+					hero.busy();
 
+					Sample.INSTANCE.play(Assets.Sounds.DRINK);
+					hero.sprite.operate(hero.pos);
+
+					updateQuickslot();
+				}
+
+			} else if (volume > 0) {
+				GLog.w( Messages.get(this, "cant_drink") );
 			} else {
 				GLog.w( Messages.get(this, "empty") );
 			}

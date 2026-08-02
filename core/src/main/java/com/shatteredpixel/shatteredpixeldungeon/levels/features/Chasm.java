@@ -24,7 +24,6 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.features;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -47,7 +46,6 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
-import com.watabou.utils.Random;
 
 public class Chasm implements Hero.Doom {
 
@@ -143,9 +141,8 @@ public class Chasm implements Hero.Doom {
 		PixelScene.shake( 4, 1f );
 
 		Dungeon.level.occupyCell(hero );
-		Buff.prolong( hero, Cripple.class, Cripple.DURATION );
-
-		hero.damage( Math.max( hero.HT / 3, Random.NormalIntRange( hero.HP / 2, hero.HT / 4 )), new Chasm() );
+		Buff.prolong( hero, Cripple.class, Cripple.DURATION * 2 );
+		hero.damage( Math.max( hero.HT / 3, hero.HP / 2 ), new Chasm() ); //At least 33% of your max health, up to 50% at full health
 	}
 
 	public static void mobFall( Mob mob ) {
