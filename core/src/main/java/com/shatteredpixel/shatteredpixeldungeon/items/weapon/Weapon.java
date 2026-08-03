@@ -126,7 +126,7 @@ abstract public class Weapon extends KindOfWeapon {
 	public Enchantment enchantment;
 	public boolean enchantHardened = false;
 	public boolean curseInfusionBonus = false;
-	public boolean masteryPotionBonus = false;
+	public int masteryPotionBonus = 0;
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
@@ -246,7 +246,7 @@ abstract public class Weapon extends KindOfWeapon {
 		enchantment = (Enchantment)bundle.get( ENCHANTMENT );
 		enchantHardened = bundle.getBoolean( ENCHANT_HARDENED );
 		curseInfusionBonus = bundle.getBoolean( CURSE_INFUSION_BONUS );
-		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
+		masteryPotionBonus = bundle.getInt( MASTERY_POTION_BONUS );
 
 		augment = bundle.getEnum(AUGMENT, Augment.class);
 	}

@@ -127,9 +127,8 @@ abstract public class MissileWeapon extends Weapon {
 	
 	public int STRReq(int lvl){
 		int req = STRReq(tier, lvl) - 1; //1 less str than normal for their tier
-		if (masteryPotionBonus){
-			req -= 2;
-		}
+		req -= 2*masteryPotionBonus;
+
 		return req;
 	}
 
@@ -233,7 +232,7 @@ abstract public class MissileWeapon extends Weapon {
 	@Override
 	public void doThrow(Hero hero) {
 		parent = null; //reset parent before throwing, just in case
-		if (((levelKnown && level() > 0) || hasGoodEnchant() || masteryPotionBonus || enchantHardened)
+		if (((levelKnown && level() > 0) || hasGoodEnchant() || masteryPotionBonus != 0 || enchantHardened)
 				&& !extraThrownLeft && quantity() == 1 && durabilityLeft() <= durabilityPerUse()){
 			GameScene.show(new WndOptions(new ItemSprite(this), Messages.titleCase(title()),
 					Messages.get(MissileWeapon.class, "break_upgraded_warn_desc"),
@@ -547,7 +546,7 @@ abstract public class MissileWeapon extends Weapon {
 				setIDReady();
 			}
 
-			masteryPotionBonus = masteryPotionBonus || ((MissileWeapon) other).masteryPotionBonus;
+			masteryPotionBonus = Math.max(masteryPotionBonus, ((MissileWeapon) other).masteryPotionBonus);
 			enchantHardened = enchantHardened || ((MissileWeapon) other).enchantHardened;
 
 			//if other has a curse/enchant status that's a higher priority, copy it. in the following order:

@@ -259,9 +259,8 @@ public class MeleeWeapon extends Weapon {
 
 	public int STRReq(int lvl){
 		int req = STRReq(tier, lvl);
-		if (masteryPotionBonus){
-			req -= 2;
-		}
+		req -= 2*masteryPotionBonus;
+
 		return req;
 	}
 

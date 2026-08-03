@@ -256,9 +256,9 @@ public class ItemSlot extends Button {
 				extra.text( Messages.format( TXT_STRENGTH, str ) );
 				if (Dungeon.hero != null && str > Dungeon.hero.STR()) {
 					extra.hardlight( DEGRADED );
-				} else if (item instanceof Weapon && ((Weapon) item).masteryPotionBonus){
+				} else if (item instanceof Weapon && ((Weapon) item).masteryPotionBonus != 0){
 					extra.hardlight( MASTERED );
-				} else if (item instanceof Armor && ((Armor) item).masteryPotionBonus) {
+				} else if (item instanceof Armor && ((Armor) item).masteryPotionBonus != 0) {
 					extra.hardlight( MASTERED );
 				} else {
 					extra.resetColor();

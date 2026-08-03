@@ -116,7 +116,7 @@ public class Armor extends EquipableItem {
 	public Glyph glyph;
 	public boolean glyphHardened = false;
 	public boolean curseInfusionBonus = false;
-	public boolean masteryPotionBonus = false;
+	public int masteryPotionBonus = 0;
 	
 	protected BrokenSeal seal;
 	
@@ -160,7 +160,7 @@ public class Armor extends EquipableItem {
 		inscribe((Glyph) bundle.get(GLYPH));
 		glyphHardened = bundle.getBoolean(GLYPH_HARDENED);
 		curseInfusionBonus = bundle.getBoolean( CURSE_INFUSION_BONUS );
-		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
+		masteryPotionBonus = bundle.getInt( MASTERY_POTION_BONUS );
 		seal = (BrokenSeal)bundle.get(SEAL);
 		
 		augment = bundle.getEnum(AUGMENT, Augment.class);
@@ -689,9 +689,8 @@ public class Armor extends EquipableItem {
 
 	public int STRReq(int lvl){
 		int req = STRReq(tier, lvl);
-		if (masteryPotionBonus){
-			req -= 2;
-		}
+		req -= 2 * masteryPotionBonus;
+
 		return req;
 	}
 
