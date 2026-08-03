@@ -23,26 +23,17 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.blobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShaftParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes.Landmark;
@@ -60,12 +51,40 @@ public class WaterOfEnchantment extends WellWater {
 		
 		Sample.INSTANCE.play( Assets.Sounds.DRINK );
 
-		PotionOfHealing.heal( hero );
-		hero.belongings.uncurseEquipped();
-		hero.HP += Math.min(hero.HT, hero.HP + hero.HT / 3);
+
+		for (Item item : hero.belongings.backpack.items) {
+			if (!item.cursed && (item instanceof Weapon || item instanceof Armor)) {
+                if(item instanceof Weapon) {
+					((Weapon) item).enchant();
+				}
+				if (item instanceof Armor) {
+					((Armor) item).inscribe();
+				}
+
+			} else if (item.cursed) {
+				hero.belongings.uncurseEquipped();
+			}
+		}
 
 
-		hero.sprite.emitter().start(Speck.factory(Speck.BLUE_LIGHT), 0.4f, 4);
+		/*
+
+		|| item instanceof Ring || item instanceof Wand)
+
+
+						if (item instanceof Ring) {
+					((Ring) item).enchant();
+				}
+				if (item instanceof Wand) {
+					((Wand) item).enchant();
+				}
+
+			if (!hero.belongings.weapon().cursed && !((Weapon)hero.belongings.weapon()).hasGoodEnchant()) {
+			((Weapon) hero.belongings.weapon()).enchant();
+		}
+		 */
+
+		hero.sprite.emitter().start(Speck.factory(Speck.ENCHANT_STAR), 0.6f, 6);
 		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(hero.HT), FloatingText.EXPERIENCE);
 
 		
@@ -77,28 +96,38 @@ public class WaterOfEnchantment extends WellWater {
 		
 		return true;
 	}
-	
+
 	@Override
 	protected Item affectItem( Item item, int pos ) {
 		if (item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
 			item.upgrade();
+			CellEmitter.get( pos ).start( Speck.factory( Speck.ENCHANT_STAR ), 0.6f, 6 );
+			Sample.INSTANCE.play( Assets.Sounds.DRINK );
+			return item;
+		} else if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
+			((Waterskin)item).fill();
 			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
-
+		} else if ( item instanceof Ankh && !(((Ankh) item).isBlessed())) {
+			((Ankh) item).bless();
+			CellEmitter.get(pos).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
+			Sample.INSTANCE.play(Assets.Sounds.DRINK);
+			return item;
 		}
+
 		return null;
 	}
 	
 	@Override
 	public Landmark landmark() {
-		return Landmark.WELL_OF_HEALTH;
+		return Landmark.WELL_OF_ENCHANTMENT;
 	}
 	
 	@Override
 	public void use( BlobEmitter emitter ) {
 		super.use( emitter );
-		emitter.start( Speck.factory( Speck.HEALING ), 0.5f, 0 );
+		emitter.start( Speck.factory( Speck.ENCHANT_STAR ), 0.5f, 0 );
 	}
 	
 	@Override

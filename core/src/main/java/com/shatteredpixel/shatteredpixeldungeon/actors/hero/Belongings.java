@@ -21,8 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -62,7 +63,7 @@ public class Belongings implements Iterable<Item> {
 					cap++;
 				}
 			}
-			if (Dungeon.hero != null && Dungeon.hero.belongings.secondWep != null){
+			if (hero != null && hero.belongings.secondWep != null){
 				//secondary weapons still occupy an inv. slot
 				cap--;
 			}
@@ -391,9 +392,12 @@ public class Belongings implements Iterable<Item> {
 		}
 		Item.updateQuickslot();
 	}
-	
+
+	//This is so when the well of enchantment procs, it doesn't remove the enchantment like a scroll of remove curse normally would. However, this logic could also go in WaterOfEnchantment.java.
 	public void uncurseEquipped() {
-		ScrollOfRemoveCurse.uncurse( owner, armor(), weapon(), artifact(), misc(), ring(), secondWep());
+		//if (!((Weapon)hero.belongings.weapon()).hasGoodEnchant()) {
+			ScrollOfRemoveCurse.uncurse( owner, armor(), weapon(), artifact(), misc(), ring(), secondWep());
+		//}
 	}
 	
 	public Item randomUnequipped() {

@@ -127,6 +127,7 @@ public class Notes {
 		DISTANT_WELL,
 		WELL_OF_HEALTH,
 		WELL_OF_AWARENESS,
+		WELL_OF_ENCHANTMENT,
 		SACRIFICIAL_FIRE,
 		STATUE,
 
@@ -186,6 +187,8 @@ public class Notes {
 					return Icons.get(Icons.WELL_HEALTH);
 				case WELL_OF_AWARENESS:
 					return Icons.get(Icons.WELL_AWARENESS);
+				case WELL_OF_ENCHANTMENT:
+					return Icons.get(Icons.WELL_ENCHANTMENT);
 				case SACRIFICIAL_FIRE:
 					return Icons.get(Icons.SACRIFICE_ALTAR);
 				case STATUE:

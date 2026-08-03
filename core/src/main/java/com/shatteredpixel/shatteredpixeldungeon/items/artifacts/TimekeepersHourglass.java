@@ -21,10 +21,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
+import static com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator.action;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
@@ -33,24 +34,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
-import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
@@ -67,7 +59,7 @@ public class TimekeepersHourglass extends Artifact {
 		partialCharge = 0;
 		chargeCap = 10+(level() * 3);
 
-		defaultAction = AC_ACTIVATE;
+		defaultAction = AC_SHORT_STASIS;
 	}
 
 	@Override
@@ -76,7 +68,8 @@ public class TimekeepersHourglass extends Artifact {
 		charge = visibleLevel/2 - 1; //grants 4-10 turns of time freeze
 	}
 
-	public static final String AC_ACTIVATE = "ACTIVATE";
+	public static final String AC_SHORT_STASIS = "SHORT STASIS";
+	//public static final String AC_LONG_STASIS = "LONG STASIS";
 
 	//keeps track of generated sandbags.
 	public int sandBags = 0;
@@ -88,7 +81,9 @@ public class TimekeepersHourglass extends Artifact {
 				&& !cursed
 				&& hero.buff(MagicImmune.class) == null
 				&& (charge > 0 || activeBuff != null)) {
-			actions.add(AC_ACTIVATE);
+			actions.add(AC_SHORT_STASIS);
+		//} else if (charge > 2) {
+			//actions.add(AC_LONG_STASIS);
 		}
 		return actions;
 	}
@@ -100,7 +95,7 @@ public class TimekeepersHourglass extends Artifact {
 
 		if (hero.buff(MagicImmune.class) != null) return;
 
-		if (action.equals(AC_ACTIVATE)){
+		if (action.equals(AC_SHORT_STASIS)){
 
 			if (!isEquipped( hero ))        GLog.i( Messages.get(Artifact.class, "need_to_equip") );
 			else if (activeBuff != null) {
@@ -121,6 +116,32 @@ public class TimekeepersHourglass extends Artifact {
 				activeBuff.attachTo(Dungeon.hero);
 			}
 		}
+		/*
+		if (action.equals(AC_LONG_STASIS)){
+
+			if (!isEquipped( hero ))        GLog.i( Messages.get(Artifact.class, "need_to_equip") );
+			else if (activeBuff != null) {
+				if (activeBuff instanceof timeStasis) { //do nothing
+				} else {
+					activeBuff.detach();
+					GLog.i( Messages.get(this, "deactivate") );
+				}
+			} else if (charge <= 0)         GLog.i( Messages.get(this, "no_charge") );
+			else if (cursed)                GLog.i( Messages.get(this, "cursed") );
+			else {
+				GLog.i(Messages.get(TimekeepersHourglass.class, "onstasis"));
+				GameScene.flash(0x80FFFFFF);
+				Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+
+				activeBuff = new timeStasis();
+				Talent.onArtifactUsed(Dungeon.hero);
+				activeBuff.attachTo(Dungeon.hero);
+			}
+		}
+
+		 */
+
+
 	}
 
 	@Override
@@ -263,6 +284,7 @@ public class TimekeepersHourglass extends Artifact {
 				Invisibility.dispel();
 
 				int usedCharge = 0; //was Math.min(charge, 2). should just use one charge
+
 				//buffs always act last, so the stasis buff should end a turn early.
 				spend(usedCharge); //was 5*usedcharge
 
