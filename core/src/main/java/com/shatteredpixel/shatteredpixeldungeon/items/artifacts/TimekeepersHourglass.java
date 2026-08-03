@@ -68,7 +68,7 @@ public class TimekeepersHourglass extends Artifact {
 		charge = visibleLevel/2 - 1; //grants 4-10 turns of time freeze
 	}
 
-	public static final String AC_SHORT_STASIS = "SHORT STASIS";
+	public static final String AC_SHORT_STASIS = "SHORT_STASIS";
 	//public static final String AC_LONG_STASIS = "LONG STASIS";
 
 	//keeps track of generated sandbags.

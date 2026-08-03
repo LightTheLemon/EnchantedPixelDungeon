@@ -1,14 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;

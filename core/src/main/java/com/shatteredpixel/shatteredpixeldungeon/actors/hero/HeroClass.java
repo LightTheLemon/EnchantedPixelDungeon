@@ -63,6 +63,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
@@ -204,25 +206,23 @@ public enum HeroClass {
 		Dungeon.quickslot.setSlot(0, staff);
 
 		// TODO: remove these
-		Stylus stylus = new Stylus();
-		stylus.quantity(100);
-		stylus.identify().collect();
 
-		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
-		upgrade.quantity(100);
-		upgrade.identify().collect();
+		PotionOfDivineInspiration divine = new PotionOfDivineInspiration();
+		divine.quantity(100);
+		divine.collect();
 
-		RingOfElements elements = new RingOfElements();
-		elements.identify().collect();
+		PotionOfMastery mastery = new PotionOfMastery();
+		mastery.quantity(100);
+		mastery.collect();
 
-		RingOfAccuracy accuracy = new RingOfAccuracy();
-		accuracy.identify().collect();
+		//RingOfAccuracy accuracy = new RingOfAccuracy();
+		//accuracy.identify().collect();
 
-		PhantomStopwatch watch = new PhantomStopwatch();
-		watch.identify().collect();
+		//PhantomStopwatch watch = new PhantomStopwatch();
+		//watch.identify().collect();
 
-		TimekeepersHourglass time = new TimekeepersHourglass();
-		time.identify().collect();
+		//TimekeepersHourglass time = new TimekeepersHourglass();
+		//time.identify().collect();
 
 		ThrowingStone stone = new ThrowingStone();
 		stone.identify().collect();
