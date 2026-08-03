@@ -124,6 +124,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDiv
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
@@ -1989,6 +1990,9 @@ public class Hero extends Char {
 		EtherealChains.chainsRecharge chains = buff(EtherealChains.chainsRecharge.class);
 		if (chains != null) chains.gainExp(percent);
 
+		PhantomStopwatch.watchRecharge watch = buff(PhantomStopwatch.watchRecharge.class);
+		if (watch != null) watch.gainExp(percent);
+
 		HornOfPlenty.hornRecharge horn = buff(HornOfPlenty.hornRecharge.class);
 		if (horn != null) horn.gainCharge(percent);
 		
@@ -2350,8 +2354,10 @@ public class Hero extends Char {
 		}
 
 		Weapon weapon = belongings.getItem(Weapon.class);
+		float arcanaBuff = RingOfArcana.enchantPowerMultiplier(Dungeon.hero);
+		System.out.println("arcanaBuff: " + arcanaBuff);
 		if (weapon != null && weapon.enchantment instanceof Covert && attackTarget.HP <= 0) {
-			Buff.append( this, Invisibility.class, Invisibility.DURATION / 10 * weapon.buffedLvl());
+			Buff.affect( this, Invisibility.class, ((Invisibility.DURATION - 18) / 2) + ((weapon.buffedLvl() * 2.5f) + 1)  * (arcanaBuff + 1));
 		}
 
 		curAction = null;

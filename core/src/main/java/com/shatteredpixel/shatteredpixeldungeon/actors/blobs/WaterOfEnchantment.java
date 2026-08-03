@@ -63,6 +63,8 @@ public class WaterOfEnchantment extends WellWater {
 
 			} else if (item.cursed) {
 				hero.belongings.uncurseEquipped();
+				((Armor) item).inscribe(null);
+				((Weapon) item).enchant(null);
 			}
 		}
 

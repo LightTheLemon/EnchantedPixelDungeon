@@ -51,6 +51,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stamina;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WellFed;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kinetic;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -67,12 +68,12 @@ public class RingOfElements extends Ring {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
 				Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, soloBuffedBonus()))),
-				Messages.decimalFormat("#.##", (1.12f * soloBuffedBonus())));
+				Messages.decimalFormat("#.##", 100f * (Math.pow(soloBuffedBonus(), 0.55f) - 1f)));
 
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
 				Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, combinedBuffedBonus(Dungeon.hero)))),
-				Messages.decimalFormat("#.##", 100f *  (1.12f * combinedBuffedBonus(Dungeon.hero))));
+				Messages.decimalFormat("#.##", 100f *  (Math.pow(combinedBuffedBonus(Dungeon.hero), 0.55f) - 1f)));
 			}
 			return info;
 		} else {
@@ -87,7 +88,7 @@ public class RingOfElements extends Ring {
 
 	public String upgradeStat2(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * 1f + (1.12f * level)) + "%";
+		return Messages.decimalFormat("#.##", 12 + (12f * level)) + "%";
 	}
 	
 	@Override
@@ -131,6 +132,8 @@ public class RingOfElements extends Ring {
 		BUFFS.add( WellFed.class);
 		BUFFS.add( Stamina.class);
 		BUFFS.add( Bless.class);
+		BUFFS.add( Kinetic.ConservedDamage.class);
+
 	}
 
 	public static float resist( Char target, Class effect ){
@@ -150,7 +153,7 @@ public class RingOfElements extends Ring {
 
 		for (Class c : BUFFS){
 			if (c.isAssignableFrom(effect)){
-				return 1f + (1.12f * getBuffedBonus(target, Elements.class));
+				return (float)Math.pow(getBuffedBonus(target, Elements.class), 0.55f);
 			}
 		}
         return 1f;

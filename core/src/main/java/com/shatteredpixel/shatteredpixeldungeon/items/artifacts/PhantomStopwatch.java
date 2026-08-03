@@ -23,7 +23,6 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
@@ -58,11 +57,12 @@ public class PhantomStopwatch extends Artifact {
 		image = ItemSpriteSheet.ARTIFACT_WATCH;
 
 		levelCap = 5;
-		//exp = 0;
 		charge = 15+(level() * 3); //value of each charge is decreased
 
 		partialCharge = 0;
 		chargeCap = 15+(level() * 3);
+
+		exp = 0;
 
 		defaultAction = AC_ACTIVATE;
 	}
@@ -76,7 +76,7 @@ public class PhantomStopwatch extends Artifact {
 	public static final String AC_ACTIVATE = "ACTIVATE";
 
 	//keeps track of generated sandbags.
-	public int sandBags = 0;
+	//public int sandBags = 0;
 
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
@@ -149,7 +149,7 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	protected ArtifactBuff passiveBuff() {
 		return new watchRecharge();
-	} //rename?
+	}
 	
 	@Override
 	public void charge(Hero target, float amount) {
@@ -171,8 +171,8 @@ public class PhantomStopwatch extends Artifact {
 		chargeCap+= 3;
 
 		//for artifact transmutation.
-		while (level()+1 > sandBags)
-			sandBags ++;
+		//while (level()+1 > sandBags)
+		//	sandBags ++;
 
 		return super.upgrade();
 	}
@@ -193,13 +193,13 @@ public class PhantomStopwatch extends Artifact {
 	}
 
 
-	private static final String SANDBAGS =  "sandbags";
+	//private static final String SANDBAGS =  "sandbags";
 	private static final String BUFF =      "buff";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle(bundle);
-		bundle.put( SANDBAGS, sandBags );
+		//bundle.put( SANDBAGS, sandBags );
 
 		if (activeBuff != null)
 			bundle.put( BUFF , activeBuff );
@@ -208,7 +208,7 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		sandBags = bundle.getInt( SANDBAGS );
+		//sandBags = bundle.getInt( SANDBAGS );
 
 		//these buffs belong to hourglass, need to handle unbundling within the hourglass class.
 		if (bundle.contains( BUFF )){
@@ -256,6 +256,25 @@ public class PhantomStopwatch extends Artifact {
 			spend( TICK );
 
 			return true;
+		}
+		public void gainExp(float levelPortion) {
+			if (cursed || target.buff(MagicImmune.class) != null || levelPortion == 0) return;
+
+			exp += Math.round(levelPortion*100);
+
+			//past the soft charge cap, gaining  charge from leveling is slowed.
+			if (charge > 5+(level()*2)){
+				levelPortion *= (5+((float)level()*2))/charge;
+			}
+			partialCharge += levelPortion*6f;
+
+			if (exp > 500+level()*500 && level() < levelCap){
+				exp -= 500+level()*500;
+				GLog.p( Messages.get(this, "levelup") );
+				Catalog.countUses(PhantomStopwatch.class, 1);
+				upgrade();
+			}
+
 		}
 	}
 
@@ -402,6 +421,7 @@ public class PhantomStopwatch extends Artifact {
 		}
 	}
 
+	/*
 	public static class sandBag extends Item {
 
 		{
@@ -446,5 +466,8 @@ public class PhantomStopwatch extends Artifact {
 		}
 	}
 
+	 */
+
 
 }
+

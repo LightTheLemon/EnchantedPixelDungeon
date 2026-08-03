@@ -392,12 +392,8 @@ public class Belongings implements Iterable<Item> {
 		}
 		Item.updateQuickslot();
 	}
-
-	//This is so when the well of enchantment procs, it doesn't remove the enchantment like a scroll of remove curse normally would. However, this logic could also go in WaterOfEnchantment.java.
 	public void uncurseEquipped() {
-		//if (!((Weapon)hero.belongings.weapon()).hasGoodEnchant()) {
 			ScrollOfRemoveCurse.uncurse( owner, armor(), weapon(), artifact(), misc(), ring(), secondWep());
-		//}
 	}
 	
 	public Item randomUnequipped() {

@@ -142,6 +142,10 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 					a.inscribe(null);
 					proceed = true;
 				}
+				if (a.hasGoodGlyph()){
+					a.inscribe(null);
+					proceed = true;
+				}
 			}
 			if (item instanceof Wand){
 				((Wand) item).updateLevel();

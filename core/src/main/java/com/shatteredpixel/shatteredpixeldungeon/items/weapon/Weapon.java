@@ -127,6 +127,8 @@ abstract public class Weapon extends KindOfWeapon {
 	public boolean enchantHardened = false;
 	public boolean curseInfusionBonus = false;
 	public boolean masteryPotionBonus = false;
+
+	public int masteryStrengthBonus = 2;
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
