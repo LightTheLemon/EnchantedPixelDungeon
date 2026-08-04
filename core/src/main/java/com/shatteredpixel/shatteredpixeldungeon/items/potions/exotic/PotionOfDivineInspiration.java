@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -42,7 +41,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class PotionOfDivineInspiration extends ExoticPotion {
-	
+
 	{
 		icon = ItemSpriteSheet.Icons.POTION_DIVINE;
 
@@ -62,6 +61,8 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 		} else {
 			identifiedByUse = false;
 		}
+
+		/*
 
 		boolean[] enabled = new boolean[5];
 		enabled[1] = enabled[2] = enabled[3] = enabled[4] = true;
@@ -84,6 +85,8 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 			}
 		}
 
+		 */
+
 		GameScene.show(new WndOptions(
 				new ItemSprite(this),
 				Messages.titleCase(trueName()),
@@ -95,7 +98,7 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 		){
 			@Override
 			protected boolean enabled(int index) {
-				return enabled[index+1];
+				return true; //was enabled[index+1]
 			}
 
 			@Override
@@ -115,17 +118,19 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 
 					curUser.spendAndNext(1f);
 
-					boolean unspentTalents = false;
-					for (int i = 1; i <= Dungeon.hero.talents.size(); i++){
-						if (Dungeon.hero.talentPointsAvailable(i) > 0){
-							unspentTalents = true;
-							break;
-						}
-					}
-					if (unspentTalents){
-						StatusPane.talentBlink = 10f;
-						WndHero.lastIdx = 1;
-					}
+					//removing this code doesn't break anything:
+
+					//boolean unspentTalents = false;
+					//for (int i = 1; i <= Dungeon.hero.talents.size(); i++){
+					//	if (Dungeon.hero.talentPointsAvailable(i) > 0){
+					//		unspentTalents = true;
+					//		break;
+					//	}
+					//}
+					//if (unspentTalents){
+					StatusPane.talentBlink = 10f;
+					WndHero.lastIdx = 1;
+					//}
 
 					GameScene.showlevelUpStars();
 
@@ -163,7 +168,7 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 			revivePersists = true;
 		}
 
-		private boolean[] boostedTiers = new boolean[5];
+		private int[] boostedTiers = new int[5];
 
 		private static final String BOOSTED_TIERS = "boosted_tiers";
 
@@ -176,17 +181,17 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
-			boostedTiers = bundle.getBooleanArray(BOOSTED_TIERS);
+			boostedTiers = bundle.getIntArray(BOOSTED_TIERS);
 		}
 
 		public void setBoosted( int tier ){
-			boostedTiers[tier] = true;
+			boostedTiers[tier]++;
 		}
 
-		public boolean isBoosted( int tier ){
+		public int boostCount(int tier ){
 			return boostedTiers[tier];
 		}
 
 	}
-	
+
 }

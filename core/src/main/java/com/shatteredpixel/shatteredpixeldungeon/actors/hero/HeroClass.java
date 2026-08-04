@@ -208,11 +208,11 @@ public enum HeroClass {
 		// TODO: remove these
 
 		PotionOfDivineInspiration divine = new PotionOfDivineInspiration();
-		divine.quantity(100);
+		divine.quantity(10);
 		divine.collect();
 
 		PotionOfMastery mastery = new PotionOfMastery();
-		mastery.quantity(100);
+		mastery.quantity(10);
 		mastery.collect();
 
 		//RingOfAccuracy accuracy = new RingOfAccuracy();

@@ -405,8 +405,8 @@ public class Hero extends Char {
 				|| (tier == 4 && armorAbility == null)) {
 			return 0;
 		} else if (buff(PotionOfDivineInspiration.DivineInspirationTracker.class) != null
-					&& buff(PotionOfDivineInspiration.DivineInspirationTracker.class).isBoosted(tier)) {
-			return 2;
+				&& buff(PotionOfDivineInspiration.DivineInspirationTracker.class).boostCount(tier) > 0) {
+			return buff(PotionOfDivineInspiration.DivineInspirationTracker.class).boostCount(tier) * 2;
 		} else {
 			return 0;
 		}
