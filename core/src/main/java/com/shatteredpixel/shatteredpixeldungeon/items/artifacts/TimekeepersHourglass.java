@@ -21,8 +21,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
-import static com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator.action;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -59,7 +57,7 @@ public class TimekeepersHourglass extends Artifact {
 		partialCharge = 0;
 		chargeCap = 10+(level() * 3);
 
-		defaultAction = AC_SHORT_STASIS;
+		defaultAction = AC_ACTIVATE;
 	}
 
 	@Override
@@ -68,8 +66,8 @@ public class TimekeepersHourglass extends Artifact {
 		charge = visibleLevel/2 - 1; //grants 4-10 turns of time freeze
 	}
 
-	public static final String AC_SHORT_STASIS = "SHORT_STASIS";
-	//public static final String AC_LONG_STASIS = "LONG STASIS";
+	public static final String AC_ACTIVATE = "SHORT_STASIS";
+	public static final String AC_LONG_STASIS = "LONG STASIS";
 
 	//keeps track of generated sandbags.
 	public int sandBags = 0;
@@ -81,9 +79,9 @@ public class TimekeepersHourglass extends Artifact {
 				&& !cursed
 				&& hero.buff(MagicImmune.class) == null
 				&& (charge > 0 || activeBuff != null)) {
-			actions.add(AC_SHORT_STASIS);
-		//} else if (charge > 2) {
-			//actions.add(AC_LONG_STASIS);
+			actions.add(AC_ACTIVATE);
+		} else if (charge > 2) {
+			actions.add(AC_LONG_STASIS);
 		}
 		return actions;
 	}
@@ -95,7 +93,7 @@ public class TimekeepersHourglass extends Artifact {
 
 		if (hero.buff(MagicImmune.class) != null) return;
 
-		if (action.equals(AC_SHORT_STASIS)){
+		if (action.equals(AC_ACTIVATE)){
 
 			if (!isEquipped( hero ))        GLog.i( Messages.get(Artifact.class, "need_to_equip") );
 			else if (activeBuff != null) {
@@ -273,7 +271,7 @@ public class TimekeepersHourglass extends Artifact {
 		
 		{
 			type = buffType.POSITIVE;
-			actPriority = BUFF_PRIO-3; //acts after all other buffs, so they are prevented
+			actPriority = BUFF_PRIO+3; //acts after all other buffs, so they are prevented
 		}
 
 		@Override

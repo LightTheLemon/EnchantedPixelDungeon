@@ -32,14 +32,17 @@ public class RingOfAccuracy extends Ring {
 		icon = ItemSpriteSheet.Icons.RING_ACCURACY;
 		buffClass = Accuracy.class;
 	}
-	
+
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
-					Messages.decimalFormat("#.##", 100f * (Math.pow(1.3f, soloBuffedBonus()) - 1f)));
+					Messages.decimalFormat("#.##", 100f * (Math.pow(1.15f, soloBuffedBonus()) - 1f)),
+					Messages.decimalFormat("#.##", 100f * Math.min(0.9, (Math.pow(soloBuffedBonus(), 0.9f) / 12) + 0.05)));
+
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
-						Messages.decimalFormat("#.##", 100f * (Math.pow(1.3f, combinedBuffedBonus(Dungeon.hero)) - 1f)));
+						Messages.decimalFormat("#.##", 100f * (Math.pow(1.15f, combinedBuffedBonus(Dungeon.hero)) - 1f)),
+						Messages.decimalFormat("#.##", 100f * Math.min(0.9, (Math.pow(combinedBuffedBonus(Dungeon.hero), 0.9f) / 12) + 0.05)));
 			}
 			return info;
 		} else {
@@ -49,7 +52,12 @@ public class RingOfAccuracy extends Ring {
 
 	public String upgradeStat1(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (Math.pow(1.3f, level+1)-1f)) + "%";
+		return Messages.decimalFormat("#.##", 100f * (Math.pow(1.15f, level+1)-1f)) + "%";
+	}
+
+	public String upgradeStat2(int level){
+		if (cursed && cursedKnown) level = Math.min(-1, level-3);
+		return Messages.decimalFormat("#.##", 100f * Math.min(0.9, (Math.pow(level + 1, 0.9f) / 12) + 0.05)) + "%";
 	}
 	
 	@Override
@@ -58,13 +66,16 @@ public class RingOfAccuracy extends Ring {
 	}
 	
 	public static float accuracyMultiplier( Char target ){
-		return (float)Math.pow(1.3f, getBuffedBonus(target, Accuracy.class));
+		return (float)Math.pow(1.15f, getBuffedBonus(target, Accuracy.class));
 	}
 
-	public static float drBonus () {
-		return 1 + 0.5f * RingOfAccuracy.getBuffedBonus(Dungeon.hero, Accuracy.class);
+	public static float damageAverage( Char hero ){
+		if (getBuffedBonus(hero, Accuracy.class) < 1) {
+			return (float)((getBuffedBonus(hero, Accuracy.class) * 0.2) - 0.05);
+		}
+		return ((float) Math.min(0.9, (Math.pow(getBuffedBonus(hero, Accuracy.class), 0.9f) / 12) + 0.05));
 	}
-	
+
 	public class Accuracy extends RingBuff {
 	}
 }

@@ -76,6 +76,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
@@ -83,6 +84,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
@@ -207,13 +209,8 @@ public enum HeroClass {
 
 		// TODO: remove these
 
-		PotionOfDivineInspiration divine = new PotionOfDivineInspiration();
-		divine.quantity(10);
-		divine.collect();
-
-		PotionOfMastery mastery = new PotionOfMastery();
-		mastery.quantity(10);
-		mastery.collect();
+		WandOfTransfusion fusion = new WandOfTransfusion();
+		fusion.collect();
 
 		//RingOfAccuracy accuracy = new RingOfAccuracy();
 		//accuracy.identify().collect();
@@ -221,8 +218,8 @@ public enum HeroClass {
 		//PhantomStopwatch watch = new PhantomStopwatch();
 		//watch.identify().collect();
 
-		//TimekeepersHourglass time = new TimekeepersHourglass();
-		//time.identify().collect();
+		TimekeepersHourglass time = new TimekeepersHourglass();
+		time.identify().collect();
 
 		ThrowingStone stone = new ThrowingStone();
 		stone.identify().collect();

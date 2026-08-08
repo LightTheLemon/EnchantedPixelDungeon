@@ -709,11 +709,13 @@ public class Hero extends Char {
 
 	//damage rolls that come from the hero can have their RNG influenced by clover
 	public static int heroDamageIntRange(int min, int max ){
-		RingOfAccuracy ring = Dungeon.hero.belongings.getItem(RingOfAccuracy.class);
+		RingOfAccuracy ringofaccuracy = Dungeon.hero.belongings.getItem(RingOfAccuracy.class);
 		if (Random.Float() < ThirteenLeafClover.alterHeroDamageChance()){
 			return ThirteenLeafClover.alterDamageRoll(min, max);
-		} else if (ring != null) {
-			return Random.NormalIntRange(min + (int) RingOfAccuracy.drBonus(), max - (int) RingOfAccuracy.drBonus());
+		} else if (ringofaccuracy != null) {
+			int avg = (max + min) / 2;
+			int newRange = Math.round(RingOfAccuracy.damageAverage(Dungeon.hero) * avg);
+			return Random.NormalIntRange(min + newRange, max - newRange);
 
 		} else {
 			return Random.NormalIntRange(min, max);

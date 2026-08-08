@@ -71,14 +71,12 @@ public class WandOfTransfusion extends DamageWand {
 	private boolean freeCharge = false;
 
 	@Override
-	public void onZap(Ballistica beam) {
+	public void onZap(Ballistica bolt) {
 
-		for (int c : beam.subPath(0, beam.dist))
-			CellEmitter.center(c).burst( BloodParticle.BURST, 1 );
+		for (int c : bolt.subPath(0, bolt.dist))
+			CellEmitter.center(c).burst( Speck.factory( Speck.HEART ), 1 );
 
-		int cell = beam.collisionPos;
-
-		Char ch = Actor.findChar(cell);
+		Char ch = Actor.findChar(bolt.collisionPos);
 
 		if (ch instanceof Mob){
 			
@@ -174,9 +172,10 @@ public class WandOfTransfusion extends DamageWand {
 
 	@Override
 	public void fx(Ballistica beam, Callback callback) {
+
 		curUser.sprite.parent.add(
 				new Beam.HealthRay(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
-		Sample.INSTANCE.play( Assets.Sounds.RAY );
+		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 		callback.call();
 	}
 
