@@ -60,7 +60,7 @@ public class v0_5_X_Changes {
 		changes.addButton( new ChangeButton(new ItemSprite(new Quarterstaff()), "Equipment Balance Changes",
 				"_-_ Quarterstaff armor bonus increased from 2 to 3\n\n" +
 				"_-_ Wand of Frost damage against chilled enemies reduced from -7.5% per turn of chill to -10%\n\n" +
-				"_-_ Wand of Transfusion self-damage reduced from 15% max hp to 10% max hp per zap\n\n" +
+				"_-_ Wand of Charm self-damage reduced from 15% max hp to 10% max hp per zap\n\n" +
 				"_-_ Dried Rose charges 20% faster and the ghost hero is stronger, especially at low levels"));
 		
 		changes.addButton( new ChangeButton(new ItemSprite(new Stylus()), "Glyph Balance Changes",

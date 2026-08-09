@@ -86,6 +86,10 @@ public abstract class Actor implements Bundlable {
 			}
 		}
 	}
+
+	protected void extendTimer( float time ) {
+		this.time += time + 1;
+	}
 	
 	public float cooldown() {
 		return time - now;

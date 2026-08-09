@@ -875,7 +875,7 @@ public abstract class Char extends Actor {
 		if (d != null){
 			d.recover();
 		}
-		Charm c = buff(Charm.class);
+		Charm c = buff(Charm.class); // ??
 		if (c != null){
 			c.recover(src);
 		}
@@ -1057,7 +1057,7 @@ public abstract class Char extends Actor {
 		Actor.remove( this );
 
 		for (Char ch : Actor.chars().toArray(new Char[0])){
-			if (ch.buff(Charm.class) != null && ch.buff(Charm.class).object == id()){
+			if (ch.buff(Charm.class) != null && ch.buff(Charm.class).object == id()){ //instead of detaching, it should remove turns of the buff
 				ch.buff(Charm.class).detach();
 			}
 			if (ch.buff(Dread.class) != null && ch.buff(Dread.class).object == id()){

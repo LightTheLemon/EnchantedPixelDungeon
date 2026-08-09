@@ -200,6 +200,13 @@ public class Buff extends Actor {
 		return buff;
 	}
 
+	//new buff method that adds to the buff's existing duration
+	public static<T extends FlavourBuff> T extend( Char target, Class<T> buffClass, float duration ) {
+		T buff = affect( target, buffClass );
+		buff.extendTimer( duration * target.resist(buffClass)  * target.buffExtend(buffClass) );
+		return buff;
+	}
+
 	public static<T extends CounterBuff> T count( Char target, Class<T> buffclass, float count ) {
 		T buff = affect( target, buffclass );
 		buff.countUp( count );

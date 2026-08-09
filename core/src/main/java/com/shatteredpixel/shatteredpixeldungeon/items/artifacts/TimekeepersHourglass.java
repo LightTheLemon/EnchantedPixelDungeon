@@ -66,8 +66,8 @@ public class TimekeepersHourglass extends Artifact {
 		charge = visibleLevel/2 - 1; //grants 4-10 turns of time freeze
 	}
 
-	public static final String AC_ACTIVATE = "SHORT_STASIS";
-	public static final String AC_LONG_STASIS = "LONG STASIS";
+	public static final String AC_ACTIVATE = "ACTIVATE";
+	public static final String AC_LONG_STASIS = "LONG_STASIS";
 
 	//keeps track of generated sandbags.
 	public int sandBags = 0;
@@ -80,7 +80,6 @@ public class TimekeepersHourglass extends Artifact {
 				&& hero.buff(MagicImmune.class) == null
 				&& (charge > 0 || activeBuff != null)) {
 			actions.add(AC_ACTIVATE);
-		} else if (charge > 2) {
 			actions.add(AC_LONG_STASIS);
 		}
 		return actions;
@@ -279,7 +278,7 @@ public class TimekeepersHourglass extends Artifact {
 
 			if (super.attachTo(target)) {
 
-				Invisibility.dispel();
+				//Invisibility.dispel();
 
 				int usedCharge = 0; //was Math.min(charge, 2). should just use one charge
 

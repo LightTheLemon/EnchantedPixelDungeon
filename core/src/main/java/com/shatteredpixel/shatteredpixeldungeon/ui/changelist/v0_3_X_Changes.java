@@ -306,7 +306,7 @@ public class v0_3_X_Changes {
 				"Blast Wave (was Telekinesis), Regrowth\n" +
 				"\n" +
 				"New Wands:\n" +
-				"Prismatic Light, Transfusion\n" +
+				"Prismatic Light, Charm\n" +
 				"\n" +
 				"_-_ Wand types are now known by default.\n" +
 				"_-_ Wands now each have unique sprites.\n" +

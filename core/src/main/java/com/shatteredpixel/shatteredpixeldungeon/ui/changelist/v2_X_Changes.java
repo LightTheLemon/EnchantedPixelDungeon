@@ -493,7 +493,7 @@ public class v2_X_Changes {
 				"_Items pt.2:_\n" +
 				"_-_ Brimstone glyph not benefiting from glyph power boosts past +50%\n" +
 				"_-_ Errors when leaving/entering blacksmith's area while a boomerang was circling back\n" +
-				"_-_ Transfusion not benefiting from wand damage bonuses\n" +
+				"_-_ Charm not benefiting from wand damage bonuses\n" +
 				"_-_ Dwarf King's crown automatically IDing armor\n" +
 				"_-_ Armband allowing more than one steal in specific cases\n" +
 				"_-_ Swiftness glyph ignoring nearby enemies in specific cases\n" +
@@ -878,7 +878,7 @@ public class v2_X_Changes {
 				"_-_ Exploit where multiplicity curse could be used to skip some of Dwarf King's second phase\n" +
 				"_-_ Various errors with class armor conversion and Warrior's broken seal\n" +
 				"_-_ Ring of Force incorrectly displaying +99.99% when at +7, instead of +100%\n" +
-				"_-_ Living Earth and Transfusion wands granting their self-buffs when shooting NPCs\n" +
+				"_-_ Living Earth and Charm wands granting their self-buffs when shooting NPCs\n" +
 				"_-_ Several obscure issues with noisemakers\n" +
 				"_-_ Trap effects from reclaim trap spell not scaling with ascension challenge\n" +
 				"_-_ Horn of Plenty occasionally having the wrong visuals for its charge state",

@@ -33,7 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.TelekineticGrab;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
@@ -264,8 +264,8 @@ public class v1_X_Changes {
 				"_-_ Equipment drops are now guaranteed to be at least level 1/2/3/4/5/6 at ring level 1/3/5/7/9/11, up from 1/3/6/10/15/21\n\n" +
 				"To limit the effectiveness of farming for a long time to stack up two highly upgraded rings of wealth, the level for equipment drops is based on your most powerful wealth ring, and a second one can only boost the level by another +1 at most."));
 
-		changes.addButton(new ChangeButton( new WandOfTransfusion(),
-				"I'm boosting the wand of transfusion's damage scaling versus undead enemies slightly:\n\n" +
+		changes.addButton(new ChangeButton( new WandOfCharm(),
+				"I'm boosting the wand of Charm's damage scaling versus undead enemies slightly:\n\n" +
 				"_-_ Damage vs. undead scaling up to 1-2 per level, from 0.5-1"));
 
 		changes.addButton(new ChangeButton( new TelekineticGrab(),
@@ -931,7 +931,7 @@ public class v1_X_Changes {
 				"_-_ wands losing max charge on save/load in rare cases\n" +
 				"_-_ magical infusion clearing curses\n" +
 				"_-_ dewdrops stacking on each other in rare cases\n" +
-				"_-_ exploding skeletons not being blocked by transfusion shield in rare cases\n" +
+				"_-_ exploding skeletons not being blocked by Charm shield in rare cases\n" +
 				"_-_ rare incorrect interactions between swiftthistle and golden lotus\n" +
 				"_-_ Rings not being renamable if they weren't IDed",
 

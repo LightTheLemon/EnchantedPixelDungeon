@@ -89,8 +89,8 @@ public abstract class SpecialRoom extends Room {
 	//note that alchemy rooms are spawned separately
 	private static final ArrayList<Class<? extends SpecialRoom>> CONSUMABLE_SPECIALS = new ArrayList<>( Arrays.asList(
 			RunestoneRoom.class, GardenRoom.class, LibraryRoom.class, StorageRoom.class,
-			TreasuryRoom.class, MagicWellRoom.class, ToxicGasRoom.class, MagicalFireRoom.class,
-			TrapsRoom.class, CrystalPathRoom.class
+			TreasuryRoom.class, ToxicGasRoom.class, MagicalFireRoom.class, TrapsRoom.class,
+			CrystalPathRoom.class, MagicWellRoom.class, MagicWellRoom.class, MagicWellRoom.class //honestly this shouldn't make it too common
 	) );
 
 	//only one special that uses crystal keys per floor

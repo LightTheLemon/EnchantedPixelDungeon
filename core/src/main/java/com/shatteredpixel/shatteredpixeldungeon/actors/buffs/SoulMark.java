@@ -27,7 +27,7 @@ import com.watabou.noosa.Image;
 
 public class SoulMark extends FlavourBuff {
 
-	public static final float DURATION	= 10f;
+	public static final float DURATION	= 25f;
 
 	{
 		type = buffType.NEGATIVE;

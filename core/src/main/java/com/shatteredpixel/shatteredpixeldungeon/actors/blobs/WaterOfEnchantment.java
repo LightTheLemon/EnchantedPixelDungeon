@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -51,47 +52,53 @@ public class WaterOfEnchantment extends WellWater {
 		
 		Sample.INSTANCE.play( Assets.Sounds.DRINK );
 
-
-		for (Item item : hero.belongings.backpack.items) {
-			if (!item.cursed && (item instanceof Weapon || item instanceof Armor)) {
-                if(item instanceof Weapon) {
-					((Weapon) item).enchant();
-					((Weapon) hero.belongings.weapon()).enchant();
-				}
-				if (item instanceof Armor) {
-					((Armor) item).inscribe();
-					( hero.belongings.armor()).inscribe();
-				}
-
-			} else if (item.cursed) {
+		//here's the logic for all worn equipment
+		Weapon weapon = (Weapon) hero.belongings.weapon();
+		if (weapon != null) {
+			if (!weapon.hasGoodEnchant()) {
+				weapon.enchant();
+			}
+			if (weapon.hasCurseEnchant()) {
 				hero.belongings.uncurseEquipped();
-				((Armor) item).inscribe(null);
-				((Weapon) item).enchant(null);
+			}
+		}
+		Armor armor = (Armor) hero.belongings.armor();
+		if (armor != null) {
+			if (!armor.hasGoodGlyph()) {
+				armor.inscribe();
+			}
+			if (armor.hasCurseGlyph()) {
+				hero.belongings.uncurseEquipped();
 			}
 		}
 
+		//logic for all other equipment
+		for (Item item : hero.belongings.backpack.items) {
 
-		/*
-
-		|| item instanceof Ring || item instanceof Wand)
-
-
-						if (item instanceof Ring) {
-					((Ring) item).enchant();
+			if (!item.cursed && ( item instanceof Weapon || item instanceof Armor ) ) {
+                if(item instanceof Weapon && !((Weapon) item).hasGoodEnchant()) {
+					((Weapon) item).enchant();
 				}
-				if (item instanceof Wand) {
-					((Wand) item).enchant();
+                if (item instanceof Armor && !((Armor) item).hasGoodGlyph()) {
+					((Armor) item).inscribe();
 				}
 
-			if (!hero.belongings.weapon().cursed && !((Weapon)hero.belongings.weapon()).hasGoodEnchant()) {
-			((Weapon) hero.belongings.weapon()).enchant();
+			} else if (item.cursed && (item instanceof Weapon || item instanceof Armor )) {
+				if (item instanceof Weapon) {
+					((Weapon) item).enchant(null);
+				}
+				if (item instanceof Armor) {
+					((Armor) item).inscribe(null);
+				}
+
+			} else if ( item instanceof Ring || item instanceof Wand || item instanceof Artifact) {
+				item.cursed = false;
+			}
 		}
-		 */
 
 		hero.sprite.emitter().start(Speck.factory(Speck.ENCHANT_STAR), 0.6f, 6);
 		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(hero.HT), FloatingText.EXPERIENCE);
 
-		
 		CellEmitter.get( hero.pos ).start( ShaftParticle.FACTORY, 0.2f, 3 );
 
 		Dungeon.hero.interrupt();
@@ -100,7 +107,6 @@ public class WaterOfEnchantment extends WellWater {
 		
 		return true;
 	}
-
 	@Override
 	protected Item affectItem( Item item, int pos ) {
 		if (item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
@@ -131,7 +137,7 @@ public class WaterOfEnchantment extends WellWater {
 	@Override
 	public void use( BlobEmitter emitter ) {
 		super.use( emitter );
-		emitter.start( Speck.factory( Speck.ENCHANT_STAR ), 0.5f, 0 );
+		emitter.start( Speck.factory( Speck.ENCHANT_STAR ), 0.45f, 0 );
 	}
 	
 	@Override

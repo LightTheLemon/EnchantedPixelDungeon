@@ -625,7 +625,7 @@ public class v0_8_X_Changes {
 				"_-_ Skeletal remains now always spawn a wraith if a cursed item spawned within them.",
 
 				"_-_ Dried rose desc now includes ghost's weapon and armor.\n" +
-				"_-_ Wand of Transfusion desc now includes damage/healing numbers.\n" +
+				"_-_ Wand of Charm desc now includes damage/healing numbers.\n" +
 				"_-_ Beneficial darts now mention that they don't harm allies.\n" +
 				"\n" +
 				"_-_ Thrown potions of purity now cleanse Tengu's smoke bomb and fire wave effects.\n" +

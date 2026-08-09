@@ -56,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorrosion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
@@ -66,7 +67,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfPrismaticLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -101,7 +101,7 @@ public class ElementalBlast extends ArmorAbility {
 		effectTypes.put(WandOfFrost.class,          MagicMissile.FROST_CONE);
 		effectTypes.put(WandOfPrismaticLight.class, MagicMissile.RAINBOW_CONE);
 		effectTypes.put(WandOfWarding.class,        MagicMissile.WARD_CONE);
-		effectTypes.put(WandOfTransfusion.class,    MagicMissile.BLOOD_CONE);
+		effectTypes.put(WandOfCharm.class,          MagicMissile.CHARM);
 		effectTypes.put(WandOfCorruption.class,     MagicMissile.SHADOW_CONE);
 		effectTypes.put(WandOfRegrowth.class,       MagicMissile.FOLIAGE_CONE);
 	}
@@ -118,7 +118,7 @@ public class ElementalBlast extends ArmorAbility {
 		damageFactors.put(WandOfFrost.class,            1f);
 		damageFactors.put(WandOfPrismaticLight.class,   0.67f);
 		damageFactors.put(WandOfWarding.class,          0f);
-		damageFactors.put(WandOfTransfusion.class,      0f);
+		damageFactors.put(WandOfCharm.class,            0f);
 		damageFactors.put(WandOfCorruption.class,       0f);
 		damageFactors.put(WandOfRegrowth.class,         0f);
 	}
@@ -332,9 +332,9 @@ public class ElementalBlast extends ArmorAbility {
 										charsHit++;
 									}
 
-								//*** Wand of Transfusion ***
-								} else if (finalWandCls == WandOfTransfusion.class){
-									if(mob.alignment == Char.Alignment.ALLY || mob.buff(Charm.class) != null){
+								//*** Wand of Charm ***
+								} else if (finalWandCls == WandOfCharm.class){
+									if(mob.alignment == Char.Alignment.ALLY ){
 										int healing = Math.round(10*effectMulti);
 										int shielding = (mob.HP + healing) - mob.HT;
 										if (shielding > 0){
@@ -354,6 +354,13 @@ public class ElementalBlast extends ArmorAbility {
 											mob.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shielding), FloatingText.SHIELDING);
 										}
 									} else {
+										Charm charm = Buff.affect(mob, Charm.class, effectMulti*Charm.DURATION);
+										charm.object = hero.id();
+										charm.ignoreHeroAllies = true;
+										mob.sprite.centerEmitter().start(Speck.factory(Speck.HEART), 0.2f, 3);
+									}
+									/*
+									else {
 										if (!mob.properties().contains(Char.Property.UNDEAD)) {
 											Charm charm = Buff.affect(mob, Charm.class, effectMulti*Charm.DURATION/2f);
 											charm.object = hero.id();
@@ -365,6 +372,7 @@ public class ElementalBlast extends ArmorAbility {
 											mob.sprite.emitter().start(ShadowParticle.UP, 0.05f, 10);
 										}
 									}
+									 */
 									charsHit++;
 
 								//*** Wand of Corruption ***

@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -491,15 +491,15 @@ public class v0_9_X_Changes {
 				"I'm making a variety of adjustments to the _Battlemage_ to make him a more compelling choice vs. the Warlock, and to improve some wands that don't work as well for him as the Warlock:\n\n" +
 				"_-_ Staff charge granted on-hit increased to 0.5 from 0.33\n\n" +
 				"_- Staff of Magic Missile_ on-hit now gives all wands 0.5 charge, up from 0.33\n\n" +
-				"_- Staff of Transfusion_ on-hit now triggers when enemy is charmed\n" +
-				"_- Staff of Transfusion_ on-hit now grants a shield in addition to a free shot on allies\n\n" +
+				"_- Staff of Charm_ on-hit now triggers when enemy is charmed\n" +
+				"_- Staff of Charm_ on-hit now grants a shield in addition to a free shot on allies\n\n" +
 				"_- Staff of Frost_ on-hit now has a chance to trigger at lower amounts of chill, still guaranteed at 10+ turns.\n\n" +
 				"_- Staff of Living Earth_ on-hit now grants 33% of damage as armor, up from 25%.\n\n" +
 				"_- Staff of Regrowth_ on-hit now triggers if the hero or enemy are standing in grass.\n" +
 				"_- Staff of Regrowth_ on-hit now grants herbal healing, instead of spawning grass."));
 
-		changes.addButton(new ChangeButton(new WandOfTransfusion(),
-				"The _Wand of Transfusion_ is currently in an odd place, where it is not very useful as a general wand, but is GREAT when heavily upgraded by the warlock. I'm making a few adjustments so that its power is less polarized, and to make it hopefully more useful when combined with allies:\n\n" +
+		changes.addButton(new ChangeButton(new WandOfCharm(),
+				"The _Wand of Charm_ is currently in an odd place, where it is not very useful as a general wand, but is GREAT when heavily upgraded by the warlock. I'm making a few adjustments so that its power is less polarized, and to make it hopefully more useful when combined with allies:\n\n" +
 				"_-_ Starting charges increased to 2, from 1\n" +
 				"_-_ Shield per-hit adjusted to 5+lvl from 5+2*lvl\n" +
 				"_-_ Self-damage reduced to 5% of max HP, from 10% max HP\n" +

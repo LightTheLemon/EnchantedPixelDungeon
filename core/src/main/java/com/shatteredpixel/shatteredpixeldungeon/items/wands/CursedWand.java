@@ -91,6 +91,7 @@ import com.watabou.utils.Random;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static java.lang.Math.*;
 
@@ -106,7 +107,7 @@ public class CursedWand {
 			@Override
 			public void call() {
 				effect.effect(origin, user, bolt, positiveOnly);
-				System.out.println("The effect was " + effect.getClass());
+				System.out.println("Curse effect type " + effect.getClass());
 				afterZap.call();
 			}
 		});
@@ -190,8 +191,9 @@ public class CursedWand {
 		COMMON_EFFECTS.add(new RandomGas());
 		COMMON_EFFECTS.add(new RandomAreaEffect());
 		COMMON_EFFECTS.add(new Bubbles());
-		COMMON_EFFECTS.add(new RandomWand());
 		COMMON_EFFECTS.add(new SelfOoze());
+		COMMON_EFFECTS.add(new Explosion());
+		COMMON_EFFECTS.add(new SummonSheep());
 	}
 
 	public static CursedEffect randomCommonEffect(){
@@ -202,7 +204,7 @@ public class CursedWand {
 		CursedEffect effect;
 		do {
 			effect = Random.element(COMMON_EFFECTS);
-		} while (!effect.valid(origin, user, bolt, positiveOnly));
+		} while (!Objects.requireNonNull(effect).valid(origin, user, bolt, positiveOnly));
 		return effect;
 	}
 
@@ -427,10 +429,9 @@ public class CursedWand {
 	static {
 		UNCOMMON_EFFECTS.add(new RandomPlant());
 		UNCOMMON_EFFECTS.add(new HealthTransfer());
-		UNCOMMON_EFFECTS.add(new Explosion());
 		UNCOMMON_EFFECTS.add(new LightningBolt());
 		UNCOMMON_EFFECTS.add(new Geyser());
-		UNCOMMON_EFFECTS.add(new SummonSheep());
+		UNCOMMON_EFFECTS.add(new RandomWand());
 		UNCOMMON_EFFECTS.add(new Levitate());
 		UNCOMMON_EFFECTS.add(new Alarm());
 	}
@@ -469,7 +470,7 @@ public class CursedWand {
 				tryForWandProc(Actor.findChar(bolt.collisionPos), origin);
 				Plant.Seed plant =  (Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED);
 				Dungeon.level.plant(plant, bolt.collisionPos);
-				PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not( Dungeon.level.solid, null ), (int) sqrt(wandLevel(origin) * 2f) );
+				PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not( Dungeon.level.solid, null ), (int) sqrt(wandLevel(origin) / 2f) );
 				for (int i = 0; i < PathFinder.distance.length; i++) {
 					if (PathFinder.distance[i] < Integer.MAX_VALUE && i != bolt.collisionPos && randomUsingLevel(wandLevel(origin))) {
 						Dungeon.level.plant(plant, i);
@@ -538,7 +539,7 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			new Bomb.ConjuredBomb().explode(bolt.collisionPos);
-			PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not( Dungeon.level.solid, null ), (int) sqrt(wandLevel(origin) * 2f) );
+			PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not( Dungeon.level.solid, null ), (int) sqrt(wandLevel(origin) / 2f) );
 			for (int i = 0; i < PathFinder.distance.length; i++) {
 				if (PathFinder.distance[i] < Integer.MAX_VALUE && i != bolt.collisionPos && randomUsingLevel(wandLevel(origin))) {
 					new Bomb.ConjuredBomb().explode(i);
@@ -1046,7 +1047,7 @@ public class CursedWand {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 
-			Buff.affect(user, TimeStasis.class, 100f*(1+wandLevel(origin)/2f));
+			Buff.affect(user, TimeStasis.class, 3f*(1+(wandLevel(origin) * 2)));
 			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
 			user.sprite.emitter().burst(Speck.factory(Speck.STEAM), 10*(1+wandLevel(origin)/2));

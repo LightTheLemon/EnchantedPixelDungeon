@@ -38,7 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gauntlet;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
@@ -558,8 +558,8 @@ public class v0_7_X_Changes {
 		changes.hardlight( CharSprite.POSITIVE );
 		changeInfos.add(changes);
 		
-		changes.addButton( new ChangeButton(new WandOfTransfusion(),
-				"Wand of Transfusion changed significantly when used on enemies:\n" +
+		changes.addButton( new ChangeButton(new WandOfCharm(),
+				"Wand of Charm changed significantly when used on enemies:\n" +
 				"_-_ No longer self-harms, now grants a mild self-shield instead\n" +
 				"_-_ Charm duration no longer scales with level, damage to undead enemies reduced"));
 		
@@ -879,14 +879,14 @@ public class v0_7_X_Changes {
 		changes.hardlight( CharSprite.POSITIVE );
 		changeInfos.add(changes);
 		
-		changes.addButton( new ChangeButton(new WandOfTransfusion(),
-				"Wand of transfusion has been rebalanced, with an emphasis on making it much more useful in conjunction with weaker allies:\n\n" +
+		changes.addButton( new ChangeButton(new WandOfCharm(),
+				"Wand of Charm has been rebalanced, with an emphasis on making it much more useful in conjunction with weaker allies:\n\n" +
 				"_-_ Using the wand still costs 10% max hp\n\n" +
 				"_-_ Ally healing adjusted to 10% of user max HP + a flat 3 per level, from 30% + 3%/lvl missing hp\n\n" +
 				"_-_ Ally healing can now overheal up to whatever the max healing per shot is\n\n" +
 				"_-_ Undead damage is is now the same as ally healing, from 30% + 5%/lvl max hp\n\n" +
 				"_-_ Charming is now more powerful at higher wand levels\n\n" +
-				"_-_ All other transfusion functionality has been removed"));
+				"_-_ All other Charm functionality has been removed"));
 		
 		changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.SCROLL_KAUNAN, null), new ScrollOfTeleportation().trueName(),
 				"The scroll of teleportation has been buffed. It now prioritizes sending the user to rooms they have not seen yet, and can teleport to secret rooms."));
