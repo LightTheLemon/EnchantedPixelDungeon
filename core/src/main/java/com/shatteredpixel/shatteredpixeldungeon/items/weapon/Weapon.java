@@ -384,9 +384,9 @@ abstract public class Weapon extends KindOfWeapon {
 				enchant(Enchantment.random());
 			}
 		} else if (enchantment != null) {
-			//chance to lose harden buff is 10/20/40/80/100% when upgrading from +6/7/8/9/10
+			//chance to lose harden buff is 30/40/40/50/50/60% etc. up to a max of 70% when upgrading starting from +2
 			if (enchantHardened){
-				if (level() >= 6 && Random.Float(10) < Math.pow(2, level()-6)){
+				if ( level() >= 2 && Random.Float(10) < Math.min(7f, (level() / 2f) + 2.5f) ){
 					enchantHardened = false;
 				}
 
@@ -394,8 +394,8 @@ abstract public class Weapon extends KindOfWeapon {
 			} else if (hasCurseEnchant()) {
 				if (Random.Int(3) == 0) enchant(null);
 
-			//otherwise chance to lose enchant is 10/20/40/80/100% when upgrading from +4/5/6/7/8
-			} else if (level() >= 4 && Random.Float(10) < Math.pow(2, level()-4)){
+			//otherwise chance to lose enchant is 30/40/40/50/50/60% etc. up to a max of 70% when upgrading starting from +2
+			} else if ( level() >= 2 && Random.Float(10) < Math.min(7f, (level() / 2f) + 2.5f) ){
 				enchant(null);
 			}
 		}

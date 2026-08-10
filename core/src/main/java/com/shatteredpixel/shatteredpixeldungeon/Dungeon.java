@@ -552,7 +552,7 @@ public class Dungeon {
 		//chance is floors left / scrolls left
 		return Random.Int(5 - floorThisSet) < souLeftThisSet;
 	}
-	
+
 	public static boolean asNeeded() {
 		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 3)); //mod, was depth / 5
 		if (asLeftThisSet <= 0) return false;
@@ -562,8 +562,9 @@ public class Dungeon {
 		return Random.Int(5 - floorThisSet) < asLeftThisSet;
 	}
 
-	public static boolean enchStoneNeeded(){ //test
+	public static boolean enchStoneNeeded(){
 		//1 enchantment stone, spawns on chapter 2 or 3
+		/*
 		if (!LimitedDrops.ENCH_STONE.dropped()){
 			int region = 1+depth/5;
 			if (region > 1){
@@ -573,6 +574,7 @@ public class Dungeon {
 			}
 
 		}
+		 */
 		return false;
 	}
 
@@ -581,7 +583,7 @@ public class Dungeon {
 		return depth < 5 && !LimitedDrops.INT_STONE.dropped() && Random.Int(4-depth) == 0;
 	}
 
-	public static boolean trinketCataNeeded(){ //TODO: add more drops on high depths
+	public static boolean trinketCataNeeded(){
 		//one trinket catalyst on floors 1-3
 		if (depth > 18) {
 			return Math.random() > 0.2;

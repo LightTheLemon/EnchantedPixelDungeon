@@ -129,7 +129,7 @@ public class Stylus extends Item {
 			curUser.sprite.centerEmitter().start(ShadowParticle.CURSE, 0.05f, 10);
 			Enchanting.show(curUser, enchantable);
 			Sample.INSTANCE.play(Assets.Sounds.CURSED);
-			curUser.spend(TIME_TO_INSCRIBE * 2);
+			curUser.spend(TIME_TO_INSCRIBE + 1);
 			GLog.w( Messages.get(this, "inscribedbad"));
 		}
 

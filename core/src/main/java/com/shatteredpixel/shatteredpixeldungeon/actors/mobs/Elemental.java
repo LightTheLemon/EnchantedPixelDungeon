@@ -261,7 +261,7 @@ public abstract class Elemental extends Mob {
 		{
 			spriteClass = ElementalSprite.NewbornFire.class;
 
-			defenseSkill = 12;
+			defenseSkill = 20; //from 12
 			
 			properties.add(Property.MINIBOSS);
 		}
@@ -327,7 +327,7 @@ public abstract class Elemental extends Mob {
 					}
 
 					GLog.n(Messages.get(this, "charging"));
-					spend(GameMath.gate(attackDelay(), (int)Math.ceil(Dungeon.hero.cooldown()), 3*attackDelay()));
+					spend(GameMath.gate(attackDelay(), (int)Math.ceil(Dungeon.hero.cooldown()), 2*attackDelay()));
 					Dungeon.hero.interrupt();
 					return true;
 				} else {

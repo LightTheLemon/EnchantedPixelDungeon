@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreatCrab;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
@@ -318,16 +319,16 @@ public class Ghost extends NPC {
 				processed = false;
 				depth = Dungeon.depth;
 
-				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
-				switch (Random.chances(new float[]{0, 0, 10, 6, 3, 1})){
+				//40%:tier2, 30%:tier3, 20%:tier4, 10%:tier5
+				switch (Random.chances(new float[]{0, 0, 8, 6, 4, 2})){
 					default:
 					case 2: armor = new LeatherArmor(); break;
 					case 3: armor = new MailArmor();    break;
 					case 4: armor = new ScaleArmor();   break;
 					case 5: armor = new PlateArmor();   break;
 				}
-				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
-				int wepTier = Random.chances(new float[]{0, 0, 10, 6, 3, 1});
+				//40%:tier2, 30%:tier3, 20%:tier4, 10%:tier5
+				int wepTier = Random.chances(new float[]{0, 0, 8, 6, 4, 2});
 				weapon = (Weapon) Generator.random(Generator.wepTiers[wepTier - 1]);
 
 				//clear weapon's starting properties
@@ -337,6 +338,9 @@ public class Ghost extends NPC {
 
 				//50%:+0, 30%:+1, 15%:+2, 5%:+3
 				float itemLevelRoll = Random.Float();
+
+				itemLevelRoll += wepTier * 0.05f;
+
 				int itemLevel;
 				if (itemLevelRoll < 0.5f){
 					itemLevel = 0;
@@ -350,13 +354,13 @@ public class Ghost extends NPC {
 				weapon.upgrade(itemLevel);
 				armor.upgrade(itemLevel);
 
-				// 20% base chance to be enchanted, stored separately so status isn't revealed early
+				// 10% base chance to be enchanted, stored separately so status isn't revealed early
 				//we generate first so that the outcome doesn't affect the number of RNG rolls
 				enchant = Weapon.Enchantment.random();
 				glyph = Armor.Glyph.random();
 
 				float enchantRoll = Random.Float();
-				if (enchantRoll > 0.2f * ParchmentScrap.enchantChanceMultiplier()){
+				if (enchantRoll > 0.1f * ParchmentScrap.enchantChanceMultiplier()){
 					enchant = null;
 					glyph = null;
 				}

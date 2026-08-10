@@ -875,7 +875,7 @@ public abstract class Char extends Actor {
 		if (d != null){
 			d.recover();
 		}
-		Charm c = buff(Charm.class); // ??
+		Charm c = buff(Charm.class);
 		if (c != null){
 			c.recover(src);
 		}

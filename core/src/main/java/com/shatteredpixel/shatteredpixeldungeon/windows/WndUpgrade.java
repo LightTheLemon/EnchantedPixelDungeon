@@ -376,9 +376,9 @@ public class WndUpgrade extends Window {
 				int lossChance;
 				if ((toUpgrade instanceof Weapon && ((Weapon) toUpgrade).enchantHardened)
 						|| (toUpgrade instanceof Armor && ((Armor) toUpgrade).glyphHardened)) {
-					lossChance = Math.min(100, 10 * (int) Math.pow(2, levelFrom - 6));
+					lossChance = Math.min(75, 10 * (int) Math.min(7f, (levelFrom / 2f) + 2.5f) );
 				} else {
-					lossChance = Math.min(100, 10 * (int) Math.pow(2, levelFrom - 4));
+					lossChance = ( 10 * (int) Math.min(7f, (levelFrom / 2f) + 2.5f) );
 					if (Dungeon.hero != null && Dungeon.hero.heroClass != HeroClass.WARRIOR && Dungeon.hero.hasTalent(Talent.RUNIC_TRANSFERENCE)){
 						if (levelFrom < 5+Dungeon.hero.pointsInTalent(Talent.RUNIC_TRANSFERENCE)){
 							lossChance = 0;
