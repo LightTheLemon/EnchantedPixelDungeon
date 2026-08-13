@@ -78,6 +78,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.watabou.noosa.Game;
 import com.watabou.utils.BArray;
@@ -106,7 +107,7 @@ public class Dungeon {
 		STRENGTH_POTIONS,
 		UPGRADE_SCROLLS,
 		ARCANE_STYLI,
-		ENCH_STONE,
+		HEALTH_POTION,
 		INT_STONE,
 		TRINKET_CATA,
 		LAB_ROOM, //actually a room, but logic is the same
@@ -554,7 +555,7 @@ public class Dungeon {
 	}
 
 	public static boolean asNeeded() {
-		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 3)); //mod, was depth / 5
+		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 4)); //higher than before rework but might not be high enough? more should be added to shops
 		if (asLeftThisSet <= 0) return false;
 
 		int floorThisSet = (depth % 5);
@@ -562,20 +563,9 @@ public class Dungeon {
 		return Random.Int(5 - floorThisSet) < asLeftThisSet;
 	}
 
-	public static boolean enchStoneNeeded(){
-		//1 enchantment stone, spawns on chapter 2 or 3
-		/*
-		if (!LimitedDrops.ENCH_STONE.dropped()){
-			int region = 1+depth/5;
-			if (region > 1){
-				int floorsVisited = depth - 5;
-				if (floorsVisited == 5) floorsVisited--; //skip floor 10
-				return Random.Int(floorsVisited) == 0; //modified from 9-floorsVisited
-			}
-
-		}
-		 */
-		return false;
+	public static boolean healthPotionNeeded(){
+		//one potion on floors 1-3
+		return depth < 5 && !LimitedDrops.HEALTH_POTION.dropped() && Random.Int(4-depth) == 0;
 	}
 
 	public static boolean intStoneNeeded(){
@@ -584,10 +574,12 @@ public class Dungeon {
 	}
 
 	public static boolean trinketCataNeeded(){
-		//one trinket catalyst on floors 1-3
-		if (depth > 18) {
-			return Math.random() > 0.2;
+		//extra on higher depths
+		if ( (Math.pow(1.12, depth) - 2) > Random.Int(50) ) {
+			GLog.i("trinketCataNeeded");
+			return true;
 		}
+		//one trinket catalyst on floors 1-3
 		return depth < 5 && !LimitedDrops.TRINKET_CATA.dropped() && Random.Int(4-depth) == 0;
 	}
 

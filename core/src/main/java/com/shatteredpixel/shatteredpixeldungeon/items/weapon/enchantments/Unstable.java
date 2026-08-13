@@ -21,8 +21,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
@@ -44,7 +46,8 @@ public class Unstable extends Weapon.Enchantment {
 			//projecting not included, no on-hit effect
 			Shocking.class,
 			Vampiric.class,
-			Covert.class
+			Covert.class,
+			Culinary.class
 	};
 
 	@Override
@@ -58,7 +61,15 @@ public class Unstable extends Weapon.Enchantment {
 		
 		damage = Reflection.newInstance(Random.oneOf(randomEnchants)).proc( weapon, attacker, defender, damage );
 		
-		return damage + conservedDamage;
+		return damage + conservedDamage * (1 + weapon.buffedLvl() / 50);
+	}
+
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
+
+		return Messages.decimalFormat("#.##", 100f + (level/10f * bonus)) + "%";
 	}
 
 	@Override

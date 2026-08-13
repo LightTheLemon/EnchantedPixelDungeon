@@ -43,7 +43,6 @@ import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
 
-// will update
 public class Stylus extends Item {
 	
 	private static final float TIME_TO_INSCRIBE = 2;

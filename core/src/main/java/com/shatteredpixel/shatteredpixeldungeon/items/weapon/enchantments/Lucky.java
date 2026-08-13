@@ -21,11 +21,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
 import com.watabou.noosa.Visual;
@@ -69,6 +71,14 @@ public class Lucky extends Weapon.Enchantment {
 
 	public static void showFlare( Visual vis ){
 		RingOfWealth.showFlareForBonusDrop(vis);
+	}
+
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		float luckyProc = (level+4f)/(level+40f) * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
+
+		return Messages.decimalFormat("#.##", 100 * luckyProc ) + "%";
 	}
 
 	@Override

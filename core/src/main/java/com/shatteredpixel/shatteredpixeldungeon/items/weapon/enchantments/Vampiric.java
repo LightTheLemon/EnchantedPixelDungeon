@@ -21,10 +21,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
@@ -62,6 +64,12 @@ public class Vampiric extends Weapon.Enchantment {
 		}
 
 		return damage;
+	}
+
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		return Messages.decimalFormat("#.##", 100f * (Math.max(1f,Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero)) *  Math.max(1, (level / 15) + 1) )) + "%";
 	}
 	
 	@Override

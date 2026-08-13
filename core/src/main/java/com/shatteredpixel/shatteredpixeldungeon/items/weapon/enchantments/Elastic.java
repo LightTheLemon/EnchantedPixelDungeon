@@ -21,12 +21,15 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.Random;
 
@@ -61,7 +64,15 @@ public class Elastic extends Weapon.Enchantment {
 		
 		return damage;
 	}
-	
+
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		float procChance = (level+1f)/(level+5f) * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
+
+		return Messages.decimalFormat("#.##", 100 * procChance ) + "%";
+	}
+
 	@Override
 	public ItemSprite.Glowing glowing() {
 		return PINK;

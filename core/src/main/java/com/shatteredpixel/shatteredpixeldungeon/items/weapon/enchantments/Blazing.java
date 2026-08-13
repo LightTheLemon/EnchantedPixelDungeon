@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
 import com.watabou.utils.Random;
@@ -66,6 +67,13 @@ public class Blazing extends Weapon.Enchantment {
 
 		return damage;
 
+	}
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		float procChance = (level+1f)/(level+3f) * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
+
+		return Messages.decimalFormat("#.##", 100 * procChance ) + "%";
 	}
 	
 	@Override

@@ -319,16 +319,16 @@ public class Ghost extends NPC {
 				processed = false;
 				depth = Dungeon.depth;
 
-				//40%:tier2, 30%:tier3, 20%:tier4, 10%:tier5
-				switch (Random.chances(new float[]{0, 0, 8, 6, 4, 2})){
+				//45%:tier2, 30%:tier3, 20%:tier4, 5%:tier5
+				switch (Random.chances(new float[]{0, 0, 9, 6, 4, 1})){
 					default:
 					case 2: armor = new LeatherArmor(); break;
 					case 3: armor = new MailArmor();    break;
 					case 4: armor = new ScaleArmor();   break;
 					case 5: armor = new PlateArmor();   break;
 				}
-				//40%:tier2, 30%:tier3, 20%:tier4, 10%:tier5
-				int wepTier = Random.chances(new float[]{0, 0, 8, 6, 4, 2});
+				//45%:tier2, 30%:tier3, 20%:tier4, 5%:tier5
+				int wepTier = Random.chances(new float[]{0, 0, 9, 6, 4, 1});
 				weapon = (Weapon) Generator.random(Generator.wepTiers[wepTier - 1]);
 
 				//clear weapon's starting properties
@@ -339,14 +339,12 @@ public class Ghost extends NPC {
 				//50%:+0, 30%:+1, 15%:+2, 5%:+3
 				float itemLevelRoll = Random.Float();
 
-				itemLevelRoll += wepTier * 0.05f;
-
 				int itemLevel;
-				if (itemLevelRoll < 0.5f){
+				if (itemLevelRoll < 0.4f){
 					itemLevel = 0;
-				} else if (itemLevelRoll < 0.8f){
+				} else if (itemLevelRoll < 0.75f){
 					itemLevel = 1;
-				} else if (itemLevelRoll < 0.95f){
+				} else if (itemLevelRoll < 0.90f){
 					itemLevel = 2;
 				} else {
 					itemLevel = 3;

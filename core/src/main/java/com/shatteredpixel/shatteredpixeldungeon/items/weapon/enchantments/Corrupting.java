@@ -25,11 +25,13 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.Random;
 
@@ -61,14 +63,21 @@ public class Corrupting extends Weapon.Enchantment {
 
 			float powerMulti = Math.max(1f, procChance);
 			if (powerMulti > 1.1f){
-				//1 turn of adrenaline for each 20% above 100% proc rate
-				Buff.affect(enemy, Adrenaline.class, Math.round(5*(powerMulti-1f)));
+				//shielding based on proc rate if its over 100%
+				Buff.affect(enemy, Barrier.class).setShield( (Math.round( (powerMulti * enemy.HT) /3f ) ) );
 			}
 			
 			return 0;
 		}
 		
 		return damage;
+	}
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		float procChance = (level+5f)/(level+25f) * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
+
+		return Messages.decimalFormat("#.##", Math.max(100, 100 * procChance )) + "%";
 	}
 	
 	@Override

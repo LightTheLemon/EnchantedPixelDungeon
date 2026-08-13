@@ -38,7 +38,7 @@ public class MysteryMeat extends Food {
 
 	{
 		image = ItemSpriteSheet.MEAT;
-		energy = Hunger.HUNGRY/2f;
+		energy = Hunger.HUNGRY/1.5f; //satiates more than frozen or stewed, but probably not worth it
 	}
 	
 	@Override
@@ -48,8 +48,8 @@ public class MysteryMeat extends Food {
 	}
 
 	public int value() {
-		return 10 * quantity;
-	} //buffed from 5
+		return 20 * quantity;
+	}
 
 	public static void effect(Hero hero){
 		switch (Random.Int( 5 )) {
@@ -59,11 +59,11 @@ public class MysteryMeat extends Food {
 				break;
 			case 1:
 				GLog.w( Messages.get(MysteryMeat.class, "legs") );
-				Buff.prolong( hero, Roots.class, Roots.DURATION*2.5f );
+				Buff.prolong( hero, Roots.class, Roots.DURATION);
 				break;
 			case 2:
 				GLog.w( Messages.get(MysteryMeat.class, "not_well") );
-				Buff.affect( hero, Poison.class ).set( hero.HT / 5 );
+				Buff.affect( hero, Poison.class ).set( hero.HT / 5f );
 				break;
 			case 3:
 				GLog.w( Messages.get(MysteryMeat.class, "stuffed") );

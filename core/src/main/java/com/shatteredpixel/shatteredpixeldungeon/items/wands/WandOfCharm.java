@@ -52,7 +52,7 @@ public class WandOfCharm extends Wand {
 
 		collisionProperties = Ballistica.PROJECTILE;
 	}
-
+	private static boolean zapWarning = true;
 
 	@Override
 	public void onZap(Ballistica bolt) {
@@ -63,10 +63,9 @@ public class WandOfCharm extends Wand {
 			
 			wandProc(ch, chargesPerCast());
 
-			//heals allies
 			if (ch.alignment == Char.Alignment.ALLY){
 
-				//Might be interesting to charm allies later on
+				//Might be interesting or more balanced to charm allies?
 				//Buff.prolong( ch, Charm.class, Charm.DURATION ).object = curUser.id();
 
 				if (ch.HP < ch.HT) {
@@ -85,43 +84,26 @@ public class WandOfCharm extends Wand {
 					int addedShield = (int)(20f / Math.sqrt(currentShield + 1));
 
 					barrier.setShield(currentShield + addedShield);
-
-
 				}
-
 
 			} else if (ch.alignment == Char.Alignment.ENEMY || ch instanceof Mimic) {
 
 				//// Note: if needed, make the charm effect weaker on undead enemies
 				int duration = (int) (( Charm.DURATION/5f ) + (buffedLvl()/3f) + 1);
-				if (ch.properties().contains(Char.Property.BOSS) || ch.properties().contains(Char.Property.UNDEAD)) {
+				if (ch.properties().contains(Char.Property.UNDEAD) || ch.properties().contains( Char.Property.MINIBOSS) || ch.properties().contains(Char.Property.BOSS) ) {
 					Buff.extend(ch, Charm.class, ( duration ) / 2f);
-					GLog.i("This creature resists the charm effect, halving its duration");
+					if (zapWarning) {
+						GLog.i("This creature resists the charm effect, halving its duration");
+						zapWarning = false;
+					}
 				} else {
 					Charm charm = Buff.extend(ch, Charm.class, duration );
 					charm.object = curUser.id();
 					charm.ignoreHeroAllies = true;
 					ch.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f, 2 + (buffedLvl() / 5) );
 				}
-
-				//charms living enemies
-				//if (!ch.properties().contains(Char.Property.UNDEAD)) {
-				//	Charm charm = Buff.prolong(ch, Charm.class, Charm.DURATION/2f);
-				//	charm.object = curUser.id();
-				//	charm.ignoreHeroAllies = true;
-				//	ch.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f, 3 );
-				
-				//harms the undead
-				//} else {
-				//	ch.damage(damageRoll(), this);
-				//	ch.sprite.emitter().start(ShadowParticle.UP, 0.05f, 10 + buffedLvl());
-				//	Sample.INSTANCE.play(Assets.Sounds.BURNING);
-				//}
-
 			}
-			
 		}
-		
 	}
 
 	@Override //This is only for battlemage
@@ -132,7 +114,6 @@ public class WandOfCharm extends Wand {
 				//Dungeon.hero.HP = (int) Math.min(Dungeon.hero.HT, healToGive * Dungeon.hero.HT);
 				attacker.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1 + (buffedLvl() / 5));
 				Dungeon.hero.HP = Math.min( Dungeon.hero.HT, Dungeon.hero.HP + (int)(healToGive * Dungeon.hero.HT) );
-
 			}
 		}
 	}

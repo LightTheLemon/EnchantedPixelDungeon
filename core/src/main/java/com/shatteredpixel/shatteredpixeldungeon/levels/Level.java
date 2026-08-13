@@ -73,6 +73,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
@@ -239,9 +240,9 @@ public abstract class Level implements Bundlable {
 				Dungeon.LimitedDrops.ARCANE_STYLI.count++;
 				addItemToSpawn( new Stylus() );
 			}
-			if ( Dungeon.enchStoneNeeded() ){
-				Dungeon.LimitedDrops.ENCH_STONE.drop();
-				addItemToSpawn( new StoneOfEnchantment() );
+			if ( Dungeon.healthPotionNeeded() ){
+				Dungeon.LimitedDrops.HEALTH_POTION.drop();
+				addItemToSpawn( new PotionOfHealing() );
 			}
 			if ( Dungeon.intStoneNeeded() ){
 				Dungeon.LimitedDrops.INT_STONE.drop();

@@ -59,6 +59,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Bloomi
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Chilling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Corrupting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Covert;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Elastic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kinetic;
@@ -346,7 +347,7 @@ abstract public class Weapon extends KindOfWeapon {
 			reach += 2;
 		}
 		if (hasEnchant(Projecting.class, owner)){
-			return reach + Math.round(Enchantment.genericProcChanceMultiplier(owner));
+			return reach + Math.round(Enchantment.genericProcChanceMultiplier(owner) + Math.round( (super.level() / 7f) - 1 )  );
 		} else {
 			return reach;
 		}
@@ -518,7 +519,7 @@ abstract public class Weapon extends KindOfWeapon {
 
 		public static final Class<?>[] uncommon = new Class<?>[]{
 				Blocking.class, Blooming.class, Elastic.class,
-				Lucky.class, Projecting.class, Unstable.class, Covert.class};
+				Lucky.class, Projecting.class, Unstable.class, Covert.class, Culinary.class};
 
 		public static final Class<?>[] rare = new Class<?>[]{
 				Corrupting.class, Grim.class, Vampiric.class};
@@ -600,7 +601,10 @@ abstract public class Weapon extends KindOfWeapon {
 		@Override
 		public void storeInBundle( Bundle bundle ) {
 		}
-		
+		public String enchantUpgradeStat1(int level) {
+			return null;
+		}
+
 		public abstract ItemSprite.Glowing glowing();
 		
 		@SuppressWarnings("unchecked")

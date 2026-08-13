@@ -635,8 +635,6 @@ public abstract class Char extends Actor {
 			acuStat = INFINITE_ACCURACY;
 		}
 
-
-
 		if (defender.buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class) != null){
 			defStat = INFINITE_EVASION;
 		}

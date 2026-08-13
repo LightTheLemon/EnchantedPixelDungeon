@@ -306,7 +306,10 @@ public class DM300 extends Mob {
 		if (enemy == Dungeon.hero && supercharged){
 			Statistics.qualifiedForBossChallengeBadge = false;
 		}
-		return super.attack(enemy, dmgMulti, dmgBonus, accMulti);
+		if (buff(Charm.class) == null) {
+			return super.attack(enemy, dmgMulti, dmgBonus, accMulti);
+		}
+		return false;
 	}
 
 	@Override
@@ -674,7 +677,7 @@ public class DM300 extends Mob {
 		immunities.add(Sleep.class);
 
 		resistances.add(Terror.class);
-		resistances.add(Charm.class);
+		//resistances.add(Charm.class);
 		resistances.add(Vertigo.class);
 		resistances.add(Cripple.class);
 		resistances.add(Chill.class);

@@ -24,6 +24,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -37,6 +40,10 @@ public class Rat extends Mob {
 		defenseSkill = 2;
 
 		maxLvl = 5;
+
+		loot = MysteryMeat.class;
+		lootChance = Dungeon.hero.belongings.weapon() != null ? Culinary.culinaryEnchantProc( (Weapon)Dungeon.hero.belongings.weapon() ) : 0f;
+
 	}
 
 	@Override

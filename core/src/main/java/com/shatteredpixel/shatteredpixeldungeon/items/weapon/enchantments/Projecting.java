@@ -21,8 +21,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 
 public class Projecting extends Weapon.Enchantment {
@@ -34,6 +36,11 @@ public class Projecting extends Weapon.Enchantment {
 		//Does nothing as a proc, instead increases weapon range.
 		//See weapon.reachFactor, and MissileWeapon.throwPos;
 		return damage;
+	}
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		return Messages.decimalFormat("#.##", 100* Math.round( Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero) + Math.round( (level / 7f) - 1 ))   ) + "%";
 	}
 
 	@Override

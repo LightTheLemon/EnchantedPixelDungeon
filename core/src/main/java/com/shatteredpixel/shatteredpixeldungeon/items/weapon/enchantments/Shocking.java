@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.BArray;
 import com.watabou.noosa.audio.Sample;
@@ -44,8 +45,7 @@ public class Shocking extends Weapon.Enchantment {
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
 		int level = Math.max( 0, weapon.buffedLvl() );
 
-		// flat 33% proc chance, effect scales with level via damage dealt
-		float procChance = (1/3f) * procChanceMultiplier(attacker);
+		float procChance = (1/3f) * procChanceMultiplier(attacker) * (level / 9f) + 1;
 		if (Random.Float() < procChance) {
 
 			float powerMulti = Math.max(1f, procChance);
@@ -69,6 +69,11 @@ public class Shocking extends Weapon.Enchantment {
 
 		return damage;
 
+	}
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		return Messages.decimalFormat("#.##", 100f * (1/3f) * (Math.max(1f,Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero)) * (level / 9f) + 1 )) + "%";
 	}
 
 	@Override
