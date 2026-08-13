@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Foliage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfAwareness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WaterOfHealth;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DemonSpawner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
@@ -237,33 +238,34 @@ public class Notes {
 			switch (landmark) {
 				default:            return "";
 
-				case CHASM_FLOOR:   return Messages.get(Level.Feeling.class, "chasm_desc");
-				case WATER_FLOOR:   return Messages.get(Level.Feeling.class, "water_desc");
-				case GRASS_FLOOR:   return Messages.get(Level.Feeling.class, "grass_desc");
-				case DARK_FLOOR:    return Messages.get(Level.Feeling.class, "dark_desc");
-				case LARGE_FLOOR:   return Messages.get(Level.Feeling.class, "large_desc");
-				case TRAPS_FLOOR:   return Messages.get(Level.Feeling.class, "traps_desc");
-				case SECRETS_FLOOR: return Messages.get(Level.Feeling.class, "secrets_desc");
+				case CHASM_FLOOR:            return Messages.get(Level.Feeling.class, "chasm_desc");
+				case WATER_FLOOR:            return Messages.get(Level.Feeling.class, "water_desc");
+				case GRASS_FLOOR:            return Messages.get(Level.Feeling.class, "grass_desc");
+				case DARK_FLOOR:             return Messages.get(Level.Feeling.class, "dark_desc");
+				case LARGE_FLOOR:            return Messages.get(Level.Feeling.class, "large_desc");
+				case TRAPS_FLOOR:            return Messages.get(Level.Feeling.class, "traps_desc");
+				case SECRETS_FLOOR:          return Messages.get(Level.Feeling.class, "secrets_desc");
 
 				case SHOP:
-					if (depth == 20)    return Messages.get(ImpShopkeeper.class, "desc");
-					else                return Messages.get(Shopkeeper.class, "desc");
-				case ALCHEMY:           return Messages.get(Level.class, "alchemy_desc");
-				case GARDEN:            return Messages.get(Foliage.class, "desc");
-				case DISTANT_WELL:      return Messages.get(WeakFloorRoom.HiddenWell.class, "desc");
-				case WELL_OF_HEALTH:    return Messages.get(WaterOfHealth.class, "desc");
-				case WELL_OF_AWARENESS: return Messages.get(WaterOfAwareness.class, "desc");
-				case SACRIFICIAL_FIRE:  return Messages.get(SacrificialFire.class, "desc");
-				case STATUE:            return Messages.get(Statue.class, "desc");
+					if (depth == 20)         return Messages.get(ImpShopkeeper.class, "desc");
+					else                     return Messages.get(Shopkeeper.class, "desc");
+				case ALCHEMY:                return Messages.get(Level.class, "alchemy_desc");
+				case GARDEN:                 return Messages.get(Foliage.class, "desc");
+				case DISTANT_WELL:           return Messages.get(WeakFloorRoom.HiddenWell.class, "desc");
+				case WELL_OF_HEALTH:         return Messages.get(WaterOfHealth.class, "desc");
+				case WELL_OF_AWARENESS:      return Messages.get(WaterOfAwareness.class, "desc");
+				case WELL_OF_ENCHANTMENT:    return Messages.get(WaterOfEnchantment.class, "desc");
+				case SACRIFICIAL_FIRE:       return Messages.get(SacrificialFire.class, "desc");
+				case STATUE:                 return Messages.get(Statue.class, "desc");
 
-				case LOST_PACK:         return Messages.get(LostBackpack.class, "desc");
-				case BEACON_LOCATION:   return Messages.get(BeaconOfReturning.class, "desc");
+				case LOST_PACK:              return Messages.get(LostBackpack.class, "desc");
+				case BEACON_LOCATION:        return Messages.get(BeaconOfReturning.class, "desc");
 
-				case GHOST:         return Messages.get(Ghost.class, "desc");
-				case RAT_KING:      return new RatKing().description(); //variable description based on holiday/run state
-				case WANDMAKER:     return Messages.get(Wandmaker.class, "desc");
-				case TROLL:         return Messages.get(Blacksmith.class, "desc");
-				case IMP:           return Messages.get(Imp.class, "desc");
+				case GHOST:                  return Messages.get(Ghost.class, "desc");
+				case RAT_KING:               return new RatKing().description(); //variable description based on holiday/run state
+				case WANDMAKER:              return Messages.get(Wandmaker.class, "desc");
+				case TROLL:                  return Messages.get(Blacksmith.class, "desc");
+				case IMP:                    return Messages.get(Imp.class, "desc");
 
 				case DEMON_SPAWNER: return Messages.get(DemonSpawner.class, "desc");
 			}

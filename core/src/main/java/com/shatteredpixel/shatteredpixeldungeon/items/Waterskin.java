@@ -78,7 +78,7 @@ public class Waterskin extends Item {
 		if (volume > 0) {
 			actions.add( AC_DRINK );
 		}
-		if (volume >= 5 && hero.HP <= hero.HT * 0.75f) {
+		if (volume > 5 && hero.HP <= hero.HT * 0.75f) {
 			actions.add( AC_SIP );
 		}
 		return actions;
@@ -232,9 +232,10 @@ public class Waterskin extends Item {
 		updateQuickslot();
 	}
 
-	public void fill() {
-		volume = MAX_VOLUME;
+	public int fill(int amount) {
+		volume = Math.min(MAX_VOLUME, volume + amount);
 		updateQuickslot();
+		return amount;
 	}
 
 	@Override

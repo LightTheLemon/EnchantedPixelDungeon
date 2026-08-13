@@ -25,12 +25,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Foresight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
@@ -66,6 +66,7 @@ public class WaterOfAwareness extends WellWater {
 		}
 		
 		Buff.affect( hero, Awareness.class, Awareness.DURATION);
+		Buff.affect( hero, Foresight.class, Foresight.DURATION / 400);
 		Dungeon.observe();
 
 		Dungeon.hero.interrupt();
@@ -78,13 +79,8 @@ public class WaterOfAwareness extends WellWater {
 	@Override
 	protected Item affectItem( Item item, int pos ) {
 		if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
-			((Waterskin)item).fill();
-			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.2f, 2 );
-			Sample.INSTANCE.play( Assets.Sounds.DRINK );
-			return item;
-		} else if ( item instanceof Ankh && !(((Ankh) item).isBlessed())){
-			((Ankh) item).bless();
-			CellEmitter.get( pos ).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
+			((Waterskin)item).fill(10);
+			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.2f, 1 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
 		}

@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -47,9 +48,17 @@ public class Kinetic extends Weapon.Enchantment {
 		//use a tracker so that we can know the true final damage
 		Buff.affect(attacker, KineticTracker.class).conservedDamage = conservedDamage;
 		
-		return damage + conservedDamage;
+		return damage + conservedDamage * (1 + weapon.buffedLvl() / 50);
 	}
-	
+
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		return Messages.decimalFormat("#.##", 100 * (1 + level / 50f) ) + "%";
+	}
+
+
+
 	@Override
 	public ItemSprite.Glowing glowing() {
 		return YELLOW;

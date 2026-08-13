@@ -57,10 +57,10 @@ public class PhantomStopwatch extends Artifact {
 		image = ItemSpriteSheet.ARTIFACT_WATCH;
 
 		levelCap = 5;
-		charge = 15+(level() * 3); //value of each charge is decreased
+		charge = 10+(level() * 2); //value of each charge is decreased
 
 		partialCharge = 0;
-		chargeCap = 15+(level() * 3);
+		chargeCap = 10+(level() * 2);
 
 		exp = 0;
 
@@ -154,7 +154,7 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.25f*amount;
+			partialCharge += 0.10f*amount; //from 0.25f*amount
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;

@@ -28,12 +28,12 @@ public class ChargrilledMeat extends Food {
 
 	{
 		image = ItemSpriteSheet.STEAK;
-		energy = Hunger.HUNGRY/2f;
+		energy = Hunger.HUNGRY/1.5f; //satiates you more than frozen or stewed
 	}
 	
 	@Override
 	public int value() {
-		return 10 * quantity; //buffed from 8 to 10
+		return 30 * quantity;
 	}
 	
 	public static Food cook( int quantity ) {

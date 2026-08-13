@@ -44,7 +44,7 @@ public class StewedMeat extends Food {
 
 	@Override
 	public int value() {
-		return 8 * quantity;
+		return 30 * quantity;
 	}
 
 	public static void effect(Hero hero){

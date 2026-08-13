@@ -25,6 +25,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SnakeSprite;
@@ -41,8 +44,9 @@ public class Snake extends Mob {
 		EXP = 2;
 		maxLvl = 7;
 		
-		loot = Generator.Category.SEED;
+		loot = Culinary.culinaryEnchantProc( (Weapon)Dungeon.hero.belongings.weapon() ) > 0 ? Berry.class : Generator.Category.SEED;
 		lootChance = 0.25f;
+
 	}
 	
 	@Override

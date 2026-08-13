@@ -541,7 +541,7 @@ public class CursedWand {
 			new Bomb.ConjuredBomb().explode(bolt.collisionPos);
 			PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not( Dungeon.level.solid, null ), (int) sqrt(wandLevel(origin) / 2f) );
 			for (int i = 0; i < PathFinder.distance.length; i++) {
-				if (PathFinder.distance[i] < Integer.MAX_VALUE && i != bolt.collisionPos && randomUsingLevel(wandLevel(origin))) {
+				if (PathFinder.distance[i] < Integer.MAX_VALUE && i != bolt.collisionPos && Math.random() < wandLevel(origin) / 20f  ) {
 					new Bomb.ConjuredBomb().explode(i);
 				}
 			}

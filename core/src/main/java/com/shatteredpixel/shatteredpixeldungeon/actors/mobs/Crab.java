@@ -21,8 +21,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrabSprite;
 import com.watabou.utils.Random;
 
@@ -34,12 +37,13 @@ public class Crab extends Mob {
 		HP = HT = 15;
 		defenseSkill = 5;
 		baseSpeed = 2f;
-		
+
 		EXP = 4;
 		maxLvl = 9;
 		
 		loot = MysteryMeat.class;
-		lootChance = 0.167f; //+ culinaryEnchantProc
+		lootChance = Dungeon.hero.belongings.weapon() != null ? 0.2f + Culinary.culinaryEnchantProc( (Weapon)Dungeon.hero.belongings.weapon() ) : 0.2f;
+
 	}
 	
 	@Override

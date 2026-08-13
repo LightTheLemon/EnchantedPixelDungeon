@@ -83,7 +83,7 @@ public class WaterOfHealth extends WellWater {
 	@Override
 	protected Item affectItem( Item item, int pos ) {
 		if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
-			((Waterskin)item).fill();
+			((Waterskin)item).fill(20);
 			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;

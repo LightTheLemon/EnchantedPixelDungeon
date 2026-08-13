@@ -32,6 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Covert;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatshield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -339,6 +341,19 @@ public class WndUpgrade extends Window {
 					bottom = fillFields(Messages.get(toUpgrade, "upgrade_stat_name_3"),
 							((Ring) toUpgrade).upgradeStat3(levelFrom),
 							((Ring) toUpgrade).upgradeStat3(levelTo),
+							bottom);
+				}
+			}
+		}
+        if (toUpgrade instanceof Weapon) {
+			Weapon weapon = (Weapon) toUpgrade;
+			Weapon.Enchantment ench = weapon.enchantment;
+			if (ench != null && ench.enchantUpgradeStat1(levelFrom) != null){
+
+				if (ench.enchantUpgradeStat1(levelFrom) != null) {
+					bottom = fillFields(Messages.get(ench, "upgrade_stat_name_1"),
+							(ench.enchantUpgradeStat1(levelFrom)),
+							(ench.enchantUpgradeStat1(levelTo)),
 							bottom);
 				}
 			}

@@ -75,6 +75,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImag
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -209,20 +210,21 @@ public enum HeroClass {
 
 		// TODO: remove these
 
-		WandOfCharm charm = new WandOfCharm();
-		charm.identify().collect();
-
-		//RingOfAccuracy accuracy = new RingOfAccuracy();
-		//accuracy.identify().collect();
+		//WandOfCharm charm = new WandOfCharm();
+		//charm.identify().collect();
 
 		//PhantomStopwatch watch = new PhantomStopwatch();
 		//watch.identify().collect();
 
+		ScrollOfEnchantment ench = new ScrollOfEnchantment();
+		ench.quantity(100);
+		ench.identify().collect();
+
 		TimekeepersHourglass time = new TimekeepersHourglass();
 		time.identify().collect();
 
-		ThrowingStone stone = new ThrowingStone();
-		stone.identify().collect();
+		ThrowingStone stones = new ThrowingStone();
+		stones.identify().collect();
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();

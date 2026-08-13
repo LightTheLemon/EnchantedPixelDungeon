@@ -486,9 +486,10 @@ public class Hero extends Char {
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
 		}
 
-		float arcanaBuff = RingOfArcana.enchantPowerMultiplier(Dungeon.hero);
+		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
 		if (wep != null && wep.enchantment instanceof Covert && attackTarget.HP <= 0) {
-			Buff.affect( this, Invisibility.class, ((Invisibility.DURATION - 18) / 2) + ((wep.buffedLvl() * 2.5f) + 1)  * (arcanaBuff + 1));
+			float finalDuration = ((Invisibility.DURATION - 18) / 2) + (wep.buffedLvl() * 2f)  * bonus;
+			Buff.prolong( this, Invisibility.class, finalDuration);
 		}
 
 		attackTarget = null;
@@ -2361,9 +2362,10 @@ public class Hero extends Char {
 		}
 
 		Weapon weapon = belongings.getItem(Weapon.class);
-		float arcanaBuff = RingOfArcana.enchantPowerMultiplier(Dungeon.hero);
+		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
 		if (weapon != null && weapon.enchantment instanceof Covert && attackTarget.HP <= 0) {
-			Buff.affect( this, Invisibility.class, ((Invisibility.DURATION - 18) / 2) + ((weapon.buffedLvl() * 2.5f) + 1)  * (arcanaBuff + 1));
+			float finalDuration = ((Invisibility.DURATION - 18) / 2) + (weapon.buffedLvl() * 2f)  * bonus;
+			Buff.prolong( this, Invisibility.class, finalDuration);
 		}
 
 		curAction = null;

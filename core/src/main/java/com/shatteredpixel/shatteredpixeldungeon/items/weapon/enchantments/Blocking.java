@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -61,6 +62,13 @@ public class Blocking extends Weapon.Enchantment {
 		}
 		
 		return damage;
+	}
+	@Override
+	public String enchantUpgradeStat1(int level) {
+
+		float procChance = (level+4f)/(level+40f) * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
+
+		return Messages.decimalFormat("#.##", 100 * procChance ) + "%";
 	}
 	
 	@Override
