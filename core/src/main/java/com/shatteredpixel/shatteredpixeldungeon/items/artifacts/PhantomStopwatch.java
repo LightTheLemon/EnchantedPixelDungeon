@@ -56,7 +56,7 @@ public class PhantomStopwatch extends Artifact {
 	{
 		image = ItemSpriteSheet.ARTIFACT_WATCH;
 
-		levelCap = 5;
+		levelCap = 10;
 		charge = 10+(level() * 2); //value of each charge is decreased
 
 		partialCharge = 0;
@@ -74,9 +74,6 @@ public class PhantomStopwatch extends Artifact {
 	}
 
 	public static final String AC_ACTIVATE = "ACTIVATE";
-
-	//keeps track of generated sandbags.
-	//public int sandBags = 0;
 
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
@@ -116,7 +113,7 @@ public class PhantomStopwatch extends Artifact {
 				GameScene.flash(0x80FFFFFF);
 				Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
-				Invisibility.dispel(Dungeon.hero);
+				//Invisibility.dispel(Dungeon.hero);
 				activeBuff = new timeFreeze();
 				Talent.onArtifactUsed(Dungeon.hero);
 				activeBuff.attachTo(Dungeon.hero);
@@ -154,7 +151,7 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.10f*amount; //from 0.25f*amount
+			partialCharge += 0.15f*amount; //from 0.25f*amount
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -168,11 +165,7 @@ public class PhantomStopwatch extends Artifact {
 
 	@Override
 	public Item upgrade() {
-		chargeCap+= 3;
-
-		//for artifact transmutation.
-		//while (level()+1 > sandBags)
-		//	sandBags ++;
+		chargeCap = Math.min(chargeCap + 2, 25);
 
 		return super.upgrade();
 	}
@@ -191,15 +184,11 @@ public class PhantomStopwatch extends Artifact {
 		}
 		return desc;
 	}
-
-
-	//private static final String SANDBAGS =  "sandbags";
 	private static final String BUFF =      "buff";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle(bundle);
-		//bundle.put( SANDBAGS, sandBags );
 
 		if (activeBuff != null)
 			bundle.put( BUFF , activeBuff );
@@ -208,7 +197,6 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		//sandBags = bundle.getInt( SANDBAGS );
 
 		//these buffs belong to hourglass, need to handle unbundling within the hourglass class.
 		if (bundle.contains( BUFF )){
@@ -230,13 +218,12 @@ public class PhantomStopwatch extends Artifact {
 	public class watchRecharge extends ArtifactBuff {
 		@Override
 		public boolean act() {
-
 			if (charge < chargeCap
 					&& !cursed
 					&& target.buff(MagicImmune.class) == null
-					&& Regeneration.regenOn()) {
-				//90 turns to charge at full, 60 turns to charge at 0/10
-				float chargeGain = 1 / (90f - (chargeCap - charge)*3f);
+					&& Regeneration.regenOn()
+					&& activeBuff == null) {
+				float chargeGain = 1 / (75f ); // was (100f - (chargeCap - charge)*3f)
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
 
@@ -251,12 +238,16 @@ public class PhantomStopwatch extends Artifact {
 			} else if (cursed && Random.Int(10) == 0)
 				((Hero) target).spend( TICK );
 
+
+			int lvlDiffFromTarget = ((Hero) target).lvl - (1+level()*2);
+
 			updateQuickslot();
 
 			spend( TICK );
 
 			return true;
 		}
+
 		public void gainExp(float levelPortion) {
 			if (cursed || target.buff(MagicImmune.class) != null || levelPortion == 0) return;
 
@@ -268,14 +259,18 @@ public class PhantomStopwatch extends Artifact {
 			}
 			partialCharge += levelPortion*6f;
 
-			if (exp > 500+level()*500 && level() < levelCap){
-				exp -= 500+level()*500;
+			if (exp > 100+level()*100 && level() < levelCap){
+				exp -= 100+level()*100;
 				GLog.p( Messages.get(this, "levelup") );
-				Catalog.countUses(PhantomStopwatch.class, 1);
+				Catalog.countUses(PhantomStopwatch.class, 2);
 				upgrade();
 			}
 
 		}
+
+
+
+
 	}
 
 	public class timeFreeze extends ArtifactBuff {
@@ -420,54 +415,6 @@ public class PhantomStopwatch extends Artifact {
 			turnsToCost = bundle.getFloat( TURNSTOCOST );
 		}
 	}
-
-	/*
-	public static class sandBag extends Item {
-
-		{
-			image = ItemSpriteSheet.SANDBAG;
-		}
-
-		@Override
-		public boolean doPickUp(Hero hero, int pos) {
-			Catalog.setSeen(getClass());
-			Statistics.itemTypesDiscovered.add(getClass());
-			PhantomStopwatch watch = hero.belongings.getItem( PhantomStopwatch.class );
-			if (watch != null && !watch.cursed) {
-				watch.upgrade();
-				Catalog.countUses(watch.getClass(), 2);
-				Sample.INSTANCE.play( Assets.Sounds.DEWDROP );
-				if (watch.level() == watch.levelCap)
-					GLog.p( Messages.get(this, "maxlevel") );
-				else
-					GLog.i( Messages.get(this, "levelup") );
-				GameScene.pickUp(this, pos);
-				hero.spendAndNext(pickupDelay());
-				return true;
-			} else {
-				GLog.w( Messages.get(this, "no_watch") );
-				return false;
-			}
-		}
-
-		@Override
-		public int value() {
-			return 30;
-		}
-
-		@Override
-		public boolean isUpgradable() {
-			return false;
-		}
-
-		@Override
-		public boolean isIdentified() {
-			return true;
-		}
-	}
-
-	 */
-
 
 }
 

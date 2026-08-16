@@ -262,11 +262,13 @@ public class CursedWand {
 			} else {
 				if (positiveOnly || user == null || Char.hasProp(user, Char.Property.IMMOVABLE)){
 					return false;
-				} else {
+				} else if (target != null) {
 					ScrollOfTeleportation.teleportChar(user);
-					Buff.affect(user, Daze.class,(float) (Math.floor(wandLevel(origin) *2.5f)));
+					Buff.affect(user, Daze.class,(float) (Math.floor(wandLevel(origin) * 2.5f)));
 					Buff.affect(target, Haste.class,(float) (Math.floor(wandLevel(origin) *1.8f)));
 					return true;
+				} else {
+					return false;
 				}
 			}
 		}

@@ -74,8 +74,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -210,14 +212,25 @@ public enum HeroClass {
 
 		// TODO: remove these
 
+		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
+		upgrade.quantity(10);
+		upgrade.collect();
+
+		CurseInfusion curse = new CurseInfusion();
+		curse.quantity(10);
+		curse.collect();
+
+		ScrollOfTransmutation trans = new ScrollOfTransmutation();
+		trans.collect();
+
 		//WandOfCharm charm = new WandOfCharm();
 		//charm.identify().collect();
 
-		//PhantomStopwatch watch = new PhantomStopwatch();
-		//watch.identify().collect();
+		PhantomStopwatch watch = new PhantomStopwatch();
+		watch.identify().collect();
 
 		ScrollOfEnchantment ench = new ScrollOfEnchantment();
-		ench.quantity(100);
+		ench.quantity(10);
 		ench.identify().collect();
 
 		TimekeepersHourglass time = new TimekeepersHourglass();

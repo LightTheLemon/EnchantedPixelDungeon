@@ -39,11 +39,11 @@ public class Polarized extends Weapon.Enchantment {
 		if (Random.Float() < procChance) {
 			return (int) Math.round(damage*(1.5+weapon.buffedLvl()*.1f));
 		} else {
-			float heal = damage * 0.1f * weapon.buffedLvl();
-			float shield = heal - (defender.HT - defender.HP);
-			if (shield > 0)
-				Buff.affect(defender, Barrier.class).setShield((int) shield);
-			return shield > 0 ? defender.HT - defender.HP : (int) heal;
+			double shieldAmount = damage*(0.5+weapon.buffedLvl()*.1f);
+			if (shieldAmount > 0)
+				Buff.affect(defender, Barrier.class).setShield((int) shieldAmount);
+			return 0;
+
 		}
 		
 	}

@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
@@ -513,7 +514,7 @@ public class Hero extends Char {
 			PhantomStopwatch.timeFreeze buff = buff(PhantomStopwatch.timeFreeze.class);
 
 			if (watch != null &&  buff != null) {
-				watch.attackCost(1);
+				//watch.attackCost(1); //just in case i want to change it later
 			}
 		}
 		return result;
@@ -1617,7 +1618,7 @@ public class Hero extends Char {
 			interrupt();
 		}
 
-		if (this.buff(Drowsy.class) != null){
+		if (this.buff(Drowsy.class) != null && dmg > 1){
 			Buff.detach(this, Drowsy.class);
 			GLog.w( Messages.get(this, "pain_resist") );
 		}

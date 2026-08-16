@@ -49,7 +49,7 @@ public class Stone extends Armor.Glyph {
 
 		//FIXME this is duplicated here because these apply in hit(), not in attack/defenseskill
 		// the true solution is probably to refactor accuracy/evasion code a little bit
-		if (attacker.buff(Bless.class) != null) accuracy *= 1.25f;
+		if (attacker.buff(Bless.class) != null) accuracy *= 2.0f;
 		if (attacker.buff(  Hex.class) != null) accuracy *= 0.8f;
 		if (attacker.buff( Daze.class) != null) accuracy *= 0.5f;
 		for (ChampionEnemy buff : attacker.buffs(ChampionEnemy.class)){
@@ -63,7 +63,7 @@ public class Stone extends Armor.Glyph {
 			accuracy *= 1.01f + 0.02f*Dungeon.hero.pointsInTalent(Talent.BLESS);
 		}
 
-		if (defender.buff(Bless.class) != null) evasion *= 1.25f;
+		if (defender.buff(Bless.class) != null) evasion *= 2.0f;
 		if (defender.buff(  Hex.class) != null) evasion *= 0.8f;
 		if (defender.buff( Daze.class) != null) evasion *= 0.5f;
 		for (ChampionEnemy buff : defender.buffs(ChampionEnemy.class)){

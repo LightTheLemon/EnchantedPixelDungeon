@@ -71,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Speed;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stamina;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
@@ -634,6 +635,9 @@ public abstract class Char extends Actor {
 		if (attacker.invisible > 0 && attacker.canSurpriseAttack()){
 			acuStat = INFINITE_ACCURACY;
 		}
+		if (Dungeon.hero.belongings.getItem(PhantomStopwatch.class) != null && Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null && attacker.canSurpriseAttack()){
+			acuStat = INFINITE_ACCURACY;
+		}
 
 		if (defender.buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class) != null){
 			defStat = INFINITE_EVASION;
@@ -650,7 +654,7 @@ public abstract class Char extends Actor {
 		}
 
 		float acuRoll = Random.Float( acuStat );
-		if (attacker.buff(Bless.class) != null) acuRoll *= 1.25f;
+		if (attacker.buff(Bless.class) != null) acuRoll *= 2.0f;
 		if (attacker.buff(  Hex.class) != null) acuRoll *= 0.8f;
 		if (attacker.buff( Daze.class) != null) acuRoll *= 0.5f;
 		for (ChampionEnemy buff : attacker.buffs(ChampionEnemy.class)){
@@ -666,7 +670,7 @@ public abstract class Char extends Actor {
 		acuRoll *= accMulti;
 
 		float defRoll = Random.Float( defStat );
-		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
+		if (defender.buff(Bless.class) != null) defRoll *= 2.0f;
 		if (defender.buff(  Hex.class) != null) defRoll *= 0.8f;
 		if (defender.buff( Daze.class) != null) defRoll *= 0.5f;
 		for (ChampionEnemy buff : defender.buffs(ChampionEnemy.class)){
@@ -888,6 +892,14 @@ public abstract class Char extends Actor {
 		}
 		if (alignment != Alignment.ALLY && this.buff(DeathMark.DeathMarkTracker.class) != null){
 			damage *= 1.25f;
+		}
+
+		if ( Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null ) {
+			damage *= 0.1f;
+			//damage = 1;
+			//Buff.affect(this, Bleeding.class).set(dmg * 0.5f);
+			Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.5f);
+
 		}
 
 		if (buff(Sickle.HarvestBleedTracker.class) != null){

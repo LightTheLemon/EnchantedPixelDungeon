@@ -40,7 +40,8 @@ public class Projecting extends Weapon.Enchantment {
 	@Override
 	public String enchantUpgradeStat1(int level) {
 
-		return Messages.decimalFormat("#.##", 100* Math.round( Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero) + Math.round( (level / 7f) - 1 ))   ) + "%";
+		return Messages.decimalFormat("#.##", 100 * Math.round( Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero) + Math.round( Math.max( 1, (level / 7f ))))) + "%";
+		//			return reach + Math.round(Enchantment.genericProcChanceMultiplier(owner) + Math.round( Math.max( 1, (super.level() / 10f )) ) );
 	}
 
 	@Override

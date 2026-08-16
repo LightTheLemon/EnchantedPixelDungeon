@@ -50,7 +50,7 @@ public class StewedMeat extends Food {
 	public static void effect(Hero hero){
 		if(Math.random() >= .45f) {
 			GLog.i( Messages.get(StewedMeat.class, "invis") );
-			Buff.affect( hero, Invisibility.class, (Invisibility.DURATION - 15));
+			Buff.affect( hero, Invisibility.class, (Invisibility.DURATION - 12));
 		}
 	}
 	

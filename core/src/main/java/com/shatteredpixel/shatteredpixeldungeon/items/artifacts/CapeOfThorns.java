@@ -23,13 +23,17 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class CapeOfThorns extends Artifact {
 
@@ -42,12 +46,25 @@ public class CapeOfThorns extends Artifact {
 		chargeCap = 100;
 		cooldown = 0;
 
-		defaultAction = "NONE"; //so it can be quickslotted
+		defaultAction = AC_ACTIVATE;
 	}
+	public static final String AC_ACTIVATE = "ACTIVATE";
 
 	@Override
 	protected ArtifactBuff passiveBuff() {
 		return new Thorns();
+	}
+
+	@Override
+	public ArrayList<String> actions(Hero hero) {
+		ArrayList<String> actions = super.actions(hero);
+		if (isEquipped(hero)
+				&& charge > 0
+				&& hero.buff(MagicImmune.class) == null
+				&& !cursed) {
+			actions.add(AC_ACTIVATE);
+		}
+		return actions;
 	}
 	
 	@Override
@@ -56,8 +73,39 @@ public class CapeOfThorns extends Artifact {
 			charge += Math.round(4*amount);
 			updateQuickslot();
 		}
-		if (charge >= chargeCap){
-			target.buff(Thorns.class).proc(0, null, null);
+		//if (charge >= chargeCap){
+		//	target.buff(Thorns.class).proc(0, null, null);
+		//}
+	}
+
+	@Override
+	public void execute(Hero hero, String action) {
+		super.execute(hero, action);
+
+		if (hero.buff(MagicImmune.class) != null) return;
+
+		if (action.equals(AC_ACTIVATE)){
+
+			curUser = hero;
+
+			if (!isEquipped( hero )) {
+				GLog.i( Messages.get(Artifact.class, "need_to_equip") );
+				usesTargeting = false;
+
+			} else if (charge < 10) {
+				GLog.i( Messages.get(this, "no_charge") );
+				usesTargeting = false;
+
+			} else if (cursed) {
+				GLog.w( Messages.get(this, "cursed") );
+				usesTargeting = false;
+
+			} else {
+				usesTargeting = true;
+				//GameScene.selectCell(targeter);
+				Dungeon.hero.buff(Thorns.class).proc(0, null, null);
+			}
+
 		}
 	}
 	

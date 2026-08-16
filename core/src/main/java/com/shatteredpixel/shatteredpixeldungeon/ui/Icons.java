@@ -333,7 +333,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 176, 64, 16, 16 ) );
 				break;
 			case DISTANT_WELL:
-				icon.frame( icon.texture.uvRectBySize( 196, 64, 16, 16 ) );
+				icon.frame( icon.texture.uvRectBySize( 192, 64, 16, 16 ) );
 				break;
 			case SKULL:
 				icon.frame( icon.texture.uvRectBySize( 0, 80, 8, 8 ) );

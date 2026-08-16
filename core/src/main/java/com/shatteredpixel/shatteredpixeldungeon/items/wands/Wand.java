@@ -215,8 +215,9 @@ public abstract class Wand extends Item {
 
 		if (target != Dungeon.hero &&
 				Dungeon.hero.subClass == HeroSubClass.WARLOCK &&
-				//standard 1 - 0.96^x chance, plus 7%. Starts at 15%
-				Random.Float() > (Math.pow(0.96f, (wandLevel*chargesUsed)+1) - 0.07f)){ //nerfed, was 0.92f
+				target.alignment != Char.Alignment.ALLY &&
+				//standard 1 - 0.92^x chance, plus 7%. Starts at 15%
+				Random.Float() > (Math.pow(0.92f, ( (wandLevel / 2f) *chargesUsed)+1) - 0.1f)){
 			SoulMark.prolong(target, SoulMark.class, SoulMark.DURATION);
 		}
 

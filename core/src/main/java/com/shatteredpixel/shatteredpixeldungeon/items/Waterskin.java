@@ -233,7 +233,7 @@ public class Waterskin extends Item {
 	}
 
 	public int fill(int amount) {
-		volume = Math.min(MAX_VOLUME, volume + amount);
+		volume = Math.max(0, Math.min(MAX_VOLUME, volume + amount) );
 		updateQuickslot();
 		return amount;
 	}

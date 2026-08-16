@@ -6,7 +6,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 
-public class Culinary extends Weapon.Enchantment {
+public class Culinary extends Weapon.Enchantment { //bug: after unequipping, still applies effect
 
     private static ItemSprite.Glowing SALMON = new ItemSprite.Glowing( 0xFFB366 );
 

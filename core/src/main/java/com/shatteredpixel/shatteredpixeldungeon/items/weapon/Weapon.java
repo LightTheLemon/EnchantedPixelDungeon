@@ -301,7 +301,7 @@ abstract public class Weapon extends KindOfWeapon {
 		float ACC = this.ACC;
 
 		if (owner.buff(Wayward.WaywardBuff.class) != null && enchantment instanceof Wayward){
-			ACC /= 5;
+			ACC /= 10;
 		}
 
 		return encumbrance > 0 ? (float)(ACC / Math.pow( 1.5, encumbrance )) : ACC;
@@ -347,7 +347,7 @@ abstract public class Weapon extends KindOfWeapon {
 			reach += 2;
 		}
 		if (hasEnchant(Projecting.class, owner)){
-			return reach + Math.round(Enchantment.genericProcChanceMultiplier(owner) + Math.round( (super.level() / 7f) - 1 )  );
+			return reach + Math.round(Enchantment.genericProcChanceMultiplier(owner) + Math.round( Math.max( 1, (super.level() / 7f ))) );
 		} else {
 			return reach;
 		}

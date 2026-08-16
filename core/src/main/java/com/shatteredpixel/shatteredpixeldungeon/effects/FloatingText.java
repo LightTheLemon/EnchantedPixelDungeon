@@ -358,7 +358,7 @@ public class FloatingText extends RenderedTextBlock {
 			&& attacker.buff(ChampionEnemy.class).evasionAndAccuracyFactor() > 1){
 			blessBoost *= attacker.buff(ChampionEnemy.class).evasionAndAccuracyFactor();
 		}
-		if (attacker.buff(Bless.class) != null) blessBoost *= 1.25f;
+		if (attacker.buff(Bless.class) != null) blessBoost *= 2.0f;
 		if (Dungeon.hero.heroClass != HeroClass.CLERIC
 				&& Dungeon.hero.hasTalent(Talent.BLESS)
 				&& attacker.alignment == Char.Alignment.ALLY){
@@ -452,7 +452,7 @@ public class FloatingText extends RenderedTextBlock {
 				&& defender.buff(ChampionEnemy.class).evasionAndAccuracyFactor() > 1){
 			blessBoost *= defender.buff(ChampionEnemy.class).evasionAndAccuracyFactor();
 		}
-		if (defender.buff(Bless.class) != null) blessBoost *= 1.25f;
+		if (defender.buff(Bless.class) != null) blessBoost *= 2.0f;
 		if (Dungeon.hero.heroClass != HeroClass.CLERIC
 				&& Dungeon.hero.hasTalent(Talent.BLESS)
 				&& defender.alignment == Char.Alignment.ALLY){
