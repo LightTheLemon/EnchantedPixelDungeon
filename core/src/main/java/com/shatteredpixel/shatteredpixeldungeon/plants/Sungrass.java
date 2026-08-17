@@ -67,6 +67,11 @@ public class Sungrass extends Plant {
 
 			bones = true;
 		}
+
+		@Override
+		public int value() {
+			return 50 * quantity;
+		}
 	}
 	
 	public static class Health extends Buff {

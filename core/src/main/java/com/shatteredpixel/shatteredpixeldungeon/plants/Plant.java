@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
@@ -135,7 +136,7 @@ public abstract class Plant implements Bundlable {
 		
 		{
 			stackable = true;
-			defaultAction = AC_THROW;
+			defaultAction = AC_PLANT;
 		}
 		
 		protected Class<? extends Plant> plantClass;
@@ -178,14 +179,26 @@ public abstract class Plant implements Bundlable {
 
 			if (action.equals( AC_PLANT )) {
 
-				hero.busy();
-				((Seed)detach( hero.belongings.backpack )).onThrow( hero.pos );
-				hero.spend( TIME_TO_PLANT );
-
-				hero.sprite.operate( hero.pos );
-				
+				curUser = hero;
+				curItem = this;
+				GameScene.selectCell( target );
 			}
 		}
+
+		protected static CellSelector.Listener target = new CellSelector.Listener() {
+			@Override
+			public void onSelect( Integer target ) {
+				if (target != null) {
+					((Seed)curItem.detach( curUser.belongings.backpack )).onThrow( target );
+					curUser.spend( TIME_TO_PLANT );
+					curUser.sprite.operate( target );
+				}
+			}
+			@Override
+			public String prompt() {
+				return Messages.get(Plant.class, "choose_throw");
+			}
+		};
 		
 		public Plant couch( int pos, Level level ) {
 			if (level != null && level.heroFOV != null && level.heroFOV[pos]) {
@@ -208,7 +221,7 @@ public abstract class Plant implements Bundlable {
 		
 		@Override
 		public int value() {
-			return 25 * quantity;
+			return 15 * quantity;
 		}
 
 		@Override

@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -254,7 +256,7 @@ public class Potion extends Item {
 				} else {
 					drink( hero );
 				}
-			
+
 		}
 	}
 	
@@ -306,11 +308,12 @@ public class Potion extends Item {
 	
 	@Override
 	protected void onThrow( int cell ) {
-		if (Dungeon.level.map[cell] == Terrain.WELL || Dungeon.level.pit[cell]) {
+
+		if (Dungeon.level.map[cell] == Terrain.WELL || Dungeon.level.pit[cell] || hero.pos == cell) {
 			
 			super.onThrow( cell );
-			
-		} else  {
+
+		} else {
 
 			//aqua brew and storm clouds specifically don't press cells, so they can disarm traps
 			if (!(this instanceof AquaBrew) && !(this instanceof PotionOfStormClouds)){
@@ -356,7 +359,7 @@ public class Potion extends Item {
 				updateQuickslot();
 			}
 			
-			if (Dungeon.hero.isAlive()) {
+			if (hero.isAlive()) {
 				Catalog.setSeen(getClass());
 				Statistics.itemTypesDiscovered.add(getClass());
 			}

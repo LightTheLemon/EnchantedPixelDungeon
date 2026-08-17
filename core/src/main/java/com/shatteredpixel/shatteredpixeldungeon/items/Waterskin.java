@@ -78,7 +78,7 @@ public class Waterskin extends Item {
 		if (volume > 0) {
 			actions.add( AC_DRINK );
 		}
-		if (volume > 5 && hero.HP <= hero.HT * 0.75f) {
+		if (volume > 5) {
 			actions.add( AC_SIP );
 		}
 		return actions;
@@ -144,7 +144,15 @@ public class Waterskin extends Item {
 			if (volume > 0 && hero.HP != hero.HT) {
 
 				float missingHealthPercent = 1f - (hero.HP / (float)hero.HT);
-				float dropsNeeded = Math.min(5, missingHealthPercent / 0.04f); //Code copied from AC_DRINK with this one change
+
+				float efficiency;
+
+				if (hero.HP >= hero.HT * 0.75f) {
+					efficiency = 0.05f;
+				} else {
+					efficiency = 0.04f; //most of the time, its less efficient
+				}
+				float dropsNeeded = Math.min(5, missingHealthPercent / efficiency);
 
 				if (dropsNeeded > 1.01f && VialOfBlood.delayBurstHealing()){
 					dropsNeeded /= VialOfBlood.totalHealMultiplier();

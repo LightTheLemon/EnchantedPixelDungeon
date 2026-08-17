@@ -67,7 +67,7 @@ public class Pickaxe extends MeleeWeapon {
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
 		if (Dungeon.level instanceof MiningLevel){
-			actions.remove(AC_DROP);
+			actions.remove(AC_DROP_ALL);
 			actions.remove(AC_THROW);
 		}
 		return actions;

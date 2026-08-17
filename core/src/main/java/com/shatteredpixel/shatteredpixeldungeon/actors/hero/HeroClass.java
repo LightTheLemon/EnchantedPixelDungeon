@@ -214,16 +214,9 @@ public enum HeroClass {
 
 		// TODO: remove these
 
-		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
-		upgrade.quantity(10);
-		upgrade.collect();
-
 		CurseInfusion curse = new CurseInfusion();
 		curse.quantity(10);
 		curse.collect();
-
-		ScrollOfTransmutation trans = new ScrollOfTransmutation();
-		trans.collect();
 
 		CapeOfThorns cape = new CapeOfThorns();
 		cape.collect();
@@ -234,9 +227,9 @@ public enum HeroClass {
 		PhantomStopwatch watch = new PhantomStopwatch();
 		watch.identify().collect();
 
-		ScrollOfEnchantment ench = new ScrollOfEnchantment();
-		ench.quantity(10);
-		ench.identify().collect();
+		//ScrollOfEnchantment ench = new ScrollOfEnchantment();
+		//ench.quantity(10);
+		//ench.identify().collect();
 
 		//TimekeepersHourglass time = new TimekeepersHourglass();
 		//time.identify().collect();

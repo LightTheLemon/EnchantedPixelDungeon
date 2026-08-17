@@ -110,6 +110,10 @@ public class Bomb extends Item {
 		} else
 			lightingFuse = false;
 
+		if (quantity > 1) {
+
+		}
+
 		super.execute(hero, action);
 	}
 

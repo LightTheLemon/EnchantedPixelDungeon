@@ -63,7 +63,7 @@ public class ReclaimTrap extends TargetedSpell {
 		ArrayList<String> actions = super.actions(hero);
 		//prevents exploits, pre-v3.0.0
 		if (storedTrap != null){
-			actions.remove(AC_DROP);
+			actions.remove(AC_DROP_ALL);
 			actions.remove(AC_THROW);
 		}
 		return actions;
