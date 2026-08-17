@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Game;
@@ -37,6 +38,8 @@ public class MobSprite extends CharSprite {
 	@Override
 	public void update() {
 		sleeping = ch != null && ch.isAlive() && ((Mob)ch).state == ((Mob)ch).SLEEPING;
+		magicSleeping = ch != null && ch.isAlive() && ((Mob)ch).state == ((Mob)ch).SLEEPING && ch.buff(MagicalSleep.class) != null;
+
 		super.update();
 	}
 	

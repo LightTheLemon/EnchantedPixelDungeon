@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
@@ -39,9 +40,9 @@ public class Wayward extends Weapon.Enchantment {
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
 		float procChance = 1/4f * procChanceMultiplier(attacker);
 
-		if (attacker.buff(WaywardBuff.class) != null){
+		if (attacker.buff(WaywardBuff.class) != null && damage < defender.HP){
 
-			return (int) (damage * 1.3f);
+			return (int) (damage * 1.5f);
 
 		} else if (Random.Float() < procChance){
 			Buff.prolong(attacker, WaywardBuff.class, WaywardBuff.DURATION + (weapon.buffedLvl() / 1.5f) );
@@ -68,11 +69,16 @@ public class Wayward extends Weapon.Enchantment {
 			announced = true;
 		}
 
-		public static final float DURATION	= 8f;
+		public static final float DURATION	= 10f;
 
 		@Override
 		public int icon() {
 			return BuffIndicator.WEAKNESS;
+		}
+
+		@Override
+		public String desc() {
+			return Messages.get(this, "desc", dispTurns(visualcooldown()));
 		}
 
 		@Override

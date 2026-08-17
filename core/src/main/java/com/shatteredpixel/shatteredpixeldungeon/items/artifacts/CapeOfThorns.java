@@ -59,7 +59,6 @@ public class CapeOfThorns extends Artifact {
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions(hero);
 		if (isEquipped(hero)
-				&& charge > 0
 				&& hero.buff(MagicImmune.class) == null
 				&& !cursed) {
 			actions.add(AC_ACTIVATE);
@@ -88,11 +87,7 @@ public class CapeOfThorns extends Artifact {
 
 			curUser = hero;
 
-			if (!isEquipped( hero )) {
-				GLog.i( Messages.get(Artifact.class, "need_to_equip") );
-				usesTargeting = false;
-
-			} else if (charge < 10) {
+			if (charge < 10) {
 				GLog.i( Messages.get(this, "no_charge") );
 				usesTargeting = false;
 
@@ -101,8 +96,6 @@ public class CapeOfThorns extends Artifact {
 				usesTargeting = false;
 
 			} else {
-				usesTargeting = true;
-				//GameScene.selectCell(targeter);
 				Dungeon.hero.buff(Thorns.class).proc(0, null, null);
 			}
 

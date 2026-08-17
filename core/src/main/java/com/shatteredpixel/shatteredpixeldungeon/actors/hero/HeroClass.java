@@ -51,6 +51,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
@@ -78,6 +79,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDeepSleep;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -223,6 +225,9 @@ public enum HeroClass {
 		ScrollOfTransmutation trans = new ScrollOfTransmutation();
 		trans.collect();
 
+		CapeOfThorns cape = new CapeOfThorns();
+		cape.collect();
+
 		//WandOfCharm charm = new WandOfCharm();
 		//charm.identify().collect();
 
@@ -233,8 +238,8 @@ public enum HeroClass {
 		ench.quantity(10);
 		ench.identify().collect();
 
-		TimekeepersHourglass time = new TimekeepersHourglass();
-		time.identify().collect();
+		//TimekeepersHourglass time = new TimekeepersHourglass();
+		//time.identify().collect();
 
 		ThrowingStone stones = new ThrowingStone();
 		stones.identify().collect();

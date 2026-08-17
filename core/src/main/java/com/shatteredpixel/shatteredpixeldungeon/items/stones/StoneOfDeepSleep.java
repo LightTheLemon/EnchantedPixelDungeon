@@ -21,11 +21,15 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -44,11 +48,20 @@ public class StoneOfDeepSleep extends Runestone {
 
 			Char c = Actor.findChar(cell);
 
-			if (c instanceof Mob){
+			if (c instanceof Mob && ((Mob)c).state == ((Mob)c).SLEEPING) { //only apply magical sleep on already sleeping enemies
 
 				Buff.affect(c, MagicalSleep.class);
-				c.sprite.centerEmitter().start( Speck.factory( Speck.NOTE ), 0.3f, 5 );
+				c.sprite.centerEmitter().start(Speck.factory(Speck.NOTE), 0.3f, 5);
 
+			} else if (c instanceof Mob) {
+				Buff.affect(c, Sleep.class);
+				c.sprite.centerEmitter().start(Speck.factory(Speck.NOTE), 0.3f, 3);
+
+			} else if (c instanceof Hero) {
+
+				Buff.affect(c, MagicalSleep.class).limitedTurns(hero.HT / 5);
+
+				c.sprite.centerEmitter().start(Speck.factory(Speck.NOTE), 0.3f, 3);
 			}
 
 		}

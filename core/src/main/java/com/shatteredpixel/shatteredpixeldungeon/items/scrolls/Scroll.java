@@ -67,7 +67,9 @@ import java.util.LinkedHashMap;
 public abstract class Scroll extends Item {
 	
 	public static final String AC_READ	= "READ";
-	
+
+	public static final String AC_CRAFT	= "CRAFT";
+
 	protected static final float TIME_TO_READ	= 1f;
 
 	private static final LinkedHashMap<String, Integer> runes = new LinkedHashMap<String, Integer>() {
@@ -166,6 +168,7 @@ public abstract class Scroll extends Item {
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
 		actions.add( AC_READ );
+		actions.add( AC_CRAFT );
 		return actions;
 	}
 	
@@ -189,6 +192,17 @@ public abstract class Scroll extends Item {
 			}
 			
 		}
+		if (action.equals( AC_CRAFT)) {
+
+
+
+			System.out.println("test");
+
+
+
+
+		}
+
 	}
 	
 	public abstract void doRead();

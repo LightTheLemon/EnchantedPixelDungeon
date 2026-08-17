@@ -107,6 +107,7 @@ public enum Icons {
 	BUSY,
 	COMPASS,
 	SLEEP,
+	MAGICAL_SLEEP,
 	ALERT,
 	LOST,
 	INVESTIGATE,
@@ -345,7 +346,10 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 0, 88, 7, 5 ) );
 				break;
 			case SLEEP:
-				icon.frame( icon.texture.uvRectBySize( 7, 88, 9, 8 ) );
+				icon.frame( icon.texture.uvRectBySize( 240, 80, 9, 8 ) );
+				break;
+			case MAGICAL_SLEEP:
+				icon.frame( icon.texture.uvRectBySize( 240, 88, 9, 8 ) );
 				break;
 			case ALERT:
 				icon.frame( icon.texture.uvRectBySize( 16, 80, 8, 8 ) );

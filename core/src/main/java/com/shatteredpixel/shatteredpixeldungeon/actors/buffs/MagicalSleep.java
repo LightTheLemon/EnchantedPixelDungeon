@@ -32,6 +32,51 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 public class MagicalSleep extends Buff {
 
 	private static final float STEP = 1f;
+	private int turnsLeft = -1;
+
+	public MagicalSleep limitedTurns(int turns) {
+		this.turnsLeft = turns;
+		return this;
+	}
+
+	@Override
+	public boolean act() {
+		if (target instanceof Mob && ((Mob) target).state != ((Mob) target).SLEEPING) {
+			detach();
+			return true;
+		}
+
+		// ALLY LOGIC ONLY
+		if (target.alignment == Char.Alignment.ALLY) {
+
+			// Handle limited turns
+			if (turnsLeft > 0) {
+				target.HP = Math.min(target.HP + 1, target.HT);
+				turnsLeft--;
+
+				if (turnsLeft == 0 && target.HP < target.HT) {
+					if (target instanceof Hero) GLog.i("\nYou wake up after a short nap, restoring some HP.");
+					detach();
+					return true;
+				}
+			}
+			// Handle original infinite turns
+			else if (turnsLeft == -1) {
+				target.HP = Math.min(target.HP + 1, target.HT);
+			}
+
+			if (target instanceof Hero) ((Hero) target).resting = true;
+
+			if (target.HP == target.HT) {
+				if (target instanceof Hero) GLog.p(Messages.get(this, "wakeup"));
+				detach();
+				return true;
+			}
+		}
+
+		spend(STEP);
+		return true;
+	}
 
 	@Override
 	public boolean attachTo( Char target ) {
@@ -59,23 +104,7 @@ public class MagicalSleep extends Buff {
 		}
 	}
 
-	@Override
-	public boolean act(){
-		if (target instanceof Mob && ((Mob) target).state != ((Mob) target).SLEEPING){
-			detach();
-			return true;
-		}
-		if (target.alignment == Char.Alignment.ALLY) {
-			target.HP = Math.min(target.HP+1, target.HT);
-			if (target instanceof  Hero) ((Hero) target).resting = true;
-			if (target.HP == target.HT) {
-				if (target instanceof  Hero) GLog.p(Messages.get(this, "wakeup"));
-				detach();
-			}
-		}
-		spend( STEP );
-		return true;
-	}
+
 
 	@Override
 	public void detach() {

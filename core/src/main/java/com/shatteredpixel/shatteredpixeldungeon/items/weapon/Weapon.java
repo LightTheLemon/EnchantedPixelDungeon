@@ -347,7 +347,7 @@ abstract public class Weapon extends KindOfWeapon {
 			reach += 2;
 		}
 		if (hasEnchant(Projecting.class, owner)){
-			return reach + Math.round(Enchantment.genericProcChanceMultiplier(owner) + Math.round( Math.max( 1, (super.level() / 7f ))) );
+			return reach + Math.round( (Enchantment.genericProcChanceMultiplier(owner) - 1) + (super.level() / 8f ));
 		} else {
 			return reach;
 		}

@@ -1618,7 +1618,7 @@ public class Hero extends Char {
 			interrupt();
 		}
 
-		if (this.buff(Drowsy.class) != null && dmg > 1){
+		if (this.buff(Drowsy.class) != null){
 			Buff.detach(this, Drowsy.class);
 			GLog.w( Messages.get(this, "pain_resist") );
 		}

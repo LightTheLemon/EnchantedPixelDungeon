@@ -122,6 +122,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected float flashTime = 0;
 	
 	protected boolean sleeping = false;
+	protected boolean magicSleeping = false;
 
 	public Char ch;
 
@@ -308,6 +309,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	public void die() {
 		sleeping = false;
+		magicSleeping = false;
 		processStateRemoval( State.PARALYSED );
 		play( die );
 
@@ -632,11 +634,15 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			glowBlock.visible =visible;
 		}
 
-		if (sleeping) {
+		if (sleeping && !magicSleeping) {
 			showSleep();
+		} else if (magicSleeping) {
+			showMagicalSleep();
 		} else {
 			hideSleep();
+			hideMagicalSleep();
 		}
+
 		synchronized (EmoIcon.class) {
 			if (emo != null && emo.alive) {
 				emo.visible = visible;
@@ -664,10 +670,32 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 		idle();
 	}
-	
+
 	public void hideSleep() {
 		synchronized (EmoIcon.class) {
 			if (emo instanceof EmoIcon.Sleep) {
+				emo.killAndErase();
+				emo = null;
+			}
+		}
+	}
+
+	public void showMagicalSleep() {
+		synchronized (EmoIcon.class) {
+			if (!(emo instanceof EmoIcon.MagicalSleep)) {
+				if (emo != null) {
+					emo.killAndErase();
+				}
+				emo = new EmoIcon.MagicalSleep(this);
+				emo.visible = visible;
+			}
+		}
+		idle();
+	}
+
+	public void hideMagicalSleep() {
+		synchronized (EmoIcon.class) {
+			if (emo instanceof EmoIcon.MagicalSleep) {
 				emo.killAndErase();
 				emo = null;
 			}

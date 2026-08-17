@@ -75,17 +75,41 @@ public class EmoIcon extends Image {
 		return new PointF(width()/2f, height()/2f);
 	};
 	
-	public static class Sleep extends EmoIcon {
+	public static class MagicalSleep extends EmoIcon {
 		
-		public Sleep( CharSprite owner ) {
+		public MagicalSleep( CharSprite owner ) {
 			
 			super( owner );
 			
-			copy( Icons.get( Icons.SLEEP ) );
+			copy( Icons.get( Icons.MAGICAL_SLEEP ) );
 			
 			maxSize = 1.2f;
 			timeScale = 0.5f;
 			
+			scale.set( Random.Float( 1, maxSize ) );
+
+			x = owner.x + owner.width - width / 2;
+			y = owner.y - height;
+		}
+
+		@Override
+		protected PointF centerPoint(){
+			//centered and significantly up
+			return new PointF(width()/2f, 4f+ height()/2f);
+		}
+	}
+
+	public static class Sleep extends EmoIcon {
+
+		public Sleep( CharSprite owner ) {
+
+			super( owner );
+
+			copy( Icons.get( Icons.SLEEP ) );
+
+			maxSize = 1.2f;
+			timeScale = 0.5f;
+
 			scale.set( Random.Float( 1, maxSize ) );
 
 			x = owner.x + owner.width - width / 2;
