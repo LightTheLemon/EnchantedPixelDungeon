@@ -301,7 +301,7 @@ abstract public class Weapon extends KindOfWeapon {
 		float ACC = this.ACC;
 
 		if (owner.buff(Wayward.WaywardBuff.class) != null && enchantment instanceof Wayward){
-			ACC /= 10;
+			ACC = (ACC / 5) - 3;
 		}
 
 		return encumbrance > 0 ? (float)(ACC / Math.pow( 1.5, encumbrance )) : ACC;

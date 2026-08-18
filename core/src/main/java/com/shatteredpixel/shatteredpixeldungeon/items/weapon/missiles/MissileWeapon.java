@@ -91,8 +91,40 @@ abstract public class MissileWeapon extends Weapon {
 	
 	public int tier;
 
+	public static final String AC_THROW	= "THROW";
+
 	protected int usesToID(){
 		return 10; //half of a melee weapon
+	}
+
+	@Override
+	public ArrayList<String> actions( Hero hero ) {
+		ArrayList<String> actions = super.actions( hero );
+		actions.add( AC_THROW );
+		actions.remove( AC_EQUIP );
+		actions.remove( AC_DROP);
+		return actions;
+	}
+
+	@Override
+	public void execute (Hero hero, String action) {
+		GameScene.cancel();
+		curUser = hero;
+		curItem = this;
+
+		if (action.equals( AC_DROP_ALL )) {
+
+			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
+				doDrop(hero);
+			}
+
+		} else if (action.equals( AC_THROW )) {
+
+			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
+				doThrow(hero);
+			}
+
+		}
 	}
 	
 	@Override
@@ -166,13 +198,6 @@ abstract public class MissileWeapon extends Weapon {
 			Buff.affect(Dungeon.hero, UpgradedSetTracker.class).levelThresholds.put(setID, trueLevel()+1);
 		}
 		return super.upgrade();
-	}
-
-	@Override
-	public ArrayList<String> actions( Hero hero ) {
-		ArrayList<String> actions = super.actions( hero );
-		actions.remove( AC_EQUIP );
-		return actions;
 	}
 	
 	@Override

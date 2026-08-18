@@ -106,7 +106,7 @@ public class Bomb extends Item {
 
 		if (action.equals(AC_LIGHTTHROW)) {
 			lightingFuse = true;
-			action = AC_THROW;
+			action = AC_DROP;
 		} else
 			lightingFuse = false;
 

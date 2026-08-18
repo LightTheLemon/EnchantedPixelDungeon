@@ -34,29 +34,32 @@ public class Sacrificial extends Weapon.Enchantment {
 
 	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x000000 );
 
+	private float hits = 1;
+
 	@Override
 	public int proc(Weapon weapon, Char attacker, Char defender, int damage ) {
 
-		float procChance = 1/5f * procChanceMultiplier(attacker);
-		if (Random.Float() < procChance && attacker.HP > attacker.HT / 2) {
-			Buff.affect(attacker, Bleeding.class).set(Math.max(1, attacker.HT)/10f, getClass());
+		float procChance = 1/6f * procChanceMultiplier(attacker);
+		if (Random.Float() < procChance) {
+			if (attacker.buff(Healing.class) == null) {
+				Buff.affect(attacker, Bleeding.class).set( (attacker.HT/10f) * hits, getClass() );
+			}
+			hits += 0.2f;
 		}
-		if (damage >= defender.HP ) { //&& attacker.buff(Bleeding.class) != null
+		if (damage >= defender.HP && Random.Float() > procChance) {
+			//Other possible conditions: && attacker.HP < attacker.HT * 0.75f, && attacker.buff(Bleeding.class) != null
+			//Do I want to increase the healing for more hits? I think not.
 			Buff.detach(attacker, Bleeding.class);
-			Buff.affect(attacker, Healing.class).setHeal(attacker.HT / 5, 1f, attacker.HT / 15);
+			hits = 1;
+			if (attacker.buff(Healing.class) == null) {
+				Buff.affect(attacker, Healing.class).setHeal(attacker.HT / 10, 0.01f, attacker.HT / 20);
+			} else {
+				Buff.affect(attacker, Healing.class).setHeal(attacker.HT / 5, 0.01f, attacker.HT / 20); //extra healing to reward consecutive kills
+			}
 		}
 
 		return damage;
 	}
-
-	/*
-			if (Random.Float() < procChance) {
-			float missingPercent = attacker.HP/(float)attacker.HT;
-			float bleedAmt = (float)(Math.pow(missingPercent, 2) * attacker.HT)/8f;
-			if (Random.Float() < bleedAmt) {
-				Buff.affect(attacker, Bleeding.class).set(Math.max(1, bleedAmt), getClass());
-			}
-	 */
 
 	@Override
 	public boolean curse() {

@@ -147,9 +147,7 @@ public abstract class Plant implements Bundlable {
 			actions.add( AC_PLANT );
 			return actions;
 		}
-		
-		@Override
-		protected void onThrow( int cell ) {
+		protected void onPlant( int cell ) {
 			if (Dungeon.level.map[cell] == Terrain.ALCHEMY
 					|| Dungeon.level.pit[cell]
 					|| Dungeon.level.traps.get(cell) != null
@@ -174,11 +172,9 @@ public abstract class Plant implements Bundlable {
 		
 		@Override
 		public void execute( Hero hero, String action ) {
-
 			super.execute (hero, action );
 
 			if (action.equals( AC_PLANT )) {
-
 				curUser = hero;
 				curItem = this;
 				GameScene.selectCell( target );
@@ -189,9 +185,9 @@ public abstract class Plant implements Bundlable {
 			@Override
 			public void onSelect( Integer target ) {
 				if (target != null) {
-					((Seed)curItem.detach( curUser.belongings.backpack )).onThrow( target );
-					curUser.spend( TIME_TO_PLANT );
-					curUser.sprite.operate( target );
+					((Seed)curItem.detach( curUser.belongings.backpack )).onPlant( target );
+					curUser.spendAndNext( TIME_TO_PLANT );
+					curUser.sprite.zap( target );
 				}
 			}
 			@Override

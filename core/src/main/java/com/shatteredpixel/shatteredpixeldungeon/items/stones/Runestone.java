@@ -25,10 +25,14 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+
+import java.util.ArrayList;
 
 public abstract class Runestone extends Item {
 	
@@ -43,6 +47,36 @@ public abstract class Runestone extends Item {
 	public void anonymize(){
 		image = ItemSpriteSheet.STONE_HOLDER;
 		anonymous = true;
+	}
+	public static final String AC_THROW	= "THROW";
+
+	@Override
+	public ArrayList<String> actions(Hero hero ) {
+		ArrayList<String> actions = super.actions( hero );
+		actions.add( AC_THROW );
+		actions.remove( AC_DROP);
+		return actions;
+	}
+
+	@Override
+	public void execute (Hero hero, String action) {
+		GameScene.cancel();
+		curUser = hero;
+		curItem = this;
+
+		if (action.equals( AC_DROP_ALL )) {
+
+			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
+				doDrop(hero);
+			}
+
+		} else if (action.equals( AC_THROW )) {
+
+			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
+				doThrow(hero);
+			}
+
+		}
 	}
 
 	@Override

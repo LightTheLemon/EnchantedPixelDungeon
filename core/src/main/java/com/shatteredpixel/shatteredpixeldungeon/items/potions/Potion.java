@@ -211,7 +211,7 @@ public class Potion extends Item {
 	@Override
 	public String defaultAction() {
 		if (isKnown() && mustThrowPots.contains(this.getClass())) {
-			return AC_THROW;
+			return AC_DROP;
 		} else if (isKnown() &&canThrowPots.contains(this.getClass())){
 			return AC_CHOOSE;
 		} else {

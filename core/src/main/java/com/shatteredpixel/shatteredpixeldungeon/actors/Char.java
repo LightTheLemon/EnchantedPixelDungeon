@@ -635,7 +635,7 @@ public abstract class Char extends Actor {
 		if (attacker.invisible > 0 && attacker.canSurpriseAttack()){
 			acuStat = INFINITE_ACCURACY;
 		}
-		if (Dungeon.hero.belongings.getItem(PhantomStopwatch.class) != null && Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null && attacker.canSurpriseAttack()){
+		if (Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null && attacker.canSurpriseAttack()){
 			acuStat = INFINITE_ACCURACY;
 		}
 
@@ -895,10 +895,9 @@ public abstract class Char extends Actor {
 		}
 
 		if ( Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null ) {
-			damage *= 0.1f;
-			//damage = 1;
-			//Buff.affect(this, Bleeding.class).set(dmg * 0.5f);
-			Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.5f);
+			damage = Math.max(1, damage * 0.15f);
+			//Buff.affect(this, Bleeding.class).set(dmg * 0.66f);
+			Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.66f);
 
 		}
 

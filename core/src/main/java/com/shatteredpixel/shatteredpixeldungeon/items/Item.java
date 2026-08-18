@@ -67,7 +67,7 @@ public class Item implements Bundlable {
 	protected static final float TIME_TO_PICK_UP	= 1.0f;
 	protected static final float TIME_TO_DROP		= 1.0f;
 	public static final String AC_DROP_ALL		= "DROP_ALL";
-	public static final String AC_THROW		= "THROW";
+	public static final String AC_DROP		= "DROP";
 
 	protected String defaultAction;
 	public boolean usesTargeting;
@@ -108,7 +108,7 @@ public class Item implements Bundlable {
 	
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = new ArrayList<>();
-		actions.add( AC_THROW );
+		actions.add( AC_DROP );
 		if (quantity > 1) {
 			actions.add( AC_DROP_ALL );
 		}
@@ -160,14 +160,14 @@ public class Item implements Bundlable {
 		GameScene.cancel();
 		curUser = hero;
 		curItem = this;
-		
+
 		if (action.equals( AC_DROP_ALL )) {
 			
 			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
 				doDrop(hero);
 			}
 			
-		} else if (action.equals( AC_THROW )) {
+		} else if (action.equals( AC_DROP )) {
 			
 			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
 				doThrow(hero);

@@ -509,6 +509,7 @@ public class Hero extends Char {
 				buff(Talent.LiquidAgilACCTracker.class).detach();
 			}
 		}
+		/*
 		if (result) {
 			PhantomStopwatch watch = belongings.getItem(PhantomStopwatch.class);
 			PhantomStopwatch.timeFreeze buff = buff(PhantomStopwatch.timeFreeze.class);
@@ -517,6 +518,8 @@ public class Hero extends Char {
 				//watch.attackCost(1); //just in case i want to change it later
 			}
 		}
+
+		 */
 		return result;
 	}
 

@@ -926,11 +926,16 @@ public class CursedWand {
 			}
 
 			//final zap at half distance of the longest ray, for timing of the actual effect
-			MagicMissile.boltFromChar( user.sprite.parent,
-					MagicMissile.RAINBOW_CONE,
-					user.sprite,
-					longestRay.path.get(longestRay.dist/2),
-					callback );
+			if (longestRay != null) {
+				MagicMissile.boltFromChar( user.sprite.parent,
+						MagicMissile.RAINBOW_CONE,
+						user.sprite,
+						longestRay.path.get(longestRay.dist/2),
+						callback );
+			} else if (callback != null) {
+				callback.call();
+			}
+
 			Sample.INSTANCE.play( Assets.Sounds.ZAP );
 		}
 
@@ -966,29 +971,29 @@ public class CursedWand {
 							Burning burning = Buff.affect(ch, Burning.class);
 							burning.reignite(ch,Burning.DURATION*wandLevel(origin)*2.5f);
 							ch.damage(dmg, burning);
-							ch.sprite.emitter().burst(FlameParticle.FACTORY, 20*wandLevel(origin)*2);
+							ch.sprite.emitter().burst(FlameParticle.FACTORY, 10*wandLevel(origin)*2);
 							break;
 						case 1:
 							ch.damage(dmg, new Frost());
 							if (ch.isAlive()) Buff.affect(ch, Frost.class, Frost.DURATION*wandLevel(origin)*3f);
-							Splash.at( ch.sprite.center(), 0xFFB2D6FF, 20*wandLevel(origin)*2 );
+							Splash.at( ch.sprite.center(), 0xFFB2D6FF, 10*wandLevel(origin)*2 );
 							break;
 						case 2:
 							Poison poison = Buff.affect(ch, Poison.class);
 							poison.set((3 + Dungeon.scalingDepth() / 2)*wandLevel(origin)*1.5f);
 							ch.damage(dmg, poison);
-							ch.sprite.emitter().burst(PoisonParticle.SPLASH, 20*wandLevel(origin)*2);
+							ch.sprite.emitter().burst(PoisonParticle.SPLASH, 10*wandLevel(origin)*2);
 							break;
 						case 3:
 							Ooze ooze = Buff.affect(ch, Ooze.class);
 							ooze.set(Ooze.DURATION*wandLevel(origin)*1.5f);
 							ch.damage(dmg, ooze);
-							Splash.at( ch.sprite.center(), 0x000000, 20*wandLevel(origin)*2 );
+							Splash.at( ch.sprite.center(), 0x000000, 10*wandLevel(origin)*2 );
 							break;
 						case 4:
 							ch.damage(dmg, new Electricity());
 							if (ch.isAlive()) Buff.affect(ch, Paralysis.class, Paralysis.DURATION*wandLevel(origin)*1.25f);
-							ch.sprite.emitter().burst(SparkParticle.FACTORY, 20*wandLevel(origin)*2);
+							ch.sprite.emitter().burst(SparkParticle.FACTORY, 10*wandLevel(origin)*2);
 							break;
 					}
 
