@@ -38,7 +38,7 @@ public abstract class Brew extends Potion {
 
 	@Override
 	public String defaultAction() {
-		return AC_DROP;
+		return AC_THROW ;
 	}
 	
 	@Override

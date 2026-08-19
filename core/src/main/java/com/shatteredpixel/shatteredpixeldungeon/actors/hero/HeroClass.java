@@ -218,6 +218,10 @@ public enum HeroClass {
 		curse.quantity(10);
 		curse.collect();
 
+		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
+		upgrade.quantity(10);
+		upgrade.collect();
+
 		CapeOfThorns cape = new CapeOfThorns();
 		cape.collect();
 

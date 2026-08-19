@@ -46,15 +46,16 @@ public class Sacrificial extends Weapon.Enchantment {
 			}
 			hits += 0.2f;
 		}
-		if (damage >= defender.HP && Random.Float() > procChance) {
+		if (damage >= defender.HP) {
 			//Other possible conditions: && attacker.HP < attacker.HT * 0.75f, && attacker.buff(Bleeding.class) != null
 			//Do I want to increase the healing for more hits? I think not.
-			Buff.detach(attacker, Bleeding.class);
 			hits = 1;
-			if (attacker.buff(Healing.class) == null) {
+			if (attacker.buff(Bleeding.class) != null) {
+				Buff.detach(attacker, Bleeding.class);
+			} else if (attacker.buff(Healing.class) != null)
+                Buff.affect(attacker, Healing.class).setHeal(attacker.HT / 5, 0.01f, attacker.HT / 20);  //extra healing to reward consecutive kills
+            else {
 				Buff.affect(attacker, Healing.class).setHeal(attacker.HT / 10, 0.01f, attacker.HT / 20);
-			} else {
-				Buff.affect(attacker, Healing.class).setHeal(attacker.HT / 5, 0.01f, attacker.HT / 20); //extra healing to reward consecutive kills
 			}
 		}
 

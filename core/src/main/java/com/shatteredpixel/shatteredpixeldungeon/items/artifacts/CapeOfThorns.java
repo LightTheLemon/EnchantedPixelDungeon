@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
@@ -31,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -72,9 +74,6 @@ public class CapeOfThorns extends Artifact {
 			charge += Math.round(4*amount);
 			updateQuickslot();
 		}
-		//if (charge >= chargeCap){
-		//	target.buff(Thorns.class).proc(0, null, null);
-		//}
 	}
 
 	@Override
@@ -96,7 +95,14 @@ public class CapeOfThorns extends Artifact {
 				usesTargeting = false;
 
 			} else {
-				Dungeon.hero.buff(Thorns.class).proc(0, null, null);
+				CapeOfThorns.Thorns thorns = Dungeon.hero.buff(CapeOfThorns.Thorns.class);
+				if (thorns != null) {
+					cooldown = 10 + level();
+					GLog.p( Messages.get(this, "radiating") );
+					Sample.INSTANCE.play( Assets.Sounds.ROCKS );
+
+				}
+				updateQuickslot();
 			}
 
 		}
@@ -145,7 +151,8 @@ public class CapeOfThorns extends Artifact {
 				int deflected = Random.NormalIntRange(0, damage);
 				damage -= deflected;
 
-				if (attacker != null && Dungeon.level.adjacent(attacker.pos, defender.pos)) {
+				if (defender == null) defender = target;
+				if (attacker != null && defender != null && Dungeon.level.adjacent(attacker.pos, defender.pos)) {
 					attacker.damage(deflected, this);
 				}
 

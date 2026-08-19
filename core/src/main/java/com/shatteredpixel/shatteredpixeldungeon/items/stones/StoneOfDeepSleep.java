@@ -60,7 +60,6 @@ public class StoneOfDeepSleep extends Runestone {
 			} else if (c instanceof Hero) {
 
 				Buff.affect(c, MagicalSleep.class).limitedTurns(hero.HT / 5);
-
 				c.sprite.centerEmitter().start(Speck.factory(Speck.NOTE), 0.3f, 3);
 			}
 

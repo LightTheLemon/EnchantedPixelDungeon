@@ -102,7 +102,7 @@ abstract public class MissileWeapon extends Weapon {
 		ArrayList<String> actions = super.actions( hero );
 		actions.add( AC_THROW );
 		actions.remove( AC_EQUIP );
-		actions.remove( AC_DROP);
+		actions.remove( AC_THROW);
 		return actions;
 	}
 

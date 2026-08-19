@@ -1586,7 +1586,13 @@ public class Hero extends Char {
 		if (rockArmor != null) {
 			damage = rockArmor.absorb(damage);
 		}
-		
+
+		CapeOfThorns.Thorns thorns = buff( CapeOfThorns.Thorns.class );
+		if (thorns != null) {
+			thorns.proc(damage, enemy, this);;
+			System.out.println(damage);
+		}
+
 		return super.defenseProc( enemy, damage );
 	}
 
@@ -1645,12 +1651,6 @@ public class Hero extends Char {
 			}
 		}
 
-		//unused, could be removed
-		CapeOfThorns.Thorns thorns = buff( CapeOfThorns.Thorns.class );
-		if (thorns != null) {
-			damage = thorns.proc((int)damage, (src instanceof Char ? (Char)src : null),  this);
-		}
-
 		if (buff(Talent.WarriorFoodImmunity.class) != null){
 			if (pointsInTalent(Talent.IRON_STOMACH) == 1)       damage /= 4f;
 			else if (pointsInTalent(Talent.IRON_STOMACH) == 2)  damage = 0;
@@ -1659,7 +1659,9 @@ public class Hero extends Char {
 		dmg = Math.round(damage);
 
 		//we ceil this one to avoid letting the player easily take 0 dmg from tenacity early
-		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
+		//dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
+
+		//..not anymore
 
 		int preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();

@@ -766,7 +766,6 @@ public abstract class Wand extends Item {
 					} else {
 						curWand.fx(shot, new Callback() {
 							public void call() {
-								curWand.onZap(shot);
 								if (Random.Float() < WondrousResin.extraCurseEffectChance()){
 									WondrousResin.forcePositive = true;
 									CursedWand.cursedZap(curWand,
@@ -779,6 +778,7 @@ public abstract class Wand extends Item {
 												}
 											});
 								} else {
+									curWand.onZap(shot);
 									curWand.wandUsed();
 								}
 							}
