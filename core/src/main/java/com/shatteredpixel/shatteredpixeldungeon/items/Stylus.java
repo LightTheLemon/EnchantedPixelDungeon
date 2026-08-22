@@ -22,13 +22,17 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -40,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -133,6 +138,57 @@ public class Stylus extends Item {
 		}
 
 		curUser.busy();
+	}
+
+	@Override
+	public Item detach( Bag container ) {
+
+		if (quantity <= 0) {
+
+			return null;
+
+		} else
+		if (quantity == 1) {
+
+			if (stackable){
+				Dungeon.quickslot.convertToPlaceholder(this);
+			}
+
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else {
+				return detachAll( container );
+			}
+
+		} else {
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else if (Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && quantity > 1 && Random.Float() < ( -1 * RingOfConservation.cursedProc(Dungeon.hero)) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
+				new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.CURSED );
+
+				Item detached = split(2);
+				updateQuickslot();
+				if (detached != null) ( detached).onDetach();
+				return detached;
+			} else {
+
+				Item detached = split(1);
+				updateQuickslot();
+				if (detached != null) ( detached).onDetach();
+				return detached;
+
+			}
+		}
 	}
 	
 	@Override

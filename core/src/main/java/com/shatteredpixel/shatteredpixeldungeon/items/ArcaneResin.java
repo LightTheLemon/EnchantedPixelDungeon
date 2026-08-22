@@ -27,9 +27,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -38,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -90,6 +93,57 @@ public class ArcaneResin extends Item {
 		return 30*quantity();
 	}
 
+	@Override
+	public Item detach( Bag container ) {
+
+		if (quantity <= 0) {
+
+			return null;
+
+		} else
+		if (quantity == 1) {
+
+			if (stackable){
+				Dungeon.quickslot.convertToPlaceholder(this);
+			}
+
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else {
+				return detachAll( container );
+			}
+
+		} else {
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else if (Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && quantity > 1 && Random.Float() < ( -1 * RingOfConservation.cursedProc(Dungeon.hero)) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
+				new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.CURSED );
+
+				Item detached = split(2);
+				updateQuickslot();
+				if (detached != null) ( detached).onDetach();
+				return detached;
+			} else {
+
+				Item detached = split(1);
+				updateQuickslot();
+				if (detached != null) ( detached).onDetach();
+				return detached;
+
+			}
+		}
+	}
+
 	private final WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
 
 		@Override
@@ -112,10 +166,12 @@ public class ArcaneResin extends Item {
 			if (item != null && item instanceof Wand) {
 				Wand w = (Wand)item;
 
+				/*
 				if (w.level() >= 3){
 					GLog.w(Messages.get(ArcaneResin.class, "level_too_high"));
 					return;
 				}
+				 */
 
 				int resinToUse = w.level()+1;
 
@@ -131,9 +187,10 @@ public class ArcaneResin extends Item {
 						detachAll(Dungeon.hero.belongings.backpack);
 					}
 
-					w.resinBonus++;
-					w.curCharges++;
-					w.updateLevel();
+					w.upgrade();
+					//w.resinBonus++;
+					//w.curCharges++;
+					//w.updateLevel();
 					Item.updateQuickslot();
 
 					curUser.sprite.operate(curUser.pos);

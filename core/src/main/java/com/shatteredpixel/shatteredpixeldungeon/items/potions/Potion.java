@@ -34,11 +34,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfHoneyedHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
@@ -47,6 +49,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCor
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShroudingFog;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfSnapFreeze;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStormClouds;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -435,6 +439,57 @@ public class Potion extends Item {
 				Splash.at(ch.sprite.center(), splashColor(), 5);
 			} else {
 				Splash.at(cell, splashColor(), 5);
+			}
+		}
+	}
+
+	@Override
+	public Item detach( Bag container ) {
+
+		if (quantity <= 0) {
+
+			return null;
+
+		} else
+		if (quantity == 1) {
+
+			if (stackable){
+				Dungeon.quickslot.convertToPlaceholder(this);
+			}
+
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else {
+				return detachAll( container );
+			}
+
+		} else {
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else if (Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && quantity > 1 && Random.Float() < ( -1 * RingOfConservation.cursedProc(Dungeon.hero)) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
+				new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.CURSED );
+
+				Item detached = split(2);
+				updateQuickslot();
+				if (detached != null) ((Potion) detached).onDetach();
+				return detached;
+			} else {
+
+				Item detached = split(1);
+				updateQuickslot();
+				if (detached != null) ((Potion) detached).onDetach();
+				return detached;
+
 			}
 		}
 	}

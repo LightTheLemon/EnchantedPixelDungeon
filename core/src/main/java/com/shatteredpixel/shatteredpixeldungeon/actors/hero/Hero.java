@@ -2001,11 +2001,11 @@ public class Hero extends Char {
 		}
 		float percent = exp/(float)maxExp();
 
-		EtherealChains.chainsRecharge chains = buff(EtherealChains.chainsRecharge.class);
-		if (chains != null) chains.gainExp(percent);
+		//EtherealChains.chainsRecharge chains = buff(EtherealChains.chainsRecharge.class);
+		//if (chains != null) chains.gainExp(percent);
 
-		PhantomStopwatch.watchRecharge watch = buff(PhantomStopwatch.watchRecharge.class);
-		if (watch != null) watch.gainExp(percent);
+		//PhantomStopwatch.watchRecharge watch = buff(PhantomStopwatch.watchRecharge.class);
+		//if (watch != null) watch.gainExp(percent);
 
 		HornOfPlenty.hornRecharge horn = buff(HornOfPlenty.hornRecharge.class);
 		if (horn != null) horn.gainCharge(percent);
@@ -2013,8 +2013,8 @@ public class Hero extends Char {
 		AlchemistsToolkit.kitEnergy kit = buff(AlchemistsToolkit.kitEnergy.class);
 		if (kit != null) kit.gainCharge(percent);
 
-		MasterThievesArmband.Thievery armband = buff(MasterThievesArmband.Thievery.class);
-		if (armband != null) armband.gainCharge(percent);
+		//MasterThievesArmband.Thievery armband = buff(MasterThievesArmband.Thievery.class);
+		//if (armband != null) armband.gainCharge(percent);
 
 		Berserk berserk = buff(Berserk.class);
 		if (berserk != null) berserk.recover(percent);

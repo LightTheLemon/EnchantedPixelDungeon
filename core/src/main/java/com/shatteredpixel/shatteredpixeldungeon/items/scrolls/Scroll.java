@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -29,11 +30,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
@@ -55,6 +59,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
@@ -171,7 +176,58 @@ public abstract class Scroll extends Item {
 		actions.add( AC_READ );
 		return actions;
 	}
-	
+
+	@Override
+	public Item detach( Bag container ) {
+
+		if (quantity <= 0) {
+
+			return null;
+
+		} else
+		if (quantity == 1) {
+
+			if (stackable){
+				Dungeon.quickslot.convertToPlaceholder(this);
+			}
+
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else {
+				return detachAll( container );
+			}
+
+		} else {
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else if (Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && quantity > 1 && Random.Float() < ( -1 * RingOfConservation.cursedProc(Dungeon.hero)) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
+				new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.CURSED );
+
+				Item detached = split(2);
+				updateQuickslot();
+				if (detached != null) ((Scroll) detached).onDetach();
+				return detached;
+			} else {
+
+				Item detached = split(1);
+				updateQuickslot();
+				if (detached != null) ((Scroll) detached).onDetach();
+				return detached;
+
+			}
+		}
+	}
+
 	@Override
 	public void execute( Hero hero, String action ) {
 
@@ -194,8 +250,7 @@ public abstract class Scroll extends Item {
 		}
 		if (action.equals( AC_CRAFT)) {
 
-			curUser.sprite.die();
-
+			curUser.spend( 1 );
 
 
 		}

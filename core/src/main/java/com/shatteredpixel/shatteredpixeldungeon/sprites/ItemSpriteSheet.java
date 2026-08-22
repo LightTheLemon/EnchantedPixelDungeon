@@ -429,6 +429,7 @@ public class ItemSpriteSheet {
 	public static final int RING_QUARTZ     = RINGS+9;
 	public static final int RING_AGATE      = RINGS+10;
 	public static final int RING_DIAMOND    = RINGS+11;
+	public static final int RING_JADE       = RINGS+12;
 	static {
 		for (int i = RINGS; i < RINGS+16; i++)
 			assignItemRect(i, 8, 10);
@@ -830,18 +831,19 @@ public class ItemSpriteSheet {
 		}
 
 		private static final int RINGS          =                            xy(1, 1);  //16 slots
-		public static final int RING_ACCURACY   = RINGS+0;
-		public static final int RING_ARCANA     = RINGS+1;
-		public static final int RING_ELEMENTS   = RINGS+2;
-		public static final int RING_ENERGY     = RINGS+3;
-		public static final int RING_EVASION    = RINGS+4;
-		public static final int RING_FORCE      = RINGS+5;
-		public static final int RING_FUROR      = RINGS+6;
-		public static final int RING_HASTE      = RINGS+7;
-		public static final int RING_MIGHT      = RINGS+8;
-		public static final int RING_SHARPSHOOT = RINGS+9;
-		public static final int RING_TENACITY   = RINGS+10;
-		public static final int RING_WEALTH     = RINGS+11;
+		public static final int RING_ACCURACY      = RINGS+0;
+		public static final int RING_ARCANA        = RINGS+1;
+		public static final int RING_ELEMENTS      = RINGS+2;
+		public static final int RING_ENERGY        = RINGS+3;
+		public static final int RING_EVASION       = RINGS+4;
+		public static final int RING_FORCE         = RINGS+5;
+		public static final int RING_FUROR         = RINGS+6;
+		public static final int RING_HASTE         = RINGS+7;
+		public static final int RING_MIGHT         = RINGS+8;
+		public static final int RING_SHARPSHOOT    = RINGS+9;
+		public static final int RING_TENACITY      = RINGS+10;
+		public static final int RING_WEALTH        = RINGS+11;
+		public static final int RING_CONSERVATION  = RINGS+12;
 		static {
 			assignIconRect( RING_ACCURACY,      7, 7 );
 			assignIconRect( RING_ARCANA,        7, 7 );
@@ -855,6 +857,7 @@ public class ItemSpriteSheet {
 			assignIconRect( RING_SHARPSHOOT,    7, 7 );
 			assignIconRect( RING_TENACITY,      6, 6 );
 			assignIconRect( RING_WEALTH,        7, 6 );
+			assignIconRect( RING_CONSERVATION,  7, 7 );
 		}
 
 		                                                                                //16 free slots

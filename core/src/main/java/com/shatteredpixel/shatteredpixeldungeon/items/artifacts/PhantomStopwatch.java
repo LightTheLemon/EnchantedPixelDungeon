@@ -99,6 +99,7 @@ public class PhantomStopwatch extends Artifact {
 			if (!isEquipped( hero ))        GLog.i( Messages.get(Artifact.class, "need_to_equip") );
 			else if (activeBuff != null) {
 					activeBuff.detach();
+					hero.spend(1);
 					GLog.i( Messages.get(this, "deactivate") );
 			} else if (charge <= 0)         GLog.i( Messages.get(this, "no_charge") );
 			else if (cursed)                GLog.i( Messages.get(this, "cursed") );
@@ -117,7 +118,7 @@ public class PhantomStopwatch extends Artifact {
 				activeBuff = new timeFreeze();
 				Talent.onArtifactUsed(Dungeon.hero);
 				activeBuff.attachTo(Dungeon.hero);
-				charge--;
+				//charge--;
 				((timeFreeze)activeBuff).processTime(0f);
 				}
 
@@ -151,7 +152,7 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.15f*amount; //from 0.25f*amount
+			partialCharge += 0.2f*amount; //from 0.25f*amount
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -209,11 +210,6 @@ public class PhantomStopwatch extends Artifact {
 		}
 	}
 
-	public void attackCost (int amount) {
-		charge = Math.max(0, charge - amount);
-
-		updateQuickslot();
-	}
 
 	public class watchRecharge extends ArtifactBuff {
 		@Override
@@ -284,14 +280,21 @@ public class PhantomStopwatch extends Artifact {
 		ArrayList<Integer> presses = new ArrayList<>();
 
 		public void processTime(float timePass){
-			charge -= (int) timePass;
+			// Buffer the time spent into your float tracker
+			turnsToCost -= timePass;
+
+			// Only drop a charge when a full 1.0 turn has accumulated
+			while (turnsToCost <= -1f) {
+				turnsToCost += 1f;
+				charge--;
+			}
+
 			updateQuickslot();
 
-			if (charge < 0 || charge == 0 && turnsToCost <= 0){
+			if (charge <= 0){
 				charge = 0;
 				detach();
 			}
-
 		}
 
 		public void setDelayedPress(int cell){
@@ -369,6 +372,7 @@ public class PhantomStopwatch extends Artifact {
 			return BuffIndicator.TIME;
 		}
 
+		/*
 		@Override
 		public void tintIcon(Image icon) {
 			icon.hardlight(1f, 0.5f, 0);
@@ -384,11 +388,13 @@ public class PhantomStopwatch extends Artifact {
 			return Integer.toString((int)(turnsToCost + 0.001f));
 		}
 
+
+
 		@Override
 		public String desc() {
-			return Messages.get(this, "desc"); //, Messages.decimalFormat("#.##", Math.max(0, turnsToCost))
+			return Messages.get(this, "desc");
 		}
-
+		*/
 		private static final String PRESSES = "presses";
 		private static final String TURNSTOCOST = "turnsToCost";
 
