@@ -150,8 +150,8 @@ public class CursedWand {
 
 	}
 
-	// common/uncommon/rare/v.rare have a 60/30/9/1% chance respectively
-	private static float[] EFFECT_CAT_CHANCES = new float[]{60, 30, 9, 1};
+	// common/uncommon/rare/v.rare have a 70/20/9/1% chance respectively
+	private static float[] EFFECT_CAT_CHANCES = new float[]{70, 20, 9, 1};
 
 	public static CursedEffect randomEffect(){
 		switch (Random.chances(EFFECT_CAT_CHANCES)){
@@ -191,9 +191,12 @@ public class CursedWand {
 		COMMON_EFFECTS.add(new RandomGas());
 		COMMON_EFFECTS.add(new RandomAreaEffect());
 		COMMON_EFFECTS.add(new Bubbles());
-		COMMON_EFFECTS.add(new SelfOoze());
 		COMMON_EFFECTS.add(new Explosion());
 		COMMON_EFFECTS.add(new SummonSheep());
+		COMMON_EFFECTS.add(new LightningBolt());
+		COMMON_EFFECTS.add(new Geyser());
+		COMMON_EFFECTS.add(new RandomWand());
+
 	}
 
 	public static CursedEffect randomCommonEffect(){
@@ -431,11 +434,10 @@ public class CursedWand {
 	static {
 		UNCOMMON_EFFECTS.add(new RandomPlant());
 		UNCOMMON_EFFECTS.add(new HealthTransfer());
-		UNCOMMON_EFFECTS.add(new LightningBolt());
-		UNCOMMON_EFFECTS.add(new Geyser());
-		UNCOMMON_EFFECTS.add(new RandomWand());
 		UNCOMMON_EFFECTS.add(new Levitate());
 		UNCOMMON_EFFECTS.add(new Alarm());
+		UNCOMMON_EFFECTS.add(new SelfOoze());
+
 	}
 
 	public static CursedEffect randomUncommonEffect(){
@@ -731,7 +733,6 @@ public class CursedWand {
 		RARE_EFFECTS.add(new SummonMonsters());
 		RARE_EFFECTS.add(new FireBall());
 		RARE_EFFECTS.add(new ConeOfColors());
-		RARE_EFFECTS.add(new MassInvuln());
 		RARE_EFFECTS.add(new Petrify());
 	}
 
@@ -1072,7 +1073,8 @@ public class CursedWand {
 	static {
 		VERY_RARE_EFFECTS.add(new ForestFire());
 		VERY_RARE_EFFECTS.add(new SpawnGoldenMimic());
-		VERY_RARE_EFFECTS.add(new AbortRetryFail());
+		VERY_RARE_EFFECTS.add(new MassInvuln());
+		//VERY_RARE_EFFECTS.add(new AbortRetryFail());
 		VERY_RARE_EFFECTS.add(new RandomTransmogrify());
 		VERY_RARE_EFFECTS.add(new HeroShapeShift());
 		VERY_RARE_EFFECTS.add(new SuperNova());

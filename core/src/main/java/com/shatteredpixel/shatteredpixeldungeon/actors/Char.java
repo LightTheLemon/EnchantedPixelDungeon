@@ -635,9 +635,7 @@ public abstract class Char extends Actor {
 		if (attacker.invisible > 0 && attacker.canSurpriseAttack()){
 			acuStat = INFINITE_ACCURACY;
 		}
-		if (Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null && attacker.canSurpriseAttack()){
-			acuStat = INFINITE_ACCURACY;
-		}
+
 
 		if (defender.buff(MonkEnergy.MonkAbility.Focus.FocusBuff.class) != null){
 			defStat = INFINITE_EVASION;
@@ -657,6 +655,9 @@ public abstract class Char extends Actor {
 		if (attacker.buff(Bless.class) != null) acuRoll *= 2.0f;
 		if (attacker.buff(  Hex.class) != null) acuRoll *= 0.8f;
 		if (attacker.buff( Daze.class) != null) acuRoll *= 0.5f;
+		if (Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null){
+			acuRoll *= 2.0f;
+		}
 		for (ChampionEnemy buff : attacker.buffs(ChampionEnemy.class)){
 			acuRoll *= buff.evasionAndAccuracyFactor();
 		}

@@ -21,16 +21,25 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -48,6 +57,8 @@ public abstract class Runestone extends Item {
 		image = ItemSpriteSheet.STONE_HOLDER;
 		anonymous = true;
 	}
+
+	/*
 	public static final String AC_THROW	= "THROW";
 
 	@Override
@@ -79,6 +90,8 @@ public abstract class Runestone extends Item {
 		}
 	}
 
+	 */
+
 	@Override
 	protected void onThrow(int cell) {
 		///inventory stones are thrown like normal items, other stones don't trigger when thrown into pits
@@ -94,6 +107,57 @@ public abstract class Runestone extends Item {
 			activate(cell);
 			if (Actor.findChar(cell) == null) Dungeon.level.pressCell( cell );
 			Invisibility.dispel();
+		}
+	}
+
+	@Override
+	public Item detach( Bag container ) {
+
+		if (quantity <= 0) {
+
+			return null;
+
+		} else
+		if (quantity == 1) {
+
+			if (stackable){
+				Dungeon.quickslot.convertToPlaceholder(this);
+			}
+
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else {
+				return detachAll( container );
+			}
+
+		} else {
+			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.BADGE );
+
+				return null;
+			} else if (Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && quantity > 1 && Random.Float() < ( -1 * RingOfConservation.cursedProc(Dungeon.hero)) ) {
+				GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
+				new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
+				Sample.INSTANCE.play( Assets.Sounds.CURSED );
+
+				Item detached = split(2);
+				updateQuickslot();
+				if (detached != null) ((Runestone) detached).onDetach();
+				return detached;
+			} else {
+
+				Item detached = split(1);
+				updateQuickslot();
+				if (detached != null) ((Runestone) detached).onDetach();
+				return detached;
+
+			}
 		}
 	}
 	

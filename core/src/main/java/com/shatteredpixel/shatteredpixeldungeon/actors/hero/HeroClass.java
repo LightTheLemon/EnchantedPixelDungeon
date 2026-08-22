@@ -67,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
@@ -221,6 +222,10 @@ public enum HeroClass {
 		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
 		upgrade.quantity(10);
 		upgrade.collect();
+
+		RingOfConservation cons = new RingOfConservation();
+		cons.identify().collect();
+		cons.collect();
 
 		CapeOfThorns cape = new CapeOfThorns();
 		cape.collect();
