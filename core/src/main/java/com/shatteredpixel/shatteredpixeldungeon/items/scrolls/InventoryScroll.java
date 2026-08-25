@@ -22,14 +22,19 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Random;
 
 public abstract class InventoryScroll extends Scroll {
 
@@ -125,7 +130,19 @@ public abstract class InventoryScroll extends Scroll {
 				//SoU opens a separate window that can be cancelled
 				//so we don't do a lot of logic here
 				if (!identifiedByUse && !(curItem instanceof ScrollOfUpgrade)) {
-					curItem = detach(curUser.belongings.backpack);
+
+					if (!RingOfConservation.recycleProc()) {
+
+						if ( RingOfConservation.recycleCurseProc() ) {
+							curItem = detach(curUser.belongings.backpack);
+							curItem = detach(curUser.belongings.backpack);
+
+						} else {
+							//what happens in most cases if the ring is a non-factor
+							curItem = detach(curUser.belongings.backpack);
+
+						}
+					}
 				}
 				((InventoryScroll)curItem).onItemSelected( item );
 

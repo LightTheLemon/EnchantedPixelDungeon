@@ -291,8 +291,23 @@ public class Potion extends Item {
 	}
 	
 	protected void drink( Hero hero ) {
-		
-		detach( hero.belongings.backpack );
+
+		if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
+			GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
+			new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
+			Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
+
+		} else if ( Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero) ) && Random.Float() < RingOfConservation.curseChance(Dungeon.hero) ) {
+
+			GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
+			new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
+			Sample.INSTANCE.play( Assets.Sounds.CURSED );
+
+			detach( hero.belongings.backpack );
+			detach( hero.belongings.backpack );
+		} else {
+			detach( hero.belongings.backpack );
+		}
 		
 		hero.spend( TIME_TO_DRINK );
 		hero.busy();
@@ -313,7 +328,7 @@ public class Potion extends Item {
 	@Override
 	protected void onThrow( int cell ) {
 
-		if (Dungeon.level.map[cell] == Terrain.WELL || Dungeon.level.pit[cell] || hero.pos == cell) {
+		if (Dungeon.level.map[cell] == Terrain.WELL || Dungeon.level.pit[cell] || cell == hero.pos) {
 			
 			super.onThrow( cell );
 
@@ -323,7 +338,20 @@ public class Potion extends Item {
 			if (!(this instanceof AquaBrew) && !(this instanceof PotionOfStormClouds)){
 				Dungeon.level.pressCell( cell );
 			}
-			shatter( cell );
+
+			if ( RingOfConservation.recycleProc() ) {
+				shatter( cell );
+				this.collect();
+				updateQuickslot();
+
+			} else if ( RingOfConservation.recycleCurseProc() ) {
+				//does not shatter here, effectively wasting it
+				//haha get trolled
+				updateQuickslot();
+
+			} else {
+				shatter( cell );
+			}
 
 			if (!anonymous) {
 				Catalog.countUse(getClass());
@@ -439,57 +467,6 @@ public class Potion extends Item {
 				Splash.at(ch.sprite.center(), splashColor(), 5);
 			} else {
 				Splash.at(cell, splashColor(), 5);
-			}
-		}
-	}
-
-	@Override
-	public Item detach( Bag container ) {
-
-		if (quantity <= 0) {
-
-			return null;
-
-		} else
-		if (quantity == 1) {
-
-			if (stackable){
-				Dungeon.quickslot.convertToPlaceholder(this);
-			}
-
-			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
-				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
-				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
-				Sample.INSTANCE.play( Assets.Sounds.BADGE );
-
-				return null;
-			} else {
-				return detachAll( container );
-			}
-
-		} else {
-			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
-				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
-				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
-				Sample.INSTANCE.play( Assets.Sounds.BADGE );
-
-				return null;
-			} else if (Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && quantity > 1 && Random.Float() < ( -1 * RingOfConservation.cursedProc(Dungeon.hero)) ) {
-				GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
-				new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
-				Sample.INSTANCE.play( Assets.Sounds.CURSED );
-
-				Item detached = split(2);
-				updateQuickslot();
-				if (detached != null) ((Potion) detached).onDetach();
-				return detached;
-			} else {
-
-				Item detached = split(1);
-				updateQuickslot();
-				if (detached != null) ((Potion) detached).onDetach();
-				return detached;
-
 			}
 		}
 	}

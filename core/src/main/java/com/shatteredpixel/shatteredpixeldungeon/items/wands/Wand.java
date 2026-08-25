@@ -769,27 +769,24 @@ public abstract class Wand extends Item {
 										curWand.wandUsed();
 									}
 								});
+					} else if (Random.Float() < WondrousResin.extraCurseEffectChance()){
+						WondrousResin.forcePositive = true;
+						CursedWand.cursedZap(curWand,
+							curUser,
+							new Ballistica(curUser.pos, target, Ballistica.MAGIC_BOLT), new Callback() {
+								@Override
+								public void call() {
+									WondrousResin.forcePositive = false;
+									curWand.wandUsed();
+								}
+							});
 					} else {
 						curWand.fx(shot, new Callback() {
 							public void call() {
-								if (Random.Float() < WondrousResin.extraCurseEffectChance()){
-									WondrousResin.forcePositive = true;
-									CursedWand.cursedZap(curWand,
-											curUser,
-											new Ballistica(curUser.pos, target, Ballistica.MAGIC_BOLT), new Callback() {
-												@Override
-												public void call() {
-													WondrousResin.forcePositive = false;
-													curWand.wandUsed();
-												}
-											});
-								} else {
-									curWand.onZap(shot);
-									curWand.wandUsed();
-								}
+								curWand.onZap(shot);
+								curWand.wandUsed();
 							}
 						});
-
 					}
 					curWand.cursedKnown = true;
 					

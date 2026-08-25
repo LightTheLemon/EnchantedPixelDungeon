@@ -37,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
@@ -45,7 +44,6 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -138,8 +136,8 @@ public abstract class Plant implements Bundlable {
 	public static class Seed extends Item {
 
 		public static final String AC_PLANT	= "PLANT";
-		
-		private static final float TIME_TO_PLANT = 1f;
+
+		private boolean isPlanting;
 		
 		{
 			stackable = true;
@@ -154,16 +152,19 @@ public abstract class Plant implements Bundlable {
 			actions.add( AC_PLANT );
 			return actions;
 		}
-		protected void onPlant( int cell ) {
+
+		@Override
+		protected void onThrow( int cell ) {
 			if (Dungeon.level.map[cell] == Terrain.ALCHEMY
 					|| Dungeon.level.pit[cell]
 					|| Dungeon.level.traps.get(cell) != null
-					|| Dungeon.isChallenged(Challenges.NO_HERBALISM)) {
+					|| Dungeon.isChallenged(Challenges.NO_HERBALISM)
+					|| !isPlanting) {
 				super.onThrow( cell );
 			} else {
 				Catalog.countUse(getClass());
 				Dungeon.level.plant( this, cell );
-				if (hero.subClass == HeroSubClass.WARDEN) {
+				if (Dungeon.hero.subClass == HeroSubClass.WARDEN) {
 					for (int i : PathFinder.NEIGHBOURS8) {
 						int c = Dungeon.level.map[cell + i];
 						if ( c == Terrain.EMPTY || c == Terrain.EMPTY_DECO
@@ -176,33 +177,27 @@ public abstract class Plant implements Bundlable {
 				}
 			}
 		}
-		
+
 		@Override
 		public void execute( Hero hero, String action ) {
+
 			super.execute (hero, action );
 
 			if (action.equals( AC_PLANT )) {
-				curUser = hero;
-				curItem = this;
-				GameScene.selectCell( target );
-			}
-		}
 
-		protected static CellSelector.Listener target = new CellSelector.Listener() {
-			@Override
-			public void onSelect( Integer target ) {
-				if (target != null) {
-					//if (target == hero.pos)
-					((Seed)curItem.detach( curUser.belongings.backpack )).onPlant( target );
-					curUser.spendAndNext( TIME_TO_PLANT );
-					curUser.sprite.operate( target );
+				if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
+					isPlanting = true;
+					doThrow(hero);
 				}
 			}
-			@Override
-			public String prompt() {
-				return Messages.get(Plant.class, "choose_throw");
+			if (action.equals( AC_THROW )) {
+
+				if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
+					isPlanting = false;
+					doThrow(hero);
+				}
 			}
-		};
+		}
 		
 		public Plant couch( int pos, Level level ) {
 			if (level != null && level.heroFOV != null && level.heroFOV[pos]) {
@@ -245,57 +240,6 @@ public abstract class Plant implements Bundlable {
 		@Override
 		public String info() {
 			return Messages.get( Seed.class, "info", super.info() );
-		}
-
-		@Override
-		public Item detach( Bag container ) {
-
-			if (quantity <= 0) {
-
-				return null;
-
-			} else
-			if (quantity == 1) {
-
-				if (stackable){
-					Dungeon.quickslot.convertToPlaceholder(this);
-				}
-
-				if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
-					GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
-					new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
-					Sample.INSTANCE.play( Assets.Sounds.BADGE );
-
-					return null;
-				} else {
-					return detachAll( container );
-				}
-
-			} else {
-				if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
-					GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
-					new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
-					Sample.INSTANCE.play( Assets.Sounds.BADGE );
-
-					return null;
-				} else if (Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && quantity > 1 && Random.Float() < ( -1 * RingOfConservation.cursedProc(Dungeon.hero)) ) {
-					GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
-					new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
-					Sample.INSTANCE.play( Assets.Sounds.CURSED );
-
-					Item detached = split(2);
-					updateQuickslot();
-					if (detached != null) ((Seed) detached).onDetach();
-					return detached;
-				} else {
-
-					Item detached = split(1);
-					updateQuickslot();
-					if (detached != null) ((Seed) detached).onDetach();
-					return detached;
-
-				}
-			}
 		}
 		
 		public static class PlaceHolder extends Seed {

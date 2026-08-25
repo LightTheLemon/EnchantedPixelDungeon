@@ -24,6 +24,8 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
@@ -40,9 +42,6 @@ public class Rat extends Mob {
 		defenseSkill = 2;
 
 		maxLvl = 5;
-
-		loot = MysteryMeat.class;
-		lootChance = Dungeon.hero.belongings.weapon() != null ? Culinary.culinaryEnchantProc( (Weapon)Dungeon.hero.belongings.weapon() ) : 0f;
 
 	}
 
@@ -86,4 +85,21 @@ public class Rat extends Mob {
 		super.restoreFromBundle(bundle);
 		if (bundle.contains(RAT_ALLY)) alignment = Alignment.ALLY;
 	}
+
+	@Override
+	public float lootChance() {
+		if (Culinary.hasFoodEnchant((Weapon)Dungeon.hero.belongings.weapon())) {
+			return 0.05f;
+		}
+		return super.lootChance();
+	}
+
+	@Override
+	public Item createLoot() {
+		if (Culinary.hasFoodEnchant( (Weapon)Dungeon.hero.belongings.weapon()) ) {
+			return new Berry();
+		}
+		return super.createLoot();
+	}
+
 }

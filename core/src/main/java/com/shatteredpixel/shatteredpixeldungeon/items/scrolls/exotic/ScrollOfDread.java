@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 
@@ -41,7 +42,18 @@ public class ScrollOfDread extends ExoticScroll {
 	@Override
 	public void doRead() {
 
-		detach(curUser.belongings.backpack);
+		if (!RingOfConservation.recycleProc()) {
+
+			if ( RingOfConservation.recycleCurseProc() ) {
+				detach(curUser.belongings.backpack);
+				detach(curUser.belongings.backpack);
+
+			} else {
+				//what happens in most cases if the ring is a non-factor
+				detach(curUser.belongings.backpack);
+
+			}
+		}
 		new Flare( 5, 32 ).color( 0xFF0000, true ).show( curUser.sprite, 2f );
 		Sample.INSTANCE.play( Assets.Sounds.READ );
 

@@ -42,7 +42,7 @@ public class Crab extends Mob {
 		maxLvl = 9;
 		
 		loot = MysteryMeat.class;
-		lootChance = Dungeon.hero.belongings.weapon() != null ? 0.2f + Culinary.culinaryEnchantProc( (Weapon)Dungeon.hero.belongings.weapon() ) : 0.2f;
+		lootChance = 0.2f;
 
 	}
 	

@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
@@ -38,7 +39,18 @@ public class ScrollOfMysticalEnergy extends ExoticScroll {
 	@Override
 	public void doRead() {
 
-		detach(curUser.belongings.backpack);
+		if (!RingOfConservation.recycleProc()) {
+
+			if ( RingOfConservation.recycleCurseProc() ) {
+				detach(curUser.belongings.backpack);
+				detach(curUser.belongings.backpack);
+
+			} else {
+				//what happens in most cases if the ring is a non-factor
+				detach(curUser.belongings.backpack);
+
+			}
+		}
 		//append buff
 		Buff.affect(curUser, ArtifactRecharge.class).set( 30 ).ignoreHornOfPlenty = false;
 

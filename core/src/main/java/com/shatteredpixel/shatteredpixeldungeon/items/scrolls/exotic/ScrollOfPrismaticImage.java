@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
@@ -42,7 +43,19 @@ public class ScrollOfPrismaticImage extends ExoticScroll {
 	@Override
 	public void doRead() {
 
-		detach(curUser.belongings.backpack);
+		if (!RingOfConservation.recycleProc()) {
+
+			if ( RingOfConservation.recycleCurseProc() ) {
+				detach(curUser.belongings.backpack);
+				detach(curUser.belongings.backpack);
+
+			} else {
+				//what happens in most cases if the ring is a non-factor
+				detach(curUser.belongings.backpack);
+
+			}
+		}
+
 		boolean found = false;
 		for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])){
 			if (m instanceof PrismaticImage){

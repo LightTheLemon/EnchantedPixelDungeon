@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Transmuting;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.InventoryScroll;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -198,7 +199,19 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 			super();
 
 			if (!identifiedByUse && curItem instanceof ScrollOfMetamorphosis) {
-				curItem.detach(curUser.belongings.backpack);
+
+				if (!RingOfConservation.recycleProc()) {
+
+					if ( RingOfConservation.recycleCurseProc() ) {
+						curItem.detach(curUser.belongings.backpack);
+						curItem.detach(curUser.belongings.backpack);
+
+					} else {
+						//what happens in most cases if the ring is a non-factor
+						curItem.detach(curUser.belongings.backpack);
+
+					}
+				}
 			}
 			identifiedByUse = false;
 

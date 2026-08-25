@@ -1590,7 +1590,7 @@ public class Hero extends Char {
 		CapeOfThorns.Thorns thorns = buff( CapeOfThorns.Thorns.class );
 		if (thorns != null) {
 			thorns.proc(damage, enemy, this);;
-			System.out.println(damage);
+			//System.out.println(damage);
 		}
 
 		return super.defenseProc( enemy, damage );

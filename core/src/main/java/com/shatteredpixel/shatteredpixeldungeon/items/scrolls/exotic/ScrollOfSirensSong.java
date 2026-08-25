@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -106,7 +107,20 @@ public class ScrollOfSirensSong extends ExoticScroll {
 				}
 
 				if (!identifiedByUse) {
-					curItem.detach(curUser.belongings.backpack);
+
+					if (!RingOfConservation.recycleProc()) {
+
+						if ( RingOfConservation.recycleCurseProc() ) {
+							curItem.detach(curUser.belongings.backpack);
+							curItem.detach(curUser.belongings.backpack);
+
+						} else {
+							//what happens in most cases if the ring is a non-factor
+							curItem.detach(curUser.belongings.backpack);
+
+						}
+					}
+
 				}
 				identifiedByUse = false;
 

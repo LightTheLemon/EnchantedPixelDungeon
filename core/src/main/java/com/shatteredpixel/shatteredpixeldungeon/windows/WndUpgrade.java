@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -55,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 public class WndUpgrade extends Window {
@@ -437,8 +439,8 @@ public class WndUpgrade extends Window {
 				}
 			}
 		}
-
 		//warning relating to arcane resin
+		//not sure if i still need this...
 		if (toUpgrade instanceof Wand && ((Wand) toUpgrade).resinBonus > 0){
 			bottom = addMessage(Messages.get(this, "resin"), CharSprite.WARNING, bottom);
 		}
@@ -466,7 +468,26 @@ public class WndUpgrade extends Window {
 					upgraded = ((MagicalInfusion) upgrader).upgradeItem(toUpgrade);
 				}
 
-				if (!force) upgrader.detach(Dungeon.hero.belongings.backpack);
+
+				if ( !force ) {
+
+					if ( Random.Float() < 0.33f && RingOfConservation.recycleProc() ) {
+
+					} else if ( Random.Float() < 0.33f && RingOfConservation.recycleCurseProc() ) {
+
+						upgrader.detach(Dungeon.hero.belongings.backpack);
+						upgrader.detach(Dungeon.hero.belongings.backpack);
+
+					} else {
+						//what happens in most cases if the ring is a non-factor
+						upgrader.detach(Dungeon.hero.belongings.backpack);
+
+					}
+
+
+				}
+				//if (!force) upgrader.detach(Dungeon.hero.belongings.backpack);
+
 				Item moreUpgradeItem = Dungeon.hero.belongings.getItem(upgrader.getClass());
 
 				hide();

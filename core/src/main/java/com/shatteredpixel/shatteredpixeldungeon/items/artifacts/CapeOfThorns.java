@@ -97,7 +97,8 @@ public class CapeOfThorns extends Artifact {
 			} else {
 				CapeOfThorns.Thorns thorns = Dungeon.hero.buff(CapeOfThorns.Thorns.class);
 				if (thorns != null) {
-					cooldown = 10 + level();
+					cooldown = charge;
+					charge = 0;
 					GLog.p( Messages.get(this, "radiating") );
 					Sample.INSTANCE.play( Assets.Sounds.ROCKS );
 
@@ -126,28 +127,30 @@ public class CapeOfThorns extends Artifact {
 
 		@Override
 		public boolean act(){
-			if (cooldown > 0) {
-				cooldown--;
-				if (cooldown == 0) {
-					GLog.w( Messages.get(this, "inert") );
-				}
-				updateQuickslot();
-			}
+			//if (cooldown > 0) {
+			//	//cooldown -= damage;
+			//	if (cooldown == 0) {
+			//		GLog.w( Messages.get(this, "inert") );
+			//	}
+			//	updateQuickslot();
+			//}
+			updateQuickslot();
 			spend(TICK);
 			return true;
 		}
 
 		public int proc(int damage, Char attacker, Char defender){
 			if (cooldown == 0){
-				charge += damage*(0.2+level()*0.2);
+				float partialCharge = (damage*0.4f) + ((level()*0.4f));
+				charge += partialCharge;
 				if (charge >= chargeCap){
-					charge = 0;
-					cooldown = 10+level();
-					GLog.p( Messages.get(this, "radiating") );
+					charge = chargeCap;
+					GLog.p( Messages.get(this, "fully_charged") );
 				}
 			}
 
 			if (cooldown != 0){
+				cooldown = Math.max(0, cooldown - damage);
 				int deflected = Random.NormalIntRange(0, damage);
 				damage -= deflected;
 

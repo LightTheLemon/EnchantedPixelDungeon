@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -52,7 +53,18 @@ public class ScrollOfDivination extends ExoticScroll {
 	@Override
 	public void doRead() {
 
-		detach(curUser.belongings.backpack);
+		if (!RingOfConservation.recycleProc()) {
+
+			if ( RingOfConservation.recycleCurseProc() ) {
+				detach(curUser.belongings.backpack);
+				detach(curUser.belongings.backpack);
+
+			} else {
+				//what happens in most cases if the ring is a non-factor
+				detach(curUser.belongings.backpack);
+
+			}
+		}
 		curUser.sprite.parent.add( new Identification( curUser.sprite.center().offset( 0, -16 ) ) );
 		
 		Sample.INSTANCE.play( Assets.Sounds.READ );

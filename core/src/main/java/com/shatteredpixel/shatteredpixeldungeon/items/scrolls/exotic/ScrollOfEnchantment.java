@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.InventoryScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -115,7 +116,19 @@ public class ScrollOfEnchantment extends ExoticScroll {
 			
 			if (item instanceof Weapon){
 				if (!identifiedByUse) {
-					curItem.detach(curUser.belongings.backpack);
+
+					if (!RingOfConservation.recycleProc()) {
+
+						if ( RingOfConservation.recycleCurseProc() ) {
+							curItem = detach(curUser.belongings.backpack);
+							curItem = detach(curUser.belongings.backpack);
+
+						} else {
+							//what happens in most cases if the ring is a non-factor
+							curItem = detach(curUser.belongings.backpack);
+
+						}
+					}
 				}
 				identifiedByUse = false;
 				

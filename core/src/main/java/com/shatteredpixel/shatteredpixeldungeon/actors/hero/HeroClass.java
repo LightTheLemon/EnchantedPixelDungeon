@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Smok
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.HeroicLeap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
+import com.shatteredpixel.shatteredpixeldungeon.items.ArcaneResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
@@ -81,6 +82,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDeepSleep;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -215,26 +217,30 @@ public enum HeroClass {
 
 		// TODO: remove these
 
-		CurseInfusion curse = new CurseInfusion();
-		curse.quantity(10);
-		curse.collect();
+		//CurseInfusion curse = new CurseInfusion();
+		//curse.quantity(10);
+		//curse.collect();
 
-		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
-		upgrade.quantity(10);
-		upgrade.collect();
+		//ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
+		//upgrade.quantity(10);
+		//upgrade.collect();
 
-		RingOfConservation cons = new RingOfConservation();
-		cons.identify().collect();
-		cons.collect();
+		//PotionOfLiquidFlame flame = new PotionOfLiquidFlame();
+		//flame.quantity(10);
+		//flame.collect();
 
-		CapeOfThorns cape = new CapeOfThorns();
-		cape.collect();
+		//RingOfConservation cons = new RingOfConservation();
+		//cons.identify().collect();
+		//cons.collect();
+
+		//CapeOfThorns cape = new CapeOfThorns();
+		//cape.collect();
 
 		//WandOfCharm charm = new WandOfCharm();
 		//charm.identify().collect();
 
-		PhantomStopwatch watch = new PhantomStopwatch();
-		watch.identify().collect();
+		//PhantomStopwatch watch = new PhantomStopwatch();
+		//watch.identify().collect();
 
 		//ScrollOfEnchantment ench = new ScrollOfEnchantment();
 		//ench.quantity(10);
@@ -243,8 +249,8 @@ public enum HeroClass {
 		//TimekeepersHourglass time = new TimekeepersHourglass();
 		//time.identify().collect();
 
-		ThrowingStone stones = new ThrowingStone();
-		stones.identify().collect();
+		//ThrowingStone stones = new ThrowingStone();
+		//stones.identify().collect();
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();

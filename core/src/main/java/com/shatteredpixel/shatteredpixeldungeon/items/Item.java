@@ -33,8 +33,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
@@ -319,7 +321,7 @@ public class Item implements Bundlable {
 		return dupe;
 	}
 	
-	public Item detach( Bag container ) {
+	public final Item detach( Bag container ) {
 		
 		if (quantity <= 0) {
 			
@@ -335,8 +337,7 @@ public class Item implements Bundlable {
 			return detachAll( container );
 			
 		} else {
-			
-			
+
 			Item detached = split(1);
 			updateQuickslot();
 			if (detached != null) detached.onDetach( );

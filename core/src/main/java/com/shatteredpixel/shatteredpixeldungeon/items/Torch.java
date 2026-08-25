@@ -26,18 +26,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
-import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -83,57 +76,6 @@ public class Torch extends Item {
 			Emitter emitter = hero.sprite.centerEmitter();
 			emitter.start( FlameParticle.FACTORY, 0.2f, 3 );
 			
-		}
-	}
-
-	@Override
-	public Item detach( Bag container ) {
-
-		if (quantity <= 0) {
-
-			return null;
-
-		} else
-		if (quantity == 1) {
-
-			if (stackable){
-				Dungeon.quickslot.convertToPlaceholder(this);
-			}
-
-			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
-				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
-				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
-				Sample.INSTANCE.play( Assets.Sounds.BADGE );
-
-				return null;
-			} else {
-				return detachAll( container );
-			}
-
-		} else {
-			if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
-				GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
-				new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
-				Sample.INSTANCE.play( Assets.Sounds.BADGE );
-
-				return null;
-			} else if (Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && quantity > 1 && Random.Float() < ( -1 * RingOfConservation.cursedProc(Dungeon.hero)) ) {
-				GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
-				new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
-				Sample.INSTANCE.play( Assets.Sounds.CURSED );
-
-				Item detached = split(2);
-				updateQuickslot();
-				if (detached != null) ( detached).onDetach();
-				return detached;
-			} else {
-
-				Item detached = split(1);
-				updateQuickslot();
-				if (detached != null) ( detached).onDetach();
-				return detached;
-
-			}
 		}
 	}
 	
