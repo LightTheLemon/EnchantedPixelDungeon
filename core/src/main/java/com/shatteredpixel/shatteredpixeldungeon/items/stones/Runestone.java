@@ -58,40 +58,6 @@ public abstract class Runestone extends Item {
 		anonymous = true;
 	}
 
-	/*
-	public static final String AC_THROW	= "THROW";
-
-	@Override
-	public ArrayList<String> actions(Hero hero ) {
-		ArrayList<String> actions = super.actions( hero );
-		actions.add( AC_THROW );
-		actions.remove( AC_THROW);
-		return actions;
-	}
-
-	@Override
-	public void execute (Hero hero, String action) {
-		GameScene.cancel();
-		curUser = hero;
-		curItem = this;
-
-		if (action.equals( AC_DROP_ALL )) {
-
-			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
-				doDrop(hero);
-			}
-
-		} else if (action.equals( AC_THROW )) {
-
-			if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
-				doThrow(hero);
-			}
-
-		}
-	}
-
-	 */
-
 	@Override
 	protected void onThrow(int cell) {
 		///inventory stones are thrown like normal items, other stones don't trigger when thrown into pits

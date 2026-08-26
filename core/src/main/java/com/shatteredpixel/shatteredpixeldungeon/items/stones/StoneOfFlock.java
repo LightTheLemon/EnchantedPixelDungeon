@@ -24,11 +24,17 @@ package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.utils.BArray;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
@@ -40,9 +46,24 @@ public class StoneOfFlock extends Runestone {
 	{
 		image = ItemSpriteSheet.STONE_FLOCK;
 	}
-	
+
 	@Override
 	protected void activate(int cell) {
+		if ( RingOfConservation.recycleProc() ) {
+			activationEffect(cell);
+			this.collect();
+			updateQuickslot();
+
+		} else if (RingOfConservation.recycleCurseProc() ) {
+			updateQuickslot();
+
+		} else {
+			activationEffect(cell);
+			updateQuickslot();
+		}
+	}
+
+	private void activationEffect (int cell) {
 
 		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 2 );
 		ArrayList<Integer> spawnPoints = new ArrayList<>();
@@ -68,7 +89,7 @@ public class StoneOfFlock extends Runestone {
 		CellEmitter.get(cell).burst(Speck.factory(Speck.WOOL), 4);
 		Sample.INSTANCE.play(Assets.Sounds.PUFF);
 		Sample.INSTANCE.play(Assets.Sounds.SHEEP);
-		
+
 	}
 	
 }

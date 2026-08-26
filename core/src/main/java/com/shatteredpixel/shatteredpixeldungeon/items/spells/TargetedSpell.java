@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -58,7 +59,8 @@ public abstract class TargetedSpell extends Spell {
 	}
 
 	protected void onSpellused(){
-		detach( curUser.belongings.backpack );
+		RingOfConservation.detachProc( this, 1 );
+		//detach( curUser.belongings.backpack );
 		Invisibility.dispel();
 		updateQuickslot();
 		curUser.spendAndNext( timeToCast() );

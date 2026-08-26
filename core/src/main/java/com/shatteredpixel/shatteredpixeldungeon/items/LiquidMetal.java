@@ -155,13 +155,24 @@ public class LiquidMetal extends Item {
 							if (Math.ceil(maxToUse) < quantity()){
 								Catalog.countUses(LiquidMetal.class, (int)Math.ceil(maxToUse));
 								GLog.i(Messages.get(LiquidMetal.class, "apply", (int)Math.ceil(maxToUse)));
-								quantity -= (int)Math.ceil(maxToUse);
+								if ( RingOfConservation.recycleProc() ) {
+
+								} else if (RingOfConservation.recycleCurseProc() ) {
+									detachAll(Dungeon.hero.belongings.backpack);
+								} else {
+									quantity -= (int)Math.ceil(maxToUse);
+								}
+
 							} else {
 								Catalog.countUses(LiquidMetal.class, quantity());
 								m.damage(100f);
 								m.repair(quantity()*durabilityPerMetal-1);
 								GLog.i(Messages.get(LiquidMetal.class, "apply", quantity()));
-								detachAll(Dungeon.hero.belongings.backpack);
+
+								if ( !RingOfConservation.recycleProc() ) {
+									detachAll(Dungeon.hero.belongings.backpack);
+								}
+
 							}
 						} else {
 							GLog.w(Messages.get(LiquidMetal.class, "already_fixed"));

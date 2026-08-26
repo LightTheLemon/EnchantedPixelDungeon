@@ -131,18 +131,7 @@ public abstract class InventoryScroll extends Scroll {
 				//so we don't do a lot of logic here
 				if (!identifiedByUse && !(curItem instanceof ScrollOfUpgrade)) {
 
-					if (!RingOfConservation.recycleProc()) {
-
-						if ( RingOfConservation.recycleCurseProc() ) {
-							curItem = detach(curUser.belongings.backpack);
-							curItem = detach(curUser.belongings.backpack);
-
-						} else {
-							//what happens in most cases if the ring is a non-factor
-							curItem = detach(curUser.belongings.backpack);
-
-						}
-					}
+					RingOfConservation.detachProc(curItem, 1);
 				}
 				((InventoryScroll)curItem).onItemSelected( item );
 

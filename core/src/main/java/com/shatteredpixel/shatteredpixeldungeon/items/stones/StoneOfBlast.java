@@ -21,7 +21,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class StoneOfBlast extends Runestone {
@@ -32,7 +36,20 @@ public class StoneOfBlast extends Runestone {
 	
 	@Override
 	protected void activate(int cell) {
-		new Bomb.ConjuredBomb().explode(cell);
+
+		if ( RingOfConservation.recycleProc() ) {
+			new Bomb.ConjuredBomb().explode(cell);
+			this.collect();
+			updateQuickslot();
+
+		} else if (RingOfConservation.recycleCurseProc() ) {
+			updateQuickslot();
+
+		} else {
+			new Bomb.ConjuredBomb().explode(cell);
+			updateQuickslot();
+		}
+
 	}
-	
+
 }

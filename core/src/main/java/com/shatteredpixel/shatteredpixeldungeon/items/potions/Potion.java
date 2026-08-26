@@ -291,7 +291,7 @@ public class Potion extends Item {
 	}
 	
 	protected void drink( Hero hero ) {
-
+		/*
 		if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
 			GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
 			new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
@@ -308,6 +308,10 @@ public class Potion extends Item {
 		} else {
 			detach( hero.belongings.backpack );
 		}
+
+		 */
+
+		RingOfConservation.detachProc(curItem, 1);
 		
 		hero.spend( TIME_TO_DRINK );
 		hero.busy();

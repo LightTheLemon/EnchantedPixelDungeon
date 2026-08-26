@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -285,12 +286,16 @@ public class Alchemize extends Spell {
 		private void consumeAlchemize(){
 			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 			if (curItem.quantity() <= 1){
-				curItem.detachAll(Dungeon.hero.belongings.backpack);
+
+				RingOfConservation.detachProc(curItem, 1);
+
 				if (owner != null) {
 					owner.hide();
 				}
 			} else {
-				curItem.detach(Dungeon.hero.belongings.backpack);
+
+				RingOfConservation.detachProc(curItem, 1);
+
 				if (owner != null){
 					owner.hide();
 				}

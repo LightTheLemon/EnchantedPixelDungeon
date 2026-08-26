@@ -81,9 +81,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfClairvoyance;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDeepSleep;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFear;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
@@ -217,6 +221,7 @@ public enum HeroClass {
 
 		// TODO: remove these
 
+
 		//CurseInfusion curse = new CurseInfusion();
 		//curse.quantity(10);
 		//curse.collect();
@@ -229,9 +234,9 @@ public enum HeroClass {
 		//flame.quantity(10);
 		//flame.collect();
 
-		//RingOfConservation cons = new RingOfConservation();
-		//cons.identify().collect();
-		//cons.collect();
+		RingOfConservation cons = new RingOfConservation();
+		cons.identify().collect();
+		cons.collect();
 
 		//CapeOfThorns cape = new CapeOfThorns();
 		//cape.collect();

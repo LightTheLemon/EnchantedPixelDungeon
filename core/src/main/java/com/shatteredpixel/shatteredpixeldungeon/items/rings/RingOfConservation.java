@@ -4,6 +4,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -17,8 +18,21 @@ public class RingOfConservation extends Ring {
         buffClass = Conservation.class;
     }
 
+    //some items have a custom way of handling the ring instead of calling this method
+    //these include runestones that extends InventoryStone, liquid metal, upgrade scrolls (WndUpgrade)
+    public static void detachProc (Item item, int amount) {
+        if (recycleProc()) {
+            //keep it
+        } else if (recycleCurseProc()) {
+            item.detach(Dungeon.hero.belongings.backpack);
+            item.detach(Dungeon.hero.belongings.backpack);
+        } else {
+            item.detach(Dungeon.hero.belongings.backpack);
+        }
+    }
+
     public static float recycleChance(Char target) {
-        return (float) Math.pow(getBuffedBonus(target, Conservation.class), 0.12f) - 0.9f;
+        return (float) Math.pow(getBuffedBonus(target, Conservation.class), 0.10f) - 0.92f;
     }
     public static float curseChance(Char target) {
         return (getBuffedBonus(target, Conservation.class) * -0.05f) + 0.1f;
@@ -31,14 +45,14 @@ public class RingOfConservation extends Ring {
 
         if ( isIdentified() && !visiblyCursed() ){
             String info = Messages.get(this, "stats",
-                    Messages.decimalFormat("#.##", 100f * ( Math.pow(soloBuffedBonus(), 0.12f) - 0.9f)) );
+                    Messages.decimalFormat("#.##", 100f * ( Math.pow(soloBuffedBonus(), 0.10f) - 0.92f)) );
             if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
                 info += "\n\n" + Messages.get(this, "combined_stats",
-                        Messages.decimalFormat("#.##", 100f * ( Math.pow(combinedBuffedBonus(Dungeon.hero), 0.12f) - 0.9f)));
+                        Messages.decimalFormat("#.##", 100f * ( Math.pow(combinedBuffedBonus(Dungeon.hero), 0.10f) - 0.92f)));
             }
             return info;
         } else if ( !visiblyCursed() ){
-            return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 0.1f));
+            return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 0.08f));
         } else {
             return Messages.get(this, "cursed_stats", Messages.decimalFormat("#.##", 100f * ( (soloBuffedBonus() * -0.05f ) + 0.1)) );
         }
@@ -57,7 +71,7 @@ public class RingOfConservation extends Ring {
         }
     }
     public static boolean recycleCurseProc() {
-        if ( Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero) ) && Random.Float() < RingOfConservation.curseChance(Dungeon.hero) ) {
+        if ( Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero)) && Random.Float() < RingOfConservation.curseChance(Dungeon.hero) ) {
 
             GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
             new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);

@@ -24,7 +24,9 @@ package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -41,10 +43,27 @@ public class StoneOfClairvoyance extends Runestone {
 	
 	@Override
 	protected void activate(final int cell) {
+
+		if ( RingOfConservation.recycleProc() ) {
+			activationEffect(cell);
+			this.collect();
+			updateQuickslot();
+
+		} else if (RingOfConservation.recycleCurseProc() ) {
+			updateQuickslot();
+
+		} else {
+			activationEffect(cell);
+			updateQuickslot();
+		}
+		
+	}
+
+	private void activationEffect(int cell) {
 		Point c = Dungeon.level.cellToPoint(cell);
-		
+
 		int[] rounding = ShadowCaster.rounding[DIST];
-		
+
 		int left, right;
 		int curr;
 		boolean noticed = false;
@@ -64,28 +83,26 @@ public class StoneOfClairvoyance extends Runestone {
 
 				GameScene.effectOverFog( new CheckedCell( curr, cell ) );
 				Dungeon.level.mapped[curr] = true;
-				
+
 				if (Dungeon.level.secret[curr]) {
 					Dungeon.level.discover(curr);
-					
+
 					if (Dungeon.level.heroFOV[curr]) {
 						GameScene.discoverTile(curr, Dungeon.level.map[curr]);
 						ScrollOfMagicMapping.discover(curr);
 						noticed = true;
 					}
 				}
-				
+
 			}
 		}
-		
+
 		if (noticed) {
 			Sample.INSTANCE.play( Assets.Sounds.SECRET );
 		}
-		
+
 		Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
 		GameScene.updateFog();
-		
-		
 	}
 	
 }

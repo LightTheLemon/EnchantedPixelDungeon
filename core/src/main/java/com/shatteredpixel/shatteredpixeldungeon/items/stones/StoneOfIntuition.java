@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -132,8 +133,22 @@ public class StoneOfIntuition extends InventoryStone {
 						if (curUser.buff(IntuitionUseTracker.class) == null) {
 							Buff.affect(curUser, IntuitionUseTracker.class);
 						} else {
-							curItem.detach(curUser.belongings.backpack);
-							curUser.buff(IntuitionUseTracker.class).detach();
+
+							if ( RingOfConservation.recycleProc() ) {
+								updateQuickslot();
+
+							} else if (RingOfConservation.recycleCurseProc() ) {
+								curItem.detach(curUser.belongings.backpack);
+								curUser.buff(IntuitionUseTracker.class).detach();
+								curItem.detach(curUser.belongings.backpack);
+								curUser.buff(IntuitionUseTracker.class).detach();
+								updateQuickslot();
+							} else {
+								curItem.detach(curUser.belongings.backpack);
+								curUser.buff(IntuitionUseTracker.class).detach();
+								updateQuickslot();
+							}
+
 						}
 						Talent.onRunestoneUsed(curUser, curUser.pos, StoneOfIntuition.class);
 					}

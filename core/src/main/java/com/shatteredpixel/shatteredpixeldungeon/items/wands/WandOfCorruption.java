@@ -65,6 +65,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Swarm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -108,19 +109,21 @@ public class WandOfCorruption extends Wand {
 	private static final float MAJOR_DEBUFF_WEAKEN = 1/2f;
 	private static final HashMap<Class<? extends Buff>, Float> MAJOR_DEBUFFS = new HashMap<>();
 	static{
-		MAJOR_DEBUFFS.put(Amok.class,           3f);
-		MAJOR_DEBUFFS.put(Slow.class,           2f);
-		MAJOR_DEBUFFS.put(Hex.class,            2f);
-		MAJOR_DEBUFFS.put(Paralysis.class,      1f);
+		MAJOR_DEBUFFS.put(Amok.class,                             3f);
+		//causes softlock so i commented it out:
+		//MAJOR_DEBUFFS.put(StoneOfAggression.Aggression.class,     2f);
+		MAJOR_DEBUFFS.put(Slow.class,                             2f);
+		MAJOR_DEBUFFS.put(Hex.class,                              2f);
+		MAJOR_DEBUFFS.put(Paralysis.class,                        1f);
 
-		MAJOR_DEBUFFS.put(Daze.class,           0f);
-		MAJOR_DEBUFFS.put(Dread.class,          0f);
-		MAJOR_DEBUFFS.put(Charm.class,          0f);
-		MAJOR_DEBUFFS.put(MagicalSleep.class,   0f);
-		MAJOR_DEBUFFS.put(SoulMark.class,       0f);
-		MAJOR_DEBUFFS.put(Corrosion.class,      0f);
-		MAJOR_DEBUFFS.put(Frost.class,          0f);
-		MAJOR_DEBUFFS.put(Doom.class,           0f);
+		MAJOR_DEBUFFS.put(Daze.class,                             0f);
+		MAJOR_DEBUFFS.put(Dread.class,                            0f);
+		MAJOR_DEBUFFS.put(Charm.class,                            0f);
+		MAJOR_DEBUFFS.put(MagicalSleep.class,                     0f);
+		MAJOR_DEBUFFS.put(SoulMark.class,                         0f);
+		MAJOR_DEBUFFS.put(Corrosion.class,                        0f);
+		MAJOR_DEBUFFS.put(Frost.class,                            0f);
+		MAJOR_DEBUFFS.put(Doom.class,                             0f);
 	}
 	
 	@Override

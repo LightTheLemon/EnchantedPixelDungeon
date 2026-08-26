@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -84,7 +85,8 @@ public abstract class InventorySpell extends Spell {
 				//Infusion opens a separate window that can be cancelled
 				//so we don't do a lot of logic here
 				if (!(curItem instanceof MagicalInfusion)) {
-					curItem = detach(curUser.belongings.backpack);
+					RingOfConservation.detachProc(curItem, 1);
+					//curItem = detach(curUser.belongings.backpack);
 				}
 				
 				((InventorySpell)curItem).onItemSelected( item );

@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 
@@ -43,7 +44,21 @@ public class StoneOfDeepSleep extends Runestone {
 	
 	@Override
 	protected void activate(int cell) {
+		if ( RingOfConservation.recycleProc() ) {
+			activationEffect(cell);
+			this.collect();
+			updateQuickslot();
 
+		} else if (RingOfConservation.recycleCurseProc() ) {
+			updateQuickslot();
+
+		} else {
+			activationEffect(cell);
+			updateQuickslot();
+		}
+	}
+
+	private void activationEffect(int cell) {
 		if (Actor.findChar(cell) != null) {
 
 			Char c = Actor.findChar(cell);
@@ -64,8 +79,7 @@ public class StoneOfDeepSleep extends Runestone {
 			}
 
 		}
-		
+
 		Sample.INSTANCE.play( Assets.Sounds.LULLABY );
-		
 	}
 }
