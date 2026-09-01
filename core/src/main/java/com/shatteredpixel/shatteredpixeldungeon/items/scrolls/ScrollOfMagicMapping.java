@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -42,7 +43,8 @@ public class ScrollOfMagicMapping extends Scroll {
 	@Override
 	public void doRead() {
 
-		detach(curUser.belongings.backpack);
+		//detach(curUser.belongings.backpack);
+		RingOfConservation.detachProc(curItem, 1);
 		int length = Dungeon.level.length();
 		int[] map = Dungeon.level.map;
 		boolean[] mapped = Dungeon.level.mapped;

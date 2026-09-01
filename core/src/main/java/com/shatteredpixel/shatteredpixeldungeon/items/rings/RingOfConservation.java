@@ -5,6 +5,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -19,13 +20,19 @@ public class RingOfConservation extends Ring {
     }
 
     //some items have a custom way of handling the ring instead of calling this method
-    //these include runestones that extends InventoryStone, liquid metal, upgrade scrolls (WndUpgrade)
+    //these include liquid metal, upgrade scrolls (WndUpgrade)
     public static void detachProc (Item item, int amount) {
-        if (recycleProc()) {
-            //keep it
-        } else if (recycleCurseProc()) {
-            item.detach(Dungeon.hero.belongings.backpack);
-            item.detach(Dungeon.hero.belongings.backpack);
+        if (item == null) return;
+
+        if (!(item instanceof PotionOfStrength) || Random.Float() < 0.5)  {
+            if (recycleProc()) {
+                //keep the item
+            } else if (recycleCurseProc()) {
+                item.detach(Dungeon.hero.belongings.backpack);
+                item.detach(Dungeon.hero.belongings.backpack);
+            } else {
+                item.detach(Dungeon.hero.belongings.backpack);
+            }
         } else {
             item.detach(Dungeon.hero.belongings.backpack);
         }
@@ -87,7 +94,7 @@ public class RingOfConservation extends Ring {
     public String upgradeStat1(int level){
         if (cursed) return Messages.decimalFormat("#.##", 100f * ( ((level + 1) / 15f ) - 0.12)) + "%";
 
-        return Messages.decimalFormat("#.##", 100f * ( Math.pow(level + 1, 0.15f) - 0.9f)) + "%";
+        return Messages.decimalFormat("#.##", 100f * ( Math.pow(level + 1, 0.10f) - 0.92f)) + "%";
     }
 
     @Override

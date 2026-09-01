@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
@@ -132,6 +134,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfHaste;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
@@ -203,11 +206,11 @@ public class Hero extends Char {
 	public static final int MAX_LEVEL = 30;
 
 	public static final int STARTING_STR = 10;
-	
+
 	private static final float TIME_TO_REST		    = 1f;
 	private static final float TIME_TO_SEARCH	    = 2f;
 	private static final float HUNGER_FOR_SEARCH	= 6f;
-	
+
 	public HeroClass heroClass = HeroClass.ROGUE;
 	public HeroSubClass subClass = HeroSubClass.NONE;
 	public ArmorAbility armorAbility = null;
@@ -259,7 +262,7 @@ public class Hero extends Char {
 		int curHT = HT;
 		
 		HT = 20 + 5*(lvl-1) + HTBoost;
-		float multiplier = RingOfMight.HTMultiplier(this);
+		float multiplier = RingOfVitality.HTMultiplier(this);
 		HT = Math.round(multiplier * HT);
 		
 		if (buff(ElixirOfMight.HTBoost.class) != null){
@@ -489,7 +492,9 @@ public class Hero extends Char {
 
 		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
 		if (wep != null && wep.enchantment instanceof Covert && attackTarget.HP <= 0) {
-			float finalDuration = ((Invisibility.DURATION - 18) / 2) + (wep.buffedLvl() * 2f)  * bonus;
+			float finalDuration = ((Invisibility.DURATION - 17) / 2) + (wep.buffedLvl() * 2f)  * bonus;
+
+			//enemy.alignment = Alignment.NEUTRAL;
 			Buff.prolong( this, Invisibility.class, finalDuration);
 		}
 
@@ -765,10 +770,10 @@ public class Hero extends Char {
 	@Override
 	public boolean canSurpriseAttack(){
 		KindOfWeapon w = belongings.attackingWeapon();
-		if (!(w instanceof Weapon))             return true;
+		if (!(w instanceof Weapon))                   return true;
 		if (RingOfForce.fightingUnarmed(this))  return true;
-		if (STR() < ((Weapon)w).STRReq())       return false;
-		if (w instanceof Flail)                 return false;
+		if (STR() < ((Weapon)w).STRReq())             return false;
+		if (w instanceof Flail)                       return false;
 
 		return super.canSurpriseAttack();
 	}
@@ -1627,7 +1632,7 @@ public class Hero extends Char {
 			interrupt();
 		}
 
-		if (this.buff(Drowsy.class) != null){
+		if (this.buff(Drowsy.class) != null && dmg > 0){
 			Buff.detach(this, Drowsy.class);
 			GLog.w( Messages.get(this, "pain_resist") );
 		}
@@ -1659,9 +1664,13 @@ public class Hero extends Char {
 		dmg = Math.round(damage);
 
 		//we ceil this one to avoid letting the player easily take 0 dmg from tenacity early
-		//dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
+		int old_dmg = dmg;
+		if (dmg > 0) dmg = (int)Math.max(1, (dmg * RingOfTenacity.damageMultiplier( this ) - 0.5));
 
-		//..not anymore
+		if ( old_dmg - dmg > 0 && (float)HP / HT < 0.5f && hero.buff(RingOfTenacity.Tenacity.class) != null) {
+			int blocked = old_dmg - dmg;
+			GLog.i(Messages.get(RingOfTenacity.class, "proc_text", blocked ));
+		}
 
 		int preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();
@@ -2001,8 +2010,8 @@ public class Hero extends Char {
 		}
 		float percent = exp/(float)maxExp();
 
-		//EtherealChains.chainsRecharge chains = buff(EtherealChains.chainsRecharge.class);
-		//if (chains != null) chains.gainExp(percent);
+		EtherealChains.chainsRecharge chains = buff(EtherealChains.chainsRecharge.class);
+		if (chains != null) chains.gainExp(percent);
 
 		//PhantomStopwatch.watchRecharge watch = buff(PhantomStopwatch.watchRecharge.class);
 		//if (watch != null) watch.gainExp(percent);
@@ -2013,8 +2022,8 @@ public class Hero extends Char {
 		AlchemistsToolkit.kitEnergy kit = buff(AlchemistsToolkit.kitEnergy.class);
 		if (kit != null) kit.gainCharge(percent);
 
-		//MasterThievesArmband.Thievery armband = buff(MasterThievesArmband.Thievery.class);
-		//if (armband != null) armband.gainCharge(percent);
+		MasterThievesArmband.Thievery armband = buff(MasterThievesArmband.Thievery.class);
+		if (armband != null) armband.gainCharge(percent);
 
 		Berserk berserk = buff(Berserk.class);
 		if (berserk != null) berserk.recover(percent);
@@ -2369,8 +2378,9 @@ public class Hero extends Char {
 
 		Weapon weapon = belongings.getItem(Weapon.class);
 		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
+
 		if (weapon != null && weapon.enchantment instanceof Covert && attackTarget.HP <= 0) {
-			float finalDuration = ((Invisibility.DURATION - 18) / 2) + (weapon.buffedLvl() * 2f)  * bonus;
+			float finalDuration = ((Invisibility.DURATION - 17) / 2) + (weapon.buffedLvl() * 2f)  * bonus;
 			Buff.prolong( this, Invisibility.class, finalDuration);
 		}
 

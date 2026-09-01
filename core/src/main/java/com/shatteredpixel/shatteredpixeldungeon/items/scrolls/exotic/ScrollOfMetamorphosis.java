@@ -200,18 +200,7 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 
 			if (!identifiedByUse && curItem instanceof ScrollOfMetamorphosis) {
 
-				if (!RingOfConservation.recycleProc()) {
-
-					if ( RingOfConservation.recycleCurseProc() ) {
-						curItem.detach(curUser.belongings.backpack);
-						curItem.detach(curUser.belongings.backpack);
-
-					} else {
-						//what happens in most cases if the ring is a non-factor
-						curItem.detach(curUser.belongings.backpack);
-
-					}
-				}
+				RingOfConservation.detachProc(curItem, 1);
 			}
 			identifiedByUse = false;
 

@@ -36,8 +36,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
@@ -60,13 +64,14 @@ public class PotionOfHealing extends Potion {
 		if (ch == Dungeon.hero && Dungeon.isChallenged(Challenges.NO_HEALING)){
 			pharmacophobiaProc(Dungeon.hero);
 		} else {
-
+			CellEmitter.get( ch.pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 			if (VialOfBlood.delayBurstHealing()){
 				Healing healing = Buff.affect(ch, Healing.class);
 				healing.setHeal(ch.HT, 0, VialOfBlood.maxHealPerTurn());
 				healing.applyVialEffect();
+				healing.applyVitalityEffect();
 			} else {
-				ch.HP = ch.HT;
+				ch.HP = (int)(ch.HT / RingOfVitality.HealingMultiplier(Dungeon.hero));
 			}
 
 			//starts out healing 30 hp, equalizes with hero health total at level 11

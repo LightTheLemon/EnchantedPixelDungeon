@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.EnergyParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -42,7 +43,8 @@ public class ScrollOfRecharging extends Scroll {
 	@Override
 	public void doRead() {
 
-		detach(curUser.belongings.backpack);
+		//detach(curUser.belongings.backpack);
+		RingOfConservation.detachProc(curItem, 1);
 		Buff.affect(curUser, Recharging.class, Recharging.DURATION);
 		charge(curUser);
 

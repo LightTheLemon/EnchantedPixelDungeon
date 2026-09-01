@@ -430,6 +430,9 @@ public class ItemSpriteSheet {
 	public static final int RING_AGATE      = RINGS+10;
 	public static final int RING_PEARL      = RINGS+11;
 	public static final int RING_DIAMOND    = RINGS+12;
+	public static final int RING_BRONZE     = RINGS+13;
+	public static final int RING_COPPER     = RINGS+14;
+
 	static {
 		for (int i = RINGS; i < RINGS+16; i++)
 			assignItemRect(i, 8, 10);
@@ -498,7 +501,7 @@ public class ItemSpriteSheet {
 	public static final int PETRIFIED_SEED  = TRINKETS+2;
 	public static final int EXOTIC_CRYSTALS = TRINKETS+3;
 	public static final int MOSSY_CLUMP     = TRINKETS+4;
-	public static final int SUNDIAL         = TRINKETS+5;
+	public static final int BURNING_SAGE    = TRINKETS+5;
 	public static final int CLOVER          = TRINKETS+6;
 	public static final int TRAP_MECHANISM  = TRINKETS+7;
 	public static final int MIMIC_TOOTH     = TRINKETS+8;
@@ -510,13 +513,15 @@ public class ItemSpriteSheet {
 	public static final int CHAOTIC_CENSER  = TRINKETS+14;
 	public static final int FERRET_TUFT     = TRINKETS+15;
 	public static final int SPYGLASS        = TRINKETS+16;
+	public static final int AMULET_SHARD    = TRINKETS+17;
+
 	static{
 		assignItemRect(RAT_SKULL,       16, 11);
 		assignItemRect(PARCHMENT_SCRAP, 10, 14);
 		assignItemRect(PETRIFIED_SEED,  10, 10);
 		assignItemRect(EXOTIC_CRYSTALS, 14, 13);
 		assignItemRect(MOSSY_CLUMP,     12, 11);
-		assignItemRect(SUNDIAL,         16, 12);
+		assignItemRect(BURNING_SAGE,    15, 16);
 		assignItemRect(CLOVER,          11, 15);
 		assignItemRect(TRAP_MECHANISM,  13, 15);
 		assignItemRect(MIMIC_TOOTH,     8,  15);
@@ -528,6 +533,7 @@ public class ItemSpriteSheet {
 		assignItemRect(CHAOTIC_CENSER,  13, 15);
 		assignItemRect(FERRET_TUFT,     16, 15);
 		assignItemRect(SPYGLASS,        15, 15);
+		assignItemRect(AMULET_SHARD,    7,   8);
 	}
 
 	private static final int SCROLLS        =                               xy(1, 20);  //16 slots
@@ -844,6 +850,9 @@ public class ItemSpriteSheet {
 		public static final int RING_TENACITY      = RINGS+10;
 		public static final int RING_WEALTH        = RINGS+11;
 		public static final int RING_CONSERVATION  = RINGS+12;
+		public static final int RING_MANA          = RINGS+13;
+		public static final int RING_VITALITY      = RINGS+14;
+
 		static {
 			assignIconRect( RING_ACCURACY,      7, 7 );
 			assignIconRect( RING_ARCANA,        7, 7 );
@@ -858,6 +867,8 @@ public class ItemSpriteSheet {
 			assignIconRect( RING_TENACITY,      6, 6 );
 			assignIconRect( RING_WEALTH,        7, 6 );
 			assignIconRect( RING_CONSERVATION,  7, 7 );
+			assignIconRect( RING_MANA,          6, 6 );
+			assignIconRect( RING_VITALITY,      7, 6 );
 		}
 
 		                                                                                //16 free slots

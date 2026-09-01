@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -294,9 +295,14 @@ public class MeleeWeapon extends Weapon {
 
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
+
 			if (exStr > 0) {
 				damage += Hero.heroDamageIntRange( 0, exStr );
 			}
+			if ( exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
+				damage = (int)(damage * (exStr + 4f) / 10f);
+			}
+
 		}
 		return damage;
 	}
@@ -313,6 +319,10 @@ public class MeleeWeapon extends Weapon {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
 				} else if (Dungeon.hero.STR() > STRReq()) {
 					info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+
+					if (Dungeon.hero.STR() >= 10 + STRReq() && Dungeon.hero.buff(RingOfMight.Might.class) != null ) {
+						info += " " + Messages.get(Weapon.class, "might_bonus", 10 * (Dungeon.hero.STR() - STRReq() + 4 - 10));
+					}
 				}
 			}
 		} else {

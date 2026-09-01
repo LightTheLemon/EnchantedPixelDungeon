@@ -60,7 +60,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.InventoryScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.DimensionalSundial;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.BurningSage;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
@@ -699,13 +699,6 @@ public class GameScene extends PixelScene {
 
 			if (Dungeon.hero.buff(AscensionChallenge.class) != null){
 				Dungeon.hero.buff(AscensionChallenge.class).saySwitch();
-			}
-
-			DimensionalSundial.sundialWarned = true;
-			if (DimensionalSundial.spawnMultiplierAtCurrentTime() > 1){
-				GLog.w(Messages.get(DimensionalSundial.class, "warning"));
-			} else {
-				DimensionalSundial.sundialWarned = false;
 			}
 
 			InterlevelScene.mode = InterlevelScene.Mode.NONE;

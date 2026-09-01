@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -42,7 +43,8 @@ public class ScrollOfRage extends Scroll {
 	@Override
 	public void doRead() {
 
-		detach(curUser.belongings.backpack);
+		//detach(curUser.belongings.backpack);
+		RingOfConservation.detachProc(curItem, 1);
 		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
 			mob.beckon( curUser.pos );
 			if (mob.alignment != Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]) {

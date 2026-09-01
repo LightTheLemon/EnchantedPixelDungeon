@@ -137,7 +137,7 @@ public abstract class Plant implements Bundlable {
 
 		public static final String AC_PLANT	= "PLANT";
 
-		private boolean isPlanting;
+		private static boolean isPlanting;
 		
 		{
 			stackable = true;
@@ -194,7 +194,7 @@ public abstract class Plant implements Bundlable {
 
 				if (hero.belongings.backpack.contains(this) || isEquipped(hero)) {
 					isPlanting = false;
-					doThrow(hero);
+					//doThrow(hero);
 				}
 			}
 		}

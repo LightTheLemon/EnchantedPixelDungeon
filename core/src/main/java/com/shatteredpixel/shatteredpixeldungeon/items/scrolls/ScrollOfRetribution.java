@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -44,7 +45,8 @@ public class ScrollOfRetribution extends Scroll {
 	@Override
 	public void doRead() {
 
-		detach(curUser.belongings.backpack);
+		//detach(curUser.belongings.backpack);
+		RingOfConservation.detachProc(curItem, 1);
 		GameScene.flash( 0x80FFFFFF );
 		
 		//scales from 0x to 1x power, maxing at ~10% HP

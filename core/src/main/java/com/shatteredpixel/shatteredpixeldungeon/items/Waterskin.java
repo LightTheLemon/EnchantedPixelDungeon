@@ -22,9 +22,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -91,12 +93,12 @@ public class Waterskin extends Item {
 
 		if (action.equals( AC_DRINK )) {
 
-			if (volume > 0 && hero.HP != hero.HT) {
+			if (volume > 0) {
 				
 				float missingHealthPercent = 1f - (hero.HP / (float)hero.HT);
 
 				//each drop is worth 5% of total health
-				float dropsNeeded = missingHealthPercent / 0.05f;
+				float dropsNeeded = missingHealthPercent / 0.05f / RingOfVitality.HealingMultiplier(hero);
 
 				//we are getting extra heal value, scale back drops needed accordingly
 				if (dropsNeeded > 1.01f && VialOfBlood.delayBurstHealing()){
@@ -141,16 +143,16 @@ public class Waterskin extends Item {
 		}
 
 		if (action.equals( AC_SIP )) {
-			if (volume > 0 && hero.HP != hero.HT) {
+			if (volume > 0) {
 
 				float missingHealthPercent = 1f - (hero.HP / (float)hero.HT);
 
 				float efficiency;
 
 				if (hero.HP >= hero.HT * 0.75f) {
-					efficiency = 0.05f;
+					efficiency = 0.05f / RingOfVitality.HealingMultiplier(hero);
 				} else {
-					efficiency = 0.04f; //most of the time, its less efficient
+					efficiency = 0.04f / RingOfVitality.HealingMultiplier(hero); //most of the time, its less efficient
 				}
 				float dropsNeeded = Math.min(5, missingHealthPercent / efficiency);
 

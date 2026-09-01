@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -69,7 +70,8 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 				Degrade.detach(curUser, Degrade.class);
 			}
 
-			detach(curUser.belongings.backpack);
+			//detach(curUser.belongings.backpack);
+			RingOfConservation.detachProc(curItem, 1);
 			GLog.p(Messages.get(this, "spirit"));
 			spirit.cleanse();
 		} else {

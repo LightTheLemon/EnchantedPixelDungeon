@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
@@ -116,6 +117,7 @@ public class RingOfElements extends Ring {
 	static {
 		BUFFS.add( Healing.class );
 		BUFFS.add( Invisibility.class );
+		BUFFS.add( AdrenalineSurge.class);
 		BUFFS.add( ArtifactRecharge.class);
 		BUFFS.add( Awareness.class);
 		BUFFS.add( Barkskin.class);

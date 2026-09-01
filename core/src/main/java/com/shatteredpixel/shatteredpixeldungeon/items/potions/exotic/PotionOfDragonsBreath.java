@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -66,7 +67,8 @@ public class PotionOfDragonsBreath extends ExoticPotion {
 
 		if (!isKnown()) {
 			identify();
-			curItem = detach( hero.belongings.backpack );
+			//curItem = detach( hero.belongings.backpack );
+			RingOfConservation.detachProc(curItem, 1);
 			identifiedByUse = true;
 		} else {
 			identifiedByUse = false;

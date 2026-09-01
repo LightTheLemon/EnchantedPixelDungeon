@@ -88,10 +88,10 @@ public class WandOfCharm extends Wand {
 
 			} else if (ch.alignment == Char.Alignment.ENEMY || ch instanceof Mimic) {
 
-				//// Note: if needed, make the charm effect weaker on undead enemies
 				int duration = (int) (( Charm.DURATION/5f ) + (buffedLvl()/3f) + 1);
 				if (ch.properties().contains(Char.Property.UNDEAD) || ch.properties().contains( Char.Property.MINIBOSS) || ch.properties().contains(Char.Property.BOSS) ) {
 					Buff.extend(ch, Charm.class, ( duration ) / 2f);
+					//ch.alignment = Char.Alignment.ALLY;
 					if (zapWarning) {
 						GLog.i("This creature resists the charm effect, halving its duration");
 						zapWarning = false;

@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -65,8 +66,9 @@ public class WaterOfHealth extends WellWater {
 			Healing healing = Buff.affect(hero, Healing.class);
 			healing.setHeal(hero.HT, 0, VialOfBlood.maxHealPerTurn());
 			healing.applyVialEffect();
+			healing.applyVitalityEffect();
 		} else {
-			hero.HP = hero.HT;
+			hero.HP = (int)(hero.HT / RingOfVitality.HealingMultiplier(Dungeon.hero));
 			hero.sprite.emitter().start(Speck.factory(Speck.HEALING), 0.4f, 4);
 			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(hero.HT), FloatingText.HEALING);
 		}

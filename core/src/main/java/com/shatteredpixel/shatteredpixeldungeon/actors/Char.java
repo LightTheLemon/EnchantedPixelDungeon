@@ -210,6 +210,7 @@ public abstract class Char extends Actor {
 	}
 
 	protected void throwItems(){
+		//TODO: would be cool to pick up Tengu stuff
 		Heap heap = Dungeon.level.heaps.get( pos );
 		if (heap != null && heap.type == Heap.Type.HEAP
 				&& !(heap.peek() instanceof Tengu.BombAbility.BombItem)

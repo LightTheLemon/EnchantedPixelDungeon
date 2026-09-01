@@ -66,8 +66,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Thorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -419,7 +421,12 @@ public class Armor extends EquipableItem {
 		
 		if (owner instanceof Hero){
 			int aEnc = STRReq() - ((Hero) owner).STR();
-			if (aEnc > 0) evasion /= Math.pow(1.5, aEnc);
+			if (aEnc > 0) evasion /= Math.pow(1.2, aEnc);
+
+			int exStr = -aEnc;
+			if (exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
+				evasion *= (float) (exStr + 5) / 10;
+			}
 			
 			Momentum momentum = owner.buff(Momentum.class);
 			if (momentum != null){
@@ -434,9 +441,8 @@ public class Armor extends EquipableItem {
 		
 		if (owner instanceof Hero) {
 			int aEnc = STRReq() - ((Hero) owner).STR();
-			if (aEnc > 0) speed /= Math.pow(1.2, aEnc);
+			if (aEnc > 0) speed /= Math.pow(1.4, aEnc);
 		}
-		
 		return speed;
 		
 	}
@@ -590,7 +596,10 @@ public class Armor extends EquipableItem {
 			
 			if (Dungeon.hero != null && STRReq() > Dungeon.hero.STR()) {
 				info += " " + Messages.get(Armor.class, "too_heavy");
+			} else if (Dungeon.hero.STR() >= 10 + STRReq() && Dungeon.hero.buff(RingOfMight.Might.class) != null ) {
+				info += " " + Messages.get(Armor.class, "might_bonus", 10 * (Dungeon.hero.STR() - STRReq() + 5 - 10));
 			}
+
 		} else {
 			info += "\n\n" + Messages.get(Armor.class, "avg_absorb", tier, DRMin(0), DRMax(0), STRReq(0));
 

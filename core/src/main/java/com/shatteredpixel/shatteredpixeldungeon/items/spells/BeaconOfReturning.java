@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPassage;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -215,7 +216,8 @@ public class BeaconOfReturning extends Spell {
 			Notes.remove(Notes.Landmark.BEACON_LOCATION, tracker.returnDepth);
 			if (tracker.target != null) tracker.detach();
 		}
-		detach(hero.belongings.backpack);
+		//detach(hero.belongings.backpack);
+		RingOfConservation.detachProc(curItem, 1);
 		Catalog.countUse(getClass());
 		if (Random.Float() < talentChance){
 			Talent.onScrollUsed(curUser, curUser.pos, talentFactor, getClass());

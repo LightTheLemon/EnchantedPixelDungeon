@@ -43,18 +43,7 @@ public class ScrollOfPrismaticImage extends ExoticScroll {
 	@Override
 	public void doRead() {
 
-		if (!RingOfConservation.recycleProc()) {
-
-			if ( RingOfConservation.recycleCurseProc() ) {
-				detach(curUser.belongings.backpack);
-				detach(curUser.belongings.backpack);
-
-			} else {
-				//what happens in most cases if the ring is a non-factor
-				detach(curUser.belongings.backpack);
-
-			}
-		}
+		RingOfConservation.detachProc(curItem, 1);
 
 		boolean found = false;
 		for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])){

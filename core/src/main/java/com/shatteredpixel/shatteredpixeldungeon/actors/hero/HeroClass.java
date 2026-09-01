@@ -70,7 +70,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMas
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMana;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -85,6 +88,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfClairvoyance;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDeepSleep;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFear;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.AmuletShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.BurningSage;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
@@ -221,28 +226,45 @@ public enum HeroClass {
 
 		// TODO: remove these
 
+		//AmuletShard amulet = new AmuletShard();
+		//amulet.collect();
+
+		//BurningSage sage = new BurningSage();
+		//sage.collect();
+
+		//RingOfVitality vitality = new RingOfVitality();
+		//vitality.identify().collect();
+
+		//RingOfMana mana = new RingOfMana();
+		//mana.identify().collect();
+
+		//RingOfTenacity tenacity = new RingOfTenacity();
+		//tenacity.identify().collect();
+
+		//RingOfMight might = new RingOfMight();
+		//might.identify().collect();
 
 		//CurseInfusion curse = new CurseInfusion();
 		//curse.quantity(10);
 		//curse.collect();
 
-		//ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
-		//upgrade.quantity(10);
-		//upgrade.collect();
+		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
+		upgrade.quantity(10);
+		upgrade.collect();
 
 		//PotionOfLiquidFlame flame = new PotionOfLiquidFlame();
 		//flame.quantity(10);
 		//flame.collect();
 
-		RingOfConservation cons = new RingOfConservation();
-		cons.identify().collect();
-		cons.collect();
+		//RingOfConservation cons = new RingOfConservation();
+		//cons.identify().collect();
+		//cons.collect();
 
 		//CapeOfThorns cape = new CapeOfThorns();
 		//cape.collect();
 
-		//WandOfCharm charm = new WandOfCharm();
-		//charm.identify().collect();
+		WandOfCharm charm = new WandOfCharm();
+		charm.identify().collect();
 
 		//PhantomStopwatch watch = new PhantomStopwatch();
 		//watch.identify().collect();

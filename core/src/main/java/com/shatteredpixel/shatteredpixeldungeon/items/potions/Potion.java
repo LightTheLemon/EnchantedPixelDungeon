@@ -291,25 +291,6 @@ public class Potion extends Item {
 	}
 	
 	protected void drink( Hero hero ) {
-		/*
-		if (Random.Float() < RingOfConservation.recycleChance(Dungeon.hero) ) {
-			GLog.p(Messages.get(RingOfConservation.class, "conservation_proc"));
-			new Flare(6, 32).color(0x00E626, true).show(Dungeon.hero.sprite, 2f);
-			Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
-
-		} else if ( Float.isNaN(RingOfConservation.recycleChance(Dungeon.hero) ) && Random.Float() < RingOfConservation.curseChance(Dungeon.hero) ) {
-
-			GLog.p(Messages.get(RingOfConservation.class, "cursed_proc"));
-			new Flare(6, 32).color(0x000000, true).show(Dungeon.hero.sprite, 2f);
-			Sample.INSTANCE.play( Assets.Sounds.CURSED );
-
-			detach( hero.belongings.backpack );
-			detach( hero.belongings.backpack );
-		} else {
-			detach( hero.belongings.backpack );
-		}
-
-		 */
 
 		RingOfConservation.detachProc(curItem, 1);
 		

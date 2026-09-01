@@ -19,30 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic;
+package com.shatteredpixel.shatteredpixeldungeon.items.trinkets;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public class ScrollOfAntiMagic extends ExoticScroll {
-	
+public class BurningSage extends Trinket {
+
 	{
-		icon = ItemSpriteSheet.Icons.SCROLL_ANTIMAGIC;
+		image = ItemSpriteSheet.BURNING_SAGE;
 	}
-	
+
 	@Override
-	public void doRead() {
-
-		RingOfConservation.detachProc(curItem, 1);
-
-		Buff.affect( curUser, MagicImmune.class, MagicImmune.DURATION );
-		new Flare( 5, 32 ).color( 0x00FF00, true ).show( curUser.sprite, 2f );
-
-		identify();
-		
-		readAnimation();
+	protected int upgradeEnergyCost() {
+		//6 -> 8(14) -> 10(24) -> 12(36)
+		return 6+2*level();
 	}
+
+	@Override
+	public String statsDesc() {
+		if (isIdentified()){
+			return Messages.get(this,
+					"stats_desc",
+					(int)(100*(enemySpawnMultiplier(buffedLvl())-1f)));
+		} else {
+			return Messages.get(this, "typical_stats_desc",
+					(int)(100*(enemySpawnMultiplier(0)-1f)));
+		}
+	}
+
+	public static float enemySpawnMultiplier(){
+		return enemySpawnMultiplier(trinketLevel(BurningSage.class));
+	}
+
+	public static float enemySpawnMultiplier( int level ){
+		if (level == -1){
+			return 1f;
+		} else {
+			return 1.20f + 0.20f*level;
+		}
+	}
+
 }

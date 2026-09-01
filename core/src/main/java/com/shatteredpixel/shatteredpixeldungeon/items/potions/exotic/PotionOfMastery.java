@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -57,7 +58,8 @@ public class PotionOfMastery extends ExoticPotion {
 
 		if (!isKnown()) {
 			identify();
-			curItem = detach( hero.belongings.backpack );
+			//curItem = detach( hero.belongings.backpack );
+			RingOfConservation.detachProc(curItem, 1);
 			identifiedByUse = true;
 		} else {
 			identifiedByUse = false;

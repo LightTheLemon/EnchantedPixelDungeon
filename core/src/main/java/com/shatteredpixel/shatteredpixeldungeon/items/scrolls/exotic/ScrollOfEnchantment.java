@@ -117,18 +117,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 			if (item instanceof Weapon){
 				if (!identifiedByUse) {
 
-					if (!RingOfConservation.recycleProc()) {
-
-						if ( RingOfConservation.recycleCurseProc() ) {
-							curItem = detach(curUser.belongings.backpack);
-							curItem = detach(curUser.belongings.backpack);
-
-						} else {
-							//what happens in most cases if the ring is a non-factor
-							curItem = detach(curUser.belongings.backpack);
-
-						}
-					}
+					RingOfConservation.detachProc(curItem, 1);
 				}
 				identifiedByUse = false;
 				

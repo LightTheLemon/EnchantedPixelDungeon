@@ -45,7 +45,8 @@ public abstract class InventoryScroll extends Scroll {
 		
 		if (!isKnown()) {
 			identify();
-			curItem = detach( curUser.belongings.backpack );
+			//curItem = detach( curUser.belongings.backpack );
+			RingOfConservation.detachProc(curItem, 1);
 			identifiedByUse = true;
 		} else {
 			identifiedByUse = false;

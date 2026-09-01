@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
@@ -529,9 +530,15 @@ abstract public class MissileWeapon extends Weapon {
 		
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
-			if (exStr > 0) {
+
+			if ( exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
+				damage = (int)(damage * (exStr + 4f) / 10f);
+
+				//GLog.i("Your ring of might is giving your weapon bonus damage due to your excess strength!");
+			} else if (exStr > 0) {
 				damage += Hero.heroDamageIntRange( 0, exStr );
 			}
+
 			if (owner.buff(Momentum.class) != null && owner.buff(Momentum.class).freerunning()) {
 				damage = Math.round(damage * (1f + 0.15f * ((Hero) owner).pointsInTalent(Talent.PROJECTILE_MOMENTUM)));
 			}
@@ -654,7 +661,11 @@ abstract public class MissileWeapon extends Weapon {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
 				} else if (Dungeon.hero.STR() > STRReq()) {
-					info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+					//info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+
+					if (Dungeon.hero.STR() >= 10 + STRReq() && Dungeon.hero.buff(RingOfMight.Might.class) != null ) {
+						info += " " + Messages.get(Weapon.class, "might_bonus", 10 * (Dungeon.hero.STR() - STRReq() + 4 - 10));
+					}
 				}
 			}
 		} else {

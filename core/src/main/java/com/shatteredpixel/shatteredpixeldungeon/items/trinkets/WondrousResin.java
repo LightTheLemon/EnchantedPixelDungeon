@@ -32,8 +32,8 @@ public class WondrousResin extends Trinket {
 
 	@Override
 	protected int upgradeEnergyCost() {
-		//6 -> 10(16) -> 15(31) -> 20(51)
-		return 10+5*level();
+		//6 -> 8(14) -> 10(24) -> 12(36)
+		return 6+2*level();
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class WondrousResin extends Trinket {
 
 	public static float extraCurseEffectChance( int level ){
 		if (level >= 0){
-			return 0.125f + 0.125f * level;
+			return 0.1f + 0.1f * level;
 		} else {
 			return 0;
 		}

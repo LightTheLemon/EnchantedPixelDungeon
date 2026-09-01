@@ -42,18 +42,7 @@ public class ScrollOfDread extends ExoticScroll {
 	@Override
 	public void doRead() {
 
-		if (!RingOfConservation.recycleProc()) {
-
-			if ( RingOfConservation.recycleCurseProc() ) {
-				detach(curUser.belongings.backpack);
-				detach(curUser.belongings.backpack);
-
-			} else {
-				//what happens in most cases if the ring is a non-factor
-				detach(curUser.belongings.backpack);
-
-			}
-		}
+		RingOfConservation.detachProc(curItem, 1);
 		new Flare( 5, 32 ).color( 0xFF0000, true ).show( curUser.sprite, 2f );
 		Sample.INSTANCE.play( Assets.Sounds.READ );
 
