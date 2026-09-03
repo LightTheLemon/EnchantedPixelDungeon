@@ -96,7 +96,7 @@ public class RingRoom extends StandardRoom {
 	}
 
 	protected int centerDecoTiles(){
-		return Terrain.REGION_DECO_ALT;
+		return Terrain.BARRICADE;
 	}
 
 	protected void placeCenterDetail(Level level, int pos){

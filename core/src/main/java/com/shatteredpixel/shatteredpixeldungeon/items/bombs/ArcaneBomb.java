@@ -60,7 +60,7 @@ public class ArcaneBomb extends Bomb {
 	}
 
 	@Override
-	protected Fuse createFuse() {
+	public Fuse createFuse() {
 		return new ArcaneBombFuse();
 	}
 

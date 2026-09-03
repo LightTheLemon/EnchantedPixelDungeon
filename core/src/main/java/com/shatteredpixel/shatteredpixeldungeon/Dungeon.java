@@ -555,7 +555,7 @@ public class Dungeon {
 	}
 
 	public static boolean asNeeded() {
-		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 4)); //higher than before rework but might not be high enough? more should be added to shops
+		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 3)); //higher than before rework but might not be high enough? more should be added to shops
 		if (asLeftThisSet <= 0) return false;
 
 		int floorThisSet = (depth % 5);

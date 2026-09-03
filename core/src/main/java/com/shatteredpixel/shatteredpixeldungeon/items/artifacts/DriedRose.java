@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShaftParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
@@ -71,6 +72,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndInfoItem;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuest;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndUseItem;
 import com.watabou.noosa.Game;
@@ -606,6 +608,12 @@ public class DriedRose extends Artifact {
 			else                return null;
 		}
 
+		//				int aEnc = rose.armor.STRReq() - rose.ghostStrength();
+		//				if (aEnc > 0) {
+		//					// /= Math.pow(1.2, aEnc)
+		//					rose.armor.evasionFactor(rose.ghost, rose.ghost.defenseSkill   );
+		//				}
+
 		@Override
 		protected boolean act() {
 			updateRose();
@@ -921,16 +929,67 @@ public class DriedRose extends Artifact {
 								} else if (item.unique) {
 									GLog.w( Messages.get(WndGhostHero.class, "cant_unique"));
 									hide();
-								} else if (item.cursed || !item.cursedKnown) {
+								} else if (item.cursed && item.isEquipped(Dungeon.hero)) {
 									GLog.w(Messages.get(WndGhostHero.class, "cant_cursed"));
 									hide();
-								}  else if (!item.levelKnown && ((MeleeWeapon)item).STRReq(0) > rose.ghostStrength()){
-									GLog.w( Messages.get(WndGhostHero.class, "cant_strength_unknown"));
-									hide();
-								} else if (((MeleeWeapon)item).STRReq() > rose.ghostStrength()) {
-									GLog.w( Messages.get(WndGhostHero.class, "cant_strength"));
-									hide();
+								} else if ( item.visiblyCursed() || !item.cursedKnown ) {
+									//You can now give the sad ghost cursed items, as long as they aren't currently equipped.
+									//Doing this will 'transfer' the curse over to the dried rose
+
+									////heres the warning prompt
+									GameScene.show(
+											new WndOptions(new ItemSprite(DriedRose.curItem),
+													Messages.titleCase("Warning!"),
+													Messages.get(WndGhostHero.class, "equip_warn"),
+													Messages.get(WndGhostHero.class, "yes"),
+													Messages.get(WndGhostHero.class, "no")) {
+												@Override
+												protected void onSelect(int index) {
+													if (index == 0) {
+														if (item.cursed) {
+
+															GLog.w(Messages.get(WndGhostHero.class, "curse_transfer"));
+
+															item.cursed = false;
+															rose.cursed = true;
+
+															if (((DriedRose) Artifact.curItem).ghostWeapon() != null){
+																Dungeon.level.drop(((DriedRose) Artifact.curItem).ghostWeapon(), Dungeon.hero.pos);
+															}
+															if (((DriedRose) Artifact.curItem).ghostArmor() != null){
+																Dungeon.level.drop(((DriedRose) Artifact.curItem).ghostArmor(), Dungeon.hero.pos);
+															}
+
+															updateQuickslot();
+															hide();
+															WndGhostHero.this.hide();
+
+															CellEmitter.get(curUser.pos).burst(ShadowParticle.UP, 5);
+															Sample.INSTANCE.play(Assets.Sounds.CURSED);
+														} else {
+
+															if (item.isEquipped(Dungeon.hero)){
+																((MeleeWeapon) item).doUnequip(Dungeon.hero, false, false);
+															} else {
+																item.detach(Dungeon.hero.belongings.backpack);
+															}
+
+															rose.weapon = (MeleeWeapon) item;
+															rose.weapon.cursedKnown = true;
+															item(rose.weapon);
+
+														}
+													}
+												}
+											}
+									);
+
 								} else {
+
+									if ( ((MeleeWeapon)item).STRReq() > rose.ghostStrength() || (!item.levelKnown && ((MeleeWeapon)item).STRReq(0) > rose.ghostStrength()) ) {
+										GLog.w( Messages.get(WndGhostHero.class, "cant_strength"));
+									}
+
 									if (item.isEquipped(Dungeon.hero)){
 										((MeleeWeapon) item).doUnequip(Dungeon.hero, false, false);
 									} else {
@@ -938,6 +997,7 @@ public class DriedRose extends Artifact {
 									}
 									rose.weapon = (MeleeWeapon) item;
 									item(rose.weapon);
+
 								}
 								
 							}
@@ -996,16 +1056,66 @@ public class DriedRose extends Artifact {
 								} else if (item.unique || ((Armor) item).checkSeal() != null) {
 									GLog.w( Messages.get(WndGhostHero.class, "cant_unique"));
 									hide();
-								} else if (item.cursed || !item.cursedKnown) {
+								} else if (item.cursed && item.isEquipped(Dungeon.hero)) {
 									GLog.w(Messages.get(WndGhostHero.class, "cant_cursed"));
 									hide();
-								}  else if (!item.levelKnown && ((Armor)item).STRReq(0) > rose.ghostStrength()){
-									GLog.w( Messages.get(WndGhostHero.class, "cant_strength_unknown"));
-									hide();
-								} else if (((Armor)item).STRReq() > rose.ghostStrength()) {
-									GLog.w( Messages.get(WndGhostHero.class, "cant_strength"));
-									hide();
+								} else if ( item.visiblyCursed() || !item.cursedKnown ) {
+									//You can now give the sad ghost cursed items, as long as they aren't currently equipped.
+									//Doing this will 'transfer' the curse over to the dried rose
+
+									////heres the warning prompt
+									GameScene.show(
+											new WndOptions(new ItemSprite(DriedRose.curItem),
+													Messages.titleCase("Warning!"),
+													Messages.get(WndGhostHero.class, "equip_warn"),
+													Messages.get(WndGhostHero.class, "yes"),
+													Messages.get(WndGhostHero.class, "no")) {
+												@Override
+												protected void onSelect(int index) {
+													if (index == 0) {
+														if (item.cursed) {
+
+															GLog.w(Messages.get(WndGhostHero.class, "curse_transfer"));
+
+															item.cursed = false;
+															rose.cursed = true;
+
+															if (((DriedRose) Artifact.curItem).ghostWeapon() != null){
+																Dungeon.level.drop(((DriedRose) Artifact.curItem).ghostWeapon(), Dungeon.hero.pos);
+															}
+															if (((DriedRose) Artifact.curItem).ghostArmor() != null){
+																Dungeon.level.drop(((DriedRose) Artifact.curItem).ghostArmor(), Dungeon.hero.pos);
+															}
+
+															updateQuickslot();
+															hide();
+															this.hide();
+
+															CellEmitter.get(curUser.pos).burst(ShadowParticle.UP, 5);
+															Sample.INSTANCE.play(Assets.Sounds.CURSED);
+														} else {
+
+															if (item.isEquipped(Dungeon.hero)){
+																((Armor) item).doUnequip(Dungeon.hero, false, false);
+															} else {
+																item.detach(Dungeon.hero.belongings.backpack);
+															}
+															rose.armor = (Armor) item;
+															rose.armor.cursedKnown = true;
+															item(rose.armor);
+
+														}
+													}
+												}
+											}
+									);
+
 								} else {
+
+									if ( (!item.levelKnown && ((Armor)item).STRReq(0) > rose.ghostStrength()) || ((Armor)item).STRReq() > rose.ghostStrength() ) {
+										GLog.w( Messages.get(WndGhostHero.class, "cant_strength"));
+									}
+
 									if (item.isEquipped(Dungeon.hero)){
 										((Armor) item).doUnequip(Dungeon.hero, false, false);
 									} else {

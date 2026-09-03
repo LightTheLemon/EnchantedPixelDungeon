@@ -152,7 +152,7 @@ public class WandOfCorruption extends Wand {
 				enemyResist = 1 + Dungeon.depth/2f;
 			} else if (ch instanceof Wraith) {
 				//divide by 5 as wraiths are always at full HP and are therefore ~5x harder to corrupt
-				enemyResist = (1f + Dungeon.scalingDepth()/4f) / 5f;
+				enemyResist = (1f + Dungeon.scalingDepth()/8f) / 5f;
 			} else if (ch instanceof Swarm){
 				//child swarms don't give exp, so we force this here.
 				enemyResist = 1 + AscensionChallenge.AscensionCorruptResist(enemy);

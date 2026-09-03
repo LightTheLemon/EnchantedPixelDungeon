@@ -21,9 +21,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -36,14 +39,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 
 public class PotionOfHealing extends Potion {
 
@@ -74,13 +81,51 @@ public class PotionOfHealing extends Potion {
 				ch.HP = (int)(ch.HT / RingOfVitality.HealingMultiplier(Dungeon.hero));
 			}
 
-			//starts out healing 30 hp, equalizes with hero health total at level 11
+			////starts out healing 30 hp, equalizes with hero health total at level 11
 			//Healing healing = Buff.affect(ch, Healing.class);
 			//healing.setHeal((int) (0.8f * ch.HT + 14), 0.25f, 0);
 			//Buff.affect(ch, Healing.class).applyVialEffect();
+
 			if (ch == Dungeon.hero){
 				GLog.p( Messages.get(PotionOfHealing.class, "heal") );
 			}
+		}
+	}
+
+	@Override
+	public void shatter(int cell) {
+		splash( cell );
+		if (Dungeon.level.heroFOV[cell]) {
+			GLog.i( Messages.get(Potion.class, "shatter") );
+			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
+		}
+
+		Char ch = Actor.findChar(cell);
+		if (ch != null && !(Dungeon.isChallenged(Challenges.NO_HEALING)) ){
+			int shielding = ch.HP - (ch.HT / 2);
+
+			GLog.p( Messages.get(PotionOfHealing.class, "heal_ally") );
+
+			PotionOfHealing.cure(ch);
+			PotionOfHealing.heal(ch);
+
+			ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
+
+			if (shielding >= 10 && ch != Dungeon.hero) {
+				ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shielding), FloatingText.SHIELDING);
+				Buff.affect(ch, Barrier.class).setShield( shielding / 2);
+			}
+
+			if (ch instanceof Bee && ch.alignment != curUser.alignment){
+				ch.alignment = Char.Alignment.ALLY;
+				((Bee)ch).setPotInfo(-1, null);
+			}
+
+		} else if (Dungeon.isChallenged(Challenges.NO_HEALING)) {
+			PotionOfHealing.cure(ch);
+			ch.sprite.emitter().burst( ShadowParticle.UP, 1 );
+			Buff.affect(ch, Poison.class).set(4 + ch.HT/3f);
+
 		}
 	}
 

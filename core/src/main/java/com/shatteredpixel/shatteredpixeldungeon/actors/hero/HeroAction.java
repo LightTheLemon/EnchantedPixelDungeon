@@ -81,6 +81,12 @@ public class HeroAction {
 			this.dst = pot;
 		}
 	}
+
+	public static class BreakBarrel extends HeroAction {
+		public BreakBarrel( int pos ) {
+			this.dst = pos;
+		}
+	}
 	
 	public static class Attack extends HeroAction {
 		public Char target;

@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -93,6 +94,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.BurningSage;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
@@ -248,9 +250,9 @@ public enum HeroClass {
 		//curse.quantity(10);
 		//curse.collect();
 
-		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
-		upgrade.quantity(10);
-		upgrade.collect();
+		//ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
+		//upgrade.quantity(10);
+		//upgrade.collect();
 
 		//PotionOfLiquidFlame flame = new PotionOfLiquidFlame();
 		//flame.quantity(10);
@@ -263,8 +265,8 @@ public enum HeroClass {
 		//CapeOfThorns cape = new CapeOfThorns();
 		//cape.collect();
 
-		WandOfCharm charm = new WandOfCharm();
-		charm.identify().collect();
+		//WandOfCharm charm = new WandOfCharm();
+		//charm.identify().collect();
 
 		//PhantomStopwatch watch = new PhantomStopwatch();
 		//watch.identify().collect();

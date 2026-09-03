@@ -127,10 +127,8 @@ public class Barkskin extends Buff {
 	//reset if a matching buff exists, otherwise append
 	public static void conditionallyAppend(Char ch, int level, int interval){
 		for (Barkskin b : ch.buffs(Barkskin.class)){
-			if (b.interval == interval){
-				b.set(level, interval);
-				return;
-			}
+			b.set(level + (b.level / 2), interval + (b.interval / 2));
+			return;
 		}
 		Buff.append(ch, Barkskin.class).set(level, interval);
 	}

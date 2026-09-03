@@ -162,6 +162,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.WeakFloorRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -938,9 +939,12 @@ public class Hero extends Char {
 				actResult = actUnlock((HeroAction.Unlock) curAction);
 				
 			} else if (curAction instanceof HeroAction.Mine) {
-				actResult = actMine( (HeroAction.Mine)curAction );
+				actResult = actMine((HeroAction.Mine) curAction);
 
-			}else if (curAction instanceof HeroAction.LvlTransition) {
+			} else if (curAction instanceof HeroAction.BreakBarrel) {
+				actResult = actBreakBarrel((HeroAction.BreakBarrel) curAction);
+
+			} else if (curAction instanceof HeroAction.LvlTransition) {
 				actResult = actTransition( (HeroAction.LvlTransition)curAction );
 				
 			} else if (curAction instanceof HeroAction.Attack) {
@@ -1232,6 +1236,30 @@ public class Hero extends Char {
 			ready();
 			return false;
 		}
+	}
+
+	private boolean actBreakBarrel (HeroAction.BreakBarrel action) {
+		if (Dungeon.level.adjacent( pos, action.dst) && Dungeon.level.map[action.dst] == Terrain.REGION_DECO_ALT) {
+
+			path = null;
+			sprite.attack( pos );
+			Sample.INSTANCE.play( Assets.Sounds.BARREL, 0.55f, 1.0f );
+			Dungeon.level.destroy(action.dst);
+			GameScene.updateMap( action.dst );
+			Level.set(action.dst, Terrain.WATER);
+			spend(TICK);
+
+			return false;
+
+		} else if (getCloser( action.dst) ) {
+			return true;
+
+		} else {
+			ready();
+			return false;
+
+		}
+
 	}
 	
 	private boolean actUnlock( HeroAction.Unlock action ) {
@@ -1947,15 +1975,20 @@ public class Hero extends Char {
 				curAction = new HeroAction.Attack( ch );
 			}
 
+		//removed "Dungeon.level instanceof MiningLevel" check
 		//TODO perhaps only trigger this if hero is already adjacent? reducing mistaps
-		} else if (Dungeon.level instanceof MiningLevel &&
-					belongings.getItem(Pickaxe.class) != null &&
+		} else if (belongings.getItem(Pickaxe.class) != null &&
 				(Dungeon.level.map[cell] == Terrain.WALL
-						|| Dungeon.level.map[cell] == Terrain.WALL_DECO
-						|| Dungeon.level.map[cell] == Terrain.MINE_CRYSTAL
-						|| Dungeon.level.map[cell] == Terrain.MINE_BOULDER)){
+				|| Dungeon.level.map[cell] == Terrain.WALL_DECO
+				|| Dungeon.level.map[cell] == Terrain.MINE_CRYSTAL
+				|| Dungeon.level.map[cell] == Terrain.MINE_BOULDER)){
 
 			curAction = new HeroAction.Mine( cell );
+
+		} else if (Dungeon.level.map[cell] == Terrain.REGION_DECO_ALT &&
+						Dungeon.depth < 6 ) {
+
+			curAction = new HeroAction.BreakBarrel( cell );
 
 		} else if (heap != null
 				//moving to an item doesn't auto-pickup when enemies are near...
@@ -2573,7 +2606,7 @@ public class Hero extends Char {
 							
 						//unintentional trap detection scales from 40% at floor 0 to 30% at floor 25
 						} else if (Dungeon.level.map[curr] == Terrain.SECRET_TRAP) {
-							chance = 0.4f - (Dungeon.depth / 250f);
+							chance = 0.3f - (Dungeon.depth / 250f);
 							
 						//unintentional door detection scales from 20% at floor 0 to 0% at floor 20
 						} else {

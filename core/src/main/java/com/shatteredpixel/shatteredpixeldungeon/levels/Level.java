@@ -282,13 +282,13 @@ public abstract class Level implements Bundlable {
 						feeling = Feeling.SECRETS;
 						break;
 					default:
-						//if-else statements are fine here as only one chance can be above 0 at a time
+						//now that multiple trinkets are a thing, i'm removing the else-if logic from before
+						feeling = Feeling.NONE;
 						if (Random.Float() < MossyClump.overrideNormalLevelChance()){
 							feeling = MossyClump.getNextFeeling();
-						} else if (Random.Float() < TrapMechanism.overrideNormalLevelChance()) {
+						}
+						if (Random.Float() < TrapMechanism.overrideNormalLevelChance()) {
 							feeling = TrapMechanism.getNextFeeling();
-						} else {
-							feeling = Feeling.NONE;
 						}
 				}
 			}

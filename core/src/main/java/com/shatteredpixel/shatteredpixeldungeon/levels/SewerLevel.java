@@ -26,11 +26,23 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Ripple;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
+import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ArcaneBomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.Recycle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.SewerPainter;
@@ -197,12 +209,65 @@ public class SewerLevel extends RegularLevel {
 	public void destroy(int pos) {
 		//if we're burning  sewers barrels
 		int terr = map[pos];
-		if (terr == Terrain.REGION_DECO){
-			set(pos, Terrain.WATER);
-			Splash.at(pos, 0xFF507B5D, 10);
-		} else if (terr == Terrain.REGION_DECO_ALT){
-			set(pos, Terrain.EMPTY_SP);
-			Splash.at(pos, 0xFF507B5D, 10);
+		if (terr == Terrain.REGION_DECO || terr == Terrain.REGION_DECO_ALT){
+
+
+			int lootTable = Random.chances(new float[]{1, 2, 2, 2, 1, 1, 4, 2, 7});
+
+			switch (lootTable) {
+				case 0:
+					set(pos, Terrain.EMPTY);
+					drop(Generator.randomUsingDefaults(Generator.Category.SEED), pos).sprite.drop(pos);
+					break;
+
+				case 1:
+					set(pos, Terrain.EMPTY);
+					drop(Generator.randomUsingDefaults(Generator.Category.STONE), pos).sprite.drop(pos);
+					break;
+
+				case 2:
+					set(pos, Terrain.WATER);
+					Dungeon.level.drop(new Dewdrop(), pos).sprite.drop(pos);
+					Splash.at(pos, 0xFF507B5D, 5);
+					break;
+
+				case 3:
+					set(pos, Terrain.EMPTY);
+					Emitter emitter = new Emitter();
+					emitter.fillTarget = false;
+					emitter.pour(SparkParticle.FACTORY, 0.125f);
+					Dungeon.level.drop(new Gold().random(), pos).sprite.drop(pos);
+					break;
+
+				case 4:
+					set(pos, Terrain.EMPTY);
+					Dungeon.level.drop( Generator.randomUsingDefaults(Generator.Category.MIS_T1), pos).sprite.drop(pos);
+					break;
+
+				case 5:
+					set(pos, Terrain.EMPTY);
+					Dungeon.level.drop( new Recycle().quantity(Random.Int(1, 3)), pos).sprite.drop(pos);
+					break;
+
+				case 6:
+					set(pos, Terrain.EMPTY);
+					Bomb bomb = new Bomb();
+					Actor.addDelayed(bomb.fuse = bomb.createFuse().ignite(bomb), 1);
+					Dungeon.level.drop( bomb, pos).sprite.drop(pos);
+					break;
+
+				case 7:
+					set(pos, Terrain.WATER);
+					Dungeon.level.drop( new AquaBrew().quantity(Random.Int(2,4)), pos).sprite.drop(pos);
+					Splash.at(pos, 0xFF507B5D, 5);
+					break;
+
+				case 8:
+					set(pos, Terrain.WATER);
+					Splash.at(pos, 0xFF507B5D, 5);
+					break;
+
+			}
 		}
 		super.destroy(pos);
 	}
@@ -221,8 +286,9 @@ public class SewerLevel extends RegularLevel {
 			case Terrain.WATER:
 				return Messages.get(SewerLevel.class, "water_name");
 			case Terrain.REGION_DECO:
-			case Terrain.REGION_DECO_ALT:
 				return Messages.get(SewerLevel.class, "region_deco_name");
+			case Terrain.REGION_DECO_ALT:
+				return Messages.get(SewerLevel.class, "region_deco_alt_name");
 			default:
 				return super.tileName( tile );
 		}
@@ -236,8 +302,9 @@ public class SewerLevel extends RegularLevel {
 			case Terrain.BOOKSHELF:
 				return Messages.get(SewerLevel.class, "bookshelf_desc");
 			case Terrain.REGION_DECO:
-			case Terrain.REGION_DECO_ALT:
 				return Messages.get(SewerLevel.class, "region_deco_desc");
+			case Terrain.REGION_DECO_ALT:
+				return Messages.get(SewerLevel.class, "region_deco_alt_desc");
 			default:
 				return super.tileDesc( tile );
 		}

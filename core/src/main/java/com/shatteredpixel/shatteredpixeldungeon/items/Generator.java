@@ -384,7 +384,7 @@ public class Generator {
 			SCROLL.probs = SCROLL.defaultProbs.clone();
 			
 			STONE.classes = new Class<?>[]{
-					StoneOfEnchantment.class,   //1 is guaranteed to drop on floors 6-19
+					StoneOfEnchantment.class,
 					StoneOfIntuition.class,     //1 additional stone is also dropped on floors 1-3
 					StoneOfDetectMagic.class,
 					StoneOfFlock.class,

@@ -66,7 +66,7 @@ public class WandOfCharm extends Wand {
 			if (ch.alignment == Char.Alignment.ALLY){
 
 				//Might be interesting or more balanced to charm allies?
-				//Buff.prolong( ch, Charm.class, Charm.DURATION ).object = curUser.id();
+				Buff.prolong( ch, Charm.class, Charm.DURATION / 2).object = curUser.id();
 
 				if (ch.HP < ch.HT) {
 					int healing = Math.max(2, buffedLvl() );

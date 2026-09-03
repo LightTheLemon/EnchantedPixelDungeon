@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
+import com.watabou.utils.Random;
 
 public class RegionDecoPatchRoom extends PatchRoom {
 
@@ -69,7 +70,23 @@ public class RegionDecoPatchRoom extends PatchRoom {
 		}
 
 		setupPatch(level);
-		fillPatch(level, Terrain.REGION_DECO);
+
+		for (int i = top + 1; i < bottom; i++) {
+			for (int j = left + 1; j < right; j++) {
+				if (patch[xyToPatchCoords(j, i)]) {
+					int cell = i * level.width() + j;
+
+					if (Random.Float() <= 0.35f) {
+						level.map[cell] = Terrain.REGION_DECO_ALT;
+
+					} else {
+						level.map[cell] = Terrain.REGION_DECO;
+
+					}
+				}
+			}
+		}
+
 	}
 
 }

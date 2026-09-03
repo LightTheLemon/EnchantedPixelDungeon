@@ -47,7 +47,7 @@ public class FrozenCarpaccio extends Food {
 
 	public static void effect(Hero hero){
 
-		if(Math.random() >= .35f) {
+		if (Math.random() >= .40f) {
 			GLog.i( Messages.get(FrozenCarpaccio.class, "hard") );
 			Barkskin.conditionallyAppend( hero, hero.HT / 3, 3 );
 

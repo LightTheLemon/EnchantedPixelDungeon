@@ -117,7 +117,7 @@ public class Bomb extends Item {
 		super.execute(hero, action);
 	}
 
-	protected Fuse createFuse(){
+	public Fuse createFuse(){
 		return new Fuse();
 	}
 

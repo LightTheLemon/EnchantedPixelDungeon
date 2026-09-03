@@ -58,8 +58,8 @@ public class BowFragment extends RemainsItem {
 			}
 			CellEmitter.get(grassCell).burst(LeafParticle.LEVEL_SPECIFIC, 4);
 		}
-		// 5 cells total
-		int totalGrassCells = 5;
+		// 8 cells total
+		int totalGrassCells = 8;
 		while (grassCells.size() > totalGrassCells){
 			grassCells.remove(0);
 		}
