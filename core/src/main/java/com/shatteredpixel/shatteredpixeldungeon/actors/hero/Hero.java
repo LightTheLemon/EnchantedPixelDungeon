@@ -1243,7 +1243,7 @@ public class Hero extends Char {
 
 			path = null;
 			sprite.attack( pos );
-			Sample.INSTANCE.play( Assets.Sounds.BARREL, 0.55f, 1.0f );
+			Sample.INSTANCE.play( Assets.Sounds.BARREL, 0.9f, 1.0f );
 			Dungeon.level.destroy(action.dst);
 			GameScene.updateMap( action.dst );
 			Level.set(action.dst, Terrain.WATER);
@@ -1660,7 +1660,7 @@ public class Hero extends Char {
 			interrupt();
 		}
 
-		if (this.buff(Drowsy.class) != null && dmg > 0){
+		if (this.buff(Drowsy.class) != null && dmg > lvl){
 			Buff.detach(this, Drowsy.class);
 			GLog.w( Messages.get(this, "pain_resist") );
 		}
@@ -1676,7 +1676,7 @@ public class Hero extends Char {
 			}
 			//the same also applies to challenge scroll damage reduction
 			if (buff(ScrollOfChallenge.ChallengeArena.class) != null){
-				damage *= 0.67f;
+				damage *= 0.34f;
 			}
 			//and to monk meditate damage reduction
 			if (buff(MonkEnergy.MonkAbility.Meditate.MeditateResistance.class) != null){
@@ -1915,6 +1915,15 @@ public class Hero extends Char {
 				return false;
 			}
 
+			if (Dungeon.level.map[step] == Terrain.TRAP
+					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay / speed()))
+					&& Trap.showWarning) {
+				Trap.heroStep(this, Dungeon.level.traps.get(step));
+				interrupt();
+				canSelfTrample = false;
+				return false;
+			}
+
 			if (buff(GreaterHaste.class) != null){
 				buff(GreaterHaste.class).spendMove();
 			}
@@ -2046,8 +2055,8 @@ public class Hero extends Char {
 		EtherealChains.chainsRecharge chains = buff(EtherealChains.chainsRecharge.class);
 		if (chains != null) chains.gainExp(percent);
 
-		//PhantomStopwatch.watchRecharge watch = buff(PhantomStopwatch.watchRecharge.class);
-		//if (watch != null) watch.gainExp(percent);
+		PhantomStopwatch.watchRecharge watch = buff(PhantomStopwatch.watchRecharge.class);
+		if (watch != null) watch.gainExp(percent);
 
 		HornOfPlenty.hornRecharge horn = buff(HornOfPlenty.hornRecharge.class);
 		if (horn != null) horn.gainCharge(percent);

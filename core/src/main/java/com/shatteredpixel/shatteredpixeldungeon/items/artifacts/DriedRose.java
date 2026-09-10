@@ -594,6 +594,13 @@ public class DriedRose extends Artifact {
 			
 			//same dodge as the hero
 			defenseSkill = (Dungeon.hero.lvl+4);
+			if (rose != null) {
+				int aEnc = rose.armor.STRReq() - rose.ghostStrength();
+				if (aEnc > 0) {
+					defenseSkill /= (int) Math.pow(1.2, aEnc);
+				}
+			}
+
 			if (rose == null) return;
 			HT = 20 + 8*rose.level();
 		}
@@ -607,12 +614,6 @@ public class DriedRose extends Artifact {
 			if (rose != null)   return rose.armor;
 			else                return null;
 		}
-
-		//				int aEnc = rose.armor.STRReq() - rose.ghostStrength();
-		//				if (aEnc > 0) {
-		//					// /= Math.pow(1.2, aEnc)
-		//					rose.armor.evasionFactor(rose.ghost, rose.ghost.defenseSkill   );
-		//				}
 
 		@Override
 		protected boolean act() {
@@ -710,6 +711,13 @@ public class DriedRose extends Artifact {
 					&& defendingPos == -1
 					&& Dungeon.level.distance(pos, Dungeon.hero.pos) > 1){
 				speed *= 2;
+			}
+
+			if (rose != null) {
+				int aEnc = rose.armor.STRReq() - rose.ghostStrength();
+				if (aEnc > 0) {
+					speed /= (int) Math.pow(1.4, aEnc);
+				}
 			}
 			
 			return speed;

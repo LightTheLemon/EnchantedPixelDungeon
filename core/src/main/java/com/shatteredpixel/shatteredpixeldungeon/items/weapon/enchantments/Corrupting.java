@@ -77,7 +77,7 @@ public class Corrupting extends Weapon.Enchantment {
 
 		float procChance = (level+5f)/(level+25f) * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
 
-		return Messages.decimalFormat("#.##", Math.max(100, 100 * procChance )) + "%";
+		return Messages.decimalFormat("#.##", Math.min(100, 100 * procChance )) + "%";
 	}
 	
 	@Override

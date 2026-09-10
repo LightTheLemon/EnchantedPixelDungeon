@@ -21,10 +21,14 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
+import static com.shatteredpixel.shatteredpixeldungeon.actors.Actor.TICK;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -86,7 +90,7 @@ public class CapeOfThorns extends Artifact {
 
 			curUser = hero;
 
-			if (charge < 10) {
+			if (charge <= 0) {
 				GLog.i( Messages.get(this, "no_charge") );
 				usesTargeting = false;
 
@@ -103,6 +107,7 @@ public class CapeOfThorns extends Artifact {
 					Sample.INSTANCE.play( Assets.Sounds.ROCKS );
 
 				}
+				hero.spendAndNext(TICK);
 				updateQuickslot();
 			}
 
@@ -114,11 +119,15 @@ public class CapeOfThorns extends Artifact {
 		String desc = Messages.get(this, "desc");
 		if (isEquipped( Dungeon.hero )) {
 			desc += "\n\n";
-			if (cooldown == 0)
-				desc += Messages.get(this, "desc_inactive");
-			else
-				desc += Messages.get(this, "desc_active");
-		}
+            if (!cursed) {
+                if (cooldown == 0)
+                    desc += Messages.get(this, "desc_inactive");
+                else
+                    desc += Messages.get(this, "desc_active");
+            } else {
+				desc += Messages.get(this, "desc_cursed");
+			}
+        }
 
 		return desc;
 	}
@@ -134,6 +143,10 @@ public class CapeOfThorns extends Artifact {
 			//	}
 			//	updateQuickslot();
 			//}
+
+			if (cursed && Random.Int(15) == 0) {
+				Buff.affect(Dungeon.hero, Vulnerable.class, Vulnerable.DURATION / 2);
+			}
 			updateQuickslot();
 			spend(TICK);
 			return true;
@@ -141,7 +154,8 @@ public class CapeOfThorns extends Artifact {
 
 		public int proc(int damage, Char attacker, Char defender){
 			if (cooldown == 0){
-				float partialCharge = (damage*0.4f) + ((level()*0.4f));
+				float partialCharge = (damage*0.3f) + ((level()*0.3f) );
+				//charge go up with xp
 				charge += partialCharge;
 				if (charge >= chargeCap){
 					charge = chargeCap;
@@ -151,7 +165,8 @@ public class CapeOfThorns extends Artifact {
 
 			if (cooldown != 0){
 				cooldown = Math.max(0, cooldown - damage);
-				int deflected = Random.NormalIntRange(0, damage);
+				//should cooldown also go down with time?
+				int deflected = Random.NormalIntRange(level() / 2, damage * ( 1 + level() / 10 ));
 				damage -= deflected;
 
 				if (defender == null) defender = target;
@@ -163,9 +178,9 @@ public class CapeOfThorns extends Artifact {
 
 				if (exp >= (level()+1)*5 && level() < levelCap){
 					exp -= (level()+1)*5;
-					upgrade();
-					Catalog.countUse(CapeOfThorns.class);
 					GLog.p( Messages.get(this, "levelup") );
+					Catalog.countUse(CapeOfThorns.class);
+					upgrade();
 				}
 
 			}
@@ -189,7 +204,6 @@ public class CapeOfThorns extends Artifact {
 		@Override
 		public void detach(){
 			cooldown = 0;
-			charge = 0;
 			super.detach();
 		}
 

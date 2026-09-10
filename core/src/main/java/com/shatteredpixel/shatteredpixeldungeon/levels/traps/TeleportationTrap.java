@@ -41,6 +41,8 @@ public class TeleportationTrap extends Trap {
 	{
 		color = TEAL;
 		shape = DOTS;
+
+		showWarning = false;
 	}
 
 	@Override

@@ -98,7 +98,7 @@ public class StoneOfAggression extends Runestone {
 				}
 			}
 			RingOfConservation.detachProc(curItem, 1);
-			//super.detach();
+			super.detach();
 			
 		}
 

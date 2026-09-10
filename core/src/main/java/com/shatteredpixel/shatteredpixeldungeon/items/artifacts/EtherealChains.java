@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -199,6 +200,14 @@ public class EtherealChains extends Artifact {
 						Invisibility.dispel(hero);
 						Talent.onArtifactUsed(hero);
 						updateQuickslot();
+
+						Buff.affect(enemy, Cripple.class, Cripple.DURATION / 2);
+
+						Paralysis para = Buff.affect(enemy, Paralysis.class, 1);
+						para.announced = false;
+						para.fx(false);
+
+						hero.spend(1);
 
 						Dungeon.level.occupyCell(enemy);
 						Dungeon.observe();

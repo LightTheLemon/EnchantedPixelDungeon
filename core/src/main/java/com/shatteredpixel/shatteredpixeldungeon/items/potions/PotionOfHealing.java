@@ -102,7 +102,6 @@ public class PotionOfHealing extends Potion {
 
 		Char ch = Actor.findChar(cell);
 		if (ch != null && !(Dungeon.isChallenged(Challenges.NO_HEALING)) ){
-			int shielding = ch.HP - (ch.HT / 2);
 
 			GLog.p( Messages.get(PotionOfHealing.class, "heal_ally") );
 
@@ -111,9 +110,9 @@ public class PotionOfHealing extends Potion {
 
 			ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
 
-			if (shielding >= 10 && ch != Dungeon.hero) {
-				ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shielding), FloatingText.SHIELDING);
-				Buff.affect(ch, Barrier.class).setShield( shielding / 2);
+			if (ch != Dungeon.hero && ch.HP == ch.HT) {
+				ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(ch.HT / 4), FloatingText.SHIELDING);
+				Buff.affect(ch, Barrier.class).setShield( ch.HT / 4);
 			}
 
 			if (ch instanceof Bee && ch.alignment != curUser.alignment){
@@ -121,8 +120,7 @@ public class PotionOfHealing extends Potion {
 				((Bee)ch).setPotInfo(-1, null);
 			}
 
-		} else if (Dungeon.isChallenged(Challenges.NO_HEALING)) {
-			PotionOfHealing.cure(ch);
+		} else if (ch != null) {
 			ch.sprite.emitter().burst( ShadowParticle.UP, 1 );
 			Buff.affect(ch, Poison.class).set(4 + ch.HT/3f);
 

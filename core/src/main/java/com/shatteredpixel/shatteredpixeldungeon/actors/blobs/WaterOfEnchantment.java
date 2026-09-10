@@ -34,8 +34,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes.Landmark;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -89,6 +91,8 @@ public class WaterOfEnchantment extends WellWater {
 				}
 				if (item instanceof Armor) {
 					((Armor) item).inscribe(null);
+					item.cursed = false;
+					//item.visiblyCursed();
 				}
 
 			} else if ( item instanceof Ring || item instanceof Wand || item instanceof Artifact) {
@@ -102,14 +106,14 @@ public class WaterOfEnchantment extends WellWater {
 		CellEmitter.get( hero.pos ).start( ShaftParticle.FACTORY, 0.2f, 3 );
 
 		Dungeon.hero.interrupt();
-	
+
 		GLog.p( Messages.get(this, "procced") );
 		
 		return true;
 	}
 	@Override
 	protected Item affectItem( Item item, int pos ) {
-		if (item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
+		if (!(item instanceof SpiritBow) && !(item instanceof Pickaxe) && item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
 			item.upgrade();
 			CellEmitter.get( pos ).start( Speck.factory( Speck.ENCHANT_STAR ), 0.6f, 6 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );

@@ -45,7 +45,7 @@ public class Shocking extends Weapon.Enchantment {
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
 		int level = Math.max( 0, weapon.buffedLvl() );
 
-		float procChance = (1/3f) * procChanceMultiplier(attacker) * (level / 9f) + 1;
+		float procChance = (1/4f) * procChanceMultiplier(attacker) * ((level / 10f) + 1);
 		if (Random.Float() < procChance) {
 
 			float powerMulti = Math.max(1f, procChance);
@@ -73,7 +73,7 @@ public class Shocking extends Weapon.Enchantment {
 	@Override
 	public String enchantUpgradeStat1(int level) {
 
-		return Messages.decimalFormat("#.##", 100f * (1/3f) * (Math.max(1f,Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero)) * (level / 9f) + 1 )) + "%";
+		return Messages.decimalFormat("#.##", 100f * (1/4f) * (Math.max(1f,Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero)) * (level / 10f) + 1 )) + "%";
 	}
 
 	@Override

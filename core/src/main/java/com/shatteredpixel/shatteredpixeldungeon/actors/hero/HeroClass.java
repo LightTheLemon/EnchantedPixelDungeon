@@ -60,6 +60,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
@@ -249,6 +250,9 @@ public enum HeroClass {
 		//CurseInfusion curse = new CurseInfusion();
 		//curse.quantity(10);
 		//curse.collect();
+
+		DriedRose rose = new DriedRose();
+		rose.identify().collect();
 
 		//ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
 		//upgrade.quantity(10);

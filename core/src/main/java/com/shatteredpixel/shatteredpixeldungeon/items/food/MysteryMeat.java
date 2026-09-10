@@ -38,7 +38,7 @@ public class MysteryMeat extends Food {
 
 	{
 		image = ItemSpriteSheet.MEAT;
-		energy = Hunger.HUNGRY/1.5f; //satiates more than frozen or stewed, but probably not worth it
+		energy = Hunger.HUNGRY/1.66f; //satiates more than frozen or stewed, but probably not worth it
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class MysteryMeat extends Food {
 	}
 
 	public int value() {
-		return 20 * quantity;
+		return 40 * quantity;
 	}
 
 	public static void effect(Hero hero){

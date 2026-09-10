@@ -46,6 +46,8 @@ public class GeyserTrap extends Trap {
 	{
 		color = TEAL;
 		shape = DIAMOND;
+
+		showWarning = false;
 	}
 
 	public int centerKnockBackDirection = -1;

@@ -152,7 +152,7 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.2f*amount; //from 0.25f*amount
+			partialCharge += 0.20f*amount;
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -219,7 +219,7 @@ public class PhantomStopwatch extends Artifact {
 					&& target.buff(MagicImmune.class) == null
 					&& Regeneration.regenOn()
 					&& activeBuff == null) {
-				float chargeGain = 1 / (75f ); // was (100f - (chargeCap - charge)*3f)
+				float chargeGain = 1 / (100f - charge*5f); // was (100f - (chargeCap - charge)*3f)
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
 
@@ -263,9 +263,6 @@ public class PhantomStopwatch extends Artifact {
 			}
 
 		}
-
-
-
 
 	}
 

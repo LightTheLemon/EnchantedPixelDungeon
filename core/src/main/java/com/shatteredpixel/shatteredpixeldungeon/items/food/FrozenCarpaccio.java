@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.utils.Random;
 
 public class FrozenCarpaccio extends Food {
 
@@ -42,14 +43,14 @@ public class FrozenCarpaccio extends Food {
 	}
 	
 	public int value() {
-		return 30 * quantity;
+		return 40 * quantity;
 	}
 
 	public static void effect(Hero hero){
 
-		if (Math.random() >= .40f) {
+		if (Random.Float() <= .40f) {
 			GLog.i( Messages.get(FrozenCarpaccio.class, "hard") );
-			Barkskin.conditionallyAppend( hero, hero.HT / 3, 3 );
+			Barkskin.conditionallyAppend( hero, hero.HT / 3, 1 );
 
 		}
 

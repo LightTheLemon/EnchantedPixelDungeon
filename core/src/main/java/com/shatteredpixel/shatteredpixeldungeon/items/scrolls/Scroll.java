@@ -170,7 +170,7 @@ public abstract class Scroll extends Item {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		//actions.add( AC_CRAFT );
+		actions.add( AC_CRAFT );
 		actions.add( AC_READ );
 		return actions;
 	}
@@ -196,7 +196,7 @@ public abstract class Scroll extends Item {
 			
 		}
 		if (action.equals( AC_CRAFT)) {
-			curUser.spend( 1 );
+			curUser.spend( -1 );
 
 		}
 

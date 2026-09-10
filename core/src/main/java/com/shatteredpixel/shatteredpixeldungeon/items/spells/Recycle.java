@@ -84,8 +84,9 @@ public class Recycle extends InventorySpell {
 			}
 		} while (result.getClass() == item.getClass() || Challenges.isItemBlocked(result));
 
-		RingOfConservation.detachProc( this, 1 );
-		//item.detach(curUser.belongings.backpack);
+		//want to see if this causes a bug
+		//RingOfConservation.detachProc( this, 1 );
+		item.detach(curUser.belongings.backpack);
 		GLog.p(Messages.get(this, "recycled", result.name()));
 		if (!result.collect()){
 			Dungeon.level.drop(result, curUser.pos).sprite.drop();

@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PrismaticGuard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stamina;
@@ -55,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kinetic;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 import java.util.HashSet;
 
@@ -69,27 +71,30 @@ public class RingOfElements extends Ring {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
 				Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, soloBuffedBonus()))),
-				Messages.decimalFormat("#.##", 100f * (Math.pow(soloBuffedBonus(), 0.55f) - 1f)));
+				Messages.decimalFormat("#.##", 100f * ( Math.pow(0.3f * soloBuffedBonus(), 1.16f) - 1f)));
 
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
 				Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, combinedBuffedBonus(Dungeon.hero)))),
-				Messages.decimalFormat("#.##", 100f *  (Math.pow(combinedBuffedBonus(Dungeon.hero), 0.55f) - 1f)));
+				Messages.decimalFormat("#.##", 100f *  ((Math.pow( 0.3f * combinedBuffedBonus(Dungeon.hero), 1.16f)))));
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 17.5f));
+			return Messages.get(this, "typical_stats",
+					Messages.decimalFormat("#.##", 17.5f));
 		}
 	}
 
 	public String upgradeStat1(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.825f, level+1))) + "%";
+		return Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, level+1))) + "%";
 	}
 
 	public String upgradeStat2(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 12 + (12f * level)) + "%";
+		GLog.i("buffed bonus: " + getBuffedBonus(Dungeon.hero, Elements.class));
+		GLog.i("level: " + level);
+		return Messages.decimalFormat("#.##", 100 * Math.pow( 0.3f * (level + 1), 1.16f)) + "%";
 	}
 	
 	@Override
@@ -135,6 +140,7 @@ public class RingOfElements extends Ring {
 		BUFFS.add( Stamina.class);
 		BUFFS.add( Bless.class);
 		BUFFS.add( Kinetic.ConservedDamage.class);
+		BUFFS.add( Recharging.class );
 
 	}
 
@@ -155,7 +161,7 @@ public class RingOfElements extends Ring {
 
 		for (Class c : BUFFS){
 			if (c.isAssignableFrom(effect)){
-				return (float)Math.pow(getBuffedBonus(target, Elements.class), 0.55f);
+				return 1f + (float) Math.pow( 0.3f * getBuffedBonus(target, Elements.class), 1.16f );
 			}
 		}
         return 1f;

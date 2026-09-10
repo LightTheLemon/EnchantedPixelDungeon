@@ -38,6 +38,7 @@ public class ChillingTrap extends Trap{
 	{
 		color = WHITE;
 		shape = DOTS;
+		if (Dungeon.depth < 10) showWarning = false;
 	}
 
 	@Override

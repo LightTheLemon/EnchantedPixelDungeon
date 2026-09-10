@@ -212,7 +212,7 @@ public class SewerLevel extends RegularLevel {
 		if (terr == Terrain.REGION_DECO || terr == Terrain.REGION_DECO_ALT){
 
 
-			int lootTable = Random.chances(new float[]{1, 2, 2, 2, 1, 1, 4, 2, 7});
+			int lootTable = Random.chances(new float[]{1, 2, 2, 2, 1, 1, 4, 1, 6});
 
 			switch (lootTable) {
 				case 0:
@@ -246,7 +246,7 @@ public class SewerLevel extends RegularLevel {
 
 				case 5:
 					set(pos, Terrain.EMPTY);
-					Dungeon.level.drop( new Recycle().quantity(Random.Int(1, 3)), pos).sprite.drop(pos);
+					Dungeon.level.drop( new Recycle().quantity(Random.Int(1, 4)), pos).sprite.drop(pos);
 					break;
 
 				case 6:
@@ -258,7 +258,7 @@ public class SewerLevel extends RegularLevel {
 
 				case 7:
 					set(pos, Terrain.WATER);
-					Dungeon.level.drop( new AquaBrew().quantity(Random.Int(2,4)), pos).sprite.drop(pos);
+					Dungeon.level.drop( new AquaBrew().quantity(Random.Int(1,4)), pos).sprite.drop(pos);
 					Splash.at(pos, 0xFF507B5D, 5);
 					break;
 

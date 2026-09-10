@@ -24,12 +24,19 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
+import com.watabou.noosa.Game;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
 
 public abstract class Trap implements Bundlable {
 
@@ -68,6 +75,10 @@ public abstract class Trap implements Bundlable {
 
 	public boolean avoidsHallways = false; //whether this trap should avoid being placed in hallways
 
+	public static boolean showWarning = true;
+
+	//private static int heroPos;
+
 	public Trap set(int pos){
 		this.pos = pos;
 		return this;
@@ -90,6 +101,7 @@ public abstract class Trap implements Bundlable {
 	}
 
 	public void trigger() {
+		showWarning = true;
 		if (active) {
 			if (Dungeon.level.heroFOV[pos]) {
 				Sample.INSTANCE.play(Assets.Sounds.TRAP);
@@ -100,6 +112,31 @@ public abstract class Trap implements Bundlable {
 			Bestiary.countEncounter(getClass());
 			activate();
 		}
+	}
+
+	public static void heroStep( final Hero hero, Trap trap ) {
+		//heroPos = hero.pos;
+		Game.runOnRenderThread(new Callback() {
+			@Override
+			public void call() {
+				GameScene.show(
+						new WndOptions( Icons.get( Icons.WARNING ),
+								Messages.titleCase(Messages.get(trap, "name")),
+								Messages.get(Trap.class, "step", trap.name()),
+								Messages.get(Trap.class, "yes"),
+								Messages.get(Trap.class, "no") ) {
+
+							@Override
+							protected void onSelect( int index ) {
+								if (index == 0 ) {
+									showWarning = false;
+									hero.resume();
+								}
+							}
+						}
+				);
+			}
+		});
 	}
 
 	public abstract void activate();

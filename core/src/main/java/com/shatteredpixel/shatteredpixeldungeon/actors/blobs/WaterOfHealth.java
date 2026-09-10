@@ -38,11 +38,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes.Landmark;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -87,17 +89,17 @@ public class WaterOfHealth extends WellWater {
 		if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
 			((Waterskin)item).fill(20);
 			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
-			Sample.INSTANCE.play( Assets.Sounds.DRINK );
+			Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
 			return item;
 		} else if ( item instanceof Ankh && !(((Ankh) item).isBlessed())){
 			((Ankh) item).bless();
 			CellEmitter.get( pos ).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
-			Sample.INSTANCE.play( Assets.Sounds.DRINK );
+			Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
 			return item;
-		} else if (item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
+		} else if (!(item instanceof SpiritBow) && !(item instanceof Pickaxe) && item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
 			item.upgrade();
 			CellEmitter.get( pos ).start( Speck.factory( Speck.ENCHANT_STAR ), 0.6f, 6 );
-			Sample.INSTANCE.play( Assets.Sounds.DRINK );
+			Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
 			return item;
 		}
 		return null;

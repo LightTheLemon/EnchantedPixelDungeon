@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.utils.Random;
 
 public class StewedMeat extends Food {
 	
@@ -44,11 +45,11 @@ public class StewedMeat extends Food {
 
 	@Override
 	public int value() {
-		return 30 * quantity;
+		return 40 * quantity;
 	}
 
 	public static void effect(Hero hero){
-		if(Math.random() >= .45f) {
+		if(Random.Float() <= .40f) {
 			GLog.i( Messages.get(StewedMeat.class, "invis") );
 			Buff.affect( hero, Invisibility.class, (Invisibility.DURATION - 12));
 		}
