@@ -46,6 +46,9 @@ public class Unstable extends Weapon.Enchantment {
 			//projecting not included, no on-hit effect
 			Shocking.class,
 			Vampiric.class,
+			Venomous.class,
+			Vorpal.class,
+			Eldritch.class,
 			Covert.class,
 			Culinary.class
 	};
@@ -63,14 +66,14 @@ public class Unstable extends Weapon.Enchantment {
 		
 		return damage + conservedDamage * (1 + weapon.buffedLvl() / 50);
 	}
-
+/*
 	@Override
 	public String enchantUpgradeStat1(int level) {
 
 		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
 
 		return Messages.decimalFormat("#.##", 100f + (level/10f * bonus)) + "%";
-	}
+	}*/
 
 	@Override
 	public ItemSprite.Glowing glowing() {

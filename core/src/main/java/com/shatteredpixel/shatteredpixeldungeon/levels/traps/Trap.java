@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndInfoTrap;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
@@ -76,8 +77,6 @@ public abstract class Trap implements Bundlable {
 	public boolean avoidsHallways = false; //whether this trap should avoid being placed in hallways
 
 	public static boolean showWarning = true;
-
-	//private static int heroPos;
 
 	public Trap set(int pos){
 		this.pos = pos;
@@ -158,7 +157,12 @@ public abstract class Trap implements Bundlable {
 	}
 
 	public String desc() {
-		return Messages.get(this, "desc");
+		String desc = "";
+		if (!active){
+			desc += Messages.get(WndInfoTrap.class, "inactive") + "\n\n";
+		}
+		desc += Messages.get(this, "desc");
+		return desc;
 	}
 
 	private static final String POS	= "pos";

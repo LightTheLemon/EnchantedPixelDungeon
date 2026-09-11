@@ -66,8 +66,7 @@ public class WaterOfHealth extends WellWater {
 
 		if (VialOfBlood.delayBurstHealing()){
 			Healing healing = Buff.affect(hero, Healing.class);
-			healing.setHeal(hero.HT, 0, VialOfBlood.maxHealPerTurn());
-			healing.applyVialEffect();
+			healing.setHeal(hero.HT, 0, VialOfBlood.maxHealPerTurn(), true);
 			healing.applyVitalityEffect();
 		} else {
 			hero.HP = (int)(hero.HT / RingOfVitality.HealingMultiplier(Dungeon.hero));

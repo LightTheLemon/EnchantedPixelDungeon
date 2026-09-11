@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:9.1.0'
+        classpath 'com.android.tools.build:gradle:9.2.0'
     }
 }
 
@@ -14,8 +14,8 @@ allprojects {
         appName = 'Enchanted Pixel Dungeon'
         appPackageName = 'com.enchanted.enchantedpixeldungeon'
 
-        appVersionCode = 1001
-        appVersionName = '0.0.2'
+        appVersionCode = 0002
+        appVersionName = '0.0.3'
 
         appJavaCompatibility = JavaVersion.VERSION_11
 

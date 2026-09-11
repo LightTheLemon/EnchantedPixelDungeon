@@ -35,7 +35,7 @@ public class RingOfMight extends Ring {
 		icon = ItemSpriteSheet.Icons.RING_MIGHT;
 		buffClass = Might.class;
 	}
-	
+
 	public String statsInfo() {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",

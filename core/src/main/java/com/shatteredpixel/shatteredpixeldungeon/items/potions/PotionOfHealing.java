@@ -74,8 +74,7 @@ public class PotionOfHealing extends Potion {
 			CellEmitter.get( ch.pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 			if (VialOfBlood.delayBurstHealing()){
 				Healing healing = Buff.affect(ch, Healing.class);
-				healing.setHeal(ch.HT, 0, VialOfBlood.maxHealPerTurn());
-				healing.applyVialEffect();
+				healing.setHeal(ch.HT, 0, VialOfBlood.maxHealPerTurn(), true);
 				healing.applyVitalityEffect();
 			} else {
 				ch.HP = (int)(ch.HT / RingOfVitality.HealingMultiplier(Dungeon.hero));

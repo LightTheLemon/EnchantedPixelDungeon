@@ -46,8 +46,6 @@ import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 
-import static java.lang.Math.pow;
-
 public class Multiplicity extends Armor.Glyph {
 
 	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x000000 );
@@ -67,75 +65,85 @@ public class Multiplicity extends Armor.Glyph {
 			}
 
 			if (spawnPoints.size() > 0) {
-				boolean condition = Random.Int(2) == 0 && defender instanceof Hero;
-				do {
-					Mob m;
-					if (condition) {
-						m = new MirrorImage();
-						((MirrorImage) m).duplicate((Hero) defender);
 
+				Mob m = null;
+				if (Random.Int(2) == 0 && defender instanceof Hero){
+					m = new MirrorImage();
+					((MirrorImage)m).duplicate( (Hero)defender );
+
+				} else {
+					Char toDuplicate = attacker;
+
+					if (toDuplicate instanceof Ratmogrify.TransmogRat){
+						toDuplicate = ((Ratmogrify.TransmogRat)attacker).getOriginal();
+					}
+
+					//FIXME should probably have a mob property for this
+					if (!(toDuplicate instanceof Mob)
+							|| toDuplicate.properties().contains(Char.Property.BOSS) || toDuplicate.properties().contains(Char.Property.MINIBOSS)
+							|| toDuplicate instanceof Mimic || toDuplicate instanceof Statue || toDuplicate instanceof NPC) {
+						m = Dungeon.level.createMob();
 					} else {
-						Char toDuplicate = attacker;
+						m = duplicate((Mob)toDuplicate);
+					}
+				}
 
-						if (toDuplicate instanceof Ratmogrify.TransmogRat) {
-							toDuplicate = ((Ratmogrify.TransmogRat) attacker).getOriginal();
-						}
+				if (m != null) {
 
-						//FIXME should probably have a mob property for this
-						if (!(toDuplicate instanceof Mob)
-								|| toDuplicate.properties().contains(Char.Property.BOSS) || toDuplicate.properties().contains(Char.Property.MINIBOSS)
-								|| toDuplicate instanceof Mimic || toDuplicate instanceof Statue || toDuplicate instanceof NPC) {
-							m = Dungeon.level.createMob();
-						} else {
-							Actor.fixTime();
-
-							m = (Mob) Reflection.newInstance(toDuplicate.getClass());
-
-							if (m != null) {
-
-								Bundle store = new Bundle();
-								attacker.storeInBundle(store);
-								m.restoreFromBundle(store);
-								m.pos = 0;
-								m.HP = m.HT;
-
-								//don't duplicate stuck projectiles
-								m.remove(PinCushion.class);
-								//don't duplicate pending damage to dwarf king
-								m.remove(DwarfKing.KingDamager.class);
-								//don't duplicate downed ghouls
-								m.remove(Ghoul.GhoulLifeLink.class);
-
-								//If a thief has stolen an item, that item is not duplicated.
-								if (m instanceof Thief) {
-									((Thief) m).item = null;
-								}
+					if (Char.hasProp(m, Char.Property.LARGE)){
+						for ( int i : spawnPoints.toArray(new Integer[0])){
+							if (!Dungeon.level.openSpace[i]){
+								//remove the value, not at the index
+								spawnPoints.remove((Integer) i);
 							}
 						}
 					}
 
-					if (m != null) {
-
-						if (Char.hasProp(m, Char.Property.LARGE)) {
-							for (int i : spawnPoints.toArray(new Integer[0])) {
-								if (!Dungeon.level.openSpace[i]) {
-									//remove the value, not at the index
-									spawnPoints.remove((Integer) i);
-								}
-							}
-						}
-
-						if (!spawnPoints.isEmpty()) {
-							m.pos = Random.element(spawnPoints);
-							GameScene.add(m);
-							ScrollOfTeleportation.appear(m, m.pos);
-						}
+					if (!spawnPoints.isEmpty()) {
+						m.pos = Random.element(spawnPoints);
+						GameScene.add(m);
+						ScrollOfTeleportation.appear(m, m.pos);
 					}
-				} while (Random.Float() <= .5*(1-pow(.5,.2*armor.buffedLvl())) );
+				}
+
 			}
 		}
 
 		return damage;
+	}
+
+	public static Mob duplicate( Mob toDuplicate ){
+
+		if (toDuplicate instanceof Ratmogrify.TransmogRat){
+			toDuplicate = ((Ratmogrify.TransmogRat)toDuplicate).getOriginal();
+		}
+
+		Actor.fixTime();
+
+		Mob m = Reflection.newInstance(toDuplicate.getClass());
+
+		if (m != null) {
+
+			Bundle store = new Bundle();
+			toDuplicate.storeInBundle(store);
+			m.restoreFromBundle(store);
+			m.pos = 0;
+			m.HP = m.HT;
+
+			//don't duplicate stuck projectiles
+			m.remove(PinCushion.class);
+			//don't duplicate pending damage to dwarf king
+			m.remove(DwarfKing.KingDamager.class);
+			//don't duplicate downed ghouls
+			m.remove(Ghoul.GhoulLifeLink.class);
+
+			//If a thief has stolen an item, that item is not duplicated.
+			if (m instanceof Thief) {
+				((Thief) m).item = null;
+			}
+		}
+
+		return m;
 	}
 
 	@Override
