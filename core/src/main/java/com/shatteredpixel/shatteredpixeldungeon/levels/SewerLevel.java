@@ -269,6 +269,7 @@ public class SewerLevel extends RegularLevel {
 
 			}
 		}
+		GameScene.updateMap(pos);
 		super.destroy(pos);
 	}
 

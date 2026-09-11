@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
@@ -96,7 +97,7 @@ public class Corrupting extends Weapon.Enchantment {
 					if (powerMulti > 1.05f) {
 						//shielding for bonus enchant power
 						//Buff.affect(corrupted, Adrenaline.class, Math.round(5 * (powerMulti - 1f)));
-						Buff.affect(corrupted, Barrier.class).setShield( (Math.round( (powerMulti * enemy.HT) - enemy.HT ) ) );
+						Buff.affect(corrupted, Barrier.class).setShield( (Math.round( (powerMulti * corrupted.HT) - corrupted.HT ) ) );
 					}
 				}
 

@@ -81,7 +81,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfShock;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.Builder;
@@ -360,7 +360,7 @@ public class VaultLevel extends CityLevel {
 		do {
 			loot = Generator.randomUsingDefaults(Generator.Category.WAND);
 		} while (generatedClasses.contains(loot.getClass()) || loot instanceof WandOfRegrowth
-				|| loot instanceof WandOfTransfusion || loot instanceof WandOfCorruption);
+				|| loot instanceof WandOfCharm || loot instanceof WandOfCorruption);
 		generatedClasses.add(loot.getClass());
 		loot.level(lootTier);
 		((Wand)loot).curCharges = ((Wand)loot).maxCharges;

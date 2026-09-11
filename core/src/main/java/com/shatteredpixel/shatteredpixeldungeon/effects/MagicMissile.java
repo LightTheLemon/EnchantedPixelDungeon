@@ -89,7 +89,7 @@ public class MagicMissile extends Emitter {
 	public static final int SPARK_CONE      = 112;
 	public static final int BLOOD_CONE      = 113;
 	public static final int POISON_CONE     = 114;
-	public static final int CHARM           = 114;
+	public static final int CHARM           = 115;
 
 	//use SPECK + the constant of the Speck you want. e.g. MagicMissile.SPECK + Speck.TOXIC
 	public static final int SPECK           = 1000;
@@ -261,13 +261,13 @@ public class MagicMissile extends Emitter {
 				size( 10 );
 				pour( BloodParticle.FACTORY, 0.03f );
 				break;
-			case CHARM:
-				size( 1 );
-				pour( Speck.factory(Speck.HEART), 0.05f );
-				break;
 			case POISON_CONE:
 				size( 10 );
 				pour( PoisonParticle.MISSILE, 0.03f );
+				break;
+			case CHARM:
+				size( 1 );
+				pour( Speck.factory(Speck.HEART), 0.05f );
 				break;
 		}
 
