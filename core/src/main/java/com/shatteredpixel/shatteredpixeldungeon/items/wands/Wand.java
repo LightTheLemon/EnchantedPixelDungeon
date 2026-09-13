@@ -222,12 +222,6 @@ public abstract class Wand extends Item {
 			SoulMark.prolong(target, SoulMark.class, SoulMark.DURATION);
 		}
 
-		if (target != Dungeon.hero &&
-				Dungeon.hero.subClass == HeroSubClass.WARLOCK &&
-				target.buff(SoulMark.class) != null) {
-			SoulMark.extend(target, SoulMark.class, 5);
-		}
-
 		if (Dungeon.hero.subClass == HeroSubClass.PRIEST && target.buff(GuidingLight.Illuminated.class) != null) {
 			target.buff(GuidingLight.Illuminated.class).detach();
 			target.damage(Dungeon.hero.lvl+5, GuidingLight.INSTANCE);

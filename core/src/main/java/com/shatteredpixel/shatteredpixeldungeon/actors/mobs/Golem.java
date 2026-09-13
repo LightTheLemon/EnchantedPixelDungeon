@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -29,9 +30,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GolemSprite;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -42,8 +45,9 @@ public class Golem extends Mob {
 	{
 		spriteClass = GolemSprite.class;
 		
-		HP = HT = 120;
+		HP = HT = 140;
 		defenseSkill = 15;
+		baseSpeed = 0.5f;
 		
 		EXP = 12;
 		maxLvl = 22;
@@ -52,7 +56,7 @@ public class Golem extends Mob {
 		lootChance = 0.2f; //initially, see lootChance()
 
 		properties.add(Property.INORGANIC);
-		properties.add(Property.LARGE);
+		//properties.add(Property.LARGE);
 
 		WANDERING = new Wandering();
 		HUNTING = new Hunting();
@@ -86,6 +90,16 @@ public class Golem extends Mob {
 		super.rollToDropLoot();
 	}
 
+	@Override
+	public void damage( int dmg, Object src ) {
+		if (src != null && AntiMagic.RESISTS.contains(src.getClass())) {
+			Sample.INSTANCE.play( Assets.Sounds.HIT_PARRY, 0.85f, 0.95f);
+			dmg /= 4;
+		}
+
+		super.damage(dmg, src);
+	}
+
 	public Item createLoot() {
 		Dungeon.LimitedDrops.GOLEM_EQUIP.count++;
 		//uses probability tables for demon halls
@@ -96,6 +110,7 @@ public class Golem extends Mob {
 		}
 	}
 
+	/*
 	private boolean teleporting = false;
 	private int selfTeleCooldown = 0;
 	private int enemyTeleCooldown = 0;
@@ -120,24 +135,28 @@ public class Golem extends Mob {
 		enemyTeleCooldown = bundle.getInt( ENEMY_COOLDOWN );
 	}
 
+
+
 	@Override
 	protected boolean act() {
-		selfTeleCooldown--;
-		enemyTeleCooldown--;
+		//selfTeleCooldown--;
+		//enemyTeleCooldown--;
 		if (teleporting){
 			((GolemSprite)sprite).teleParticles(false);
 			if (Actor.findChar(target) == null && Dungeon.level.openSpace[target]) {
 				ScrollOfTeleportation.appear(this, target);
-				selfTeleCooldown = 30;
+				//selfTeleCooldown = 30;
 			} else {
 				target = Dungeon.level.randomDestination(this);
 			}
-			teleporting = false;
+			//teleporting = false;
 			spend(TICK);
 			return true;
 		}
 		return super.act();
 	}
+
+
 
 	public void onZapComplete(){
 		teleportEnemy();
@@ -169,7 +188,7 @@ public class Golem extends Mob {
 			}
 		}
 
-		enemyTeleCooldown = 20;
+		//enemyTeleCooldown = 20;
 	}
 
 	private boolean canTele(int target){
@@ -180,9 +199,12 @@ public class Golem extends Mob {
 			return false;
 		}
 		return true;
+		return false;
 	}
 
-	private class Wandering extends Mob.Wandering{
+	*/
+
+/*	private class Wandering extends Mob.Wandering{
 
 		@Override
 		protected boolean continueWandering() {
@@ -192,10 +214,10 @@ public class Golem extends Mob {
 			if (target != -1 && getCloser( target )) {
 				spend( 1 / speed() );
 				return moveSprite( oldPos, pos );
-			} else if (!Dungeon.bossLevel() && target != -1 && target != pos && selfTeleCooldown <= 0) {
-				((GolemSprite)sprite).teleParticles(true);
-				teleporting = true;
-				spend( 2*TICK );
+//			} else if (!Dungeon.bossLevel() && target != -1 && target != pos && selfTeleCooldown <= 0) {
+//				((GolemSprite)sprite).teleParticles(true);
+//				teleporting = true;
+//				spend( 2*TICK );
 			} else {
 				target = randomDestination();
 				spend( TICK );
@@ -203,7 +225,7 @@ public class Golem extends Mob {
 
 			return true;
 		}
-	}
+	}*/
 
 	private class Hunting extends Mob.Hunting{
 
@@ -220,7 +242,7 @@ public class Golem extends Mob {
 				enemySeen = true;
 				target = enemy.pos;
 
-				int oldPos = pos;
+/*				int oldPos = pos;
 
 				if (distance(enemy) >= 1 && Random.Int(100/distance(enemy)) == 0
 						&& !Char.hasProp(enemy, Property.IMMOVABLE) && canTele(target)){
@@ -245,7 +267,7 @@ public class Golem extends Mob {
 						return true;
 					}
 
-				} else {
+				} else*/ {
 					//attempt to swap targets if the current one can't be reached or teleported
 					return handleUnreachableTarget(enemyInFOV, justAlerted);
 				}

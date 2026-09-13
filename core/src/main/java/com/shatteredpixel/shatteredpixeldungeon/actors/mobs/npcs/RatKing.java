@@ -63,7 +63,15 @@ public class RatKing extends NPC {
 
 	@Override
 	public void damage( int dmg, Object src ) {
-		//do nothing
+		if (state == SLEEPING) {
+			notice();
+			yell( Messages.get(this, "not_sleeping") );
+			state = WANDERING;
+		} else {
+			notice();
+			yell( Messages.get(this, "attack_king") );
+			state = WANDERING;
+		}
 	}
 
 	@Override

@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ArcaneBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
@@ -241,7 +242,9 @@ public class SewerLevel extends RegularLevel {
 
 				case 4:
 					set(pos, Terrain.EMPTY);
-					Dungeon.level.drop( Generator.randomUsingDefaults(Generator.Category.MIS_T1), pos).sprite.drop(pos);
+					Item missile = Generator.randomUsingDefaults(Generator.Category.MIS_T1);
+					missile.quantity(1);
+					Dungeon.level.drop( missile, pos).sprite.drop(pos);
 					break;
 
 				case 5:

@@ -77,6 +77,7 @@ public class PotionOfHealing extends Potion {
 				healing.setHeal(ch.HT, 0, VialOfBlood.maxHealPerTurn(), true);
 				healing.applyVitalityEffect();
 			} else {
+				//Char.healPercent(ch, 100);
 				ch.HP = (int)(ch.HT / RingOfVitality.HealingMultiplier(Dungeon.hero));
 			}
 

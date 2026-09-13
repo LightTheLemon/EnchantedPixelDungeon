@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.GreaterHaste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
@@ -122,7 +123,21 @@ public abstract class Mob extends Char {
 	public AiState WANDERING	= new Wandering();
 	public AiState FLEEING		= new Fleeing();
 	public AiState PASSIVE		= new Passive();
-	public AiState state = SLEEPING;
+
+	public AiState state = initState();
+
+	private AiState initState() {
+		if (Random.Float() < 0.10) {
+			Buff.affect(this, MagicalSleep.class);
+			return SLEEPING;
+		} else if (Random.Float() < 0.20) {
+			return HUNTING;
+		} else {
+			return SLEEPING;
+		}
+	}
+
+	//public AiState state = SLEEPING;
 	
 	public Class<? extends CharSprite> spriteClass;
 	

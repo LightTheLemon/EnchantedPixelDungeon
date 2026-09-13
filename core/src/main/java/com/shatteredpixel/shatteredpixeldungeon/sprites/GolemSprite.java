@@ -64,28 +64,28 @@ public class GolemSprite extends MobSprite {
 	public void link(Char ch) {
 		super.link(ch);
 
-		teleParticles = emitter();
-		teleParticles.autoKill = false;
-		teleParticles.pour(ElmoParticle.FACTORY, 0.05f);
-		teleParticles.on = false;
+//		teleParticles = emitter();
+//		teleParticles.autoKill = false;
+//		teleParticles.pour(ElmoParticle.FACTORY, 0.05f);
+//		teleParticles.on = false;
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		if (teleParticles != null){
-			teleParticles.pos( this );
-			teleParticles.visible = visible;
-		}
+//		if (teleParticles != null){
+//			teleParticles.pos( this );
+//			teleParticles.visible = visible;
+//		}
 	}
 
 	@Override
 	public void kill() {
 		super.kill();
 
-		if (teleParticles != null) {
-			teleParticles.on = false;
-		}
+//		if (teleParticles != null) {
+//			teleParticles.on = false;
+//		}
 	}
 
 	public void teleParticles(boolean value){
@@ -103,6 +103,7 @@ public class GolemSprite extends MobSprite {
 		return 0xFF80706c;
 	}
 
+/*
 	public void zap( int cell ) {
 
 		super.zap( cell );
@@ -121,6 +122,7 @@ public class GolemSprite extends MobSprite {
 				} );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
+*/
 
 	private boolean died = false;
 

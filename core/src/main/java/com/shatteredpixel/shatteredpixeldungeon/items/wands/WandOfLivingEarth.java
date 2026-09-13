@@ -105,7 +105,8 @@ public class WandOfLivingEarth extends DamageWand {
 		//shooting at the guardian
 		if (guardian != null && guardian == ch){
 			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
-			guardian.setInfo(curUser, buffedLvl(), armorToAdd);
+			guardian.setInfo(curUser, buffedLvl(), armorToAdd * 2);
+			System.out.println("armorToAdd * 2: " + armorToAdd * 2);
 			wandProc(guardian, chargesPerCast());
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.9f * Random.Float(0.87f, 1.15f) );
 

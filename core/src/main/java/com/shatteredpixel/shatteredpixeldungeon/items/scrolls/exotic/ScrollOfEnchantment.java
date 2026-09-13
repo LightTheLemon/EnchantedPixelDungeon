@@ -124,9 +124,11 @@ public class ScrollOfEnchantment extends ExoticScroll {
 				final Weapon.Enchantment enchants[] = new Weapon.Enchantment[3];
 				
 				Class<? extends Weapon.Enchantment> existing = ((Weapon) item).enchantment != null ? ((Weapon) item).enchantment.getClass() : null;
-				enchants[0] = Weapon.Enchantment.randomCommon( existing );
-				enchants[1] = Weapon.Enchantment.randomUncommon( existing );
-				enchants[2] = Weapon.Enchantment.random( existing, enchants[0].getClass(), enchants[1].getClass());
+				enchants[0] = Weapon.Enchantment.random( existing );
+				enchants[1] = Weapon.Enchantment.random( existing );
+				enchants[2] = Weapon.Enchantment.random( existing );
+				//enchants[0].getClass(), enchants[1].getClass()
+				//you can now get duplicate enchant selections. Too bad!
 
 				GameScene.show(new WndEnchantSelect((Weapon) item, enchants[0], enchants[1], enchants[2]));
 			

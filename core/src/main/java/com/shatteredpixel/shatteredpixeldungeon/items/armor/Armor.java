@@ -422,7 +422,7 @@ public class Armor extends EquipableItem {
 		
 		if (owner instanceof Hero){
 			int aEnc = STRReq() - ((Hero) owner).STR();
-			if (aEnc > 0) evasion /= Math.pow(1.2, aEnc);
+			if (aEnc > 0) evasion /= (float) Math.pow(1.6, aEnc);
 
 			int exStr = -aEnc;
 			if (exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
@@ -442,7 +442,7 @@ public class Armor extends EquipableItem {
 		
 		if (owner instanceof Hero) {
 			int aEnc = STRReq() - ((Hero) owner).STR();
-			if (aEnc > 0) speed /= Math.pow(1.4, aEnc);
+			if (aEnc > 0) speed /= (float) Math.pow(1.5, aEnc);
 		}
 		return speed;
 		

@@ -40,8 +40,8 @@ public class DM200 extends Mob {
 	{
 		spriteClass = DM200Sprite.class;
 
-		HP = HT = 80;
-		defenseSkill = 12;
+		HP = HT = 90;
+		defenseSkill = 10;
 
 		EXP = 9;
 		maxLvl = 17;
@@ -87,7 +87,7 @@ public class DM200 extends Mob {
 		}
 	}
 
-	private int ventCooldown = 0;
+	private int ventCooldown = 2;
 
 	private static final String VENT_COOLDOWN = "vent_cooldown";
 
@@ -116,14 +116,14 @@ public class DM200 extends Mob {
 
 	private void zap( ){
 		spend( TICK );
-		ventCooldown = 30;
+		ventCooldown = 6;
 
 		Ballistica trajectory = new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET);
 
 		for (int i : trajectory.subPath(0, trajectory.dist)){
-			GameScene.add(Blob.seed(i, 20, ToxicGas.class));
+			GameScene.add(Blob.seed(i, 5, ToxicGas.class));
 		}
-		GameScene.add(Blob.seed(trajectory.collisionPos, 100, ToxicGas.class));
+		GameScene.add(Blob.seed(trajectory.collisionPos, 15, ToxicGas.class));
 
 	}
 

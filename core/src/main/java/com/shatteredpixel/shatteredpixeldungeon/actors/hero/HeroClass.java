@@ -69,6 +69,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfMastery;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -229,14 +230,17 @@ public enum HeroClass {
 
 		// TODO: remove these
 
+		Pickaxe pickaxe = new Pickaxe();
+		pickaxe.collect();
+
 		//AmuletShard amulet = new AmuletShard();
 		//amulet.collect();
 
 		//BurningSage sage = new BurningSage();
 		//sage.collect();
 
-		//RingOfVitality vitality = new RingOfVitality();
-		//vitality.identify().collect();
+		RingOfVitality vitality = new RingOfVitality();
+		vitality.identify().collect();
 
 		//RingOfMana mana = new RingOfMana();
 		//mana.identify().collect();

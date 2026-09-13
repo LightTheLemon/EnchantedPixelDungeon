@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -57,6 +58,15 @@ public class Warlock extends Mob {
 		lootChance = 0.5f;
 
 		properties.add(Property.UNDEAD);
+	}
+
+	@Override
+	public void damage( int dmg, Object src ) {
+		if (src != null && AntiMagic.RESISTS.contains(src.getClass())) {
+			dmg *= (int) 1.5f;
+		}
+
+		super.damage(dmg, src);
 	}
 	
 	@Override

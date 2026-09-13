@@ -73,7 +73,7 @@ public class PhantomPiranha extends Piranha {
 						teleportAway();
 					}
 				}
-			} else {
+			} else if (dmg > Dungeon.scalingDepth()) {
 				teleportAway();
 			}
 		}

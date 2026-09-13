@@ -380,7 +380,7 @@ abstract public class MissileWeapon extends Weapon {
 	}
 
 	public int defaultQuantity(){
-		return 3;
+		return Random.Int(2) + 2;
 	}
 
 	//mainly used to track warnings relating to throwing the last upgraded one, not super accurate

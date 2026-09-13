@@ -245,6 +245,10 @@ public abstract class Char extends Actor {
 			return false;
 		}
 	}
+
+	public static void healPercent (Char c, float percent) {
+
+	}
 	
 	//swaps places by default
 	public boolean interact(Char c){
@@ -903,6 +907,8 @@ public abstract class Char extends Actor {
 		}
 		if (this.buff(MagicalSleep.class) != null){
 			Buff.detach(this, MagicalSleep.class);
+			//Do I want to buff magical sleep?
+			Buff.affect(this, Sleep.class);
 		}
 		if (this.buff(Doom.class) != null && !isImmune(Doom.class)){
 			damage *= 1.67f;
@@ -912,9 +918,9 @@ public abstract class Char extends Actor {
 		}
 
 		if ( Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null ) {
-			damage = Math.max(1, damage * 0.35f);
-			//Buff.affect(this, Bleeding.class).set(dmg * 0.65f);
-			Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.65f);
+			damage = Math.max(1, damage * 0.30f);
+			Buff.affect(this, Bleeding.class).set(dmg * 0.70f);
+			//Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.70f);
 
 		}
 

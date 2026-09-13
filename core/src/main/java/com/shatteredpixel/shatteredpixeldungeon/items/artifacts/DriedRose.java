@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -596,7 +597,7 @@ public class DriedRose extends Artifact {
 			
 			//same dodge as the hero
 			defenseSkill = (Dungeon.hero.lvl+4);
-			if (rose != null) {
+			if (rose != null && rose.armor != null) {
 				int aEnc = rose.armor.STRReq() - rose.ghostStrength();
 				if (aEnc > 0) {
 					defenseSkill /= (int) Math.pow(1.2, aEnc);
@@ -670,7 +671,7 @@ public class DriedRose extends Artifact {
 			int dmg = 0;
 			if (weapon() != null){
 				dmg += weapon().damageRoll(this);
-				if (rose != null){
+				if (rose != null && rose.weapon != null){
 					int excessStr = rose.ghostStrength()-weapon().STRReq();
 					if (excessStr > 0){
 						dmg += Random.NormalIntRange(0, excessStr);
@@ -726,7 +727,7 @@ public class DriedRose extends Artifact {
 				speed *= 2;
 			}
 
-			if (rose != null) {
+			if (rose != null && rose.armor != null) {
 				int aEnc = rose.armor.STRReq() - rose.ghostStrength();
 				if (aEnc > 0) {
 					speed /= (int) Math.pow(1.4, aEnc);
@@ -751,11 +752,26 @@ public class DriedRose extends Artifact {
 		public int drRoll() {
 			int dr = super.drRoll();
 			if (armor() != null){
-				dr += Random.NormalIntRange( armor().DRMin(), armor().DRMax());
+				//dr += Random.NormalIntRange( armor().DRMin(), armor().DRMax());
+
+				int armDr = Random.NormalIntRange( armor().DRMin(), armor().DRMax());
+				if (rose.ghostStrength() < armor().STRReq()){
+					armDr -= (int) (1.25f*(armor().STRReq() - rose.ghostStrength()));
+				}
+				if (armDr > 0) dr += armDr;
+
 			}
 			if (weapon() != null){
-				dr += Random.NormalIntRange( 0, weapon().defenseFactor( this ));
+				//dr += Random.NormalIntRange( 0, weapon().defenseFactor( this ));
+
+				int wepDr = Random.NormalIntRange( 0 , weapon().defenseFactor( this ) );
+				if (rose.ghostStrength() < ((Weapon)weapon()).STRReq()){
+					wepDr -= (int) (1.25f*(((Weapon)weapon()).STRReq() - rose.ghostStrength()));
+				}
+				if (wepDr > 0) dr += wepDr;
+
 			}
+
 			return dr;
 		}
 

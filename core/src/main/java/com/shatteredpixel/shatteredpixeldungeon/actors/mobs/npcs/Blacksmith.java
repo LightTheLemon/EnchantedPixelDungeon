@@ -464,15 +464,14 @@ public class Blacksmith extends NPC {
 
 			Statistics.questScores[2] += favor;
 
-			if (favor >= 2500){
-				freePickaxe = true;
-			}
+//			if (favor >= 2500){
+//				freePickaxe = true;
+//			}
 		}
 
 		public static boolean rewardsAvailable(){
 			return favor > 0
-					|| (Quest.smithRewards != null && Quest.smiths > 0)
-					|| (pickaxe != null && freePickaxe);
+					|| (Quest.smithRewards != null && Quest.smiths > 0);
 		}
 
 	}

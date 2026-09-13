@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
@@ -286,7 +287,7 @@ public abstract class Level implements Bundlable {
 						feeling = Feeling.SECRETS;
 						break;
 					default:
-						//now that multiple trinkets are a thing, i'm removing the else-if logic from before
+						//now that multiple trinkets are a thing, I'm removing the else-if logic from before
 						feeling = Feeling.NONE;
                         float mossyChance = Random.Float();
                         float trapMechChance = Random.Float();
@@ -773,7 +774,16 @@ public abstract class Level implements Bundlable {
 
 		Mob mob = createMob();
 		if (mob.state != mob.PASSIVE) {
-			mob.state = mob.WANDERING;
+			//TODO: trinket could affect this like amulet shard
+			if (Random.Float() < 0.25) {
+				mob.state = mob.SLEEPING;
+			} else if (Random.Float() < 0.15) {
+				mob.state = mob.SLEEPING;
+				Buff.affect(mob, MagicalSleep.class);
+			} else {
+				mob.state = mob.WANDERING;
+			}
+
 		}
 		int tries = 30;
 		do {

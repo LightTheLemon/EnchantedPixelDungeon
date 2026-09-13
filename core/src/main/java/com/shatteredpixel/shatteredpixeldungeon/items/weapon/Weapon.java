@@ -539,9 +539,9 @@ abstract public class Weapon extends KindOfWeapon {
 		};
 
 		public static final float[] typeChances = new float[]{
-				50, //10% each
-				40, //5%  each
-				10  //2.5% each
+				45, //9% each
+				40, //4%  each
+				15  //3.75% each
 		};
 
 		public static final Class<?>[] curses = new Class<?>[]{

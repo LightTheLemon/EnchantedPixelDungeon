@@ -115,6 +115,7 @@ public class MagicalSleep extends Buff {
 			((Hero) target).resting = false;
 		} else if (target instanceof Mob && target.alignment == Char.Alignment.ALLY && ((Mob) target).state == ((Mob) target).SLEEPING){
 			((Mob) target).state = ((Mob) target).WANDERING;
+			//Buff.affect(target, Sleep.class);
 		}
 		super.detach();
 	}

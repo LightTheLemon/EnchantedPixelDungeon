@@ -21,15 +21,20 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.PathFinder;
@@ -59,8 +64,17 @@ public class Blooming extends Weapon.Enchantment {
 			} else {
 				plants = (float)Math.floor(plants);
 			}
+
+			if (Dungeon.level.map[defender.pos] == Terrain.HIGH_GRASS) {
+				if (Dungeon.level.adjacent(defender.pos, attacker.pos)) {
+					Buff.affect(defender, Roots.class, 5f);
+				} else {
+					Buff.affect(defender, Roots.class, 1f);
+				}
+			}
 			
 			if (plantGrass(defender.pos)){
+				//Buff.affect(defender, Roots.class, 1f);
 				plants--;
 				if (plants <= 0){
 					return damage;
@@ -101,9 +115,12 @@ public class Blooming extends Weapon.Enchantment {
 				&& Dungeon.level.plants.get(cell) == null){
 			if (!Regeneration.regenOn()){
 				Level.set(cell, Terrain.FURROWED_GRASS);
+			} else if (Random.Float() < 0.2 * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero) && !Dungeon.isChallenged(Challenges.NO_HERBALISM)) {
+				((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED)).couch(cell, null);
 			} else {
 				Level.set(cell, Terrain.HIGH_GRASS);
 			}
+
 			GameScene.updateMap(cell);
 			CellEmitter.get( cell ).burst( LeafParticle.LEVEL_SPECIFIC, 4 );
 			return true;

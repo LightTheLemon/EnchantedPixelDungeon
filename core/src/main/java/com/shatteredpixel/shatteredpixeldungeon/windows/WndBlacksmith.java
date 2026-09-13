@@ -76,7 +76,7 @@ public class WndBlacksmith extends Window {
 
 		ArrayList<RedButton> buttons = new ArrayList<>();
 
-		int pickaxeCost = Blacksmith.Quest.freePickaxe ? 0 : 250;
+		int pickaxeCost = 1000;
 		RedButton pickaxe = new RedButton(Messages.get(this, "pickaxe", pickaxeCost), 6){
 			@Override
 			protected void onClick() {
@@ -110,7 +110,7 @@ public class WndBlacksmith extends Window {
 		pickaxe.enable(Blacksmith.Quest.pickaxe != null && Blacksmith.Quest.favor >= pickaxeCost);
 		buttons.add(pickaxe);
 
-		int reforgecost = 500 + 1000*Blacksmith.Quest.reforges;
+		int reforgecost = 500 + 500*Blacksmith.Quest.reforges;
 		RedButton reforge = new RedButton(Messages.get(this, "reforge", reforgecost), 6){
 			@Override
 			protected void onClick() {
@@ -120,7 +120,7 @@ public class WndBlacksmith extends Window {
 		reforge.enable(Blacksmith.Quest.favor >= reforgecost);
 		buttons.add(reforge);
 
-		int hardenCost = 500 + 1000*Blacksmith.Quest.hardens;
+		int hardenCost = 500 + 500*Blacksmith.Quest.hardens;
 		RedButton harden = new RedButton(Messages.get(this, "harden", hardenCost), 6){
 			@Override
 			protected void onClick() {
@@ -130,7 +130,7 @@ public class WndBlacksmith extends Window {
 		harden.enable(Blacksmith.Quest.favor >= hardenCost);
 		buttons.add(harden);
 
-		int upgradeCost = 1000 + 1000*Blacksmith.Quest.upgrades;
+		int upgradeCost = 1000 + 500*Blacksmith.Quest.upgrades;
 		RedButton upgrade = new RedButton(Messages.get(this, "upgrade", upgradeCost), 6){
 			@Override
 			protected void onClick() {
@@ -154,7 +154,7 @@ public class WndBlacksmith extends Window {
 					protected void onSelect(int index) {
 						if (index == 0){
 							Blacksmith.Quest.favor -= 2000;
-							Blacksmith.Quest.smiths++;
+							//Blacksmith.Quest.smiths++;
 							WndBlacksmith.this.hide();
 							GameScene.show(new WndSmith(troll, hero));
 						}

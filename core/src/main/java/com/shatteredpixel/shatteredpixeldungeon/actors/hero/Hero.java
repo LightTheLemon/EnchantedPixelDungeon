@@ -55,6 +55,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
@@ -159,6 +160,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWea
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
+import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -269,6 +271,7 @@ public class Hero extends Char {
 		int curHT = HT;
 		
 		HT = 20 + 5*(lvl-1) + HTBoost;
+
 		float multiplier = RingOfVitality.HTMultiplier(this);
 		HT = Math.round(multiplier * HT);
 		
@@ -521,17 +524,7 @@ public class Hero extends Char {
 				buff(Talent.LiquidAgilACCTracker.class).detach();
 			}
 		}
-		/*
-		if (result) {
-			PhantomStopwatch watch = belongings.getItem(PhantomStopwatch.class);
-			PhantomStopwatch.timeFreeze buff = buff(PhantomStopwatch.timeFreeze.class);
 
-			if (watch != null &&  buff != null) {
-				//watch.attackCost(1); //just in case i want to change it later
-			}
-		}
-
-		 */
 		return result;
 	}
 
@@ -674,14 +667,14 @@ public class Hero extends Char {
 		if (belongings.armor() != null) {
 			int armDr = Random.NormalIntRange( belongings.armor().DRMin(), belongings.armor().DRMax());
 			if (STR() < belongings.armor().STRReq()){
-				armDr -= 2*(belongings.armor().STRReq() - STR());
+				armDr -= (int) (1.25f*(belongings.armor().STRReq() - STR()));
 			}
 			if (armDr > 0) dr += armDr;
 		}
 		if (belongings.weapon() != null && !RingOfForce.fightingUnarmed(this))  {
 			int wepDr = Random.NormalIntRange( 0 , belongings.weapon().defenseFactor( this ) );
 			if (STR() < ((Weapon)belongings.weapon()).STRReq()){
-				wepDr -= 2*(((Weapon)belongings.weapon()).STRReq() - STR());
+				wepDr -= (int) (1.25f*(((Weapon)belongings.weapon()).STRReq() - STR()));
 			}
 			if (wepDr > 0) dr += wepDr;
 		}
@@ -1283,7 +1276,8 @@ public class Hero extends Char {
 	}
 
 	private boolean actBreakBarrel (HeroAction.BreakBarrel action) {
-		if (Dungeon.level.adjacent( pos, action.dst) && Dungeon.level.map[action.dst] == Terrain.REGION_DECO_ALT) {
+		if ((Dungeon.level.adjacent( pos, action.dst) && Dungeon.level.map[action.dst] == Terrain.REGION_DECO_ALT) ||
+			(Dungeon.level.adjacent( pos, action.dst) && Dungeon.level.map[action.dst] == Terrain.REGION_DECO && hero.STR > 12)) {
 
 			path = null;
 			sprite.attack( pos );
@@ -1377,7 +1371,7 @@ public class Hero extends Char {
 					|| Dungeon.level.map[action.dst] == Terrain.WALL_DECO
 					|| Dungeon.level.map[action.dst] == Terrain.MINE_CRYSTAL
 					|| Dungeon.level.map[action.dst] == Terrain.MINE_BOULDER)
-				&& Dungeon.level.insideMap(action.dst)){
+					&& Dungeon.level.insideMap(action.dst)){
 				sprite.attack(action.dst, new Callback() {
 					@Override
 					public void call() {
@@ -1392,35 +1386,92 @@ public class Hero extends Char {
 
 						//1 hunger spent total
 						if (Dungeon.level.map[action.dst] == Terrain.WALL_DECO){
-							DarkGold gold = new DarkGold();
-							if (gold.doPickUp( Dungeon.hero )) {
-								DarkGold existing = Dungeon.hero.belongings.getItem(DarkGold.class);
-								if (existing != null && existing.quantity()%5 == 0){
-									if (existing.quantity() >= 40) {
-										GLog.p(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
-									} else {
-										GLog.i(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+							//only mine gold in CavesLevel
+							// Dungeon.depth < 16 && Dungeon.depth > 10
+							if (Dungeon.level instanceof CavesLevel) {
+								DarkGold gold = new DarkGold();
+								if (gold.doPickUp( Dungeon.hero )) {
+									DarkGold existing = Dungeon.hero.belongings.getItem(DarkGold.class);
+									if (existing != null && existing.quantity()%5 == 0){
+										if (existing.quantity() >= 40) {
+											GLog.p(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+										} else {
+											GLog.i(Messages.get(DarkGold.class, "you_now_have", existing.quantity()));
+										}
 									}
+									spend(-Actor.TICK); //picking up the gold doesn't spend a turn here
+								} else {
+									Dungeon.level.drop( gold, pos ).sprite.drop();
 								}
-								spend(-Actor.TICK); //picking up the gold doesn't spend a turn here
-							} else {
-								Dungeon.level.drop( gold, pos ).sprite.drop();
+								CellEmitter.center( action.dst ).burst( Speck.factory( Speck.STAR ), 5 );
 							}
-							PixelScene.shake(0.5f, 0.5f);
-							CellEmitter.center( action.dst ).burst( Speck.factory( Speck.STAR ), 7 );
-							Sample.INSTANCE.play( Assets.Sounds.EVOKE );
-							Level.set( action.dst, Terrain.EMPTY_DECO );
+
+							if (Dungeon.depth < 16 && Dungeon.depth > 10) {
+								PixelScene.shake(0.5f, 0.5f);
+								Sample.INSTANCE.play( Assets.Sounds.EVOKE );
+								Level.set( action.dst, Terrain.EMPTY_DECO );
+							} else {
+								PixelScene.shake(0.5f, 0.5f);
+								Sample.INSTANCE.play( Assets.Sounds.MINE );
+								Level.set( action.dst, Terrain.EMPTY );
+
+							}
+
 
 							//mining gold doesn't break crystals
 							crystalAdjacent = false;
 
-						//4 hunger spent total
 						} else if (Dungeon.level.map[action.dst] == Terrain.WALL){
-							buff(Hunger.class).affectHunger(-3);
-							PixelScene.shake(0.5f, 0.5f);
-							CellEmitter.get( action.dst ).burst( Speck.factory( Speck.ROCK ), 2 );
-							Sample.INSTANCE.play( Assets.Sounds.MINE );
-							Level.set( action.dst, Terrain.EMPTY_DECO );
+
+							boolean canMine = true;
+
+							//mining restrictions
+							for (int i : PathFinder.NEIGHBOURS8) {
+								if (Dungeon.level.map[action.dst + i] == Terrain.DOOR ||
+									Dungeon.level.map[action.dst + i] == Terrain.LOCKED_DOOR ||
+									Dungeon.level.map[action.dst + i] == Terrain.CRYSTAL_DOOR ||
+									Dungeon.level.map[action.dst + i] == Terrain.OPEN_DOOR ||
+									Dungeon.level.map[action.dst + i] == Terrain.SECRET_DOOR ||
+									Dungeon.level.map[action.dst + i] == Terrain.BARRICADE ||
+									Dungeon.depth % 5 == 0){
+									//TODO: add same check for ethereal chains boundary break
+									canMine = false;
+									break;
+								}
+							}
+
+							//check all tiles around. if all but one are walls, can't mine
+							int wallCount = 0;
+							for (int i: PathFinder.NEIGHBOURS8) {
+								if (Dungeon.level.map[action.dst + i] == Terrain.WALL) {
+									wallCount++;
+									System.out.println("wallCount: " + wallCount);
+									if (wallCount > 6) {
+										canMine = false;
+										break;
+									}
+								}
+							}
+
+							//3 hunger spent total
+							if (canMine) {
+								buff(Hunger.class).affectHunger(-2);
+								PixelScene.shake(0.5f, 0.5f);
+								CellEmitter.get( action.dst ).burst( Speck.factory( Speck.ROCK ), 2 );
+								Sample.INSTANCE.play( Assets.Sounds.MINE );
+								if (Dungeon.depth < 16 && Dungeon.depth > 10) {
+									Level.set( action.dst, Terrain.EMPTY_DECO );
+								} else {
+									if (Random.Float() < 0.2f) {
+										Level.set( action.dst, Terrain.EMPTY_DECO );
+									} else {
+										Level.set( action.dst, Terrain.EMPTY );
+									}
+								}
+							} else {
+								CellEmitter.get( action.dst ).burst( Speck.factory( Speck.ROCK ), 1 );
+								Sample.INSTANCE.play( Assets.Sounds.EVOKE, 0.99f, 1.1f );
+							}
 
 						//1 hunger spent total
 						} else if (Dungeon.level.map[action.dst] == Terrain.MINE_CRYSTAL){
@@ -2028,14 +2079,17 @@ public class Hero extends Char {
 			}
 
 		//removed "Dungeon.level instanceof MiningLevel" check
-		//TODO perhaps only trigger this if hero is already adjacent? reducing mistaps
-		} else if (belongings.getItem(Pickaxe.class) != null &&
-				(Dungeon.level.map[cell] == Terrain.WALL
+		} else if (belongings.getItem(Pickaxe.class) != null && (
+				Dungeon.level.map[cell] == Terrain.WALL
 				|| Dungeon.level.map[cell] == Terrain.WALL_DECO
 				|| Dungeon.level.map[cell] == Terrain.MINE_CRYSTAL
 				|| Dungeon.level.map[cell] == Terrain.MINE_BOULDER)){
 
-			curAction = new HeroAction.Mine( cell );
+			if (Dungeon.level.adjacent(pos, cell)) {
+				curAction = new HeroAction.Mine( cell );
+			} else {
+				curAction = new HeroAction.Move( cell );
+			}
 
 		} else if (Dungeon.level.map[cell] == Terrain.REGION_DECO_ALT &&
 						Dungeon.depth < 6 ) {
