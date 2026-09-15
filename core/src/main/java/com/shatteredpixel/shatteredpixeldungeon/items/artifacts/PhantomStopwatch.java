@@ -54,10 +54,10 @@ import java.util.ArrayList;
 public class PhantomStopwatch extends Artifact {
 
 	{
-		image = ItemSpriteSheet.ARTIFACT_WATCH;
+		image = ItemSpriteSheet.ARTIFACT_WATCH1;
 
 		levelCap = 10;
-		charge = 10+(level() * 2); //value of each charge is decreased
+		charge = 10+(level() * 2);
 
 		partialCharge = 0;
 		chargeCap = 10+(level() * 2);
@@ -152,7 +152,7 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.20f*amount;
+			partialCharge += 0.25f*amount;
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -167,6 +167,18 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public Item upgrade() {
 		chargeCap = Math.min(chargeCap + 2, 25);
+
+		switch (level() % 3) {
+			case 0:
+				image = ItemSpriteSheet.ARTIFACT_WATCH1;
+				break;
+			case 1:
+				image = ItemSpriteSheet.ARTIFACT_WATCH2;
+				break;
+			case 2:
+				image = ItemSpriteSheet.ARTIFACT_WATCH3;
+				break;
+		}
 
 		return super.upgrade();
 	}
@@ -219,7 +231,9 @@ public class PhantomStopwatch extends Artifact {
 					&& target.buff(MagicImmune.class) == null
 					&& Regeneration.regenOn()
 					&& activeBuff == null) {
-				float chargeGain = 1 / (100f - charge*5f); // was (100f - (chargeCap - charge)*3f)
+				float chargeGain = 1f / 50f;
+				// or (100f - (chargeCap - charge)*3f) for charging faster as charge increases
+				// or  1 / (100f - charge*5f);
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
 
@@ -233,7 +247,6 @@ public class PhantomStopwatch extends Artifact {
 				}
 			} else if (cursed && Random.Int(10) == 0)
 				((Hero) target).spend( TICK );
-
 
 			int lvlDiffFromTarget = ((Hero) target).lvl - (1+level()*2);
 

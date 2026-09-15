@@ -918,9 +918,9 @@ public abstract class Char extends Actor {
 		}
 
 		if ( Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null ) {
-			damage = Math.max(1, damage * 0.30f);
-			Buff.affect(this, Bleeding.class).set(dmg * 0.70f);
-			//Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.70f);
+			damage = Math.max(1, damage * 0.20f);
+			Buff.affect(this, Bleeding.class).set(dmg * 0.40f);
+			Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.40f);
 
 		}
 

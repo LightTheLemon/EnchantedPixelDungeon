@@ -464,7 +464,9 @@ public class ItemSpriteSheet {
 	public static final int ARTIFACT_ROSE3      = ARTIFACTS+22;
 	public static final int ARTIFACT_TOME       = ARTIFACTS+23;
 	public static final int ARTIFACT_KEY        = ARTIFACTS+24;
-	public static final int ARTIFACT_WATCH      = ARTIFACTS+25;
+	public static final int ARTIFACT_WATCH1      = ARTIFACTS+25;
+	public static final int ARTIFACT_WATCH2      = ARTIFACTS+26;
+	public static final int ARTIFACT_WATCH3      = ARTIFACTS+27;
 
 	static{
 		assignItemRect(ARTIFACT_CLOAK,      9,  15);
@@ -492,7 +494,11 @@ public class ItemSpriteSheet {
 		assignItemRect(ARTIFACT_ROSE3,      14, 14);
 		assignItemRect(ARTIFACT_TOME,       14, 16);
 		assignItemRect(ARTIFACT_KEY,        8,  16);
-		assignItemRect(ARTIFACT_WATCH,      12,  16);
+		assignItemRect(ARTIFACT_WATCH1,     12, 16);
+		assignItemRect(ARTIFACT_WATCH2,     12, 16);
+		assignItemRect(ARTIFACT_WATCH3,     12, 16);
+
+
 	}
 
 	private static final int TRINKETS        =                               xy(1, 18);  //32 slots
@@ -553,7 +559,7 @@ public class ItemSpriteSheet {
 	public static final int ARCANE_RESIN    = SCROLLS+13;
 	static {
 		for (int i = SCROLLS; i < SCROLLS+16; i++)
-			assignItemRect(i, 15, 14);
+			assignItemRect(i, 15, 15);
 		assignItemRect(ARCANE_RESIN   , 12, 11);
 	}
 	

@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.audio.Sample;
@@ -48,6 +49,21 @@ public class GeyserTrap extends Trap {
 		shape = DIAMOND;
 
 		showWarning = false;
+	}
+
+	//Same method but without repeating the show warning
+	@Override
+	public void trigger() {
+		if (active) {
+			if (Dungeon.level.heroFOV[pos]) {
+				Sample.INSTANCE.play(Assets.Sounds.TRAP);
+			}
+			if (disarmedByActivation) disarm();
+			Dungeon.level.discover(pos);
+			Bestiary.setSeen(getClass());
+			Bestiary.countEncounter(getClass());
+			activate();
+		}
 	}
 
 	public int centerKnockBackDirection = -1;

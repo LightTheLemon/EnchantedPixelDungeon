@@ -51,7 +51,7 @@ public class TimekeepersHourglass extends Artifact {
 	{
 		image = ItemSpriteSheet.ARTIFACT_HOURGLASS;
 
-		levelCap = 5;
+		levelCap = 10;
 
 		charge = 10+(level() * 3);
 		partialCharge = 0;
@@ -60,6 +60,8 @@ public class TimekeepersHourglass extends Artifact {
 		defaultAction = AC_ACTIVATE;
 	}
 
+	public static int consecutiveUses = 0;
+
 	@Override
 	public void resetForTrinity(int visibleLevel) {
 		super.resetForTrinity(visibleLevel);
@@ -67,7 +69,6 @@ public class TimekeepersHourglass extends Artifact {
 	}
 
 	public static final String AC_ACTIVATE = "ACTIVATE";
-	public static final String AC_LONG_STASIS = "LONG_STASIS";
 
 	//keeps track of generated sandbags.
 	public int sandBags = 0;
@@ -80,7 +81,6 @@ public class TimekeepersHourglass extends Artifact {
 				&& hero.buff(MagicImmune.class) == null
 				&& (charge > 0 || activeBuff != null)) {
 			actions.add(AC_ACTIVATE);
-			actions.add(AC_LONG_STASIS);
 		}
 		return actions;
 	}
@@ -105,29 +105,7 @@ public class TimekeepersHourglass extends Artifact {
 			else if (cursed)                GLog.i( Messages.get(this, "cursed") );
 			else {
 				GLog.i(Messages.get(TimekeepersHourglass.class, "onstasis"));
-				GameScene.flash(0x80FFFFFF);
-				Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
-
-				activeBuff = new timeStasis();
-				Talent.onArtifactUsed(Dungeon.hero);
-				activeBuff.attachTo(Dungeon.hero);
-			}
-		}
-		/*
-		if (action.equals(AC_LONG_STASIS)){
-
-			if (!isEquipped( hero ))        GLog.i( Messages.get(Artifact.class, "need_to_equip") );
-			else if (activeBuff != null) {
-				if (activeBuff instanceof timeStasis) { //do nothing
-				} else {
-					activeBuff.detach();
-					GLog.i( Messages.get(this, "deactivate") );
-				}
-			} else if (charge <= 0)         GLog.i( Messages.get(this, "no_charge") );
-			else if (cursed)                GLog.i( Messages.get(this, "cursed") );
-			else {
-				GLog.i(Messages.get(TimekeepersHourglass.class, "onstasis"));
-				GameScene.flash(0x80FFFFFF);
+				//GameScene.flash(0x80FFFFFF);
 				Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
 				activeBuff = new timeStasis();
@@ -136,7 +114,6 @@ public class TimekeepersHourglass extends Artifact {
 			}
 		}
 
-		 */
 
 
 	}
@@ -164,7 +141,7 @@ public class TimekeepersHourglass extends Artifact {
 	protected ArtifactBuff passiveBuff() {
 		return new hourglassRecharge();
 	}
-	
+
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
@@ -267,10 +244,10 @@ public class TimekeepersHourglass extends Artifact {
 	}
 
 	public class timeStasis extends ArtifactBuff {
-		
+
 		{
 			type = buffType.POSITIVE;
-			actPriority = BUFF_PRIO+3; //acts after all other buffs, so they are prevented
+			actPriority = BUFF_PRIO-3;
 		}
 
 		@Override
@@ -278,17 +255,16 @@ public class TimekeepersHourglass extends Artifact {
 
 			if (super.attachTo(target)) {
 
-				//Invisibility.dispel();
+				Invisibility.dispel();
 
-				int usedCharge = 0; //was Math.min(charge, 2). should just use one charge
-
-				//buffs always act last, so the stasis buff should end a turn early.
-				spend(usedCharge); //was 5*usedcharge
+				//Duration of stasis increases with consecutive use
+				int stasisTurns = consecutiveUses / 2;
+				spend( stasisTurns );
 
 				//shouldn't punish the player for going into stasis frequently
 				Hunger hunger = Buff.affect(target, Hunger.class);
-				if (hunger != null && !hunger.isStarving()) {
-					hunger.satisfy(usedCharge); //was 5*usedcharge
+				if ( !hunger.isStarving()) { //removed hunger != null && to test
+					hunger.satisfy(stasisTurns);
 				}
 
 				charge -= 1;
@@ -302,6 +278,11 @@ public class TimekeepersHourglass extends Artifact {
 				if (Dungeon.hero != null) {
 					Dungeon.observe();
 				}
+
+				consecutiveUses += 1;
+
+				System.out.println("consecutive uses (hourglass): " + consecutiveUses);
+
 
 				return true;
 			} else {

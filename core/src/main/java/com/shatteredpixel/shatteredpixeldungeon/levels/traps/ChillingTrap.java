@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
@@ -39,6 +40,21 @@ public class ChillingTrap extends Trap{
 		color = WHITE;
 		shape = DOTS;
 		if (Dungeon.depth < 10) showWarning = false;
+	}
+
+	@Override
+	public void trigger() {
+		if (Dungeon.depth >= 10) showWarning = true;
+		if (active) {
+			if (Dungeon.level.heroFOV[pos]) {
+				Sample.INSTANCE.play(Assets.Sounds.TRAP);
+			}
+			if (disarmedByActivation) disarm();
+			Dungeon.level.discover(pos);
+			Bestiary.setSeen(getClass());
+			Bestiary.countEncounter(getClass());
+			activate();
+		}
 	}
 
 	@Override

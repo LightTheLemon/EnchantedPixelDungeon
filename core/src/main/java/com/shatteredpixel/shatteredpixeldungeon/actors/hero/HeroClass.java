@@ -230,8 +230,8 @@ public enum HeroClass {
 
 		// TODO: remove these
 
-		Pickaxe pickaxe = new Pickaxe();
-		pickaxe.collect();
+		//Pickaxe pickaxe = new Pickaxe();
+		//pickaxe.collect();
 
 		//AmuletShard amulet = new AmuletShard();
 		//amulet.collect();
@@ -239,8 +239,8 @@ public enum HeroClass {
 		//BurningSage sage = new BurningSage();
 		//sage.collect();
 
-		RingOfVitality vitality = new RingOfVitality();
-		vitality.identify().collect();
+		//RingOfVitality vitality = new RingOfVitality();
+		//vitality.identify().collect();
 
 		//RingOfMana mana = new RingOfMana();
 		//mana.identify().collect();
@@ -276,15 +276,15 @@ public enum HeroClass {
 		//WandOfCharm charm = new WandOfCharm();
 		//charm.identify().collect();
 
-		//PhantomStopwatch watch = new PhantomStopwatch();
-		//watch.identify().collect();
+		PhantomStopwatch watch = new PhantomStopwatch();
+		watch.identify().collect();
 
 		//ScrollOfEnchantment ench = new ScrollOfEnchantment();
 		//ench.quantity(10);
 		//ench.identify().collect();
 
-		//TimekeepersHourglass time = new TimekeepersHourglass();
-		//time.identify().collect();
+		TimekeepersHourglass time = new TimekeepersHourglass();
+		time.identify().collect();
 
 		//ThrowingStone stones = new ThrowingStone();
 		//stones.identify().collect();

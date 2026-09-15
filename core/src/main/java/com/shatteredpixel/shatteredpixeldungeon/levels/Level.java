@@ -772,12 +772,13 @@ public abstract class Level implements Bundlable {
 	public boolean spawnMob(int disLimit){
 		PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.or(passable, avoid, null));
 
+		float spawnChance = Random.Float();
 		Mob mob = createMob();
 		if (mob.state != mob.PASSIVE) {
 			//TODO: trinket could affect this like amulet shard
-			if (Random.Float() < 0.25) {
+			if (spawnChance < 0.1f) {
 				mob.state = mob.SLEEPING;
-			} else if (Random.Float() < 0.15) {
+			} else if (spawnChance < 0.2f) {
 				mob.state = mob.SLEEPING;
 				Buff.affect(mob, MagicalSleep.class);
 			} else {

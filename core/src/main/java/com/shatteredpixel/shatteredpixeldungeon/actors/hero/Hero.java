@@ -209,7 +209,7 @@ public class Hero extends Char {
 	{
 		actPriority = HERO_PRIO;
 		
-		alignment = Alignment.ALLY;
+		alignment = Alignment.ENEMY; //fun
 	}
 	
 	public static final int MAX_LEVEL = 30;
@@ -1744,7 +1744,7 @@ public class Hero extends Char {
 	@Override
 	public void damage( int dmg, Object src ) {
 		if (buff(TimekeepersHourglass.timeStasis.class) != null
-				|| buff(TimeStasis.class) != null) {
+			|| buff(TimeStasis.class) != null) {
 			return;
 		}
 
@@ -1993,6 +1993,13 @@ public class Hero extends Char {
 
 			if (buff(GreaterHaste.class) != null){
 				delay = 0;
+			}
+
+			//TODO: I need a better place for this.
+			if (buff(TimekeepersHourglass.timeStasis.class) == null) {
+				TimekeepersHourglass.consecutiveUses = 0;
+
+				System.out.println("consecutive uses (hero.java): " + TimekeepersHourglass.consecutiveUses);
 			}
 
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]

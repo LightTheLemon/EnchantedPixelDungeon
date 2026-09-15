@@ -117,28 +117,27 @@ public abstract class Mob extends Char {
 		alignment = Alignment.ENEMY;
 	}
 
-	public AiState SLEEPING     = new Sleeping();
-	public AiState HUNTING		= new Hunting();
-	public AiState INVESTIGATING= new Investigating();
-	public AiState WANDERING	= new Wandering();
-	public AiState FLEEING		= new Fleeing();
-	public AiState PASSIVE		= new Passive();
+	public AiState SLEEPING       = new Sleeping();
+	public AiState HUNTING		  = new Hunting();
+	public AiState INVESTIGATING  = new Investigating();
+	public AiState WANDERING	  = new Wandering();
+	public AiState FLEEING		  = new Fleeing();
+	public AiState PASSIVE        = new Passive();
 
 	public AiState state = initState();
 
 	private AiState initState() {
-		if (Random.Float() < 0.10) {
+		float chance = Random.Float();
+		if (chance < 0.10f) {
 			Buff.affect(this, MagicalSleep.class);
 			return SLEEPING;
-		} else if (Random.Float() < 0.20) {
+		} else if (chance < 0.15f) {
 			return HUNTING;
 		} else {
 			return SLEEPING;
 		}
 	}
 
-	//public AiState state = SLEEPING;
-	
 	public Class<? extends CharSprite> spriteClass;
 	
 	protected int target = -1;

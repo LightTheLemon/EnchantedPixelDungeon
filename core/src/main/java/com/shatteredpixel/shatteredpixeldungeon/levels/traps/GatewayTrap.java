@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -147,6 +148,21 @@ public class GatewayTrap extends Trap {
 			}
 		}
 
+	}
+
+	//Same method but without repeating the show warning
+	@Override
+	public void trigger() {
+		if (active) {
+			if (Dungeon.level.heroFOV[pos]) {
+				Sample.INSTANCE.play(Assets.Sounds.TRAP);
+			}
+			if (disarmedByActivation) disarm();
+			Dungeon.level.discover(pos);
+			Bestiary.setSeen(getClass());
+			Bestiary.countEncounter(getClass());
+			activate();
+		}
 	}
 
 	private static final String TELE_POS = "tele_pos";
