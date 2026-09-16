@@ -209,7 +209,7 @@ public class Hero extends Char {
 	{
 		actPriority = HERO_PRIO;
 		
-		alignment = Alignment.ENEMY; //fun
+		alignment = Alignment.ALLY;
 	}
 	
 	public static final int MAX_LEVEL = 30;
@@ -1999,7 +1999,7 @@ public class Hero extends Char {
 			if (buff(TimekeepersHourglass.timeStasis.class) == null) {
 				TimekeepersHourglass.consecutiveUses = 0;
 
-				System.out.println("consecutive uses (hero.java): " + TimekeepersHourglass.consecutiveUses);
+				//System.out.println("consecutive uses (hero.java): " + TimekeepersHourglass.consecutiveUses);
 			}
 
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
@@ -2017,8 +2017,9 @@ public class Hero extends Char {
 			}
 
 			if (Dungeon.level.map[step] == Terrain.TRAP
-					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay / speed()))
-					&& Trap.showWarning) {
+					&& (!flying || buff(Levitation.class) != null
+					&& buff(Levitation.class).detachesWithinDelay(delay / speed()))
+					&& (Trap.showWarning && Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) == null)) {
 				Trap.heroStep(this, Dungeon.level.traps.get(step));
 				interrupt();
 				canSelfTrample = false;

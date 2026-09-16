@@ -196,7 +196,9 @@ public abstract class Char extends Actor {
 	public boolean[] fieldOfView = null;
 	
 	private LinkedHashSet<Buff> buffs = new LinkedHashSet<>();
-	
+
+	public int delayedDamage = 0;
+
 	@Override
 	protected boolean act() {
 		if (fieldOfView == null || fieldOfView.length != Dungeon.level.length()){
@@ -918,10 +920,11 @@ public abstract class Char extends Actor {
 		}
 
 		if ( Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) != null ) {
-			damage = Math.max(1, damage * 0.20f);
-			Buff.affect(this, Bleeding.class).set(dmg * 0.40f);
-			Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.40f);
-
+			delayedDamage += (int) damage;
+			damage = 0;
+			//damage = Math.max(1, damage * 0.20f);
+			//Buff.affect(this, Bleeding.class).set(dmg * 0.40f);
+			//Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg * 0.40f);
 		}
 
 		//two separate things can convert dmg to bleed, we handle that here

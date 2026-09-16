@@ -648,6 +648,11 @@ public class DriedRose extends Artifact {
 			if (weapon() != null){
 				acc *= weapon().accuracyFactor( this, target );
 			}
+
+			int encumbrance = rose.weapon.STRReq() - rose.ghostStrength();
+			if (encumbrance > 0){
+				acc /= (int) Math.pow( 1.5, encumbrance );
+			}
 			
 			return acc;
 		}
@@ -658,6 +663,11 @@ public class DriedRose extends Artifact {
 			if (weapon() != null){
 				delay *= weapon().delayFactor(this);
 			}
+			int encumbrance = rose.weapon.STRReq() - rose.ghostStrength();
+			if (encumbrance > 0){
+				delay *= Math.pow( 1.2, encumbrance );
+			}
+
 			return delay;
 		}
 		

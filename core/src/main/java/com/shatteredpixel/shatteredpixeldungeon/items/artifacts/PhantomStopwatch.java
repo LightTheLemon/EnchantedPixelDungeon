@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
@@ -32,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
@@ -118,7 +120,6 @@ public class PhantomStopwatch extends Artifact {
 				activeBuff = new timeFreeze();
 				Talent.onArtifactUsed(Dungeon.hero);
 				activeBuff.attachTo(Dungeon.hero);
-				//charge--;
 				((timeFreeze)activeBuff).processTime(0f);
 				}
 
@@ -130,6 +131,7 @@ public class PhantomStopwatch extends Artifact {
 		super.activate(ch);
 		if (activeBuff != null)
 			activeBuff.attachTo(ch);
+		//charge = Math.max(0,charge-1);
 	}
 
 	@Override
@@ -152,7 +154,7 @@ public class PhantomStopwatch extends Artifact {
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.25f*amount;
+			partialCharge += 0.20f*amount;
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -260,7 +262,7 @@ public class PhantomStopwatch extends Artifact {
 		public void gainExp(float levelPortion) {
 			if (cursed || target.buff(MagicImmune.class) != null || levelPortion == 0) return;
 
-			exp += Math.round(levelPortion*100);
+			exp += Math.round(levelPortion*60);
 
 			//past the soft charge cap, gaining  charge from leveling is slowed.
 			if (charge > 5+(level()*2)){
@@ -360,6 +362,19 @@ public class PhantomStopwatch extends Artifact {
 			activeBuff = null;
 			triggerPresses();
 			target.next();
+
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+				if (mob.delayedDamage > 0) {
+					mob.damage(Math.round(mob.delayedDamage * 0.9f), Dungeon.hero);
+					if (mob.delayedDamage * 0.15f > 1) {
+						Buff.affect(mob, Viscosity.DeferedDamage.class).extend(mob.delayedDamage * 0.15f);
+					}
+					Sample.INSTANCE.play(Assets.Sounds.BLAST, Math.min( 1.1f, mob.delayedDamage / 10f), 0.9f);
+					mob.delayedDamage = 0;
+
+				}
+			}
+
 		}
 
 		@Override
@@ -382,7 +397,7 @@ public class PhantomStopwatch extends Artifact {
 			return BuffIndicator.TIME;
 		}
 
-		/*
+
 		@Override
 		public void tintIcon(Image icon) {
 			icon.hardlight(1f, 0.5f, 0);
@@ -393,18 +408,13 @@ public class PhantomStopwatch extends Artifact {
 			return Math.max(0, (2f - turnsToCost) / 2f);
 		}
 
-		@Override
-		public String iconTextDisplay() {
-			return Integer.toString((int)(turnsToCost + 0.001f));
-		}
-
 
 
 		@Override
 		public String desc() {
 			return Messages.get(this, "desc");
 		}
-		*/
+
 		private static final String PRESSES = "presses";
 		private static final String TURNSTOCOST = "turnsToCost";
 
