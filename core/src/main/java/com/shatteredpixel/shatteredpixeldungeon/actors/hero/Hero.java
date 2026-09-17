@@ -162,12 +162,10 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
-import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.WeakFloorRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -501,10 +499,8 @@ public class Hero extends Char {
 		}
 
 		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
-		if (wep != null && wep.enchantment instanceof Covert && attackTarget.HP <= 0) {
-			float finalDuration = ((Invisibility.DURATION - 17) / 2) + (wep.buffedLvl() * 2f)  * bonus;
-
-			//enemy.alignment = Alignment.NEUTRAL;
+		if (wep != null && (wep.enchantment instanceof Covert || (belongings.getItem(SpiritBow.class).enchantment != null && belongings.getItem(SpiritBow.class).enchantment instanceof Covert)) && attackTarget.HP <= 0) {
+			float finalDuration = ((Invisibility.DURATION - 16) / 2) + (wep.buffedLvl() * 2f)  * bonus;
 			Buff.prolong( this, Invisibility.class, finalDuration);
 		}
 
@@ -2525,9 +2521,8 @@ public class Hero extends Char {
 
 		Weapon weapon = belongings.getItem(Weapon.class);
 		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
-
 		if (weapon != null && weapon.enchantment instanceof Covert && attackTarget.HP <= 0) {
-			float finalDuration = ((Invisibility.DURATION - 17) / 2) + (weapon.buffedLvl() * 2f)  * bonus;
+			float finalDuration = ((Invisibility.DURATION - 16) / 2) + (weapon.buffedLvl() * 2f)  * bonus;
 			Buff.prolong( this, Invisibility.class, finalDuration);
 		}
 

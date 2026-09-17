@@ -128,6 +128,7 @@ public class EtherealChains extends Artifact {
 			if (target != null && (Dungeon.level.visited[target] || Dungeon.level.mapped[target])){
 
 				//chains cannot be used to go where it is impossible to walk to
+				//TODO: pickaxe logic
 				PathFinder.buildDistanceMap(target, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
 				if (!(Dungeon.level instanceof MiningLevel) && PathFinder.distance[curUser.pos] == Integer.MAX_VALUE){
 					GLog.w( Messages.get(EtherealChains.class, "cant_reach") );

@@ -258,7 +258,7 @@ public class TimekeepersHourglass extends Artifact {
 				Invisibility.dispel();
 
 				//Duration of stasis increases with consecutive use
-				int stasisTurns = consecutiveUses / 2;
+				int stasisTurns = Math.min(0, consecutiveUses - 1 / 2);
 				spend( stasisTurns );
 
 				//shouldn't punish the player for going into stasis frequently

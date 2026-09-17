@@ -208,10 +208,9 @@ public class SewerLevel extends RegularLevel {
 
 	@Override
 	public void destroy(int pos) {
-		//if we're burning  sewers barrels
+		//if we're burning barrels
 		int terr = map[pos];
 		if (terr == Terrain.REGION_DECO || terr == Terrain.REGION_DECO_ALT){
-
 
 			int lootTable = Random.chances(new float[]{1, 2, 2, 2, 1, 1, 4, 1, 6});
 

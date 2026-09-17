@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
@@ -90,6 +91,7 @@ public class MagicMissile extends Emitter {
 	public static final int BLOOD_CONE      = 113;
 	public static final int POISON_CONE     = 114;
 	public static final int CHARM           = 115;
+	public static final int GHOST_PARTICLE  = 116;
 
 	//use SPECK + the constant of the Speck you want. e.g. MagicMissile.SPECK + Speck.TOXIC
 	public static final int SPECK           = 1000;
@@ -268,6 +270,10 @@ public class MagicMissile extends Emitter {
 			case CHARM:
 				size( 1 );
 				pour( Speck.factory(Speck.HEART), 0.05f );
+				break;
+			case GHOST_PARTICLE:
+				size( 2 );
+				pour( WhiteParticle.FACTORY, 0.01f );
 				break;
 		}
 

@@ -98,7 +98,7 @@ public class WandOfLivingEarth extends DamageWand {
 				buff = Buff.affect(curUser, RockArmor.class);
 			}
 			if (buff != null) {
-				buff.addArmor( buffedLvl(), armorToAdd);
+				buff.addArmor( buffedLvl(), armorToAdd / 2);
 			}
 		}
 
@@ -106,7 +106,6 @@ public class WandOfLivingEarth extends DamageWand {
 		if (guardian != null && guardian == ch){
 			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
 			guardian.setInfo(curUser, buffedLvl(), armorToAdd * 2);
-			System.out.println("armorToAdd * 2: " + armorToAdd * 2);
 			wandProc(guardian, chargesPerCast());
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.9f * Random.Float(0.87f, 1.15f) );
 

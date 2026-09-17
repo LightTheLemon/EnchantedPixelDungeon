@@ -159,7 +159,7 @@ public class DungeonTileSheet {
 	public static boolean waterStitcheable(int tile){
 		//alt region deco has different visuals per region, is stitchable in demon halls
 		if (tile == Terrain.REGION_DECO_ALT){
-			if (Dungeon.depth <= 20)    return false;
+			if (Dungeon.depth <= 20 && Dungeon.depth >= 6)    return false; //made it stitchable in sewers, should fix water bug
 			else                        return true;
 		}
 		return waterStitcheable.contains(tile);

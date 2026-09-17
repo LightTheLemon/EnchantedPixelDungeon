@@ -133,7 +133,7 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 					w.enchant(null);
 					proceed = true;
 				}
-				if (w.hasGoodEnchant()) { //should remove enchantment
+				if (w.hasGoodEnchant()) {
 					w.enchant(null);
 					proceed = true;
 				}

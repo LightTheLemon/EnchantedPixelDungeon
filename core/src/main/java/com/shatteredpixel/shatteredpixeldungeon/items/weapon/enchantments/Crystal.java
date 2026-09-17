@@ -46,11 +46,11 @@ public class Crystal extends Weapon.Enchantment {
 	private static ItemSprite.Glowing FLAW = new ItemSprite.Glowing( 0x0088FF, 0.5f );
 	private static ItemSprite.Glowing CRACK = new ItemSprite.Glowing( 0x0088FF, 0.25f );
 
-	private float durability = 100;
+	private float durability = 80;
 
 	//used for displaying durability to the player, prevents message spam
 	//essentially it has a 'lag' of up to 10 points while self-repairing
-	private float visualDurability = 100;
+	private float visualDurability = 80;
 
 	private boolean thrownWeapon = false;
 
@@ -61,7 +61,7 @@ public class Crystal extends Weapon.Enchantment {
 				setThrownWep(); //we piggyback on thrown weapon durability, don't change our own
 			} else {
 				thrownWeapon = false;
-				//lasts for an average of ~33 attacks at normal speed
+				//lasts for an average of ~25 attacks at normal speed
 				durability -= Random.Float(2, 4) * weapon.delayFactor(attacker);
 
 				float prevHeuristicDur = visualDurability;
@@ -88,14 +88,11 @@ public class Crystal extends Weapon.Enchantment {
 					Sample.INSTANCE.play( Assets.Sounds.SHATTER );
 					Splash.at(attacker.pos, 0x0088FF, 15);
 					if (attacker instanceof Hero) {
-						if (weapon.isEquipped((Hero) attacker)) {
-							weapon.doUnequip((Hero) attacker, false);
-						} else {
-							weapon.detachAll(((Hero) attacker).belongings.backpack);
-						}
+						weapon.enchant(null);
 						GLog.n(Messages.get(this, "alert_shattered"));
 					} else if (attacker instanceof DriedRose.GhostHero){
 						((DriedRose.GhostHero) attacker).clearWeapon();
+						((DriedRose.GhostHero) attacker).weapon().enchant(null);
 						GLog.n(Messages.get(this, "alert_shattered_ghost"));
 					}
 				}
@@ -125,28 +122,28 @@ public class Crystal extends Weapon.Enchantment {
 	public void repair(Weapon w, boolean inRose, float amount){
 		if (w instanceof MissileWeapon){
 			amount /= 2; //crystal thrown weapons have more uses, they repair more slowly
-			if (((MissileWeapon) w).durabilityLeft() < 100) {
+			if (((MissileWeapon) w).durabilityLeft() < 80) {
 				((MissileWeapon) w).repair(amount);
-				if (((MissileWeapon) w).durabilityLeft() == 100){
+				if (((MissileWeapon) w).durabilityLeft() == 80){
 					GLog.p(Messages.get(this, "alert_fixed"));
 				}
 			}
 		} else {
 
-			durability = Math.min(100, durability + amount);
+			durability = Math.min(80, durability + amount);
 			float prevHeuristicDur = visualDurability;
 			visualDurability = Math.max(visualDurability, durability-10);
 
-			if (durability == 100){
-				if (visualDurability == 90){
+			if (durability == 80){
+				if (visualDurability == 70){
 					if (!inRose) {
 						GLog.p(Messages.get(this, "alert_fixed"));
 					} else {
 						GLog.p(Messages.get(this, "alert_fixed_ghost"));
 					}
 				}
-				visualDurability = 100;
-			} else if (prevHeuristicDur < 50 && visualDurability >= 50){
+				visualDurability = 80;
+			} else if (prevHeuristicDur < 40 && visualDurability >= 40){
 				if (!inRose) {
 					GLog.p(Messages.get(this, "alert_noflaw"));
 				} else {
@@ -180,7 +177,7 @@ public class Crystal extends Weapon.Enchantment {
 		String desc = super.desc();
 		if (thrownWeapon){
 			desc += " " + Messages.get(this, "desc_thrown");
-		} else if (visualDurability == 100){
+		} else if (visualDurability == 80){
 			desc += " " + Messages.get(this, "desc_perfect");
 		}else if (visualDurability > 50){
 			desc += " " + Messages.get(this, "desc_fine");

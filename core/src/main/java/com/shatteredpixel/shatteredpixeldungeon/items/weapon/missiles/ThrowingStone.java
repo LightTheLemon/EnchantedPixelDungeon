@@ -34,12 +34,8 @@ public class ThrowingStone extends MissileWeapon {
 		bones = false;
 		
 		tier = 1;
-		baseUses = 5;
+		baseUses = 15;
 		sticky = false;
 	}
-	
-	@Override
-	public int value() {
-		return super.value(); //half normal value
-	}
+
 }

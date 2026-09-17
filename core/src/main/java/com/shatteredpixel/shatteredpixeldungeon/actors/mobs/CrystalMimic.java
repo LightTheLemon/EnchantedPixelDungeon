@@ -175,11 +175,11 @@ public class CrystalMimic extends Mimic {
 
 	@Override
 	protected void generatePrize( boolean useDecks ) {
-		//Crystal mimic already contains a prize item. Just guarantee it isn't cursed.
-		for (Item i : items){
-			i.cursed = false;
-			i.cursedKnown = true;
-		}
+		//No longer guarantees it's not cursed
+//		for (Item i : items){
+//			i.cursed = false;
+//			i.cursedKnown = true;
+//		}
 	}
 
 	private class Fleeing extends Mob.Fleeing {

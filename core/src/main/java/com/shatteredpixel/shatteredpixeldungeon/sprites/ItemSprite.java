@@ -28,6 +28,11 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Camouflage;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Wayward;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Covert;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -381,6 +386,16 @@ public class ItemSprite extends MovieClip {
 			ra = glowing.red * value;
 			ga = glowing.green * value;
 			ba = glowing.blue * value;
+
+			var wep = Dungeon.hero.belongings.getItem(Weapon.class);
+			if (wep != null && wep.enchantment instanceof Covert || wep.enchantment instanceof Wayward) {
+				am = phase / 2.5f + 0.15f;
+			}
+			var arm = Dungeon.hero.belongings.getItem(Armor.class);
+			if (arm != null && arm.glyph instanceof Camouflage) {
+				am = phase / 2.5f + 0.15f;
+			}
+
 		}
 	}
 

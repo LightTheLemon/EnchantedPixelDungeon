@@ -224,7 +224,6 @@ public class PhantomStopwatch extends Artifact {
 		}
 	}
 
-
 	public class watchRecharge extends ArtifactBuff {
 		@Override
 		public boolean act() {
@@ -272,7 +271,7 @@ public class PhantomStopwatch extends Artifact {
 
 			if (exp > 100+level()*100 && level() < levelCap){
 				exp -= 100+level()*100;
-				GLog.p( Messages.get(this, "levelup") );
+				GLog.p( Messages.get(PhantomStopwatch.class, "levelup") );
 				Catalog.countUses(PhantomStopwatch.class, 2);
 				upgrade();
 			}
@@ -365,9 +364,9 @@ public class PhantomStopwatch extends Artifact {
 
 			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 				if (mob.delayedDamage > 0) {
-					mob.damage(Math.round(mob.delayedDamage * 0.9f), Dungeon.hero);
-					if (mob.delayedDamage * 0.15f > 1) {
-						Buff.affect(mob, Viscosity.DeferedDamage.class).extend(mob.delayedDamage * 0.15f);
+					mob.damage(Math.round(mob.delayedDamage * 0.7f), Dungeon.hero);
+					if (mob.delayedDamage * 0.3f > 1) {
+						Buff.affect(mob, Viscosity.DeferedDamage.class).extend(mob.delayedDamage * 0.3f);
 					}
 					Sample.INSTANCE.play(Assets.Sounds.BLAST, Math.min( 1.1f, mob.delayedDamage / 10f), 0.9f);
 					mob.delayedDamage = 0;

@@ -105,7 +105,7 @@ public class Stylus extends Item {
 		detach(curUser.belongings.backpack);
 		Catalog.countUse(getClass());
 
-		if(Math.random() >= .5f) {
+		if (Math.random() >= .5f) {
 			if (enchantable instanceof Armor)
 				((Armor) enchantable).inscribe();
 			if (enchantable instanceof Weapon)
@@ -121,7 +121,7 @@ public class Stylus extends Item {
 			curUser.spend(TIME_TO_INSCRIBE);
 			GLog.w( Messages.get(this, "inscribed"));
 
-		} else{
+		} else {
 			if (enchantable instanceof Armor)
 				((Armor) enchantable).inscribe(Armor.Glyph.randomCurse(((Armor) enchantable).glyph != null ? ((Armor) enchantable).glyph.getClass() : null));
 			if (enchantable instanceof Weapon)

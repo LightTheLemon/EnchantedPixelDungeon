@@ -206,6 +206,7 @@ public enum HeroClass {
 		(hero.belongings.weapon = new WornShortsword()).identify();
 		ThrowingStone stones = new ThrowingStone();
 		stones.identify().collect();
+		stones.quantity(2);
 
 		Dungeon.quickslot.setSlot(0, stones);
 
@@ -245,9 +246,6 @@ public enum HeroClass {
 		//RingOfMana mana = new RingOfMana();
 		//mana.identify().collect();
 
-		//RingOfTenacity tenacity = new RingOfTenacity();
-		//tenacity.identify().collect();
-
 		//RingOfMight might = new RingOfMight();
 		//might.identify().collect();
 
@@ -262,32 +260,21 @@ public enum HeroClass {
 		//upgrade.quantity(10);
 		//upgrade.collect();
 
-		//PotionOfLiquidFlame flame = new PotionOfLiquidFlame();
-		//flame.quantity(10);
-		//flame.collect();
-
-		//RingOfConservation cons = new RingOfConservation();
-		//cons.identify().collect();
-		//cons.collect();
-
 		//CapeOfThorns cape = new CapeOfThorns();
 		//cape.collect();
 
 		//WandOfCharm charm = new WandOfCharm();
 		//charm.identify().collect();
 
-		PhantomStopwatch watch = new PhantomStopwatch();
-		watch.identify().collect();
+		//PhantomStopwatch watch = new PhantomStopwatch();
+		//watch.identify().collect();
 
 		//ScrollOfEnchantment ench = new ScrollOfEnchantment();
 		//ench.quantity(10);
 		//ench.identify().collect();
 
-		TimekeepersHourglass time = new TimekeepersHourglass();
-		time.identify().collect();
-
-		//ThrowingStone stones = new ThrowingStone();
-		//stones.identify().collect();
+		//TimekeepersHourglass time = new TimekeepersHourglass();
+		//time.identify().collect();
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
@@ -317,6 +304,10 @@ public enum HeroClass {
 		bow.identify().collect();
 
 		Dungeon.quickslot.setSlot(0, bow);
+
+		ScrollOfEnchantment ench = new ScrollOfEnchantment();
+		ench.quantity(10);
+		ench.identify().collect();
 
 		new PotionOfMindVision().identify();
 		new ScrollOfLullaby().identify();

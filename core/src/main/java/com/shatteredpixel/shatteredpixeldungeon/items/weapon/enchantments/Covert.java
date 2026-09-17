@@ -13,7 +13,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 
 public class Covert extends Weapon.Enchantment {
-    private static ItemSprite.Glowing DARK_BLUE = new ItemSprite.Glowing( 0x04006e );
+    private static ItemSprite.Glowing DARK_BLUE = new ItemSprite.Glowing( 0x04006e, 1.5f );
 
     @Override
     public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {

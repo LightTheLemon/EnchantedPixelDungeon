@@ -55,24 +55,40 @@ public class WaterOfEnchantment extends WellWater {
 		Sample.INSTANCE.play( Assets.Sounds.DRINK );
 
 		//here's the logic for all worn equipment
-		Weapon weapon = (Weapon) hero.belongings.weapon();
-		if (weapon != null) {
-			if (!weapon.hasGoodEnchant() && !weapon.hasCurseEnchant()) {
-				weapon.enchant();
-			}
-			if (weapon.hasCurseEnchant()) {
+		for (Item item : hero.belongings.backpack.items) {
+			if (!item.cursed && (item instanceof Weapon || item instanceof Armor)) {
+				if (item instanceof Weapon) {
+					((Weapon) hero.belongings.weapon()).enchant();
+				}
+				if (item instanceof Armor) {
+					( hero.belongings.armor()).inscribe();
+				}
+
+			} else if (item.cursed) {
 				hero.belongings.uncurseEquipped();
+
 			}
 		}
-		Armor armor = (Armor) hero.belongings.armor();
-		if (armor != null) {
-			if (!armor.hasGoodGlyph() && !armor.hasCurseGlyph()) {
-				armor.inscribe();
-			}
-			if (armor.hasCurseGlyph()) {
-				hero.belongings.uncurseEquipped();
-			}
-		}
+
+//
+//		Weapon weapon = (Weapon) hero.belongings.weapon();
+//		if (weapon != null) {
+//			if (!weapon.hasGoodEnchant() && !weapon.hasCurseEnchant()) {
+//				weapon.enchant();
+//			}
+//			if (weapon.hasCurseEnchant()) {
+//				hero.belongings.uncurseEquipped();
+//			}
+//		}
+//		Armor armor = (Armor) hero.belongings.armor();
+//		if (armor != null) {
+//			if (!armor.hasGoodGlyph() && !armor.hasCurseGlyph()) {
+//				armor.inscribe();
+//			}
+//			if (armor.hasCurseGlyph()) {
+//				hero.belongings.uncurseEquipped();
+//			}
+//		}
 
 		//logic for all other equipment
 		for (Item item : hero.belongings.backpack.items) {
@@ -80,19 +96,25 @@ public class WaterOfEnchantment extends WellWater {
 			if (!item.cursed && ( item instanceof Weapon || item instanceof Armor ) ) {
                 if(item instanceof Weapon && !((Weapon) item).hasGoodEnchant()) {
 					((Weapon) item).enchant();
+					item.cursedKnown = true;
 				}
                 if (item instanceof Armor && !((Armor) item).hasGoodGlyph()) {
 					((Armor) item).inscribe();
+					item.cursedKnown = true;
 				}
 
 			} else if (item.cursed && (item instanceof Weapon || item instanceof Armor )) {
 				if (item instanceof Weapon) {
 					((Weapon) item).enchant(null);
+					item.cursed = false;
+					item.cursedKnown = true;
+
 				}
 				if (item instanceof Armor) {
 					((Armor) item).inscribe(null);
 					item.cursed = false;
-					//item.visiblyCursed();
+					item.cursedKnown = true;
+
 				}
 
 			} else if ( item instanceof Ring || item instanceof Wand || item instanceof Artifact) {

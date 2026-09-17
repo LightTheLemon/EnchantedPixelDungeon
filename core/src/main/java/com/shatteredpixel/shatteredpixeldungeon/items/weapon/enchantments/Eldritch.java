@@ -53,15 +53,17 @@ public class Eldritch extends Weapon.Enchantment {
 					continue;
 				}
 				if (ch.fieldOfView != null && (ch.fieldOfView[attacker.pos] || ch.fieldOfView[defender.pos])){
+					new Flare( 5, 24 ).color( 0xFF0000, true ).show( defender.sprite, 1f );
+
 					if (ch == Dungeon.hero){
 						Buff.affect( defender, Vertigo.class, 5f );
 					} else {
+
 						Buff.affect(ch, Terror.class, powerMulti * 5f).object = attacker.id();
 					}
 				}
 			}
 
-			new Flare( 5, 24 ).color( 0xFF0000, true ).show( attacker.sprite, 1f );
 		}
 
 		return damage;

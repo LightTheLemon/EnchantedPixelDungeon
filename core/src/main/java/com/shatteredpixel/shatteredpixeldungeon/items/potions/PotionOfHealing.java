@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
@@ -103,11 +104,15 @@ public class PotionOfHealing extends Potion {
 		Char ch = Actor.findChar(cell);
 		if (ch != null && !(Dungeon.isChallenged(Challenges.NO_HEALING)) ){
 
-			GLog.p( Messages.get(PotionOfHealing.class, "heal_ally") );
+			if (ch != Dungeon.hero) {
+				GLog.p( Messages.get(PotionOfHealing.class, "heal_ally") );
+				ch.HP = (int) (ch.HT * 0.75f);
+			} else {
+				ch.HP = ch.HT / 3;
+
+			}
 
 			PotionOfHealing.cure(ch);
-			PotionOfHealing.heal(ch);
-
 			ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
 
 			if (ch != Dungeon.hero && ch.HP == ch.HT) {
@@ -120,9 +125,9 @@ public class PotionOfHealing extends Potion {
 				((Bee)ch).setPotInfo(-1, null);
 			}
 
-		} else if (ch != null) {
-			ch.sprite.emitter().burst( ShadowParticle.UP, 1 );
-			Buff.affect(ch, Poison.class).set(4 + ch.HT/3f);
+		} else if (ch != null && ch != Dungeon.hero) {
+			ch.sprite.emitter().burst( BloodParticle.BURST, 2 );
+			Buff.affect(ch, Bleeding.class).set(4 + ch.HT/4f);
 
 		}
 	}

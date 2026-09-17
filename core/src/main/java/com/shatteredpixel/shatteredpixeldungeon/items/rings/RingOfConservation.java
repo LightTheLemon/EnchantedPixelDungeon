@@ -46,9 +46,9 @@ public class RingOfConservation extends Ring {
     }
 
     public String statsInfo() {
-        System.out.println("level: " + soloBuffedBonus());
-        System.out.println("recycleChance: " + RingOfConservation.recycleChance(Dungeon.hero));
-        System.out.println("cursedProc: " + RingOfConservation.curseChance(Dungeon.hero));
+        //System.out.println("level: " + soloBuffedBonus());
+        //System.out.println("recycleChance: " + RingOfConservation.recycleChance(Dungeon.hero));
+        //System.out.println("cursedProc: " + RingOfConservation.curseChance(Dungeon.hero));
 
         if ( isIdentified() && !visiblyCursed() ){
             String info = Messages.get(this, "stats",
