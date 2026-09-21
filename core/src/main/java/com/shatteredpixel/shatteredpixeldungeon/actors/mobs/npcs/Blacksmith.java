@@ -119,14 +119,16 @@ public class Blacksmith extends NPC {
 							Quest.given = true;
 							Quest.completed = false;
 							Item pick = Quest.pickaxe != null ? Quest.pickaxe : new Pickaxe();
-							if (pick.doPickUp( Dungeon.hero )) {
-								GLog.i( Messages.capitalize(Messages.get(Dungeon.hero, "you_now_have", pick.name()) ));
-							} else {
-								Dungeon.level.drop( pick, Dungeon.hero.pos ).sprite.drop();
-							}
-							Quest.pickaxe = null;
+                            if (Random.Float() < 0.20f) {
+                                if (pick.doPickUp( Dungeon.hero )) {
+                                    GLog.i( Messages.capitalize(Messages.get(Dungeon.hero, "you_now_have", pick.name()) ));
+                                } else {
+                                    Dungeon.level.drop( pick, Dungeon.hero.pos ).sprite.drop();
+                                }
+                                Quest.pickaxe = null;
+                            }
 
-							if (msg2Final != ""){
+                            if (msg2Final != ""){
 								GameScene.show(new WndQuest(Blacksmith.this, msg2Final));
 							}
 
@@ -214,7 +216,6 @@ public class Blacksmith extends NPC {
 		//reward tracking. Stores remaining favor, the pickaxe, and how many of each reward has been chosen
 		public static int favor;
 		public static Item pickaxe;
-		public static boolean freePickaxe;
 		public static int reforges;
 		public static int hardens;
 		public static int upgrades;
@@ -236,7 +237,6 @@ public class Blacksmith extends NPC {
 
 			favor       = 0;
 			pickaxe     = new Pickaxe().identify(false);
-			freePickaxe = false;
 			reforges    = 0;
 			hardens     = 0;
 			upgrades    = 0;
@@ -285,7 +285,6 @@ public class Blacksmith extends NPC {
 
 				node.put( FAVOR, favor );
 				if (pickaxe != null) node.put( PICKAXE, pickaxe );
-				node.put( FREE_PICKAXE, freePickaxe );
 				node.put( REFORGES, reforges );
 				node.put( HARDENS, hardens );
 				node.put( UPGRADES, upgrades );
@@ -320,9 +319,6 @@ public class Blacksmith extends NPC {
 					pickaxe = (Item) node.get(PICKAXE);
 				} else {
 					pickaxe = null;
-				}
-				if (node.contains(FREE_PICKAXE)){
-					freePickaxe = node.getBoolean(FREE_PICKAXE);
 				}
 				reforges = node.getInt( REFORGES );
 				hardens = node.getInt( HARDENS );
@@ -399,13 +395,13 @@ public class Blacksmith extends NPC {
 				i.cursed = false;
 			}
 
-			// 30% base chance to be enchanted, stored separately so status isn't revealed early
+			// 20% base chance to be enchanted, stored separately so status isn't revealed early
 			//we generate first so that the outcome doesn't affect the number of RNG rolls
 			smithEnchant = Weapon.Enchantment.random();
 			smithGlyph = Armor.Glyph.random();
 
 			float enchantRoll = Random.Float();
-			if (enchantRoll > 0.3f * ParchmentScrap.enchantChanceMultiplier()){
+			if (enchantRoll > 0.2f * ParchmentScrap.enchantChanceMultiplier()){
 				smithEnchant = null;
 				smithGlyph = null;
 			}

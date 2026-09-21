@@ -28,10 +28,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -53,9 +56,9 @@ public class TimekeepersHourglass extends Artifact {
 
 		levelCap = 10;
 
-		charge = 10+(level() * 3);
+		charge = 10+(level() * 2);
 		partialCharge = 0;
-		chargeCap = 10+(level() * 3);
+		chargeCap = 10+(level() * 2);
 
 		defaultAction = AC_ACTIVATE;
 	}
@@ -114,8 +117,6 @@ public class TimekeepersHourglass extends Artifact {
 			}
 		}
 
-
-
 	}
 
 	@Override
@@ -159,7 +160,7 @@ public class TimekeepersHourglass extends Artifact {
 
 	@Override
 	public Item upgrade() {
-		chargeCap+= 1;
+		chargeCap+= 2;
 
 		//for artifact transmutation.
 		while (level()+1 > sandBags)
@@ -232,8 +233,14 @@ public class TimekeepersHourglass extends Artifact {
 						partialCharge = 0;
 					}
 				}
-			} else if (cursed && Random.Int(10) == 0)
-				((Hero) target).spend( TICK );
+			} else if (cursed) {
+                if (Dungeon.hero.buff(TimeStasis.class) == null) {
+                    if (Random.Float() < 0.08f ) {
+                        Buff.affect(Dungeon.hero, TimeStasis.class,Random.Int(2) + 1);
+						spend(TICK);
+                    }
+                }
+            }
 
 			updateQuickslot();
 
@@ -255,10 +262,10 @@ public class TimekeepersHourglass extends Artifact {
 
 			if (super.attachTo(target)) {
 
-				Invisibility.dispel();
+				//Invisibility.dispel();
 
 				//Duration of stasis increases with consecutive use
-				int stasisTurns = Math.min(0, consecutiveUses - 1 / 2);
+				int stasisTurns = Math.max(1, consecutiveUses / 2);
 				spend( stasisTurns );
 
 				//shouldn't punish the player for going into stasis frequently
@@ -271,6 +278,8 @@ public class TimekeepersHourglass extends Artifact {
 
 				target.invisible++;
 				target.paralysed++;
+				target.buff(Invulnerability.class);
+
 				target.next();
 
 				updateQuickslot();

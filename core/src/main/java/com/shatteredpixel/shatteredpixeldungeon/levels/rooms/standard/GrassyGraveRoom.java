@@ -24,6 +24,10 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.UnstableSpell;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -64,7 +68,23 @@ public class GrassyGraveRoom extends StandardRoom {
 			int pos = w > h ?
 					left + 1 + shift + i * 2 + (top + 2 + Random.Int( h-2 )) * level.width() :
 					(left + 2 + Random.Int( w-2 )) + (top + 1 + shift + i * 2) * level.width();
-			level.drop( i == index ? Generator.random() : new Gold().random(), pos ).type = Heap.Type.TOMB;
+
+			float lootChance = Random.Float();
+			if (lootChance < 0.05f) {
+				level.drop( new UnstableSpell(), pos ).type = Heap.Type.TOMB;
+			} else if (lootChance < 0.15f) {
+				level.drop( new CurseInfusion(), pos ).type = Heap.Type.TOMB;
+			} else if (lootChance < 0.25f) {
+				var chalice = new ChaliceOfBlood();
+				chalice.cursed = true;
+				chalice.cursedKnown = true;
+				level.drop( chalice, pos ).type = Heap.Type.TOMB;
+			} else if (i == index) {
+				level.drop( Generator.random(), pos ).type = Heap.Type.TOMB;
+			} else {
+				level.drop( new Gold().random(), pos ).type = Heap.Type.TOMB;
+			}
+
 		}
 	}
 }

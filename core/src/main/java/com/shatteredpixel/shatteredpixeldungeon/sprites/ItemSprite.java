@@ -388,15 +388,19 @@ public class ItemSprite extends MovieClip {
 			ba = glowing.blue * value;
 
 			var wep = Dungeon.hero.belongings.getItem(Weapon.class);
-			if (wep != null && wep.enchantment instanceof Covert || wep.enchantment instanceof Wayward) {
-				am = phase / 2.5f + 0.15f;
-			}
-			var arm = Dungeon.hero.belongings.getItem(Armor.class);
-			if (arm != null && arm.glyph instanceof Camouflage) {
-				am = phase / 2.5f + 0.15f;
-			}
+            if (wep != null) {
+                if (wep.enchantment instanceof Covert || wep.enchantment instanceof Wayward) {
+                    am = phase / 2.5f + 0.15f;
+                }
+            }
+            var arm = Dungeon.hero.belongings.getItem(Armor.class);
+            if (arm != null) {
+                if ( arm.glyph instanceof Camouflage) {
+                    am = phase / 2.5f + 0.15f;
+                }
+            }
 
-		}
+        }
 	}
 
 	public static int pick( int index, int x, int y ) {

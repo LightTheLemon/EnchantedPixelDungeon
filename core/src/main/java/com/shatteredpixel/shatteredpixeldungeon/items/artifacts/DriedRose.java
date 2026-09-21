@@ -30,22 +30,25 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TormentedSpirit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -55,17 +58,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.WondrousResin;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.CursedWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -124,7 +122,9 @@ public class DriedRose extends Artifact {
 	private Armor armor = null;
 	private int storedCharge = 0;
 	private float storedPartialCharge = 0;
-	private static int storedBuffs;
+
+	//private static Buff storedBuffs;
+	private static LinkedHashSet<Buff> storedBuffs = new LinkedHashSet<>();
 	public int droppedPetals = 0;
 
 	public static final String AC_SUMMON = "SUMMON";
@@ -198,7 +198,8 @@ public class DriedRose extends Artifact {
 			GameScene.show( new WndGhostHero(this) );
 		} else if (action.equals(AC_RECALL)) {
 
-			if (ghost != null) {
+			boolean canRecall = ghost.buff(Roots.class) == null && ghost.buff(Paralysis.class) == null && ghost.buff(MagicImmune.class) == null && ghost.buff(MagicalSleep.class) == null && ghost.buff(Sleep.class) == null;
+			if (ghost != null && canRecall) {
 
 				hero.sprite.emitter().burst(WindParticle.FACTORY, 5 );
 				Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
@@ -206,9 +207,11 @@ public class DriedRose extends Artifact {
 
 				storedCharge = 100 * ghost.HP / ghost.HT;
 
-				//Save buffs:
+				//storedBuffs.addAll(ghost.buffs());
 
-				System.out.println(storedBuffs);
+				for (Buff b : ghost.buffs()) {
+					Buff.affect(hero, (Class) b.getClass(), b.cooldown() + 1f);
+				}
 
 				ghost.updateRose();
 				ghost.sprite.die();
@@ -226,6 +229,9 @@ public class DriedRose extends Artifact {
 				Dungeon.hero.sprite.operate(Dungeon.hero.pos);
 
 				updateQuickslot();
+			} else if (!canRecall) {
+				GLog.i( Messages.get(this, "cant_recall") );
+				Dungeon.hero.busy();
 			}
 
 		}
@@ -337,14 +343,16 @@ public class DriedRose extends Artifact {
 								} else {
 									if (BossHealthBar.isAssigned()) {
 										Rose.ghost.sayBoss();
-									} else if (Random.Float() < 0.35f) {
+									} else if (Random.Float() < 0.4f) {
 										Rose.ghost.sayAppeared();
 									}
 								}
 
-								//Apply saved buffs:
+								//for (Buff b : storedBuffs) {
+								//	Rose.ghost.add(b);
+								//}
 
-								System.out.println(storedBuffs);
+								//Rose.ghost.buffs().addAll( Rose.storedBuffs );
 
 								Dungeon.hero.spend(1f);
 								Dungeon.hero.busy();
@@ -516,6 +524,8 @@ public class DriedRose extends Artifact {
 	private static final String WEAPON =        "weapon";
 	private static final String ARMOR =         "armor";
 
+	private static final String BUFFS = "buffs";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle(bundle);
@@ -527,6 +537,8 @@ public class DriedRose extends Artifact {
 		
 		if (weapon != null) bundle.put( WEAPON, weapon );
 		if (armor != null)  bundle.put( ARMOR, armor );
+
+		//if (storedBuffs != null) bundle.put( BUFFS, storedBuffs );
 	}
 
 	@Override
@@ -540,6 +552,9 @@ public class DriedRose extends Artifact {
 		
 		if (bundle.contains(WEAPON)) weapon = (MeleeWeapon)bundle.get( WEAPON );
 		if (bundle.contains(ARMOR))  armor = (Armor)bundle.get( ARMOR );
+
+		//if (storedBuffs != null && ghost != null) storedBuffs = ghost.buffs();
+		bundle.get(BUFFS);
 	}
 
 	public class roseRecharge extends ArtifactBuff {
@@ -560,9 +575,9 @@ public class DriedRose extends Artifact {
 			//rose does not charge while ghost hero is alive
 			if (ghost != null && !cursed && target.buff(MagicImmune.class) == null){
 				
-				//heals to full over 500 turns
+				//heals to full over 750 turns
 				if (ghost.HP < ghost.HT && Regeneration.regenOn()) {
-					partialCharge += (ghost.HT / 500f) * RingOfEnergy.artifactChargeMultiplier(target);
+					partialCharge += (ghost.HT / 750f) * RingOfEnergy.artifactChargeMultiplier(target);
 					updateQuickslot();
 					
 					while (partialCharge > 1) {
@@ -584,7 +599,7 @@ public class DriedRose extends Artifact {
 					&& target.buff(MagicImmune.class) == null
 					&& Regeneration.regenOn()) {
 				//500 turns to a full charge
-				partialCharge += (1/5f * RingOfEnergy.artifactChargeMultiplier(target));
+				partialCharge += (1/7f * RingOfEnergy.artifactChargeMultiplier(target));
 				while (partialCharge > 1){
 					charge++;
 					partialCharge--;
@@ -605,7 +620,11 @@ public class DriedRose extends Artifact {
 				}
 
 				if (spawnPoints.size() > 0) {
-					Wraith.spawnAt(Random.element(spawnPoints), Wraith.class);
+					if (Random.Float() < 0.1f) {
+						TormentedSpirit.spawnAt(Random.element(spawnPoints), Wraith.class);
+					} else {
+						Wraith.spawnAt(Random.element(spawnPoints), Wraith.class);
+					}
 					Sample.INSTANCE.play(Assets.Sounds.CURSED);
 				}
 
@@ -654,9 +673,16 @@ public class DriedRose extends Artifact {
 				GLog.w( Messages.get(this, "no_rose") );
 				return false;
 			} if ( rose.level() >= rose.levelCap ){
-				GLog.i( Messages.get(this, "no_room") );
-				hero.spendAndNext(pickupDelay());
-				return true;
+				if (rose.charge < rose.chargeCap) {
+					rose.charge = Math.min(100, rose.charge + 20);
+					hero.spendAndNext(pickupDelay());
+					return true;
+				} else {
+					GLog.i( Messages.get(this, "no_room") );
+					hero.spendAndNext(pickupDelay());
+					return true;
+				}
+
 			} else {
 
 				rose.upgrade();
@@ -750,7 +776,7 @@ public class DriedRose extends Artifact {
 			}
 
 			if (rose == null) return;
-			HT = 40 + 10*rose.level();
+			HT = 40 + 10 * rose.level();
 		}
 
 		public Weapon weapon(){
@@ -834,7 +860,7 @@ public class DriedRose extends Artifact {
 				}
 			} else if (rose != null) {
 				//1-5 to 1-10
-				dmg += Random.NormalIntRange(1, rose.ghostStrength()-8);
+				dmg += Random.NormalIntRange(rose.level() + 1, (rose.ghostStrength()-9) * 4   );
 			}
 			
 			return dmg;
@@ -915,6 +941,8 @@ public class DriedRose extends Artifact {
 				}
 				if (armDr > 0) dr += armDr;
 
+			} else {
+				dr += Random.NormalIntRange(0, rose.level());
 			}
 			if (weapon() != null){
 				//dr += Random.NormalIntRange( 0, weapon().defenseFactor( this ));

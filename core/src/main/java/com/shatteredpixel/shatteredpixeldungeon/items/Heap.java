@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TormentedSpirit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -51,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,7 +86,11 @@ public class Heap implements Bundlable {
 	public void open( Hero hero ) {
 		switch (type) {
 		case TOMB:
-			Wraith.spawnAround( hero.pos );
+			if (Random.Float() < 0.2f) {
+				TormentedSpirit.spawnAround( hero.pos );
+			} else {
+				Wraith.spawnAround( hero.pos );
+			}
 			break;
 		case REMAINS:
 		case SKELETON:

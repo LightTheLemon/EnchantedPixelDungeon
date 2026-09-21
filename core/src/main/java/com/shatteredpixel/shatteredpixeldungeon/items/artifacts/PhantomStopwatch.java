@@ -364,9 +364,9 @@ public class PhantomStopwatch extends Artifact {
 
 			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 				if (mob.delayedDamage > 0) {
-					mob.damage(Math.round(mob.delayedDamage * 0.7f), Dungeon.hero);
-					if (mob.delayedDamage * 0.3f > 1) {
-						Buff.affect(mob, Viscosity.DeferedDamage.class).extend(mob.delayedDamage * 0.3f);
+					mob.damage(Math.round(mob.delayedDamage * 0.6f), Dungeon.hero);
+					if (mob.delayedDamage * 0.4f > 1) {
+						Buff.affect(mob, Viscosity.DeferedDamage.class).extend(mob.delayedDamage * 0.4f);
 					}
 					Sample.INSTANCE.play(Assets.Sounds.BLAST, Math.min( 1.1f, mob.delayedDamage / 10f), 0.9f);
 					mob.delayedDamage = 0;

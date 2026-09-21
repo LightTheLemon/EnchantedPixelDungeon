@@ -128,7 +128,6 @@ public class EtherealChains extends Artifact {
 			if (target != null && (Dungeon.level.visited[target] || Dungeon.level.mapped[target])){
 
 				//chains cannot be used to go where it is impossible to walk to
-				//TODO: pickaxe logic
 				PathFinder.buildDistanceMap(target, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
 				if (!(Dungeon.level instanceof MiningLevel) && PathFinder.distance[curUser.pos] == Integer.MAX_VALUE){
 					GLog.w( Messages.get(EtherealChains.class, "cant_reach") );
@@ -202,7 +201,7 @@ public class EtherealChains extends Artifact {
 						Talent.onArtifactUsed(hero);
 						updateQuickslot();
 
-						Buff.affect(enemy, Cripple.class, Cripple.DURATION / 2);
+						Buff.affect(enemy, Cripple.class, 1f + (level() / 2f));
 
 						Paralysis para = Buff.affect(enemy, Paralysis.class, 1);
 						para.announced = false;
@@ -331,11 +330,11 @@ public class EtherealChains extends Artifact {
 					&& !cursed
 					&& target.buff(MagicImmune.class) == null
 					&& Regeneration.regenOn()) {
-				//gains a charge in 40 - 2*missingCharge turns
-				float chargeGain = (1 / (40f - (chargeTarget - charge)*2f));
+				//gains a charge in 40 - 1.5*missingCharge turns
+				float chargeGain = (1 / (40f - (chargeTarget - charge)*1.5f));
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
-			} else if (cursed && Random.Int(100) == 0){
+			} else if (cursed && Random.Int(80) == 0){
 				Buff.prolong( target, Cripple.class, 10f);
 			}
 
@@ -356,7 +355,7 @@ public class EtherealChains extends Artifact {
 
 			exp += Math.round(levelPortion*100);
 
-			//past the soft charge cap, gaining  charge from leveling is slowed.
+			//past the soft charge cap, gaining charge from leveling is slowed.
 			if (charge > 5+(level()*2)){
 				levelPortion *= (5+((float)level()*2))/charge;
 			}

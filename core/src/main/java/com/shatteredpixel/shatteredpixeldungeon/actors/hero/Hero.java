@@ -162,6 +162,7 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -499,7 +500,11 @@ public class Hero extends Char {
 		}
 
 		float bonus = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
-		if (wep != null && (wep.enchantment instanceof Covert || (belongings.getItem(SpiritBow.class).enchantment != null && belongings.getItem(SpiritBow.class).enchantment instanceof Covert)) && attackTarget.HP <= 0) {
+		if (wep != null && wep.enchantment instanceof Covert  && attackTarget.HP <= 0) {
+			float finalDuration = ((Invisibility.DURATION - 16) / 2) + (wep.buffedLvl() * 2f)  * bonus;
+			Buff.prolong( this, Invisibility.class, finalDuration);
+		}
+		if (belongings.getItem(SpiritBow.class) != null && belongings.getItem(SpiritBow.class).enchantment != null && belongings.getItem(SpiritBow.class).enchantment instanceof Covert) {
 			float finalDuration = ((Invisibility.DURATION - 16) / 2) + (wep.buffedLvl() * 2f)  * bonus;
 			Buff.prolong( this, Invisibility.class, finalDuration);
 		}
@@ -1413,7 +1418,6 @@ public class Hero extends Char {
 
 							}
 
-
 							//mining gold doesn't break crystals
 							crystalAdjacent = false;
 
@@ -1421,31 +1425,36 @@ public class Hero extends Char {
 
 							boolean canMine = true;
 
-							//mining restrictions
+							//cant mine on boss levels. Exception for 15 because
+							if (Dungeon.depth == 20 || Dungeon.depth == 25) {
+								if (canMine && buff(LockedFloor.class) == null) GLog.w( Messages.get(Pickaxe.class, "cant_mine_boss_1") );
+								if (canMine && buff(LockedFloor.class) != null) GLog.w( Messages.get(Pickaxe.class, "cant_mine_boss_2") );
+								canMine = false;
+							}
+							//with the exception to mining level, you shouldn't be able to get into any areas that you can't normally access
 							for (int i : PathFinder.NEIGHBOURS8) {
-								if (Dungeon.level.map[action.dst + i] == Terrain.DOOR ||
-									Dungeon.level.map[action.dst + i] == Terrain.LOCKED_DOOR ||
-									Dungeon.level.map[action.dst + i] == Terrain.CRYSTAL_DOOR ||
-									Dungeon.level.map[action.dst + i] == Terrain.OPEN_DOOR ||
-									Dungeon.level.map[action.dst + i] == Terrain.SECRET_DOOR ||
-									Dungeon.level.map[action.dst + i] == Terrain.BARRICADE ||
-									Dungeon.depth % 5 == 0){
-									//TODO: add same check for ethereal chains boundary break
-									canMine = false;
-									break;
+								if (!(Dungeon.level instanceof MiningLevel)
+									&& (Dungeon.level.passable[action.dst + i]
+									|| Dungeon.level.map[action.dst + i] == Terrain.TRAP
+									|| Dungeon.level.map[action.dst + i] == Terrain.INACTIVE_TRAP
+									|| Dungeon.level.map[action.dst + i] == Terrain.SECRET_TRAP) ) {
+
+									PathFinder.buildDistanceMap(hero.pos, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
+									if (PathFinder.distance[action.dst + i] == Integer.MAX_VALUE) {
+										if (canMine) GLog.w( Messages.get(Pickaxe.class, "cant_mine_locked") );
+										canMine = false;
+									}
 								}
 							}
-
-							//check all tiles around. if all but one are walls, can't mine
-							int wallCount = 0;
-							for (int i: PathFinder.NEIGHBOURS8) {
-								if (Dungeon.level.map[action.dst + i] == Terrain.WALL) {
-									wallCount++;
-									System.out.println("wallCount: " + wallCount);
-									if (wallCount > 6) {
-										canMine = false;
-										break;
-									}
+							for (int i : PathFinder.NEIGHBOURS4) {
+								if (Dungeon.level.map[action.dst + i] == Terrain.DOOR ||
+										Dungeon.level.map[action.dst + i] == Terrain.LOCKED_DOOR ||
+										Dungeon.level.map[action.dst + i] == Terrain.CRYSTAL_DOOR ||
+										Dungeon.level.map[action.dst + i] == Terrain.OPEN_DOOR ||
+										Dungeon.level.map[action.dst + i] == Terrain.BARRICADE) {
+									if (canMine) GLog.w( Messages.get(Pickaxe.class, "cant_mine_door") );
+									canMine = false;
+									break;
 								}
 							}
 
@@ -1466,7 +1475,7 @@ public class Hero extends Char {
 								}
 							} else {
 								CellEmitter.get( action.dst ).burst( Speck.factory( Speck.ROCK ), 1 );
-								Sample.INSTANCE.play( Assets.Sounds.EVOKE, 0.99f, 1.1f );
+								Sample.INSTANCE.play( Assets.Sounds.EVOKE, 0.99f, 1.0f );
 							}
 
 						//1 hunger spent total
@@ -1520,6 +1529,14 @@ public class Hero extends Char {
 						Dungeon.observe();
 					}
 				});
+			} else if (!Dungeon.level.insideMap(action.dst)) {
+
+				hero.sprite.attack( action.dst );
+				CellEmitter.get( action.dst ).burst( Speck.factory( Speck.ROCK ), 1 );
+				Sample.INSTANCE.play( Assets.Sounds.EVOKE, 0.99f, 1.0f );
+				spendAndNext(TICK);
+				ready();
+
 			} else {
 				ready();
 			}
@@ -2082,18 +2099,18 @@ public class Hero extends Char {
 				curAction = new HeroAction.Attack( ch );
 			}
 
-		//removed "Dungeon.level instanceof MiningLevel" check
 		} else if (belongings.getItem(Pickaxe.class) != null && (
 				Dungeon.level.map[cell] == Terrain.WALL
 				|| Dungeon.level.map[cell] == Terrain.WALL_DECO
 				|| Dungeon.level.map[cell] == Terrain.MINE_CRYSTAL
 				|| Dungeon.level.map[cell] == Terrain.MINE_BOULDER)){
 
-			if (Dungeon.level.adjacent(pos, cell)) {
+			curAction = new HeroAction.Mine( cell );
+/*			if (Dungeon.level.adjacent(pos, cell)) {
 				curAction = new HeroAction.Mine( cell );
 			} else {
 				curAction = new HeroAction.Move( cell );
-			}
+			}*/
 
 		} else if (Dungeon.level.map[cell] == Terrain.REGION_DECO_ALT &&
 						Dungeon.depth < 6 ) {

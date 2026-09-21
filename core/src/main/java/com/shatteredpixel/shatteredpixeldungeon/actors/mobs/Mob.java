@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.actors.Char.Property.MINIBOSS;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
@@ -127,11 +129,13 @@ public abstract class Mob extends Char {
 	public AiState state = initState();
 
 	private AiState initState() {
+		if (enemy != null) enemy.HP = (int) (enemy.HP * ( 1 + Random.Float() - 0.5f) );
+
 		float chance = Random.Float();
-		if (chance < 0.10f) {
+		if (chance < 0.04f && !Char.hasProp(this.enemy, Char.Property.MINIBOSS) && !Char.hasProp(this.enemy, Char.Property.BOSS) && !(Dungeon.level instanceof VaultLevel) ) {
 			Buff.affect(this, MagicalSleep.class);
 			return SLEEPING;
-		} else if (chance < 0.15f) {
+		} else if (chance < 0.12f) {
 			return HUNTING;
 		} else {
 			return SLEEPING;
@@ -1091,7 +1095,7 @@ public abstract class Mob extends Char {
 		if (Ring.getBuffedBonus(Dungeon.hero, RingOfWealth.Wealth.class) > 0) {
 			int rolls = 1;
 			if (properties.contains(Property.BOSS)) rolls = 15;
-			else if (properties.contains(Property.MINIBOSS)) rolls = 5;
+			else if (properties.contains(MINIBOSS)) rolls = 5;
 			ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(Dungeon.hero, rolls);
 			if (bonus != null && !bonus.isEmpty()) {
 				for (Item b : bonus) Dungeon.level.drop(b, pos).sprite.drop();

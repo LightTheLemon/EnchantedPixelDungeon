@@ -253,8 +253,8 @@ public enum HeroClass {
 		//curse.quantity(10);
 		//curse.collect();
 
-		DriedRose rose = new DriedRose();
-		rose.identify().collect();
+		//DriedRose rose = new DriedRose();
+		//rose.identify().collect();
 
 		//ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
 		//upgrade.quantity(10);
@@ -275,6 +275,7 @@ public enum HeroClass {
 
 		//TimekeepersHourglass time = new TimekeepersHourglass();
 		//time.identify().collect();
+		//time.cursed = true;
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
@@ -304,10 +305,6 @@ public enum HeroClass {
 		bow.identify().collect();
 
 		Dungeon.quickslot.setSlot(0, bow);
-
-		ScrollOfEnchantment ench = new ScrollOfEnchantment();
-		ench.quantity(10);
-		ench.identify().collect();
 
 		new PotionOfMindVision().identify();
 		new ScrollOfLullaby().identify();

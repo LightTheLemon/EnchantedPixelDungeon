@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ArcaneBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
@@ -212,25 +213,22 @@ public class SewerLevel extends RegularLevel {
 		int terr = map[pos];
 		if (terr == Terrain.REGION_DECO || terr == Terrain.REGION_DECO_ALT){
 
-			int lootTable = Random.chances(new float[]{1, 2, 2, 2, 1, 1, 4, 1, 6});
+			int lootTable = Random.chances(new float[]{1, 2, 2, 3, 1, 1, 5, 1, 13, 1, 1});
 
 			switch (lootTable) {
 				case 0:
 					set(pos, Terrain.EMPTY);
 					drop(Generator.randomUsingDefaults(Generator.Category.SEED), pos).sprite.drop(pos);
 					break;
-
 				case 1:
-					set(pos, Terrain.EMPTY);
+					set(pos, Terrain.EMPTY_DECO);
 					drop(Generator.randomUsingDefaults(Generator.Category.STONE), pos).sprite.drop(pos);
 					break;
-
 				case 2:
 					set(pos, Terrain.WATER);
 					Dungeon.level.drop(new Dewdrop(), pos).sprite.drop(pos);
 					Splash.at(pos, 0xFF507B5D, 5);
 					break;
-
 				case 3:
 					set(pos, Terrain.EMPTY);
 					Emitter emitter = new Emitter();
@@ -238,37 +236,40 @@ public class SewerLevel extends RegularLevel {
 					emitter.pour(SparkParticle.FACTORY, 0.125f);
 					Dungeon.level.drop(new Gold().random(), pos).sprite.drop(pos);
 					break;
-
 				case 4:
 					set(pos, Terrain.EMPTY);
 					Item missile = Generator.randomUsingDefaults(Generator.Category.MIS_T1);
 					missile.quantity(1);
+					missile.identify();
 					Dungeon.level.drop( missile, pos).sprite.drop(pos);
 					break;
-
 				case 5:
 					set(pos, Terrain.EMPTY);
 					Dungeon.level.drop( new Recycle().quantity(Random.Int(1, 4)), pos).sprite.drop(pos);
 					break;
-
 				case 6:
-					set(pos, Terrain.EMPTY);
+					set(pos, Terrain.EMBERS);
 					Bomb bomb = new Bomb();
 					Actor.addDelayed(bomb.fuse = bomb.createFuse().ignite(bomb), 1);
 					Dungeon.level.drop( bomb, pos).sprite.drop(pos);
 					break;
-
 				case 7:
 					set(pos, Terrain.WATER);
 					Dungeon.level.drop( new AquaBrew().quantity(Random.Int(1,4)), pos).sprite.drop(pos);
 					Splash.at(pos, 0xFF507B5D, 5);
 					break;
-
 				case 8:
 					set(pos, Terrain.WATER);
 					Splash.at(pos, 0xFF507B5D, 5);
 					break;
-
+				case 9:
+					set(pos, Terrain.EMPTY_DECO);
+					Dungeon.level.drop( new Stylus(), pos).sprite.drop(pos);
+					break;
+				case 10:
+					set(pos, Terrain.EMPTY_DECO);
+					Dungeon.level.drop( Generator.randomUsingDefaults(Generator.Category.SCROLL), pos).sprite.drop(pos);
+					break;
 			}
 		}
 		GameScene.updateMap(pos);

@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WellFed;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -63,6 +64,7 @@ public class WaterOfHealth extends WellWater {
 
 		PotionOfHealing.cure( hero );
 		hero.buff( Hunger.class ).satisfy( Hunger.STARVING );
+		Buff.affect( hero, WellFed.class ).reset();
 
 		if (VialOfBlood.delayBurstHealing()){
 			Healing healing = Buff.affect(hero, Healing.class);

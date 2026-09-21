@@ -722,7 +722,7 @@ public class PrisonBossLevel extends Level {
 		GameScene.updateMap();
 		
 		FadingTraps t = new FadingTraps();
-		t.fadeDelay = 2f;
+		t.fadeDelay = 1f;
 		t.setCoveringArea(tenguCell);
 		GameScene.add(t, false);
 		customTiles.add(t);
@@ -784,7 +784,7 @@ public class PrisonBossLevel extends Level {
 		
 		Rect area;
 		
-		private float fadeDuration = 1f;
+		private float fadeDuration = 7f;
 		private float initialAlpha = .4f;
 		private float fadeDelay = 1f;
 		

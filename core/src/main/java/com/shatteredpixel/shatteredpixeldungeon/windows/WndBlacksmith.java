@@ -76,14 +76,14 @@ public class WndBlacksmith extends Window {
 
 		ArrayList<RedButton> buttons = new ArrayList<>();
 
-		int pickaxeCost = 1000;
+		int pickaxeCost = 2000;
 		RedButton pickaxe = new RedButton(Messages.get(this, "pickaxe", pickaxeCost), 6){
 			@Override
 			protected void onClick() {
 				GameScene.show(new WndOptions(
 						troll.sprite(),
 						Messages.titleCase( troll.name() ),
-						Messages.get(WndBlacksmith.class, "pickaxe_verify") + (pickaxeCost == 0 ? "\n\n" + Messages.get(WndBlacksmith.class, "pickaxe_free") : ""),
+                        Messages.get(WndBlacksmith.class, "pickaxe_verify") + "", // + (pickaxeCost == 0 ? "\n\n" + Messages.get(WndBlacksmith.class, "pickaxe_free") : ""
 						Messages.get(WndBlacksmith.class, "pickaxe_yes"),
 						Messages.get(WndBlacksmith.class, "pickaxe_no")
 				){
