@@ -707,8 +707,8 @@ public class Armor extends EquipableItem {
 	protected static int STRReq(int tier, int lvl){
 		lvl = Math.max(0, lvl);
 
-		//strength req decreases every other upgrade
-		return (8 + tier * 2) - (1 + lvl / 2);
+		//strength req decreases every other upgrade up to a certain point
+		return (8 + tier * 2) - Math.min(8, ((1 + lvl ) / 2));
 	}
 	
 	@Override

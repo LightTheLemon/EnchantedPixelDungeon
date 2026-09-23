@@ -97,6 +97,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
@@ -111,6 +112,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSp
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
 import com.watabou.utils.DeviceCompat;
 
 public enum HeroClass {
@@ -253,8 +255,8 @@ public enum HeroClass {
 		//curse.quantity(10);
 		//curse.collect();
 
-		//DriedRose rose = new DriedRose();
-		//rose.identify().collect();
+		DriedRose rose = new DriedRose();
+		rose.identify().collect();
 
 		//ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
 		//upgrade.quantity(10);

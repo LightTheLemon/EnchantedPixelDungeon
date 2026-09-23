@@ -30,9 +30,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Camouflage;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Obfuscation;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Wayward;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Covert;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -79,7 +81,7 @@ public class ItemSprite extends MovieClip {
 	protected float shadowWidth     = 1f;
 	protected float shadowHeight    = 0.25f;
 	protected float shadowOffset    = 0.5f;
-	
+
 	public ItemSprite() {
 		this( ItemSpriteSheet.SOMETHING, null );
 	}
@@ -203,7 +205,11 @@ public class ItemSprite extends MovieClip {
 		}
 	}
 
+	public Item item;
+
 	public ItemSprite view( Item item ){
+		this.item = item;
+
 		view(item.image(), item.glowing());
 		Emitter emitter = item.emitter();
 		if (emitter != null && parent != null) {
@@ -387,18 +393,39 @@ public class ItemSprite extends MovieClip {
 			ga = glowing.green * value;
 			ba = glowing.blue * value;
 
-			var wep = Dungeon.hero.belongings.getItem(Weapon.class);
-            if (wep != null) {
-                if (wep.enchantment instanceof Covert || wep.enchantment instanceof Wayward) {
-                    am = phase / 2.5f + 0.15f;
+			if (heap != null) {
+				Item item = heap.peek();
+                if (item instanceof Weapon) {
+                    if (((Weapon) item).hasEnchant(Covert.class, Dungeon.hero)
+                        || ((Weapon) item).hasEnchant(Wayward.class, Dungeon.hero)) {
+
+                        am = phase / 2.5f + 0.15f;
+                    }
+                }
+                if (item instanceof Armor) {
+                    if (((Armor) item).hasGlyph(Obfuscation.class, Dungeon.hero)
+                        || ((Armor) item).hasGlyph(Camouflage.class, Dungeon.hero)) {
+
+                        am = phase / 2.5f + 0.15f;
+                    }
                 }
             }
-            var arm = Dungeon.hero.belongings.getItem(Armor.class);
-            if (arm != null) {
-                if ( arm.glyph instanceof Camouflage) {
-                    am = phase / 2.5f + 0.15f;
-                }
-            }
+			if (item != null) {
+				if (item instanceof Weapon) {
+					if (((Weapon) item).hasEnchant(Covert.class, Dungeon.hero)
+							|| ((Weapon) item).hasEnchant(Wayward.class, Dungeon.hero)) {
+
+						am = phase / 2.5f + 0.4f;
+					}
+				}
+				if (item instanceof Armor) {
+					if (((Armor) item).hasGlyph(Obfuscation.class, Dungeon.hero)
+							|| ((Armor) item).hasGlyph(Camouflage.class, Dungeon.hero)) {
+
+						am = phase / 2f + 0.4f;
+					}
+				}
+			}
 
         }
 	}

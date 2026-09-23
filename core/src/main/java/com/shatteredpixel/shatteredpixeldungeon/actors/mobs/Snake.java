@@ -25,13 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SnakeSprite;
@@ -78,12 +71,4 @@ public class Snake extends Mob {
 		return super.defenseVerb();
 	}
 
-	@Override
-	public Item createLoot() {
-		if (Culinary.hasFoodEnchant((Weapon)Dungeon.hero.belongings.weapon())) {
-			return new Berry();
-		}
-		return super.createLoot();
-
-	}
 }

@@ -21,13 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollSprite;
 import com.watabou.utils.Random;
 

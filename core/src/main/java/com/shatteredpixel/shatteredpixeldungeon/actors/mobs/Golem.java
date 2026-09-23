@@ -227,53 +227,5 @@ public class Golem extends Mob {
 		}
 	}*/
 
-	private class Hunting extends Mob.Hunting{
-
-		@Override
-		public boolean act(boolean enemyInFOV, boolean justAlerted) {
-			if (!enemyInFOV || canAttack(enemy)) {
-				return super.act(enemyInFOV, justAlerted);
-			} else {
-
-				if (handleRecentAttackers()){
-					return act( true, justAlerted );
-				}
-
-				enemySeen = true;
-				target = enemy.pos;
-
-/*				int oldPos = pos;
-
-				if (distance(enemy) >= 1 && Random.Int(100/distance(enemy)) == 0
-						&& !Char.hasProp(enemy, Property.IMMOVABLE) && canTele(target)){
-					if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
-						sprite.zap( enemy.pos );
-						return false;
-					} else {
-						teleportEnemy();
-						return true;
-					}
-
-				} else if (getCloser( target )) {
-					spend( 1 / speed() );
-					return moveSprite( oldPos,  pos );
-
-				} else if (!Char.hasProp(enemy, Property.IMMOVABLE) && canTele(target)) {
-					if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
-						sprite.zap( enemy.pos );
-						return false;
-					} else {
-						teleportEnemy();
-						return true;
-					}
-
-				} else*/ {
-					//attempt to swap targets if the current one can't be reached or teleported
-					return handleUnreachableTarget(enemyInFOV, justAlerted);
-				}
-
-			}
-		}
-	}
 
 }

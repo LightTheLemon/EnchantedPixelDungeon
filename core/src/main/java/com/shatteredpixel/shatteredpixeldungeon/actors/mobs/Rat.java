@@ -26,9 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -84,22 +82,6 @@ public class Rat extends Mob {
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
 		if (bundle.contains(RAT_ALLY)) alignment = Alignment.ALLY;
-	}
-
-	@Override
-	public float lootChance() {
-		if (Culinary.hasFoodEnchant((Weapon)Dungeon.hero.belongings.weapon())) {
-			return 0.05f;
-		}
-		return super.lootChance();
-	}
-
-	@Override
-	public Item createLoot() {
-		if (Culinary.hasFoodEnchant( (Weapon)Dungeon.hero.belongings.weapon()) ) {
-			return new Berry();
-		}
-		return super.createLoot();
 	}
 
 }

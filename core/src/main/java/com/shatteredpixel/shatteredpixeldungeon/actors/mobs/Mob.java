@@ -72,7 +72,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
@@ -1114,6 +1121,9 @@ public abstract class Mob extends Char {
 			Dungeon.level.drop(buff(Culinary.culinaryProc.class).genLoot(), pos).sprite.drop();
 			Culinary.showFlare(sprite);
 		}
+		if (this instanceof Piranha) {
+
+		}
 
 		//soul eater talent
 		if (buff(SoulMark.class) != null &&
@@ -1128,6 +1138,19 @@ public abstract class Mob extends Char {
 	
 	@SuppressWarnings("unchecked")
 	public Item createLoot() {
+
+		//Replacement drops if you used this enchantment to kill the mob
+		if (buff(Culinary.culinaryKill.class) != null) {
+			if (this instanceof Piranha) return new PhantomMeat();
+			if (this instanceof Gnoll) return new SmallRation();
+			if (this instanceof Snake || this instanceof RotLasher) return new Berry();
+			if (this instanceof Senior) return new MeatPie();
+			if (this instanceof Monk) return new Pasty();
+			if (this instanceof Warlock) return new PotionOfCleansing();
+
+		}
+
+
 		Item item;
 		if (loot instanceof Generator.Category) {
 

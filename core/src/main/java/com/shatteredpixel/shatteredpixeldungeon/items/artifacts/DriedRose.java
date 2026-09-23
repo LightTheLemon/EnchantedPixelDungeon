@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
@@ -49,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -210,7 +212,11 @@ public class DriedRose extends Artifact {
 				//storedBuffs.addAll(ghost.buffs());
 
 				for (Buff b : ghost.buffs()) {
-					Buff.affect(hero, (Class) b.getClass(), b.cooldown() + 1f);
+					if (b instanceof FlavourBuff) {
+						Buff.affect(hero, (Class<? extends FlavourBuff>) b.getClass(),10f);
+					} else {
+						Buff.affect(hero, (Class) b.getClass(), b.cooldown() + 1);
+					}
 				}
 
 				ghost.updateRose();
@@ -312,7 +318,7 @@ public class DriedRose extends Artifact {
 
 			if (target != curUser.pos && Dungeon.level.passable[target]) {
 
-				////If i want to make it so the ghost can't be spawned through walls
+				////If i want to make it so the ghost can't be spawned through walls.
 				//int spawnPos = Math.min(spawnCell, new Ballistica( curUser.pos, target, Ballistica.MAGIC_BOLT).collisionPos);
 				//System.out.println( new Ballistica( curUser.pos, target, Ballistica.MAGIC_BOLT).collisionPos);
 				//System.out.println(spawnCell);
@@ -387,7 +393,7 @@ public class DriedRose extends Artifact {
 	};
 
 	public int ghostStrength(){
-		return 12 + level()/2;
+		return 12 + (level() + 1 )/2;
 	}
 
 	@Override
@@ -479,15 +485,14 @@ public class DriedRose extends Artifact {
 				}
 				updateQuickslot();
 			}
-		}
-/*		else if (ghost.HP < ghost.HT) {
+		} else if (ghost.HP < ghost.HT) {
 			int heal = Math.round((1 + level()/3f)*amount);
 			ghost.HP = Math.min( ghost.HT, ghost.HP + heal);
 			if (ghost.sprite != null) {
 				ghost.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
 			}
 			updateQuickslot();
-		}*/
+		}
 	}
 	
 	@Override
@@ -524,8 +529,6 @@ public class DriedRose extends Artifact {
 	private static final String WEAPON =        "weapon";
 	private static final String ARMOR =         "armor";
 
-	private static final String BUFFS = "buffs";
-
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle(bundle);
@@ -538,7 +541,6 @@ public class DriedRose extends Artifact {
 		if (weapon != null) bundle.put( WEAPON, weapon );
 		if (armor != null)  bundle.put( ARMOR, armor );
 
-		//if (storedBuffs != null) bundle.put( BUFFS, storedBuffs );
 	}
 
 	@Override
@@ -553,8 +555,6 @@ public class DriedRose extends Artifact {
 		if (bundle.contains(WEAPON)) weapon = (MeleeWeapon)bundle.get( WEAPON );
 		if (bundle.contains(ARMOR))  armor = (Armor)bundle.get( ARMOR );
 
-		//if (storedBuffs != null && ghost != null) storedBuffs = ghost.buffs();
-		bundle.get(BUFFS);
 	}
 
 	public class roseRecharge extends ArtifactBuff {
@@ -575,9 +575,9 @@ public class DriedRose extends Artifact {
 			//rose does not charge while ghost hero is alive
 			if (ghost != null && !cursed && target.buff(MagicImmune.class) == null){
 				
-				//heals to full over 750 turns
+				//passive regeneration while ghost is summoned
 				if (ghost.HP < ghost.HT && Regeneration.regenOn()) {
-					partialCharge += (ghost.HT / 750f) * RingOfEnergy.artifactChargeMultiplier(target);
+					partialCharge += (ghost.HT / 700f) * RingOfEnergy.artifactChargeMultiplier(target);
 					updateQuickslot();
 					
 					while (partialCharge > 1) {
@@ -598,7 +598,7 @@ public class DriedRose extends Artifact {
 					&& !cursed
 					&& target.buff(MagicImmune.class) == null
 					&& Regeneration.regenOn()) {
-				//500 turns to a full charge
+				//700 turns to a full charge
 				partialCharge += (1/7f * RingOfEnergy.artifactChargeMultiplier(target));
 				while (partialCharge > 1){
 					charge++;
@@ -818,11 +818,11 @@ public class DriedRose extends Artifact {
 			
 			if (weapon() != null){
 				acc *= weapon().accuracyFactor( this, target );
-			}
 
-			int encumbrance = rose.weapon.STRReq() - rose.ghostStrength();
-			if (encumbrance > 0){
-				acc /= (int) Math.pow( 1.5, encumbrance );
+				int encumbrance = rose.weapon.STRReq() - rose.ghostStrength();
+				if (encumbrance > 0){
+					acc /= Math.pow( 1.5, encumbrance );
+				}
 			}
 			
 			return acc;
@@ -833,10 +833,11 @@ public class DriedRose extends Artifact {
 			float delay = super.attackDelay();
 			if (weapon() != null){
 				delay *= weapon().delayFactor(this);
-			}
-			int encumbrance = rose.weapon.STRReq() - rose.ghostStrength();
-			if (encumbrance > 0){
-				delay *= Math.pow( 1.2, encumbrance );
+
+				int encumbrance = rose.weapon.STRReq() - rose.ghostStrength();
+				if (encumbrance > 0){
+					delay *= (float) Math.pow( 1.2, encumbrance );
+				}
 			}
 
 			return delay;
@@ -948,8 +949,8 @@ public class DriedRose extends Artifact {
 				//dr += Random.NormalIntRange( 0, weapon().defenseFactor( this ));
 
 				int wepDr = Random.NormalIntRange( 0 , weapon().defenseFactor( this ) );
-				if (rose.ghostStrength() < ((Weapon)weapon()).STRReq()){
-					wepDr -= (int) (1.25f*(((Weapon)weapon()).STRReq() - rose.ghostStrength()));
+				if (rose.ghostStrength() < (weapon()).STRReq()){
+					wepDr -= (int) (1.25f*((weapon()).STRReq() - rose.ghostStrength()));
 				}
 				if (wepDr > 0) dr += wepDr;
 
@@ -1182,7 +1183,6 @@ public class DriedRose extends Artifact {
 
 															updateQuickslot();
 															hide();
-															WndGhostHero.this.hide();
 
 															if (rose.ghost != null) {
 																rose.ghost.sprite.die();

@@ -30,10 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RotLasherSprite;
 import com.watabou.utils.Random;
@@ -134,12 +130,5 @@ public class RotLasher extends Mob {
 			return super.noticeEnemy();
 		}
 	}
-	@Override
-	public Item createLoot() {
-		if (Culinary.hasFoodEnchant((Weapon)Dungeon.hero.belongings.weapon())) {
-			return new Berry();
-		}
-		return super.createLoot();
 
-	}
 }

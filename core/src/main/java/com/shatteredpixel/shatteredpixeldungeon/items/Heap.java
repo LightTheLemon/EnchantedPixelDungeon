@@ -47,6 +47,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Sungrass;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -227,9 +230,12 @@ public class Heap implements Bundlable {
 		
 		boolean burnt = false;
 		boolean evaporated = false;
-		
+
 		for (Item item : items.toArray( new Item[0] )) {
-			if (item instanceof Scroll && !item.unique) {
+			if (Random.Float() < 0.5f && item instanceof Scroll && !item.unique) {
+				items.remove( item );
+				burnt = true;
+			} else if (Random.Float() < 0.5f && item instanceof Plant.Seed) {
 				items.remove( item );
 				burnt = true;
 			} else if (item instanceof Dewdrop) {

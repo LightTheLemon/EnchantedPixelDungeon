@@ -21,15 +21,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Culinary;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.AlbinoSprite;
 import com.watabou.utils.Random;
 
@@ -55,12 +50,4 @@ public class Albino extends Rat {
 		return damage;
 	}
 
-	@Override
-	public Item createLoot() {
-		if (Culinary.hasFoodEnchant((Weapon)Dungeon.hero.belongings.weapon())) {
-			return new MysteryMeat().quantity(2);
-		}
-		return super.createLoot();
-
-	}
 }

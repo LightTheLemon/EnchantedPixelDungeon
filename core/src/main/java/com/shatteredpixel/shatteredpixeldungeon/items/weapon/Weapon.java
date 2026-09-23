@@ -368,8 +368,8 @@ abstract public class Weapon extends KindOfWeapon {
 	protected static int STRReq(int tier, int lvl){
 		lvl = Math.max(0, lvl);
 
-		//strength req decreases every other upgrade
-		return (8 + tier * 2) - ((1 + lvl ) / 2);
+		//strength req decreases every other upgrade up to a certain point
+		return (8 + tier * 2) - Math.min(8, ((1 + lvl ) / 2));
 	}
 
 	@Override
@@ -531,17 +531,17 @@ abstract public class Weapon extends KindOfWeapon {
 
 		public static final Class<?>[] uncommon = new Class<?>[]{
 				Blocking.class, Blooming.class, Eldritch.class, Elastic.class, Vorpal.class,
-				Lucky.class, Projecting.class, Unstable.class, Culinary.class, Covert.class
+				Lucky.class, Projecting.class, Unstable.class, Covert.class
 		};
 
 		public static final Class<?>[] rare = new Class<?>[]{
-				Corrupting.class, Crystal.class, Grim.class, Vampiric.class
+				Corrupting.class, Crystal.class, Grim.class, Vampiric.class, Culinary.class
 		};
 
 		public static final float[] typeChances = new float[]{
 				45, //9% each
-				40, //4%  each
-				15  //3.75% each
+				40, //4.44%  each
+				15  //3% each
 		};
 
 		public static final Class<?>[] curses = new Class<?>[]{
