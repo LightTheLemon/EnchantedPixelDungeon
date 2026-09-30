@@ -161,7 +161,7 @@ public class AlchemistsToolkit extends Artifact {
 	@Override
 	public void charge(Hero target, float amount) {
 		if (target.buff(MagicImmune.class) != null) return;
-		partialCharge += 0.25f*amount;
+		partialCharge += 0.35f*amount; //was 0.25f*amount
 		while (partialCharge >= 1){
 			partialCharge--;
 			charge++;
@@ -241,10 +241,10 @@ public class AlchemistsToolkit extends Artifact {
 		public void gainCharge(float levelPortion) {
 			if (cursed || target.buff(MagicImmune.class) != null) return;
 
-			//generates 2 energy every hero level, +1 energy per toolkit level
+			//generates 3 energy every hero level, +1 energy per toolkit level
 			//to a max of 12 energy per hero level
 			//This means that energy absorbed into the kit is recovered in 5 hero levels
-			float chargeGain = (2 + level()) * levelPortion;
+			float chargeGain = (3 + level()) * levelPortion;
 			chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 			partialCharge += chargeGain;
 

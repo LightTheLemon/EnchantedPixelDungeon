@@ -169,8 +169,12 @@ public abstract class Trap implements Bundlable {
 	private static final String VISIBLE	= "visible";
 	private static final String ACTIVE = "active";
 
+	public static final String SHOW_WARNING = "show_warning";
+
+
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
+		showWarning = bundle.getBoolean( SHOW_WARNING );
 		pos = bundle.getInt( POS );
 		visible = bundle.getBoolean( VISIBLE );
 		if (bundle.contains(ACTIVE)){
@@ -180,6 +184,7 @@ public abstract class Trap implements Bundlable {
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
+		bundle.put( SHOW_WARNING, showWarning );
 		bundle.put( POS, pos );
 		bundle.put( VISIBLE, visible );
 		bundle.put( ACTIVE, active );

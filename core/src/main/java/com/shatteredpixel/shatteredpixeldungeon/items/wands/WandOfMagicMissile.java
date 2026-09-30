@@ -67,7 +67,7 @@ public class WandOfMagicMissile extends DamageWand {
 			//apply the magic charge buff if we have another wand in inventory of a lower level, or already have the buff
 			for (Wand.Charger wandCharger : curUser.buffs(Wand.Charger.class)){
 				if (wandCharger.wand().buffedLvl() < buffedLvl() || curUser.buff(MagicCharge.class) != null){
-					Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setup(this);
+					Buff.affect(curUser, MagicCharge.class).setup(this);
 					break;
 				}
 			}
@@ -92,14 +92,12 @@ public class WandOfMagicMissile extends DamageWand {
 		return 3;
 	}
 
-	public static class MagicCharge extends FlavourBuff {
+	public static class MagicCharge extends Buff {
 
 		{
 			type = buffType.POSITIVE;
 			announced = true;
 		}
-
-		public static float DURATION = 4f;
 
 		private int level = 0;
 		private Wand wandJustApplied; //we don't bundle this as it's only used right as the buff is applied
@@ -139,13 +137,13 @@ public class WandOfMagicMissile extends DamageWand {
 		}
 
 		@Override
-		public float iconFadePercent() {
-			return Math.max(0, (DURATION - visualcooldown()) / DURATION);
+		public String iconTextDisplay() {
+			return Integer.toString(level());
 		}
 
 		@Override
 		public String desc() {
-			return Messages.get(this, "desc", level(), dispTurns());
+			return Messages.get(this, "desc", level());
 		}
 
 		private static final String LEVEL = "level";

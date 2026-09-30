@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -50,7 +51,7 @@ public class Monk extends Mob {
 
 		properties.add(Property.UNDEAD);
 	}
-	
+
 	@Override
 	public int damageRoll() {
 		return Random.NormalIntRange( 12, 25 );
@@ -84,7 +85,7 @@ public class Monk extends Mob {
 	protected boolean act() {
 		boolean result = super.act();
 		if (buff(Focus.class) == null && state == HUNTING && focusCooldown <= 0) {
-			Buff.affect( this, Focus.class );
+			Buff.affect( this, Focus.class, 10 );
 		}
 		return result;
 	}
@@ -139,8 +140,8 @@ public class Monk extends Mob {
 		super.restoreFromBundle( bundle );
 		focusCooldown = bundle.getInt( FOCUS_COOLDOWN );
 	}
-	
-	public static class Focus extends Buff {
+
+	public static class Focus extends FlavourBuff {
 		
 		{
 			type = buffType.POSITIVE;

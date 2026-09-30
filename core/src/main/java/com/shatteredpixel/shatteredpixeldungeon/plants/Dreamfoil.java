@@ -24,8 +24,8 @@ package com.shatteredpixel.shatteredpixeldungeon.plants;
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
@@ -35,7 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
-public class Mageroyal extends Plant {
+public class Dreamfoil extends Plant {
 
 	{
 		image = 7;
@@ -48,13 +48,13 @@ public class Mageroyal extends Plant {
 		if (ch != null) {
 			PotionOfHealing.cure(ch);
 
-
 			if (ch instanceof Hero) {
 				GLog.i( Messages.get(this, "refreshed") );
 				Buff.affect(ch, MagicalSleep.class).limitedTurns(hero.HT / 5);
 
 				if (((Hero) ch).subClass == HeroSubClass.WARDEN){
-					Buff.affect(ch, BlobImmunity.class, BlobImmunity.DURATION);
+					Buff.affect(ch, MagicalSleep.class);
+					Buff.affect(ch, Healing.class).setHeal(ch.HT / 3, 0, 10);
 				}
 			} else if (ch instanceof Mob) {
 				Buff.affect(ch, MagicalSleep.class);
@@ -64,9 +64,9 @@ public class Mageroyal extends Plant {
 
 	public static class Seed extends Plant.Seed {
 		{
-			image = ItemSpriteSheet.SEED_MAGEROYAL;
+			image = ItemSpriteSheet.SEED_DREAMFOIL;
 
-			plantClass = Mageroyal.class;
+			plantClass = Dreamfoil.class;
 		}
 	}
 }

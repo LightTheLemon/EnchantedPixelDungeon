@@ -25,6 +25,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
@@ -46,7 +48,7 @@ public class Golem extends Mob {
 		spriteClass = GolemSprite.class;
 		
 		HP = HT = 140;
-		defenseSkill = 15;
+		defenseSkill = 18;
 		baseSpeed = 0.5f;
 		
 		EXP = 12;
@@ -64,7 +66,7 @@ public class Golem extends Mob {
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 25, 30 );
+		return Random.NormalIntRange( 25, 35 );
 	}
 	
 	@Override
@@ -93,11 +95,28 @@ public class Golem extends Mob {
 	@Override
 	public void damage( int dmg, Object src ) {
 		if (src != null && AntiMagic.RESISTS.contains(src.getClass())) {
-			Sample.INSTANCE.play( Assets.Sounds.HIT_PARRY, 0.85f, 0.95f);
-			dmg /= 4;
+			Sample.INSTANCE.play( Assets.Sounds.HIT_PARRY, 0.75f, 0.95f);
+			dmg *= 0.35f;
+			Buff.affect(this, Barrier.class).setShield(1);
+		}
+		super.damage(dmg, src);
+	}
+
+	@Override
+	public String defenseVerb() {
+		return "blocked";
+	}
+
+	@Override
+	public int defenseProc( Char enemy, int damage ) {
+
+		if (!Dungeon.level.adjacent(pos, enemy.pos)) {
+			Sample.INSTANCE.play( Assets.Sounds.HIT_PARRY, 0.75f, 0.95f);
+			damage *= 0.35f;
+			Buff.affect(this, Barrier.class).setShield(1);
 		}
 
-		super.damage(dmg, src);
+		return super.defenseProc(enemy, damage);
 	}
 
 	public Item createLoot() {
@@ -109,123 +128,5 @@ public class Golem extends Mob {
 			return Generator.randomArmor(5);
 		}
 	}
-
-	/*
-	private boolean teleporting = false;
-	private int selfTeleCooldown = 0;
-	private int enemyTeleCooldown = 0;
-
-	private static final String TELEPORTING = "teleporting";
-	private static final String SELF_COOLDOWN = "self_cooldown";
-	private static final String ENEMY_COOLDOWN = "enemy_cooldown";
-
-	@Override
-	public void storeInBundle(Bundle bundle) {
-		super.storeInBundle(bundle);
-		bundle.put(TELEPORTING, teleporting);
-		bundle.put(SELF_COOLDOWN, selfTeleCooldown);
-		bundle.put(ENEMY_COOLDOWN, enemyTeleCooldown);
-	}
-
-	@Override
-	public void restoreFromBundle(Bundle bundle) {
-		super.restoreFromBundle(bundle);
-		teleporting = bundle.getBoolean( TELEPORTING );
-		selfTeleCooldown = bundle.getInt( SELF_COOLDOWN );
-		enemyTeleCooldown = bundle.getInt( ENEMY_COOLDOWN );
-	}
-
-
-
-	@Override
-	protected boolean act() {
-		//selfTeleCooldown--;
-		//enemyTeleCooldown--;
-		if (teleporting){
-			((GolemSprite)sprite).teleParticles(false);
-			if (Actor.findChar(target) == null && Dungeon.level.openSpace[target]) {
-				ScrollOfTeleportation.appear(this, target);
-				//selfTeleCooldown = 30;
-			} else {
-				target = Dungeon.level.randomDestination(this);
-			}
-			//teleporting = false;
-			spend(TICK);
-			return true;
-		}
-		return super.act();
-	}
-
-
-
-	public void onZapComplete(){
-		teleportEnemy();
-		next();
-	}
-
-	public void teleportEnemy(){
-		spend(TICK);
-
-		int bestPos = enemy.pos;
-		for (int i : PathFinder.NEIGHBOURS8){
-			if (Dungeon.level.passable[pos + i]
-				&& Actor.findChar(pos+i) == null
-				&& Dungeon.level.trueDistance(pos+i, enemy.pos) > Dungeon.level.trueDistance(bestPos, enemy.pos)){
-				bestPos = pos+i;
-			}
-		}
-
-		if (enemy.buff(MagicImmune.class) != null){
-			bestPos = enemy.pos;
-		}
-
-		if (bestPos != enemy.pos){
-			ScrollOfTeleportation.appear(enemy, bestPos);
-			if (enemy instanceof Hero){
-				((Hero) enemy).interrupt();
-				Dungeon.observe();
-				GameScene.updateFog();
-			}
-		}
-
-		//enemyTeleCooldown = 20;
-	}
-
-	private boolean canTele(int target){
-		if (enemyTeleCooldown > 0) return false;
-		PathFinder.buildDistanceMap(target, BArray.not(Dungeon.level.solid, null), Dungeon.level.distance(pos, target)+1);
-		//zaps can go around blocking terrain, but not through it
-		if (PathFinder.distance[pos] == Integer.MAX_VALUE){
-			return false;
-		}
-		return true;
-		return false;
-	}
-
-	*/
-
-/*	private class Wandering extends Mob.Wandering{
-
-		@Override
-		protected boolean continueWandering() {
-			enemySeen = false;
-
-			int oldPos = pos;
-			if (target != -1 && getCloser( target )) {
-				spend( 1 / speed() );
-				return moveSprite( oldPos, pos );
-//			} else if (!Dungeon.bossLevel() && target != -1 && target != pos && selfTeleCooldown <= 0) {
-//				((GolemSprite)sprite).teleParticles(true);
-//				teleporting = true;
-//				spend( 2*TICK );
-			} else {
-				target = randomDestination();
-				spend( TICK );
-			}
-
-			return true;
-		}
-	}*/
-
 
 }

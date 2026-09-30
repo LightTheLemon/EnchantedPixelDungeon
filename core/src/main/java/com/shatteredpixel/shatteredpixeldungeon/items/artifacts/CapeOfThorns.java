@@ -54,6 +54,9 @@ public class CapeOfThorns extends Artifact {
 
 		defaultAction = AC_ACTIVATE;
 	}
+
+	private boolean isFullyCharged = false;
+	private float partialCooldown = 0f;
 	public static final String AC_ACTIVATE = "ACTIVATE";
 
 	@Override
@@ -77,6 +80,8 @@ public class CapeOfThorns extends Artifact {
 		if (cooldown == 0) {
 			charge += Math.round(4*amount);
 			updateQuickslot();
+		} else if (cooldown < 0) {
+			cooldown = 0;
 		}
 	}
 
@@ -92,6 +97,7 @@ public class CapeOfThorns extends Artifact {
 
 			if (charge <= 0) {
 				GLog.i( Messages.get(this, "no_charge") );
+				charge = 0;
 				usesTargeting = false;
 
 			} else if (cursed) {
@@ -103,9 +109,9 @@ public class CapeOfThorns extends Artifact {
 				if (thorns != null) {
 					cooldown = charge;
 					charge = 0;
+					isFullyCharged = false;
 					GLog.p( Messages.get(this, "radiating") );
 					Sample.INSTANCE.play( Assets.Sounds.ROCKS );
-
 				}
 				hero.spendAndNext(TICK);
 				updateQuickslot();
@@ -144,29 +150,41 @@ public class CapeOfThorns extends Artifact {
 			//	updateQuickslot();
 			//}
 
-			if (cursed && Random.Int(15) == 0) {
+			if (cursed && Dungeon.hero.buff(Vulnerable.class) == null && Random.Int(15) == 0) {
 				Buff.affect(Dungeon.hero, Vulnerable.class, Vulnerable.DURATION / 2);
 			}
 			updateQuickslot();
 			spend(TICK);
+			if (Dungeon.hero.buff(Thorns.class) != null) {
+				partialCooldown += 0.1f;
+				if (partialCooldown >= 1f) {
+					partialCooldown = 0f;
+					cooldown = Math.max(0, cooldown - 1);
+					updateQuickslot();
+				}
+			}
+
 			return true;
 		}
 
 		public int proc(int damage, Char attacker, Char defender){
 			if (cooldown == 0){
-				float partialCharge = (damage*0.3f) + ((level()*0.3f) );
+				float partialCharge = (damage*0.30f) + ((level()*0.05f) );
 				//charge go up with xp
 				charge += partialCharge;
 				if (charge >= chargeCap){
 					charge = chargeCap;
-					GLog.p( Messages.get(this, "fully_charged") );
+					if (!isFullyCharged) {
+						isFullyCharged = true;
+						GLog.p( Messages.get(this, "fully_charged") );
+					}
 				}
 			}
 
 			if (cooldown != 0){
-				cooldown = Math.max(0, cooldown - damage);
-				//should cooldown also go down with time?
-				int deflected = Random.NormalIntRange(level() / 2, damage * ( 1 + level() / 10 ));
+				cooldown = Math.max(0, cooldown - (damage / ( 1 + (level() / 10) )));
+				int deflected = Random.NormalIntRange(level() / 2, damage * ( 1 + (level() / 10) ));
+				System.out.println(deflected);
 				damage -= deflected;
 
 				if (defender == null) defender = target;
@@ -174,7 +192,7 @@ public class CapeOfThorns extends Artifact {
 					attacker.damage(deflected, this);
 				}
 
-				exp+= deflected;
+				exp += deflected;
 
 				if (exp >= (level()+1)*5 && level() < levelCap){
 					exp -= (level()+1)*5;
@@ -182,8 +200,8 @@ public class CapeOfThorns extends Artifact {
 					Catalog.countUse(CapeOfThorns.class);
 					upgrade();
 				}
-
 			}
+
 			updateQuickslot();
 			return damage;
 		}

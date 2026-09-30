@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
@@ -166,6 +167,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.HighGrass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.WeakFloorRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
@@ -268,7 +270,7 @@ public class Hero extends Char {
 	
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
-		
+
 		HT = 20 + 5*(lvl-1) + HTBoost;
 
 		float multiplier = RingOfVitality.HTMultiplier(this);
@@ -863,7 +865,7 @@ public class Hero extends Char {
 	
 	@Override
 	public boolean act() {
-		
+
 		//calls to dungeon.observe will also update hero's local FOV.
 		fieldOfView = Dungeon.level.heroFOV;
 
@@ -1280,13 +1282,14 @@ public class Hero extends Char {
 		if ((Dungeon.level.adjacent( pos, action.dst) && Dungeon.level.map[action.dst] == Terrain.REGION_DECO_ALT) ||
 			(Dungeon.level.adjacent( pos, action.dst) && Dungeon.level.map[action.dst] == Terrain.REGION_DECO && hero.STR > 12)) {
 
+			spend(TICK);
+			interrupt();
 			path = null;
 			sprite.attack( pos );
 			Sample.INSTANCE.play( Assets.Sounds.BARREL, 0.9f, 1.0f );
 			Dungeon.level.destroy(action.dst);
 			GameScene.updateMap( action.dst );
 			Level.set(action.dst, Terrain.WATER);
-			spend(TICK);
 
 			return false;
 
@@ -1369,6 +1372,8 @@ public class Hero extends Char {
 		if (Dungeon.level.adjacent(pos, action.dst)){
 			path = null;
 			if ((Dungeon.level.map[action.dst] == Terrain.WALL
+					|| Dungeon.level.map[action.dst] == Terrain.REGION_DECO
+					|| Dungeon.level.map[action.dst] == Terrain.REGION_DECO_ALT
 					|| Dungeon.level.map[action.dst] == Terrain.WALL_DECO
 					|| Dungeon.level.map[action.dst] == Terrain.MINE_CRYSTAL
 					|| Dungeon.level.map[action.dst] == Terrain.MINE_BOULDER)
@@ -1425,10 +1430,10 @@ public class Hero extends Char {
 
 							boolean canMine = true;
 
-							//cant mine on boss levels. Exception for 15 because
+							//cant mine on boss levels. Exception for 15 because its mining themed
 							if (Dungeon.depth == 20 || Dungeon.depth == 25) {
-								if (canMine && buff(LockedFloor.class) == null) GLog.w( Messages.get(Pickaxe.class, "cant_mine_boss_1") );
-								if (canMine && buff(LockedFloor.class) != null) GLog.w( Messages.get(Pickaxe.class, "cant_mine_boss_2") );
+								if (buff(LockedFloor.class) == null) GLog.w( Messages.get(Pickaxe.class, "cant_mine_boss_1") );
+								if (buff(LockedFloor.class) != null) GLog.w( Messages.get(Pickaxe.class, "cant_mine_boss_2") );
 								canMine = false;
 							}
 							//with the exception to mining level, you shouldn't be able to get into any areas that you can't normally access
@@ -1767,7 +1772,7 @@ public class Hero extends Char {
 			interrupt();
 		}
 
-		if (this.buff(Drowsy.class) != null && dmg > lvl){
+		if (this.buff(Drowsy.class) != null){
 			Buff.detach(this, Drowsy.class);
 			GLog.w( Messages.get(this, "pain_resist") );
 		}
@@ -1855,7 +1860,7 @@ public class Hero extends Char {
 
 			if (fieldOfView[ m.pos ] && m.alignment == Alignment.ENEMY) {
 				visible.add(m);
-				if (!visibleEnemies.contains( m )) {
+				if (!visibleEnemies.contains( m ) && m.buff(MagicalSleep.class) == null) {
 					newMob = true;
 				}
 
@@ -2016,7 +2021,9 @@ public class Hero extends Char {
 			}
 
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
-					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay / speed()))){
+				&& (!flying || buff(Levitation.class) != null
+				&& buff(Levitation.class).detachesWithinDelay(delay / speed()))){
+
 				if (!Chasm.jumpConfirmed){
 					Chasm.heroJump(this);
 					interrupt();
@@ -2030,11 +2037,12 @@ public class Hero extends Char {
 			}
 
 			if (Dungeon.level.map[step] == Terrain.TRAP
-					&& (!flying || buff(Levitation.class) != null
-					&& buff(Levitation.class).detachesWithinDelay(delay / speed()))
-					&& (Trap.showWarning && Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) == null)) {
+				&& (!flying || buff(Levitation.class) != null
+				&& buff(Levitation.class).detachesWithinDelay(delay / speed()))
+				&& (Trap.showWarning && Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) == null)) {
+
 				Trap.heroStep(this, Dungeon.level.traps.get(step));
-				interrupt();
+				interrupt(); //TODO: this might cancel movement when it shouldn't
 				canSelfTrample = false;
 				return false;
 			}

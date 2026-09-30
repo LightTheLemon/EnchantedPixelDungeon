@@ -78,15 +78,132 @@ public class StatusPane extends Component {
 
 	private boolean large;
 
+	//private static int dynamicBarWidthLarge = Math.min(128, Dungeon.hero.HT + 30);
+
 	//potentially extends the hero portrait space to avoid some cutouts
 	public static float heroPaneExtraWidth = 0;
 	private NinePatch heroPaneCutout;
+
 	//potentially shrinks and/or repositions the hp bar to avoid some cutouts
-	public static int hpBarMaxWidth = 50;
+	//public static int hpBarMaxWidth = 50;
 	private Image hpCutout;
 	//potentially adjusts the row(s) of the the buff indicator to avoid some cutouts
 	public static float[] buffBarRowMaxWidths;
 	public static float[] buffBarRowAdjusts;
+
+	private void updateHealthBar(boolean large) {
+
+		int dynamicBarWidthLarge = Math.min(180, Dungeon.hero.HT + 35);
+
+		int dynamicBarWidthSmall = Math.min(68, (Dungeon.hero.HT / 2) + 10);
+
+		if (large)   hp.frame(0, 103, dynamicBarWidthLarge, 9);
+		else         hp.frame(0, 40, dynamicBarWidthSmall, 4);
+
+		if (large) shieldHP.frame(0, 112, dynamicBarWidthLarge, 9);
+		else        shieldHP.frame(0, 44, dynamicBarWidthSmall, 4);
+
+		if (large) Dot.frame(0, 103, dynamicBarWidthLarge, 9);
+		else       Dot.frame(0, 40, dynamicBarWidthSmall, 4);
+
+		if (large) exp.frame(0, 121, dynamicBarWidthLarge, 7);
+		else       exp.frame(0, 48, dynamicBarWidthSmall, 4);
+
+		if (large)  bg.size( dynamicBarWidthLarge + 32, bg.height ); //HP bars must be 128px wide atm
+		else        bg.size(dynamicBarWidthSmall + 32, bg.height ); //default max right is 50px health bar + 32
+
+		float heroPaneWidth = 30 + heroPaneExtraWidth;
+
+		if (large) {
+			exp.scale.x = (dynamicBarWidthLarge / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
+
+			hpText.measure();
+			hpText.x = hp.x - 9 + ((Math.min(180, Dungeon.hero.HT + 30))/2f);
+
+		} else {
+			exp.scale.x = ((17 + heroPaneExtraWidth) / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
+		}
+
+
+
+		if (large) {
+			exp.x = x + 30;
+			exp.y = y + 30;
+
+			hp.x = shieldHP.x = Dot.x = x + 30;
+			hp.y = shieldHP.y = Dot.y = y + 19;
+
+			hpText.x = hp.x - 9 + dynamicBarWidthLarge / 2f;;
+			hpText.y = hp.y + 1;
+			PixelScene.align(hpText);
+
+			expText.x = exp.x + 1 - (dynamicBarWidthLarge / 2f);
+			expText.y = exp.y;
+			PixelScene.align(expText);
+
+			heroInfoOnBar.setRect(heroInfo.right(), y + 19, dynamicBarWidthLarge, 20);
+
+			//little extra for 14th buff
+			buffs.setRect(x + 31, y, 142, 16);
+
+			busy.x = x + bg.width + 1;
+			busy.y = y + bg.height - 9;
+		} else {
+			exp.x = x+2;
+			exp.y = y+30;
+
+			if (heroPaneExtraWidth > 0){
+				heroPaneCutout.visible = true;
+				heroPaneCutout.x = x;
+				heroPaneCutout.y = y;
+				heroPaneCutout.size(heroPaneExtraWidth+4, heroPaneCutout.height);
+			}
+
+			float hpleft = x + heroPaneWidth;
+
+			//the class variable assumes the left of the bar can't move, but we can inset it 9px
+			int hpWidth = (int)dynamicBarWidthSmall;
+
+			hpleft -= 9;
+			hpWidth += 9;
+			hpCutout.visible = true;
+			hpCutout.x = hpleft - 2;
+			hpCutout.y = y;
+
+			hp.frame(50-hpWidth, 40, hpWidth, 4);
+			shieldHP.frame(50-hpWidth, 44, hpWidth, 4);
+
+
+			hp.x = shieldHP.x = Dot.x = hpleft;
+			hp.y = shieldHP.y = Dot.y = y + 2;
+
+			hpText.scale.set(PixelScene.align(0.5f));
+			hpText.x = hp.x - 4 + dynamicBarWidthSmall / 2f;
+			hpText.y = hp.y + (hp.height - (hpText.baseLine()+hpText.scale.y))/2f;
+			hpText.y -= 0.001f; //prefer to be slightly higher
+			PixelScene.align(hpText);
+
+			expText.scale.set(PixelScene.align(0.5f));
+			expText.x = exp.x + 1;
+			expText.y = exp.y + (exp.height - (expText.baseLine()+expText.scale.y))/2f;
+			expText.y -= 0.001f; //prefer to be slightly higher
+			PixelScene.align(expText);
+
+			heroInfoOnBar.setRect(heroInfo.right(), y, dynamicBarWidthSmall, 9);
+
+			if (buffBarRowMaxWidths != null){
+				buffs.rowWidthLimits = buffBarRowMaxWidths;
+			}
+			if (buffBarRowAdjusts != null){
+				buffs.rowHeightAdjusts = buffBarRowAdjusts;
+			}
+			buffs.setRect( x + heroPaneWidth + 1, y + 8, 55, 16 );
+
+			busy.x = x + 1;
+			busy.y = y + 37;
+		}
+
+	}
 
 	public StatusPane( boolean large ){
 		super();
@@ -138,12 +255,12 @@ public class StatusPane extends Component {
 		else        shieldHP = new Image(asset, 0, 44, 50, 4);
 		add(shieldHP);
 
-		if (large)  hp = new Image(asset, 0, 103, 128, 9);
-		else        hp = new Image(asset, 0, 40, 50, 4);
+		if (large)   hp = new Image(asset, 0, 103, 128, 9);
+		else         hp = new Image(asset, 0, 40, 50, 4);
 		add( hp );
 
-		if (large)  Dot = new Image(asset, 0, 103, 128, 9);
-		else        Dot = new Image(asset, 0, 40, 50, 4);
+		if (large)   Dot = new Image(asset, 0, 103, 128, 9);
+		else         Dot = new Image(asset, 0, 40, 50, 4);
 		Dot.hardlight(0, 0, 0);
 		Dot.alpha(0.25f);
 		add( Dot );
@@ -162,7 +279,7 @@ public class StatusPane extends Component {
 		add(heroInfoOnBar);
 
 		if (large)  exp = new Image(asset, 0, 121, 128, 7);
-		else        exp = new Image(asset, 0, 48, 17, 4);
+		else        exp = new Image(asset, 0, 48, 50, 4);
 		add( exp );
 
 		expText = new BitmapText(PixelScene.pixelFont);
@@ -192,10 +309,10 @@ public class StatusPane extends Component {
 
 		float heroPaneWidth = 30 + heroPaneExtraWidth;
 
+
 		bg.x = x + heroPaneExtraWidth;
 		bg.y = y;
-		if (large)  bg.size( 160, bg.height ); //HP bars must be 128px wide atm
-		else        bg.size(hpBarMaxWidth+32, bg.height ); //default max right is 50px health bar + 32
+		//moved code that was here to update method
 
 		avatar.x = bg.x - avatar.width / 2f + 15;
 		avatar.y = bg.y - avatar.height / 2f + 16;
@@ -207,83 +324,6 @@ public class StatusPane extends Component {
 		compass.y = avatar.y + avatar.height / 2f - compass.origin.y;
 		PixelScene.align(compass);
 
-		if (large) {
-			exp.x = x + 30;
-			exp.y = y + 30;
-
-			hp.x = shieldHP.x = Dot.x = x + 30;
-			hp.y = shieldHP.y = Dot.y = y + 19;
-
-			hpText.x = hp.x + (128 - hpText.width())/2f;
-			hpText.y = hp.y + 1;
-			PixelScene.align(hpText);
-
-			expText.x = exp.x + (128 - expText.width())/2f;
-			expText.y = exp.y;
-			PixelScene.align(expText);
-
-			heroInfoOnBar.setRect(heroInfo.right(), y + 19, 130, 20);
-
-			//little extra for 14th buff
-			buffs.setRect(x + 31, y, 142, 16);
-
-			busy.x = x + bg.width + 1;
-			busy.y = y + bg.height - 9;
-		} else {
-			exp.x = x+2;
-			exp.y = y+30;
-
-			if (heroPaneExtraWidth > 0){
-				heroPaneCutout.visible = true;
-				heroPaneCutout.x = x;
-				heroPaneCutout.y = y;
-				heroPaneCutout.size(heroPaneExtraWidth+4, heroPaneCutout.height);
-			}
-
-			float hpleft = x + heroPaneWidth;
-			if (hpBarMaxWidth < 82){
-				//the class variable assumes the left of the bar can't move, but we can inset it 9px
-				int hpWidth = (int)hpBarMaxWidth;
-				if (hpWidth <= 41){
-					hpleft -= 9;
-					hpWidth += 9;
-					hpCutout.visible = true;
-					hpCutout.x = hpleft - 2;
-					hpCutout.y = y;
-				}
-				hp.frame(50-hpWidth, 40, 50, 4);
-				shieldHP.frame(50-hpWidth, 44, 50, 4);
-			}
-
-			hp.x = shieldHP.x = Dot.x = hpleft;
-			hp.y = shieldHP.y = Dot.y = y + 2;
-
-			hpText.scale.set(PixelScene.align(0.5f));
-			hpText.x = hp.x + 1;
-			hpText.y = hp.y + (hp.height - (hpText.baseLine()+hpText.scale.y))/2f;
-			hpText.y -= 0.001f; //prefer to be slightly higher
-			PixelScene.align(hpText);
-
-			expText.scale.set(PixelScene.align(0.5f));
-			expText.x = exp.x + 1;
-			expText.y = exp.y + (exp.height - (expText.baseLine()+expText.scale.y))/2f;
-			expText.y -= 0.001f; //prefer to be slightly higher
-			PixelScene.align(expText);
-
-			heroInfoOnBar.setRect(heroInfo.right(), y, 50, 9);
-
-			if (buffBarRowMaxWidths != null){
-				buffs.rowWidthLimits = buffBarRowMaxWidths;
-			}
-			if (buffBarRowAdjusts != null){
-				buffs.rowHeightAdjusts = buffBarRowAdjusts;
-			}
-			buffs.setRect( x + heroPaneWidth + 1, y + 8, 55, 16 );
-
-			busy.x = x + 1;
-			busy.y = y + 37;
-		}
-
 		counter.point(busy.center());
 	}
 	
@@ -292,11 +332,12 @@ public class StatusPane extends Component {
 	private int oldHP = 0;
 	private int oldShield = 0;
 	private int oldMax = 0;
+	private int oldExp = 0;
 
 	@Override
 	public void update() {
 		super.update();
-		
+
 		int health = Dungeon.hero.HP;
 		int shield = Dungeon.hero.shielding();
 		int incomingDOT = Dungeon.hero.incomingDOT();
@@ -331,7 +372,10 @@ public class StatusPane extends Component {
 		Dot.scale.x = Math.min(DOTPercent, shieldHP.scale.x);
 		Dot.x = shieldHP.x + shieldHP.width() - Dot.width();
 
-		if (oldHP != health || oldShield != shield || oldMax != max){
+		if (oldHP != health || oldShield != shield || oldMax != max || oldExp != Dungeon.hero.exp){
+
+			updateHealthBar(large);
+
 			if (shield <= 0) {
 				hpText.text(health + "/" + max);
 			} else {
@@ -340,20 +384,15 @@ public class StatusPane extends Component {
 			oldHP = health;
 			oldShield = shield;
 			oldMax = max;
+			oldExp = Dungeon.hero.exp;
 		}
 
 		if (large) {
-			exp.scale.x = (128 / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
-
-			hpText.measure();
-			hpText.x = hp.x + (128 - hpText.width())/2f;
-
 			expText.text(Dungeon.hero.exp + "/" + Dungeon.hero.maxExp());
 			expText.measure();
-			expText.x = hp.x + (128 - expText.width())/2f;
+			expText.x = hp.x - 7 + ((Math.min(180, Dungeon.hero.HT + 30))/2f);
 
 		} else {
-			exp.scale.x = ((17 + heroPaneExtraWidth) / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
 			expText.text(Dungeon.hero.exp + "/" + Dungeon.hero.maxExp());
 		}
 

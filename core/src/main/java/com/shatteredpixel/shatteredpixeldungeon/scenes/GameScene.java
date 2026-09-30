@@ -480,7 +480,7 @@ public class GameScene extends PixelScene {
 		status = new StatusPane( SPDSettings.interfaceSize() > 0 );
 		status.camera = uiCamera;
 		StatusPane.heroPaneExtraWidth = heroPaneExtraWidth;
-		StatusPane.hpBarMaxWidth = hpBarMaxWidth;
+		//StatusPane.hpBarMaxWidth = hpBarMaxWidth;
 		StatusPane.buffBarRowMaxWidths = buffBarRowLimits;
 		StatusPane.buffBarRowAdjusts = buffBarRowAdjusts;
 		status.setRect(insets.left, uiSize > 0 ? uiCamera.height-39-insets.bottom : screentop, uiCamera.width - insets.left - insets.right, 0 );

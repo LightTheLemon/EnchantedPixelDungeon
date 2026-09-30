@@ -766,7 +766,12 @@ public abstract class Level implements Bundlable {
 		} else {
 			cooldown = TIME_TO_RESPAWN;
 		}
-		return cooldown / BurningSage.enemySpawnMultiplier() / AmuletShard.enemySpawnMultiplier();
+		System.out.println("cooldown: " + cooldown);
+		System.out.println("BurningSage.enemySpawnMultiplier(): " + BurningSage.enemySpawnMultiplier());
+		System.out.println("AmuletShard.enemySpawnMultiplier(): " + AmuletShard.enemySpawnMultiplier());
+		System.out.println("SPAWN RATE: " + cooldown * BurningSage.enemySpawnMultiplier() * AmuletShard.enemySpawnMultiplier());
+
+		return cooldown * BurningSage.enemySpawnMultiplier() * AmuletShard.enemySpawnMultiplier();
 	}
 
 	public boolean spawnMob(int disLimit){

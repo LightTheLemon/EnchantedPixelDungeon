@@ -43,7 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Firebloom;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Dreamfoil;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
@@ -95,7 +95,7 @@ public class SandalsOfNature extends Artifact {
 		seedColors.put(Icecap.Seed.class,       0x66B3FF);
 		seedColors.put(Stormvine.Seed.class,    0x195D80);
 		seedColors.put(Sorrowmoss.Seed.class,   0xA15CE5);
-		seedColors.put(Mageroyal.Seed.class,    0xFF4CD2);
+		seedColors.put(Dreamfoil.Seed.class,    0xFF4CD2);
 		seedColors.put(Earthroot.Seed.class,    0x67583D);
 		seedColors.put(Starflower.Seed.class,   0x404040);
 		seedColors.put(Fadeleaf.Seed.class,     0x919999);
@@ -111,7 +111,7 @@ public class SandalsOfNature extends Artifact {
 		seedChargeReqs.put(Icecap.Seed.class,       20);
 		seedChargeReqs.put(Stormvine.Seed.class,    20);
 		seedChargeReqs.put(Sorrowmoss.Seed.class,   20);
-		seedChargeReqs.put(Mageroyal.Seed.class,    12);
+		seedChargeReqs.put(Dreamfoil.Seed.class,    12);
 		seedChargeReqs.put(Earthroot.Seed.class,    40);
 		seedChargeReqs.put(Starflower.Seed.class,   40);
 		seedChargeReqs.put(Fadeleaf.Seed.class,     12);

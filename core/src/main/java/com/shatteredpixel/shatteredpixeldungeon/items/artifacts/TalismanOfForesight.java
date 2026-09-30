@@ -102,7 +102,7 @@ public class TalismanOfForesight extends Artifact {
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
 		if (charge < chargeCap){
-			partialCharge += 2*amount;
+			partialCharge += 3*amount;
 			while (partialCharge >= 1f){
 				charge++;
 				partialCharge--;
@@ -181,7 +181,7 @@ public class TalismanOfForesight extends Artifact {
 						noticed = true;
 
 						if (oldValue == Terrain.SECRET_TRAP){
-							earnedExp += 10;
+							earnedExp += 20;
 						} else if (oldValue == Terrain.SECRET_DOOR){
 							earnedExp += 100;
 						}
@@ -196,7 +196,7 @@ public class TalismanOfForesight extends Artifact {
 						artifactProc(ch, visiblyUpgraded(), (int)(3 + dist*1.08f));
 
 						if (!curUser.fieldOfView[ch.pos]){
-							earnedExp += 10;
+							earnedExp += 20;
 						}
 					}
 
@@ -205,7 +205,7 @@ public class TalismanOfForesight extends Artifact {
 						Buff.append(curUser, HeapAwareness.class, 5 + 2*level()).pos = h.pos;
 
 						if (!h.seen){
-							earnedExp += 10;
+							earnedExp += 20;
 						}
 					}
 
@@ -281,8 +281,8 @@ public class TalismanOfForesight extends Artifact {
 					&& !cursed
 					&& target.buff(MagicImmune.class) == null
 					&& Regeneration.regenOn()) {
-				//fully charges in 2000 turns at +0, scaling to 1000 turns at +10.
-				float chargeGain = (0.05f+(level()*0.005f));
+				//fully charges in 1600 turns at +0, scaling to 500 turns at +10.
+				float chargeGain = (0.08f+(level()*0.01f));
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
 

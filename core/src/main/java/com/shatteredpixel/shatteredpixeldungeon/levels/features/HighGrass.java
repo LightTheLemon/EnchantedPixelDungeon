@@ -52,6 +52,14 @@ public class HighGrass {
 	//yes this is a bit ugly, oh well.
 	private static boolean freezeTrample = false;
 
+	public static void growGrass ( Level level, int pos) {
+
+		if (level.map[pos] == Terrain.FURROWED_GRASS || level.map[pos] == Terrain.GRASS){
+			Level.set(pos, Terrain.HIGH_GRASS);
+		}
+
+	}
+
 	public static void trample( Level level, int pos ) {
 		
 		if (freezeTrample) return;

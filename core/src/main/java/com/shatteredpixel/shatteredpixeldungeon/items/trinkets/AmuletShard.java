@@ -20,10 +20,10 @@ public class AmuletShard extends Trinket {
         if (isIdentified()){
             return Messages.get(this,
                     "stats_desc",
-                    (int)(100*(1f - enemySpawnMultiplier(buffedLvl()))));
+                    (int)Math.ceil((100*(1f - enemySpawnMultiplier(buffedLvl())))));
         } else {
             return Messages.get(this, "typical_stats_desc",
-                    (int)(100*(1f - enemySpawnMultiplier(0))));
+                    (int)Math.ceil((100*(1f - enemySpawnMultiplier(0)))));
         }
     }
 
@@ -35,7 +35,7 @@ public class AmuletShard extends Trinket {
         if (level == -1){
             return 1f;
         } else {
-            return 0.95f - 0.05f*level;
+            return 0.80f - 0.20f*level;
         }
     }
 

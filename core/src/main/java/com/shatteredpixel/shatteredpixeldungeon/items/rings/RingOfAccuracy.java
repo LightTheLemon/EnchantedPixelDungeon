@@ -37,12 +37,12 @@ public class RingOfAccuracy extends Ring {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
 					Messages.decimalFormat("#.##", 100f * (Math.pow(1.15f, soloBuffedBonus()) - 1f)),
-					Messages.decimalFormat("#.##", 100f * Math.min(0.9, (Math.pow(soloBuffedBonus(), 0.9f) / 12) + 0.05)));
+					Messages.decimalFormat("#.##", 100f * Math.min(1f, (Math.pow(soloBuffedBonus(), 0.92f) / 12) + 0.05)));
 
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
 						Messages.decimalFormat("#.##", 100f * (Math.pow(1.15f, combinedBuffedBonus(Dungeon.hero)) - 1f)),
-						Messages.decimalFormat("#.##", 100f * Math.min(0.9, (Math.pow(combinedBuffedBonus(Dungeon.hero), 0.9f) / 12) + 0.05)));
+						Messages.decimalFormat("#.##", 100f * Math.min(1f, (Math.pow(combinedBuffedBonus(Dungeon.hero), 0.92f) / 12) + 0.05)));
 			}
 			return info;
 		} else {
@@ -57,7 +57,7 @@ public class RingOfAccuracy extends Ring {
 
 	public String upgradeStat2(int level){
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
-		return Messages.decimalFormat("#.##", 100f * Math.min(0.9, (Math.pow(level + 1, 0.9f) / 12) + 0.05)) + "%";
+		return Messages.decimalFormat("#.##", 100f * Math.min(1f, (Math.pow(level + 1, 0.92f) / 12f) + 0.05f)) + "%";
 	}
 	
 	@Override
@@ -73,7 +73,7 @@ public class RingOfAccuracy extends Ring {
 		if (getBuffedBonus(hero, Accuracy.class) < 1) {
 			return (float)((getBuffedBonus(hero, Accuracy.class) * 0.2) - 0.05);
 		}
-		return ((float) Math.min(0.9, (Math.pow(getBuffedBonus(hero, Accuracy.class), 0.9f) / 12) + 0.05));
+		return ((float) Math.min(1f, (Math.pow(getBuffedBonus(hero, Accuracy.class), 0.92f) / 12f) + 0.05f));
 	}
 
 	public class Accuracy extends RingBuff {

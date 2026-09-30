@@ -102,7 +102,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Firebloom;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Dreamfoil;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Stormvine;
@@ -440,7 +440,7 @@ public class VaultLevel extends CityLevel {
 		if (consumableLoot.get(0).isEmpty()){
 			consumableLoot.get(0).addAll(Arrays.asList(
 					Reflection.newInstance(Random.oneOf(PotionOfFrost.class, PotionOfLevitation.class)),
-					Reflection.newInstance(Random.oneOf(Mageroyal.Seed.class, Icecap.Seed.class, Stormvine.Seed.class)),
+					Reflection.newInstance(Random.oneOf(Dreamfoil.Seed.class, Icecap.Seed.class, Stormvine.Seed.class)),
 					Reflection.newInstance(Random.oneOf(ScrollOfMirrorImage.class, ScrollOfTeleportation.class)),
 					Reflection.newInstance(Random.oneOf(StoneOfFlock.class, StoneOfShock.class, StoneOfFear.class))));
 			Collections.shuffle(consumableLoot.get(0));

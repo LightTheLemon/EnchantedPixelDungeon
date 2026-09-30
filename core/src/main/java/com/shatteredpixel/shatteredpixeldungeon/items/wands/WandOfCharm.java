@@ -90,8 +90,11 @@ public class WandOfCharm extends Wand {
 
 				int duration = (int) (( Charm.DURATION/5f ) + (buffedLvl()/3f) + 1);
 				if (ch.properties().contains(Char.Property.UNDEAD) || ch.properties().contains( Char.Property.MINIBOSS) || ch.properties().contains(Char.Property.BOSS) ) {
-					Buff.extend(ch, Charm.class, ( duration ) / 2f);
-					//ch.alignment = Char.Alignment.ALLY;
+					Charm charm = Buff.extend(ch, Charm.class, ( duration ) / 2f);
+					charm.object = curUser.id();
+					charm.ignoreHeroAllies = true;
+					ch.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f, 1 + (buffedLvl() / 10) );
+
 					if (zapWarning) {
 						GLog.i("This creature resists the charm effect, halving its duration");
 						zapWarning = false;
@@ -106,7 +109,8 @@ public class WandOfCharm extends Wand {
 		}
 	}
 
-	@Override //This is only for battlemage
+	//This is only for battlemage
+	@Override
 	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
 		if (defender.buff(Charm.class) == null){
 			float healToGive = (2 + (buffedLvl() / 2f) + procChanceMultiplier(attacker) ) / 100f ;

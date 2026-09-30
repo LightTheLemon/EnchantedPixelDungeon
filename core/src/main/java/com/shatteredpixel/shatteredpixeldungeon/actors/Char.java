@@ -505,6 +505,10 @@ public abstract class Char extends Actor {
 					effectiveDamage *= 1.33f;
 				}
 
+				if (enemy.buff(Frost.class) != null) {
+					effectiveDamage *= 1.33f;
+				}
+
 				effectiveDamage = attackProc(enemy, effectiveDamage);
 			}
 			if (visibleFight) {
@@ -1116,7 +1120,7 @@ public abstract class Char extends Actor {
 		Actor.remove( this );
 
 		for (Char ch : Actor.chars().toArray(new Char[0])){
-			if (ch.buff(Charm.class) != null && ch.buff(Charm.class).object == id()){ //instead of detaching, it should remove turns of the buff
+			if (ch.buff(Charm.class) != null && ch.buff(Charm.class).object == id()){
 				ch.buff(Charm.class).detach();
 			}
 			if (ch.buff(Dread.class) != null && ch.buff(Dread.class).object == id()){

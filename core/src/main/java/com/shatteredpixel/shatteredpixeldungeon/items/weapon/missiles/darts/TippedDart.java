@@ -39,7 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Firebloom;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Mageroyal;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Dreamfoil;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
@@ -232,7 +232,7 @@ public abstract class TippedDart extends Dart {
 		types.put(Blindweed.Seed.class,     BlindingDart.class);
 		types.put(Stormvine.Seed.class,     ShockingDart.class);
 		types.put(Earthroot.Seed.class,     ParalyticDart.class);
-		types.put(Mageroyal.Seed.class,     CleansingDart.class);
+		types.put(Dreamfoil.Seed.class,     CleansingDart.class);
 		types.put(Starflower.Seed.class,    HolyDart.class);
 	}
 	

@@ -496,7 +496,7 @@ public abstract class Mob extends Char {
 			Charm charm = buff( Charm.class );
 			if (charm != null){
 				Char source = (Char)Actor.findById( charm.object );
-				if (source != null && enemies.contains(source) && enemies.size() > 1){
+				if (source != null && enemies.contains(source)){ //enemies.size() > 1
 					enemies.remove(source);
 				}
 			}
