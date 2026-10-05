@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BlacksmithSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
 import com.watabou.noosa.Game;
@@ -197,7 +198,8 @@ public class MiningLevel extends CavesLevel {
 			losBlocking[cell] = false;
 		}
 		drop( Generator.randomUsingDefaults(Generator.Category.FOOD), cell );
-		if (Blacksmith.Quest.Type() == Blacksmith.Quest.GNOLL){
+		drop( Generator.randomUsingDefaults(Generator.Category.FOOD), cell );
+/*		if (Blacksmith.Quest.Type() == Blacksmith.Quest.GNOLL){
 			//drop a second ration for the gnoll quest type, more mining required!
 			cell = randomDropCell();
 			if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
@@ -205,7 +207,7 @@ public class MiningLevel extends CavesLevel {
 				losBlocking[cell] = false;
 			}
 			drop( Generator.randomUsingDefaults(Generator.Category.FOOD), cell );
-		}
+		}*/
 
 		if (Dungeon.isChallenged(Challenges.DARKNESS)){
 			cell = randomDropCell();
@@ -244,13 +246,28 @@ public class MiningLevel extends CavesLevel {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
-						GameScene.show(new WndTitledMessage( new BlacksmithSprite(),
+
+						GameScene.show( new WndOptions( new BlacksmithSprite(),
 								Messages.titleCase(Messages.get(Blacksmith.class, "name")),
-								Messages.get(Blacksmith.class, "forgot_pick")));
+								Messages.get(Blacksmith.class, "forgot_pick"),
+								Messages.get(Blacksmith.class, "catch")){
+							@Override
+							protected void onSelect(int index) {
+								if (index == 0){
+									Item pick = Blacksmith.Quest.pickaxe != null ? Blacksmith.Quest.pickaxe : new Pickaxe();
+									if (pick.doPickUp( Dungeon.hero )) {
+										GLog.i( Messages.capitalize(Messages.get(Dungeon.hero, "you_now_have", pick.name()) ));
+									} else {
+										Dungeon.level.drop( pick, Dungeon.hero.pos ).sprite.drop();
+									}
+								}
+							}
+						} );
+
+
 					}
 				});
-				Item pick = Blacksmith.Quest.pickaxe != null ? Blacksmith.Quest.pickaxe : new Pickaxe();
-				Dungeon.level.drop( pick, Dungeon.hero.pos ).sprite.drop();
+
 				return false;
 			}
 

@@ -23,7 +23,7 @@ public class RingOfVitality extends Ring {
             }
             return info;
         } else {
-            return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 0.9));
+            return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 10f));
         }
     }
 

@@ -78,8 +78,6 @@ public class StatusPane extends Component {
 
 	private boolean large;
 
-	//private static int dynamicBarWidthLarge = Math.min(128, Dungeon.hero.HT + 30);
-
 	//potentially extends the hero portrait space to avoid some cutouts
 	public static float heroPaneExtraWidth = 0;
 	private NinePatch heroPaneCutout;
@@ -93,9 +91,9 @@ public class StatusPane extends Component {
 
 	private void updateHealthBar(boolean large) {
 
-		int dynamicBarWidthLarge = Math.min(180, Dungeon.hero.HT + 35);
+		int dynamicBarWidthLarge = Math.min(360, (Dungeon.hero.HT / 2) + 45);
 
-		int dynamicBarWidthSmall = Math.min(68, (Dungeon.hero.HT / 2) + 10);
+		int dynamicBarWidthSmall = Math.min(72, (Dungeon.hero.HT / 3) + 10);
 
 		if (large)   hp.frame(0, 103, dynamicBarWidthLarge, 9);
 		else         hp.frame(0, 40, dynamicBarWidthSmall, 4);
@@ -110,7 +108,7 @@ public class StatusPane extends Component {
 		else       exp.frame(0, 48, dynamicBarWidthSmall, 4);
 
 		if (large)  bg.size( dynamicBarWidthLarge + 32, bg.height ); //HP bars must be 128px wide atm
-		else        bg.size(dynamicBarWidthSmall + 32, bg.height ); //default max right is 50px health bar + 32
+		else        bg.size(dynamicBarWidthSmall + 35, bg.height ); //default max right is 50px health bar + 32
 
 		float heroPaneWidth = 30 + heroPaneExtraWidth;
 
@@ -124,8 +122,6 @@ public class StatusPane extends Component {
 			exp.scale.x = ((17 + heroPaneExtraWidth) / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
 		}
 
-
-
 		if (large) {
 			exp.x = x + 30;
 			exp.y = y + 30;
@@ -133,7 +129,7 @@ public class StatusPane extends Component {
 			hp.x = shieldHP.x = Dot.x = x + 30;
 			hp.y = shieldHP.y = Dot.y = y + 19;
 
-			hpText.x = hp.x - 9 + dynamicBarWidthLarge / 2f;;
+			hpText.x = hp.x - 9 + dynamicBarWidthLarge / 2f;
 			hpText.y = hp.y + 1;
 			PixelScene.align(hpText);
 
@@ -148,6 +144,10 @@ public class StatusPane extends Component {
 
 			busy.x = x + bg.width + 1;
 			busy.y = y + bg.height - 9;
+
+			counter.x = x + bg.width + 6;
+			counter.y = y + bg.height - 6;
+
 		} else {
 			exp.x = x+2;
 			exp.y = y+30;
@@ -178,7 +178,7 @@ public class StatusPane extends Component {
 			hp.y = shieldHP.y = Dot.y = y + 2;
 
 			hpText.scale.set(PixelScene.align(0.5f));
-			hpText.x = hp.x - 4 + dynamicBarWidthSmall / 2f;
+			hpText.x = hp.x - 2 + dynamicBarWidthSmall / 2f;
 			hpText.y = hp.y + (hp.height - (hpText.baseLine()+hpText.scale.y))/2f;
 			hpText.y -= 0.001f; //prefer to be slightly higher
 			PixelScene.align(hpText);
@@ -201,6 +201,10 @@ public class StatusPane extends Component {
 
 			busy.x = x + 1;
 			busy.y = y + 37;
+
+			counter.x = x + 6;
+			counter.y = y + 41;
+
 		}
 
 	}

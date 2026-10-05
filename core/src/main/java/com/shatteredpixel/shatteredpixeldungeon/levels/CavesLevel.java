@@ -133,27 +133,19 @@ public class CavesLevel extends RegularLevel {
 				Game.runOnRenderThread(new Callback() {
 					@Override
 					public void call() {
-						if (pick == null){
-							GameScene.show( new WndTitledMessage(new BlacksmithSprite(),
-									Messages.titleCase(Messages.get(Blacksmith.class, "name")),
-									Messages.get(Blacksmith.class, "lost_pick"))
-							);
-						} else {
-							GameScene.show( new WndOptions( new BlacksmithSprite(),
-									Messages.titleCase(Messages.get(Blacksmith.class, "name")),
-									Messages.get(Blacksmith.class, "quest_start_prompt"),
-									Messages.get(Blacksmith.class, "enter_yes"),
-									Messages.get(Blacksmith.class, "enter_no")){
-								@Override
-								protected void onSelect(int index) {
-									if (index == 0){
-										Blacksmith.Quest.start();
-										CavesLevel.super.activateTransition(hero, transition);
-									}
+						GameScene.show( new WndOptions( new BlacksmithSprite(),
+								Messages.titleCase(Messages.get(Blacksmith.class, "name")),
+								Messages.get(Blacksmith.class, "quest_start_prompt"),
+								Messages.get(Blacksmith.class, "enter_yes"),
+								Messages.get(Blacksmith.class, "enter_no")){
+							@Override
+							protected void onSelect(int index) {
+								if (index == 0){
+									Blacksmith.Quest.start();
+									CavesLevel.super.activateTransition(hero, transition);
 								}
-							} );
-						}
-
+							}
+						} );
 					}
 				});
 			}

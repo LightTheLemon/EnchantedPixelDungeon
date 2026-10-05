@@ -46,7 +46,7 @@ public class RingOfAccuracy extends Ring {
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 30f));
+			return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 15f));
 		}
 	}
 

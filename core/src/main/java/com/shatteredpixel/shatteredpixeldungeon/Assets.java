@@ -102,6 +102,9 @@ public class Assets {
 		public static final String RADIAL_MENU      = "interfaces/radial_menu.png";
 
 		public static final String CHANGE_ICONS    = "interfaces/change_icons.png";
+
+		public static final String TILE_INDICATOR    = "interfaces/tileindicator.png";
+
 	}
 
 	//these points to resource bundles, not raw asset files

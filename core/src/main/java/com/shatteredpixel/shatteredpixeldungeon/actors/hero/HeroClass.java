@@ -62,6 +62,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -212,8 +213,8 @@ public enum HeroClass {
 		//BurningSage sage = new BurningSage();
 		//sage.collect();
 
-		//RingOfVitality vitality = new RingOfVitality();
-		//vitality.identify().collect();
+		RingOfVitality vitality = new RingOfVitality();
+		vitality.identify().collect();
 
 		//RingOfMana mana = new RingOfMana();
 		//mana.identify().collect();
@@ -225,13 +226,13 @@ public enum HeroClass {
 		//DriedRose rose = new DriedRose();
 		//rose.identify().collect();
 
-		//PotionOfExperience exp = new PotionOfExperience();
-		//exp.quantity(100);
-		//exp.identify().collect();
+		PotionOfExperience exp = new PotionOfExperience();
+		exp.quantity(100);
+		exp.identify().collect();
 
-		//ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
-		//upgrade.quantity(100);
-		//upgrade.collect();
+		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
+		upgrade.quantity(100);
+		upgrade.collect();
 
 		//CapeOfThorns cape = new CapeOfThorns();
 		//cape.collect();

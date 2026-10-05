@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -146,7 +147,7 @@ public class WandOfWarding extends Wand {
 				GLog.w( Messages.get(this, "bad_location"));
 				Dungeon.level.pressCell(target);
 			}
-			
+
 		} else if (!Dungeon.level.passable[target]){
 			GLog.w( Messages.get(this, "bad_location"));
 			Dungeon.level.pressCell(target);
@@ -241,7 +242,7 @@ public class WandOfWarding extends Wand {
 			properties.add(Property.IMMOVABLE);
 			properties.add(Property.INORGANIC);
 
-			viewDistance = 4;
+			viewDistance = Dungeon.isChallenged( Challenges.DARKNESS ) ? 2 : 6;
 			state = WANDERING;
 		}
 
@@ -508,7 +509,7 @@ public class WandOfWarding extends Wand {
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			tier = bundle.getInt(TIER);
-			viewDistance = 3 + tier;
+			viewDistance = Dungeon.isChallenged( Challenges.DARKNESS ) ? 1 + tier : 5 + tier;
 			wandLevel = bundle.getInt(WAND_LEVEL);
 			totalZaps = bundle.getInt(TOTAL_ZAPS);
 		}
