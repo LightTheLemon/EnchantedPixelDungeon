@@ -332,6 +332,9 @@ public class DriedRose extends Artifact {
 							public void call() {
 
 								Rose.ghost = new GhostHero( Rose );
+
+
+
 								Rose.ghostID = Rose.ghost.id();
 								Rose.ghost.pos = spawnCell; //spawnPos
 
@@ -345,13 +348,14 @@ public class DriedRose extends Artifact {
 									Rose.ghost.yell( Messages.get(GhostHero.class, "hello", Messages.titleCase(Dungeon.hero.name())) );
 									Sample.INSTANCE.play( Assets.Sounds.GHOST );
 									Rose.firstSummon = true;
+								} else if (BossHealthBar.isAssigned()) {
+									Rose.ghost.sayBoss();
+								}
 
-								} else {
-									if (BossHealthBar.isAssigned()) {
-										Rose.ghost.sayBoss();
-									} else if (Random.Float() < 0.4f) {
-										Rose.ghost.sayAppeared();
-									}
+								if (Actor.findChar(target) != null) {
+									Rose.ghost.directTocell(target);
+								} else if (!BossHealthBar.isAssigned()) {
+									Rose.ghost.saySpawned();
 								}
 
 								//for (Buff b : storedBuffs) {
@@ -1002,6 +1006,16 @@ public class DriedRose extends Artifact {
 				rose.ghostID = -1;
 			}
 			super.destroy();
+		}
+
+		public void saySpawned() {
+			if (Dungeon.hero.buff(AscensionChallenge.class) != null){
+				yell( Messages.get( this, "dialogue_ascension_" + Random.IntRange(1, 6) ));
+
+			} else {
+				yell(Messages.get(this, "dialogue_generic_" + Random.IntRange(1, 5)));
+			}
+
 		}
 		
 		public void sayAppeared(){

@@ -225,6 +225,8 @@ public class Hero extends Char {
 	public HeroSubClass subClass = HeroSubClass.NONE;
 	public ArmorAbility armorAbility = null;
 	public ArrayList<LinkedHashMap<Talent, Integer>> talents = new ArrayList<>();
+
+	public String customName = null;
 	public LinkedHashMap<Talent, Talent> metamorphedTalents = new LinkedHashMap<>();
 	
 	private int attackSkill = 10;
@@ -313,7 +315,8 @@ public class Hero extends Char {
 	private static final String LEVEL		= "lvl";
 	private static final String EXPERIENCE	= "exp";
 	private static final String HTBOOST     = "htboost";
-	
+	private static final String CUSTOM_NAME = "customName";
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 
@@ -322,6 +325,9 @@ public class Hero extends Char {
 		bundle.put( CLASS, heroClass );
 		bundle.put( SUBCLASS, subClass );
 		bundle.put( ABILITY, armorAbility );
+		if (customName != null && !customName.isEmpty()) {
+			bundle.put( CUSTOM_NAME, customName );
+		}
 		Talent.storeTalentsInBundle( bundle, this );
 		
 		bundle.put( ATTACK, attackSkill );
@@ -347,6 +353,7 @@ public class Hero extends Char {
 
 		super.restoreFromBundle( bundle );
 
+
 		heroClass = bundle.getEnum( CLASS, HeroClass.class );
 		subClass = bundle.getEnum( SUBCLASS, HeroSubClass.class );
 		armorAbility = (ArmorAbility)bundle.get( ABILITY );
@@ -369,6 +376,12 @@ public class Hero extends Char {
 		info.shld = bundle.getInt( Char.TAG_SHLD );
 		info.heroClass = bundle.getEnum( CLASS, HeroClass.class );
 		info.subClass = bundle.getEnum( SUBCLASS, HeroSubClass.class );
+		if (bundle.contains( CUSTOM_NAME )) {
+			info.customName = bundle.getString( CUSTOM_NAME );
+			if (info.customName != null && info.customName.isEmpty()) info.customName = null;
+		} else {
+			info.customName = null;
+		}
 		Belongings.preview( info, bundle );
 	}
 
@@ -435,6 +448,8 @@ public class Hero extends Char {
 	public String name(){
 		if (buff(HeroDisguise.class) != null) {
 			return buff(HeroDisguise.class).getDisguise().title();
+		} else if ( customName != null && !customName.isEmpty() ) {
+			return customName;
 		} else {
 			return className();
 		}

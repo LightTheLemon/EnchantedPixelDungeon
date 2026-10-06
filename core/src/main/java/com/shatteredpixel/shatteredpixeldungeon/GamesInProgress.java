@@ -48,6 +48,8 @@ public class GamesInProgress {
 	private static final String GAME_FILE	= "game.dat";
 	private static final String DEPTH_FILE	= "depth%d.dat";
 	private static final String DEPTH_BRANCH_FILE	= "depth%d-branch%d.dat";
+
+	public static String pendingHeroName = null;
 	
 	public static boolean gameExists( int slot ){
 		return FileUtils.dirExists(gameFolder(slot))
@@ -159,7 +161,9 @@ public class GamesInProgress {
 		info.heroClass = Dungeon.hero.heroClass;
 		info.subClass = Dungeon.hero.subClass;
 		info.armorTier = Dungeon.hero.tier();
-		
+
+		info.customName = Dungeon.hero.customName;
+
 		info.goldCollected = Statistics.goldCollected;
 		info.maxDepth = Statistics.deepestFloor;
 
@@ -197,6 +201,8 @@ public class GamesInProgress {
 		public HeroClass heroClass;
 		public HeroSubClass subClass;
 		public int armorTier;
+
+		public String customName;
 		
 		public int goldCollected;
 		public int maxDepth;

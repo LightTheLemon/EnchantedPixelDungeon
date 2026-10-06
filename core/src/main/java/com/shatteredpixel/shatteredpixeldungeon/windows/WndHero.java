@@ -53,10 +53,10 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class WndHero extends WndTabbed {
-	
+
 	private static final int WIDTH		= 120;
 	private static final int HEIGHT		= 120;
-	
+
 	private StatsTab stats;
 	private TalentsTab talents;
 	private BuffsTab buffs;
@@ -64,11 +64,11 @@ public class WndHero extends WndTabbed {
 	public static int lastIdx = 0;
 
 	public WndHero() {
-		
+
 		super();
-		
+
 		resize( WIDTH, HEIGHT );
-		
+
 		stats = new StatsTab();
 		add( stats );
 
@@ -80,7 +80,7 @@ public class WndHero extends WndTabbed {
 		add( buffs );
 		buffs.setRect(0, 0, WIDTH, HEIGHT);
 		buffs.setupList();
-		
+
 		add( new IconTab( Icons.get(Icons.RANKINGS) ) {
 			protected void select( boolean value ) {
 				super.select( value );
@@ -136,11 +136,11 @@ public class WndHero extends WndTabbed {
 	}
 
 	private class StatsTab extends Group {
-		
+
 		private static final int GAP = 6;
-		
+
 		private float pos;
-		
+
 		public StatsTab() {
 			initialize();
 		}
@@ -151,7 +151,7 @@ public class WndHero extends WndTabbed {
 				if (g != null) g.destroy();
 			}
 			clear();
-			
+
 			Hero hero = Dungeon.hero;
 
 			IconTitle title = new IconTitle();
@@ -233,14 +233,14 @@ public class WndHero extends WndTabbed {
 			txt.setPos(WIDTH * 0.55f, pos + (6 - txt.height())/2);
 			PixelScene.align(txt);
 			add( txt );
-			
+
 			pos += GAP + txt.height();
 		}
-		
+
 		private void statSlot( String label, int value ) {
 			statSlot( label, Integer.toString( value ) );
 		}
-		
+
 		public float height() {
 			return pos;
 		}
@@ -264,11 +264,11 @@ public class WndHero extends WndTabbed {
 		}
 
 	}
-	
+
 	private class BuffsTab extends Component {
-		
+
 		private static final int GAP = 2;
-		
+
 		private float pos;
 		private ScrollPane buffList;
 		private ArrayList<BuffSlot> slots = new ArrayList<>();
@@ -291,13 +291,13 @@ public class WndHero extends WndTabbed {
 			};
 			add(buffList);
 		}
-		
+
 		@Override
 		protected void layout() {
 			super.layout();
 			buffList.setRect(0, 0, width, height);
 		}
-		
+
 		private void setupList() {
 			Component content = buffList.content();
 			for (Buff buff : Dungeon.hero.buffs()) {
@@ -349,7 +349,7 @@ public class WndHero extends WndTabbed {
 				);
 				PixelScene.align(txt);
 			}
-			
+
 			protected boolean onClick ( float x, float y ) {
 				if (inside( x, y )) {
 					GameScene.show(new WndInfoBuff(buff));
