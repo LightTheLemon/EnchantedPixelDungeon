@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndDifficulty;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHeroInfo;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
@@ -405,7 +406,7 @@ public class HeroSelectScene extends PixelScene {
 
 	private void updateOptionsColor(){
 		if (GamesInProgress.pendingHeroName != null && !GamesInProgress.pendingHeroName.isEmpty()){
-			btnOptions.icon().hardlight(1.1f, 0.95f, 0.0f);
+			btnOptions.icon().hardlight(2f, 1.33f, 0.5f);
 		} else if (!SPDSettings.customSeed().isEmpty()){
 			btnOptions.icon().hardlight(1f, 1.5f, 0.67f);
 		} else if (SPDSettings.challenges() != 0){
@@ -632,6 +633,8 @@ public class HeroSelectScene extends PixelScene {
 
 		protected StyledButton challengeButton;
 
+		protected StyledButton difficultyButton;
+
 		@Override
 		protected void createChildren() {
 
@@ -641,10 +644,11 @@ public class HeroSelectScene extends PixelScene {
 			buttons = new ArrayList<>();
 			spacers = new ArrayList<>();
 
+			//NAME HERO BUTTON
 			StyledButton nameButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "hero_name"), 6){
 				@Override
 				protected void onClick() {
-					String existing = GamesInProgress.pendingHeroName == null ? "" : GamesInProgress.pendingHeroName;
+					String existing = GamesInProgress.pendingHeroName == null && SPDSettings.savedName() == null ? "" : SPDSettings.savedName();
 					ShatteredPixelDungeon.scene().addToFront( new WndTextInput(
 							Messages.get(HeroSelectScene.class, "hero_name_title"),
 							Messages.get(HeroSelectScene.class, "hero_name_desc"),
@@ -662,10 +666,13 @@ public class HeroSelectScene extends PixelScene {
 									icon.resetColor();
 								} else {
 									GamesInProgress.pendingHeroName = text;
+									SPDSettings.savedName(text);
 									icon.hardlight(1.1f, 0.95f, 0.0f);
 								}
 							} else {
 								GamesInProgress.pendingHeroName = null;
+								SPDSettings.savedName("");
+								System.out.println("NAME: " + GamesInProgress.pendingHeroName);
 								icon.resetColor();
 							}
 							updateOptionsColor();
@@ -675,12 +682,14 @@ public class HeroSelectScene extends PixelScene {
 			};
 			nameButton.leftJustify = true;
 			nameButton.icon(Icons.get(Icons.SCROLL_COLOR));
-			if (GamesInProgress.pendingHeroName != null && !GamesInProgress.pendingHeroName.isEmpty()){
-				nameButton.icon().hardlight(1f, 1.5f, 0.67f);
+			if ( (GamesInProgress.pendingHeroName != null && !GamesInProgress.pendingHeroName.isEmpty()) || SPDSettings.savedName() != null ){
+				nameButton.icon().hardlight(1.1f, 0.95f, 0.0f);
+				GamesInProgress.pendingHeroName = SPDSettings.savedName();
 			}
 			buttons.add(nameButton);
 			add(nameButton);
 
+			//CUSTOM SEED
 			StyledButton seedButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "custom_seed"), 6){
 				@Override
 				protected void onClick() {
@@ -734,6 +743,7 @@ public class HeroSelectScene extends PixelScene {
 			buttons.add(seedButton);
 			add(seedButton);
 
+			//DAILY RUN
 			StyledButton dailyButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "daily"), 6){
 
 				private static final long SECOND = 1000;
@@ -840,38 +850,67 @@ public class HeroSelectScene extends PixelScene {
 			add(dailyButton);
 			buttons.add(dailyButton);
 
-			challengeButton = new StyledButton(Chrome.Type.BLANK, Messages.get(WndChallenges.class, "title"), 6){
+			//CHALLENGE BUTTON
+//			challengeButton = new StyledButton(Chrome.Type.BLANK, Messages.get(WndChallenges.class, "title"), 6){
+//				@Override
+//				protected void onClick() {
+//					if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
+//						ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage(
+//								Icons.get(Icons.CHALLENGE_GREY),
+//								Messages.get(WndChallenges.class, "title"),
+//								Messages.get(HeroSelectScene.class, "challenges_nowin")
+//						));
+//						return;
+//					}
+//
+//					ShatteredPixelDungeon.scene().addToFront(new WndChallenges(SPDSettings.challenges(), true) {
+//						public void onBackPressed() {
+//							super.onBackPressed();
+//							icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
+//							updateOptionsColor();
+//						}
+//					} );
+//				}
+//			};
+//			challengeButton.leftJustify = true;
+//			challengeButton.icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
+//			add(challengeButton);
+//			buttons.add(challengeButton);
+
+			//DIFFICULTY BUTTON
+			difficultyButton = new StyledButton(Chrome.Type.BLANK, Messages.get(WndDifficulty.class, "title"), 6) {
 				@Override
 				protected void onClick() {
 					if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
 						ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage(
 								Icons.get(Icons.CHALLENGE_GREY),
-								Messages.get(WndChallenges.class, "title"),
-								Messages.get(HeroSelectScene.class, "challenges_nowin")
+								Messages.get(WndDifficulty.class, "title"),
+								Messages.get(HeroSelectScene.class, "difficulty_nowin")
 						));
 						return;
 					}
 
-					ShatteredPixelDungeon.scene().addToFront(new WndChallenges(SPDSettings.challenges(), true) {
+					ShatteredPixelDungeon.scene().addToFront(new WndDifficulty( SPDSettings.difficulty(), true ) {
 						public void onBackPressed() {
 							super.onBackPressed();
-							icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
+							icon(Icons.get(SPDSettings.difficulty() == 10 ? Icons.CHALLENGE_GREY : Icons.CHALLENGE_COLOR));
 							updateOptionsColor();
 						}
 					} );
 				}
 			};
-			challengeButton.leftJustify = true;
-			challengeButton.icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
-			add(challengeButton);
-			buttons.add(challengeButton);
+			difficultyButton.leftJustify = true;
+			difficultyButton.icon(Icons.get(SPDSettings.difficulty() != 1 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
+			add(difficultyButton);
+			buttons.add(difficultyButton);
 
 			int unlockedCount = 0;
 			for (HeroClass cls : HeroClass.values()){
 				if (cls.isUnlocked()) unlockedCount++;
 			}
 
-			if (unlockedCount >= 2) {
+			//RANDOMIZE BUTTON
+/*			if (unlockedCount >= 2) {
 				StyledButton randomButton = new StyledButton(Chrome.Type.BLANK, Messages.get(HeroSelectScene.class, "randomize"), 6) {
 					@Override
 					protected void onClick() {
@@ -893,7 +932,7 @@ public class HeroSelectScene extends PixelScene {
 				randomButton.icon(Icons.SHUFFLE.get());
 				buttons.add(randomButton);
 				add(randomButton);
-			}
+			}*/
 
 			for (int i = 1; i < buttons.size(); i++){
 				ColorBlock spc = new ColorBlock(1, 1, 0xFF000000);

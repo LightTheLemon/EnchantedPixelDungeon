@@ -128,7 +128,7 @@ public class Potion extends Item {
 	static{
 		canThrowPots.add(PotionOfPurity.class);
 		canThrowPots.add(PotionOfLevitation.class);
-		canThrowPots.add(PotionOfHealing.class);
+		//canThrowPots.add(PotionOfHealing.class);
 		
 		//exotic
 		canThrowPots.add(PotionOfCleansing.class);
@@ -215,7 +215,7 @@ public class Potion extends Item {
 	public String defaultAction() {
 		if (isKnown() && mustThrowPots.contains(this.getClass())) {
 			return AC_THROW;
-		} else if (isKnown() && canThrowPots.contains(this.getClass())){
+		} else if (isKnown() && canThrowPots.contains(this.getClass() )){
 			return AC_CHOOSE;
 		} else {
 			return AC_DRINK;

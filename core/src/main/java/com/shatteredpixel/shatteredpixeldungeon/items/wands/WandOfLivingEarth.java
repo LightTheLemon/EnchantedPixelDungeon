@@ -204,11 +204,13 @@ public class WandOfLivingEarth extends DamageWand {
 
 	@Override
 	public String upgradeStat3(int level) {
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-			return level + "-" + (2+level);
-		} else {
-			return level + "-" + (3+(3*level));
-		}
+		float difficultyMultiplier = Math.max(0.34f,(Dungeon.difficulty / -4) + 1.25f);
+		//1.0: *= 1
+		//2.0: *= 0.75
+		//3.0: *= 0.5
+		//4.0: *= 0.34
+
+		return level + "-" + Math.round(3 + ( (3 * difficultyMultiplier) * level) );
 	}
 
 	@Override
@@ -416,11 +418,14 @@ public class WandOfLivingEarth extends DamageWand {
 		@Override
 		public int drRoll() {
 			int dr = super.drRoll();
-			if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-				return dr + Random.NormalIntRange(wandLevel, 2 + wandLevel);
-			} else {
-				return dr + Random.NormalIntRange(wandLevel, 3 + 3 * wandLevel);
-			}
+
+			float difficultyMultiplier = Math.max(0.34f,(Dungeon.difficulty / -4) + 1.25f);
+			//1.0: *= 1
+			//2.0: *= 0.75
+			//3.0: *= 0.5
+			//4.0: *= 0.34
+
+			return dr + Random.NormalIntRange(wandLevel, Math.round(3 + (3 * difficultyMultiplier) * wandLevel));
 		}
 
 		@Override
@@ -428,11 +433,8 @@ public class WandOfLivingEarth extends DamageWand {
 			String desc = Messages.get(this, "desc");
 
 			if (Actor.chars().contains(this)) {
-				if (Dungeon.isChallenged(Challenges.NO_ARMOR)) {
-					desc += "\n\n" + Messages.get(this, "wand_info", wandLevel, 2 + wandLevel);
-				} else {
-					desc += "\n\n" + Messages.get(this, "wand_info", wandLevel, 3 + 3 * wandLevel);
-				}
+				float difficultyMultiplier = Math.max(0.34f,(Dungeon.difficulty / -4) + 1.25f);
+				desc += "\n\n" + Messages.get(this, "wand_info", wandLevel, Math.round(2 + difficultyMultiplier + (3 * difficultyMultiplier) * wandLevel));
 			}
 
 			return desc;

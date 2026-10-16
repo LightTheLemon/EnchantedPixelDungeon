@@ -62,7 +62,7 @@ public class WndGame extends Window {
 		curBtn.icon(Icons.get(Icons.PREFS));
 
 		// Challenges window
-		if (Dungeon.challenges > 0) {
+/*		if (Dungeon.challenges > 0) {
 			addButton( curBtn = new RedButton( Messages.get(this, "challenges") ) {
 				@Override
 				protected void onClick() {
@@ -71,7 +71,7 @@ public class WndGame extends Window {
 				}
 			} );
 			curBtn.icon(Icons.get(Icons.CHALLENGE_COLOR));
-		}
+		}*/
 
 		// Restart
 		if (Dungeon.hero == null || !Dungeon.hero.isAlive()) {

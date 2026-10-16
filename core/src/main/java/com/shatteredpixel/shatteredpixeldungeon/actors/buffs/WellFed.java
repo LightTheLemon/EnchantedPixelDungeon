@@ -64,13 +64,11 @@ public class WellFed extends Buff {
 	}
 	
 	public void reset(){
-		//heals one HP every 18 turns for 450 turns
-		//25 HP healed in total
-		left = (int)Hunger.STARVING;
-		if (Dungeon.isChallenged(Challenges.NO_FOOD)){
-			//150 turns if on diet is enabled
-			left /= 3;
-		}
+		//Buff heals one HP every 18 turns
+		//Duration lowers as difficulty increases
+		//1.0: 450 turns
+		//3.0: 150 turns
+		left = Math.round(Hunger.STARVING / Dungeon.foodDifficultyMultiplier() );
 	}
 
 	public void extend( float duration ) {

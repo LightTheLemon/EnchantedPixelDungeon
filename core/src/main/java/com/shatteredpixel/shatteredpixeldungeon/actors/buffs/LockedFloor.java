@@ -29,8 +29,8 @@ import com.watabou.utils.Bundle;
 public class LockedFloor extends Buff {
 
 	//the amount of turns remaining before beneficial passive effects turn off
-	//starts at 50 turns normally, 20 with badder bosses
-	private float left = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 20 : 50;
+	//Duration scales with difficulty
+	private float left = 50 * ((Dungeon.difficulty / -4f) + 1.25f);
 
 	@Override
 	public boolean act() {

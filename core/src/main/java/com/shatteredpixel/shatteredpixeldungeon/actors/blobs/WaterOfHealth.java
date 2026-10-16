@@ -90,17 +90,17 @@ public class WaterOfHealth extends WellWater {
 		if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
 			((Waterskin)item).fill(20);
 			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
-			Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
+			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
 		} else if ( item instanceof Ankh && !(((Ankh) item).isBlessed())){
 			((Ankh) item).bless();
 			CellEmitter.get( pos ).start(Speck.factory(Speck.LIGHT), 0.2f, 3);
-			Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
+			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
 		} else if (!(item instanceof SpiritBow) && !(item instanceof Pickaxe) && item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
 			item.upgrade();
 			CellEmitter.get( pos ).start( Speck.factory( Speck.ENCHANT_STAR ), 0.6f, 6 );
-			Sample.INSTANCE.play( Assets.Sounds.TELEPORT );
+			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
 		}
 		return null;

@@ -73,6 +73,14 @@ public class WaterOfEnchantment extends WellWater {
 				hero.belongings.uncurseEquipped();
 			}
 		}
+		Item ring = hero.belongings.ring();
+		if (ring != null) {
+			ring.cursed = false;
+		}
+		Item artifact = hero.belongings.artifact();
+		if (artifact != null) {
+			artifact.cursed = false;
+		}
 
 		//logic for all other equipment
 		for (Item item : hero.belongings.backpack.items) {

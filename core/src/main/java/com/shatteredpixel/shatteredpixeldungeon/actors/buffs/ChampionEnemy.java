@@ -106,7 +106,7 @@ public abstract class ChampionEnemy extends Buff {
 			case 5:             buffCls = Growing.class;      break;
 		}
 
-		if (Dungeon.mobsToChampion <= 0 && Dungeon.isChallenged(Challenges.CHAMPION_ENEMIES)) {
+		if (Dungeon.mobsToChampion <= 0 && Dungeon.difficulty > 1) {
 
 			//we block certain standout enemies on floor <10 from becoming champions
 			if (m instanceof Crab  && Dungeon.scalingDepth() <= 3) return;
@@ -116,7 +116,7 @@ public abstract class ChampionEnemy extends Buff {
 
 			Buff.affect(m, buffCls);
 			//numbers of mobs until a champion scales from 1/8 to 1/6 as depths increases
-			Dungeon.mobsToChampion += 8 - Math.min(20, Dungeon.scalingDepth()-1)/10f;
+			Dungeon.mobsToChampion += Math.round(17 - (3 * Dungeon.difficulty)) - Math.min(20, Dungeon.scalingDepth()-1)/10f;
 			if (m.state != m.PASSIVE) {
 				m.state = m.WANDERING;
 			}

@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndDifficulty;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndGame;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournal;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
@@ -58,6 +59,10 @@ public class MenuPane extends Component {
 	private Image challengeIcon;
 	private BitmapText challengeText;
 	private Button challengeButton;
+
+	private Image difficultyIcon;
+	private BitmapText difficultyText;
+	private Button difficultyButton;
 
 	private JournalButton btnJournal;
 	private MenuButton btnMenu;
@@ -141,6 +146,29 @@ public class MenuPane extends Component {
 			add(challengeButton);
 		}
 
+		if (WndDifficulty.getDifficulty() != 1){
+			difficultyIcon = Icons.get(Icons.CHAL_COUNT);
+			add(difficultyIcon);
+
+			difficultyText = new BitmapText( Float.toString( Dungeon.difficulty ), PixelScene.pixelFont);
+			difficultyText.hardlight( 0xCACFC2 );
+			difficultyText.measure();
+			add( difficultyText );
+
+			difficultyButton = new Button(){
+				@Override
+				protected void onClick() {
+					GameScene.show(new WndDifficulty( Dungeon.difficulty, false));
+				}
+
+				@Override
+				protected String hoverText() {
+					return Messages.get(WndDifficulty.class, "title");
+				}
+			};
+			add(difficultyButton);
+		}
+
 		btnJournal = new JournalButton();
 		add( btnJournal );
 
@@ -195,7 +223,7 @@ public class MenuPane extends Component {
 		depthButton.setRect(depthIcon.x, depthIcon.y, depthIcon.width(), depthIcon.height() + depthText.height());
 
 		if (challengeIcon != null){
-			challengeIcon.x = btnJournal.left() - 14 + (7 - challengeIcon.width())/2f - 0.1f;
+			challengeIcon.x = btnJournal.left() - 23 + (7 - challengeIcon.width())/2f - 0.1f;
 			challengeIcon.y = depthIcon.y;
 			PixelScene.align(challengeIcon);
 
@@ -205,6 +233,19 @@ public class MenuPane extends Component {
 			PixelScene.align(challengeText);
 
 			challengeButton.setRect(challengeIcon.x, challengeIcon.y, challengeIcon.width(), challengeIcon.height() + challengeText.height());
+		}
+
+		if (difficultyIcon != null){
+			difficultyIcon.x = btnJournal.left() - 15 + (7 - difficultyIcon.width())/2f - 0.1f;
+			difficultyIcon.y = depthIcon.y;
+			PixelScene.align(difficultyIcon);
+
+			difficultyText.scale.set(PixelScene.align(0.67f));
+			difficultyText.x = difficultyIcon.x + (difficultyIcon.width() - difficultyText.width())/2f;
+			difficultyText.y = difficultyIcon.y + difficultyIcon.height();
+			PixelScene.align(difficultyText);
+
+			difficultyButton.setRect(difficultyIcon.x, difficultyIcon.y, difficultyIcon.width(), difficultyIcon.height() + difficultyText.height());
 		}
 
 		danger.setPos( x + WIDTH - danger.width(), y + bg.height + 1 );

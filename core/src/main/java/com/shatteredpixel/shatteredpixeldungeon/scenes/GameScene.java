@@ -599,7 +599,7 @@ public class GameScene extends PixelScene {
 				if (pos == -1) pos = Dungeon.level.entrance();
 				if (item instanceof Potion) {
 					((Potion) item).shatter(pos);
-				} else if (item instanceof Plant.Seed && !Dungeon.isChallenged(Challenges.NO_HERBALISM)) {
+				} else if (item instanceof Plant.Seed && Dungeon.difficulty < 3) {
 					Dungeon.level.plant((Plant.Seed) item, pos);
 				} else if (item instanceof Honeypot) {
 					Dungeon.level.drop(((Honeypot) item).shatter(null, pos), pos);

@@ -52,7 +52,15 @@ public class WndGameInProgress extends Window {
 	public WndGameInProgress(final int slot){
 		
 		final GamesInProgress.Info info = GamesInProgress.check(slot);
-		
+
+		RenderedTextBlock name = PixelScene.renderTextBlock(9);
+		add(name);
+		if (info.customName != null && !info.customName.isEmpty()) {
+			name.text(Messages.upperCase(info.customName));
+			name.hardlight(TITLE_COLOR);
+			name.setRect(18, 0, WIDTH, 0);
+		}
+
 		String className = null;
 		if (info.subClass != HeroSubClass.NONE){
 			className = info.subClass.title();
@@ -64,14 +72,14 @@ public class WndGameInProgress extends Window {
 		title.icon( HeroSprite.avatar(info.heroClass, info.armorTier) );
 		title.label((Messages.get(this, "title", info.level, className)).toUpperCase(Locale.ENGLISH));
 		title.color(Window.TITLE_COLOR);
-		title.setRect( 0, 0, WIDTH, 0 );
+		title.setRect( 0, 5, WIDTH, 0 );
 		add(title);
 		
-		if (info.challenges > 0) GAP -= 2;
+		//if (info.challenges > 0) GAP -= 2;
 		
 		pos = title.bottom() + GAP;
 		
-		if (info.challenges > 0) {
+/*		if (info.challenges > 0) {
 			RedButton btnChallenges = new RedButton( Messages.get(this, "challenges") ) {
 				@Override
 				protected void onClick() {
@@ -84,10 +92,11 @@ public class WndGameInProgress extends Window {
 			add( btnChallenges );
 			
 			pos = btnChallenges.bottom() + GAP;
-		}
+		}*/
 		
 		pos += GAP;
 
+		statSlot( Messages.get(this, "difficulty"), Float.toString(info.difficulty) );
 		int strBonus = info.strBonus;
 		if (strBonus > 0)           statSlot( Messages.get(this, "str"), info.str + " + " + strBonus );
 		else if (strBonus < 0)      statSlot( Messages.get(this, "str"), info.str + " - " + -strBonus );

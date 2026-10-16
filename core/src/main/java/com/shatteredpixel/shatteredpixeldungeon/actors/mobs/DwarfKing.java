@@ -82,7 +82,7 @@ public class DwarfKing extends Mob {
 	{
 		spriteClass = KingSprite.class;
 
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 450 : 300;
+		HP = HT = Math.round(350 * Dungeon.bossDifficultyMultiplier());
 		EXP = 40;
 		defenseSkill = 22;
 
@@ -110,8 +110,8 @@ public class DwarfKing extends Mob {
 
 	private float summonCooldown = 0;
 	private float abilityCooldown = 0;
-	private final int MIN_COOLDOWN = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 8 : 10;
-	private final int MAX_COOLDOWN = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 10 : 14;
+	private final int MIN_COOLDOWN = Math.round(10 / Dungeon.bossDifficultyMultiplier());
+	private final int MAX_COOLDOWN = Math.round(13 / Dungeon.bossDifficultyMultiplier());
 
 	private int lastAbility = 0;
 	private static final int NONE = 0;
@@ -158,7 +158,7 @@ public class DwarfKing extends Mob {
 
 		if (phase == 1) {
 
-			if (summonCooldown <= 0 && summonSubject(Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 2 : 3)){
+			if (summonCooldown <= 0 && summonSubject( Math.round (2.75f / Dungeon.bossDifficultyMultiplier()) )){
 				summonsMade++;
 				summonCooldown += Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 			} else if (summonCooldown > 0){
@@ -200,108 +200,82 @@ public class DwarfKing extends Mob {
 
 		} else if (phase == 2){
 
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
-				//challenge logic
-				if (summonsMade < 6){
-					if (summonsMade == 0) {
-						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
-						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
-						yell(Messages.get(this, "wave_1"));
-					}
-					summonSubject(3, DKGhoul.class);
-					summonSubject(3, DKGhoul.class);
-					spend(3 * TICK);
-					summonsMade += 2;
-					return true;
-				} else if (shielding() <= 300 && summonsMade < 12){
-					if (summonsMade == 6) {
-						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
-						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
-						yell(Messages.get(this, "wave_2"));
-					}
-					summonSubject(3, DKGhoul.class);
-					summonSubject(3, DKGhoul.class);
-					if (summonsMade == 6) {
-						summonSubject(3, DKMonk.class);
-					} else {
-						summonSubject(3, DKWarlock.class);
-					}
-					summonsMade += 3;
-					spend(3*TICK);
-					return true;
-				} else if (shielding() <= 150 && summonsMade < 18) {
-					if (summonsMade == 12) {
-						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
-						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
-						yell(Messages.get(this, "wave_3"));
-						summonSubject(3, DKWarlock.class);
-						summonSubject(3, DKMonk.class);
-						summonSubject(3, DKGhoul.class);
-						summonSubject(3, DKGhoul.class);
-						summonsMade += 4;
-						spend(3*TICK);
-					} else {
-						summonSubject(3, DKGolem.class);
-						summonSubject(3, DKGolem.class);
-						summonsMade += 2;
-						spend(TICK);
-					}
-					return true;
-				} else {
-					spend(TICK);
-					return true;
+			float diffScalingMulti = (Dungeon.difficulty / 4f ) + 0.75f;
+
+			if (summonsMade < 3 + Dungeon.difficulty ) {
+				if (summonsMade == 0) {
+					sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
+					Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+					yell(Messages.get(this, "wave_1"));
 				}
-			} else {
-				//non-challenge logic
-				if (summonsMade < 4) {
-					if (summonsMade == 0) {
-						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
-						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
-						yell(Messages.get(this, "wave_1"));
-					}
+				summonSubject(3, DKGhoul.class);
+				if (Dungeon.difficulty > 2) {
 					summonSubject(3, DKGhoul.class);
-					spend(3 * TICK);
 					summonsMade++;
-					return true;
-				} else if (shielding() <= 200 && summonsMade < 8) {
-					if (summonsMade == 4) {
-						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
-						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
-						yell(Messages.get(this, "wave_2"));
-					}
-					if (summonsMade == 7) {
+				}
+				spend(3 * TICK);
+				summonsMade++;
+				return true;
+			} else if (shielding() <= Math.round(200 * diffScalingMulti) && summonsMade < Math.round(8 * diffScalingMulti)) {
+				if (summonsMade == Math.round(4 * diffScalingMulti)) {
+					sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
+					Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+					yell(Messages.get(this, "wave_2"));
+				}
+				for (int i = 1; i <= (int) Dungeon.difficulty; i++) {
+					if (summonsMade + i - 1 == 7) {
 						summonSubject(3, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
 					} else {
 						summonSubject(3, DKGhoul.class);
 					}
-					summonsMade++;
-					spend(TICK);
-					return true;
-				} else if (shielding() <= 100 && summonsMade < 12) {
+				}
+				summonsMade += (int) Dungeon.difficulty;
+				spend((int) Dungeon.difficulty * TICK);
+				return true;
+			} else if (shielding() <= Math.round(100 * diffScalingMulti) && summonsMade < Math.round(12 * diffScalingMulti)) {
+				if (summonsMade >= Math.round(8 * diffScalingMulti) ) {
 					sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 					Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 					yell(Messages.get(this, "wave_3"));
-					summonSubject(4, DKWarlock.class);
-					summonSubject(4, DKMonk.class);
-					summonSubject(4, DKGhoul.class);
-					summonSubject(4, DKGhoul.class);
-					summonsMade = 12;
-					spend(TICK);
-					return true;
+					summonSubject(3, DKWarlock.class);
+					summonSubject(3, DKMonk.class);
+					summonSubject(3, DKGhoul.class);
+					summonSubject(3, DKGhoul.class);
+					summonsMade += 4;
+					spend(3*TICK);
 				} else {
+					summonSubject(3, DKGhoul.class);
+					summonSubject(3, DKGolem.class);
+					summonsMade += 2;
 					spend(TICK);
-					return true;
 				}
+				return true;
+
+			} else {
+				spend(TICK);
+				return true;
 			}
+
 		} else if (phase == 3 && buffs(Summoning.class).size() < 4){
-			if (summonSubject(Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 2 : 3)) summonsMade++;
+			if (summonSubject(Math.round (2.75f / Dungeon.bossDifficultyMultiplier()) )) summonsMade++;
 		}
 
 		return super.act();
 	}
 
 	private boolean summonSubject( int delay ){
-		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
+		//every 3rd summon is always a monk or warlock, otherwise ghoul
+		//except every 9th summon, which is a golem!
+		if (summonsMade % 3 == 2) {
+			if (summonsMade % 9 == 8){
+				return summonSubject(delay, DKGolem.class);
+			} else {
+				return summonSubject(delay, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
+			}
+		} else {
+			return summonSubject(delay, DKGhoul.class);
+		}
+/*		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
 			//every 3rd summon is always a monk or warlock, otherwise ghoul
 			//except every 9th summon, which is a golem!
 			if (summonsMade % 3 == 2) {
@@ -321,7 +295,7 @@ public class DwarfKing extends Mob {
 			} else {
 				return summonSubject(delay, DKGhoul.class);
 			}
-		}
+		}*/
 	}
 
 	private boolean summonSubject( int delay, Class<?extends Mob> type ){
@@ -484,16 +458,15 @@ public class DwarfKing extends Mob {
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg/5f);
-			else                                                    lock.addTime(dmg/3f);
+			lock.addTime(dmg / (2 + Dungeon.difficulty) );
 		}
 
 		if (phase == 1) {
 			int dmgTaken = preHP - HP;
 			abilityCooldown -= dmgTaken/8f;
 			summonCooldown -= dmgTaken/8f;
-			if (HP <= (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 100 : 50)) {
-				HP = (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 100 : 50);
+			if (HP <= Math.round(60 * Dungeon.bossDifficultyMultiplier()) ) {
+				HP = Math.round(60 * Dungeon.bossDifficultyMultiplier());
 				sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 				ScrollOfTeleportation.appear(this, CityBossLevel.throne);
 				properties.add(Property.IMMOVABLE);
@@ -707,11 +680,7 @@ public class DwarfKing extends Mob {
 					Char ch = Actor.findChar(pos);
 					ch.damage(Random.NormalIntRange(20, 40), this);
 					if (((DwarfKing)target).phase == 2){
-						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
-							target.damage(target.HT/18, new KingDamager());
-						} else {
-							target.damage(target.HT/12, new KingDamager());
-						}
+						target.damage(target.HT / Math.round(12 * ( Math.max(0.3f, Dungeon.difficulty) * 2)), new KingDamager());
 					}
 					if (!ch.isAlive() && ch == Dungeon.hero) {
 						Dungeon.fail(DwarfKing.class);
@@ -787,7 +756,7 @@ public class DwarfKing extends Mob {
 			super.detach();
 			for (Mob m : Dungeon.level.mobs){
 				if (m instanceof DwarfKing){
-					int damage = m.HT / (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 18 : 12);
+					int damage = Math.round(m.HT / ( 12 + (Dungeon.difficulty * 2)));
 					m.damage(damage, this);
 				}
 			}

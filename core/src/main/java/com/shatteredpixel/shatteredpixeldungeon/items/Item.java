@@ -27,12 +27,14 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -189,6 +191,18 @@ public class Item implements Bundlable {
 	}
 	
 	protected void onThrow( int cell ) {
+
+		//Distract unaware enemies by throwing an object
+		for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])) {
+			if ( m.state != m.HUNTING
+				&& Dungeon.level.distance(m.pos, Dungeon.hero.pos) >= Dungeon.level.distance(m.pos, cell) ) {
+//				System.out.println("Dungeon.level.distance(m.pos, cell): " + Dungeon.level.distance(m.pos, cell) );
+//				System.out.println("Dungeon.level.distance(m.pos, Dungeon.hero.pos): " + Dungeon.level.distance(m.pos, Dungeon.hero.pos));
+//				System.out.println("m.fieldOfView[Dungeon.hero.pos]: " + m.fieldOfView[Dungeon.hero.pos]);
+				m.beckon(cell);
+			}
+		}
+
 		Heap heap = Dungeon.level.drop( this, cell );
 		if (!heap.isEmpty()) {
 			heap.sprite.drop( cell );

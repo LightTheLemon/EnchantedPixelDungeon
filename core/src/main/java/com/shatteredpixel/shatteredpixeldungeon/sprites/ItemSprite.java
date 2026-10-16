@@ -393,6 +393,7 @@ public class ItemSprite extends MovieClip {
 			ga = glowing.green * value;
 			ba = glowing.blue * value;
 
+			//FOR TRANSPARENT ITEMS:
 			if (heap != null) {
 				Item item = heap.peek();
                 if (item instanceof Weapon) {

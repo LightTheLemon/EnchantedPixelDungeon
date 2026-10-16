@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.IceBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.GlowBlock;
+import com.shatteredpixel.shatteredpixeldungeon.effects.PinkBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
@@ -86,7 +87,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	public boolean visibleOutOfFFOV = false;
 
 	public enum State {
-		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, HEARTS, GLOWING, AURA
+		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, HEARTS, GLOWING, AURA, PINKIFIED
 	}
 	
 	protected Animation idle;
@@ -109,6 +110,8 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	
 	protected IceBlock iceBlock;
 	protected DarkBlock darkBlock;
+
+	protected PinkBlock pinkBlock;
 	protected GlowBlock glowBlock;
 	protected TorchHalo light;
 	protected ShieldHalo shield;
@@ -430,6 +433,10 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				if (darkBlock != null) darkBlock.killAndErase();
 				darkBlock = DarkBlock.darken(this);
 				break;
+			case PINKIFIED:
+				if (pinkBlock != null) pinkBlock.killAndErase();
+				pinkBlock = PinkBlock.darken(this);
+				break;
 			case MARKED:
 				if (marked != null) marked.on = false;
 				marked = emitter();
@@ -533,6 +540,12 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				if (darkBlock != null) {
 					darkBlock.lighten();
 					darkBlock = null;
+				}
+				break;
+			case PINKIFIED:
+				if (pinkBlock != null) {
+					pinkBlock.lighten();
+					pinkBlock = null;
 				}
 				break;
 			case MARKED:

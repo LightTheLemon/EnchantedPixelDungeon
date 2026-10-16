@@ -160,7 +160,7 @@ public class HighGrass {
 					lootChance /= 2;
 				}
 
-				if (Random.Float() < lootChance) {
+				if (Random.Float() < lootChance * Dungeon.dewdropDifficultyMultiplier()) {
 					level.drop(new Dewdrop(), pos).sprite.drop();
 				}
 			}

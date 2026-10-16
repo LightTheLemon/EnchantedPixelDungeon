@@ -182,6 +182,8 @@ public class Dungeon {
 	}
 
 	public static int challenges;
+
+	public static float difficulty;
 	public static float mobsToChampion;
 
 	public static Hero hero;
@@ -190,6 +192,7 @@ public class Dungeon {
 	public static QuickSlot quickslot = new QuickSlot();
 	
 	public static int depth;
+
 	//determines path the hero is on. Current uses:
 	// 0 is the default path
 	// 1 is for quest sub-floors
@@ -236,6 +239,7 @@ public class Dungeon {
 
 		initialVersion = version = Game.versionCode;
 		challenges = SPDSettings.challenges();
+		difficulty = SPDSettings.difficulty() / 10f;
 		mobsToChampion = 1;
 
 		Actor.clear();
@@ -297,6 +301,30 @@ public class Dungeon {
 
 	public static boolean isChallenged( int mask ) {
 		return (challenges & mask) != 0;
+	}
+
+	public static float healingDifficultyMultiplier() {
+		return ( difficulty / -1.8f ) + 1.56f;
+	}
+
+	public static float foodDifficultyMultiplier() {
+		return Math.max( 1.0f, difficulty);
+	}
+
+	public static float armorDifficultyMultiplier() {
+		return Math.min(1f, (difficulty / -4f) + 1.25f);
+	}
+
+	public static float bossDifficultyMultiplier() {
+		return (difficulty / 8f) + 0.875f;
+	}
+
+	public static float dewdropDifficultyMultiplier() {
+		return Math.min(1.3f, Math.max(0f, ( difficulty / -2f ) + 1.5f));
+	}
+
+	public static float upgradeDifficultyMultiplier() {
+		return Math.max(0.25f, ( difficulty / -5f ) + 0.95f);
 	}
 
 	public static boolean levelHasBeenGenerated(int depth, int branch){
@@ -554,7 +582,7 @@ public class Dungeon {
 	public static boolean souNeeded() {
 		int souLeftThisSet;
 		//3 SOU each floor set
-		souLeftThisSet = 3 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 3);
+		souLeftThisSet = 4 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 4);
 		if (souLeftThisSet <= 0) return false;
 
 		int floorThisSet = (depth % 5);
@@ -611,6 +639,7 @@ public class Dungeon {
 	private static final String DAILY_REPLAY= "daily_replay";
 	private static final String LAST_PLAYED = "last_played";
 	private static final String CHALLENGES	= "challenges";
+	private static final String DIFFICULTY	= "difficulty";
 	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
 	private static final String HERO		= "hero";
 	private static final String DEPTH		= "depth";
@@ -638,6 +667,7 @@ public class Dungeon {
 			bundle.put( DAILY_REPLAY, dailyReplay );
 			bundle.put( LAST_PLAYED, lastPlayed = Game.realTime);
 			bundle.put( CHALLENGES, challenges );
+			bundle.put( DIFFICULTY, difficulty );
 			bundle.put( MOBS_TO_CHAMPION, mobsToChampion );
 			bundle.put( HERO, hero );
 			bundle.put( DEPTH, depth );
@@ -745,6 +775,7 @@ public class Dungeon {
 		Toolbar.swappedQuickslots = false;
 
 		Dungeon.challenges = bundle.getInt( CHALLENGES );
+		Dungeon.difficulty = bundle.getFloat( DIFFICULTY );
 		Dungeon.mobsToChampion = bundle.getFloat( MOBS_TO_CHAMPION );
 		
 		Dungeon.level = null;
@@ -864,6 +895,7 @@ public class Dungeon {
 		info.depth = bundle.getInt( DEPTH );
 		info.version = bundle.getInt( VERSION );
 		info.challenges = bundle.getInt( CHALLENGES );
+		info.difficulty = bundle.getFloat( DIFFICULTY );
 		info.seed = bundle.getLong( SEED );
 		info.customSeed = bundle.getString( CUSTOM_SEED );
 		info.daily = bundle.getBoolean( DAILY );

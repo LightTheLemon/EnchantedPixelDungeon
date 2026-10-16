@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -115,8 +116,8 @@ public class Blooming extends Weapon.Enchantment {
 				&& Dungeon.level.plants.get(cell) == null){
 			if (!Regeneration.regenOn()){
 				Level.set(cell, Terrain.FURROWED_GRASS);
-			} else if (Random.Float() < 0.2 * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero) && !Dungeon.isChallenged(Challenges.NO_HERBALISM)) {
-				((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED)).couch(cell, null);
+			} else if (Random.Float() < 0.2 * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero) && Dungeon.difficulty <= 3) {
+				Dungeon.level.plant((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED), cell);
 			} else {
 				Level.set(cell, Terrain.HIGH_GRASS);
 			}

@@ -70,7 +70,8 @@ public class PotionOfHealing extends Potion {
 	}
 
 	public static void heal( Char ch ){
-		if (ch == Dungeon.hero && Dungeon.isChallenged(Challenges.NO_HEALING)){
+
+		if (ch == Dungeon.hero && Dungeon.difficulty > 2.8){
 			pharmacophobiaProc(Dungeon.hero);
 		} else {
 			CellEmitter.get( ch.pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
@@ -79,8 +80,14 @@ public class PotionOfHealing extends Potion {
 				healing.setHeal(ch.HT, 0, VialOfBlood.maxHealPerTurn(), true);
 				healing.applyVitalityEffect();
 			} else {
-				//Char.healPercent(ch, 100);
-				ch.HP = (int)(ch.HT / RingOfVitality.HealingMultiplier(Dungeon.hero));
+				float healAmount = ch.HT;
+				healAmount /= RingOfVitality.HealingMultiplier(Dungeon.hero);
+				healAmount *= Math.max(0, Dungeon.healingDifficultyMultiplier());
+
+				ch.HP = Math.round( Math.min(ch.HT, ch.HP + healAmount) );
+
+				System.out.println("healAmount: " + healAmount );
+
 			}
 
 			////starts out healing 30 hp, equalizes with hero health total at level 11
@@ -103,13 +110,26 @@ public class PotionOfHealing extends Potion {
 		}
 
 		Char ch = Actor.findChar(cell);
-		if (ch != null && !(Dungeon.isChallenged(Challenges.NO_HEALING)) ){
+		if (ch != null && Dungeon.difficulty <= 2.8 ){
+
+			//Base healing for throwing a potion at a character is lower
+			float healAmount = ch.HT * 0.66f;
+			healAmount *= (Dungeon.healingDifficultyMultiplier());
 
 			if (ch != Dungeon.hero) {
-				GLog.p( Messages.get(PotionOfHealing.class, "heal_ally") );
-				ch.HP = (int) (ch.HT * 0.75f);
+
+				if (ch.alignment == Char.Alignment.ALLY) {
+					GLog.p( Messages.get(PotionOfHealing.class, "heal_ally") );
+				} else {
+					GLog.p( Messages.get(PotionOfHealing.class, "heal_enemy") );
+					healAmount += 0.2f * ch.HT;
+				}
+				ch.HP = Math.min( ch.HT, Math.round(ch.HP + healAmount));
+
 			} else {
-				ch.HP = ch.HT / 3;
+
+				healAmount /= RingOfVitality.HealingMultiplier(Dungeon.hero);
+				ch.HP = Math.min( ch.HT, Math.round(ch.HP + healAmount));
 
 			}
 
@@ -118,7 +138,7 @@ public class PotionOfHealing extends Potion {
 
 			if (ch != Dungeon.hero && ch.HP == ch.HT) {
 				ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(ch.HT / 4), FloatingText.SHIELDING);
-				Buff.affect(ch, Barrier.class).setShield( ch.HT / 4);
+				Buff.affect(ch, Barrier.class).setShield( Math.round(healAmount / 2f));
 			}
 
 			if (ch instanceof Bee && ch.alignment != curUser.alignment){
@@ -126,16 +146,16 @@ public class PotionOfHealing extends Potion {
 				((Bee)ch).setPotInfo(-1, null);
 			}
 
-		} else if (ch != null && ch != Dungeon.hero) {
+		} else if (ch != null && ch.alignment != Char.Alignment.ENEMY ) {
 			ch.sprite.emitter().burst( BloodParticle.BURST, 2 );
-			Buff.affect(ch, Bleeding.class).set(4 + ch.HT/4f);
+			Buff.affect(ch, Poison.class).set(3);
 
 		}
 	}
 
 	public static void pharmacophobiaProc( Hero hero ){
-		// harms the hero for ~40% of their max HP in poison
-		Buff.affect( hero, Poison.class).set(4 + hero.lvl/2);
+		// harms the hero depending on difficulty
+		Buff.affect( hero, Poison.class).set(6 + hero.lvl/1.5f * (Math.max(0.05f, -Dungeon.healingDifficultyMultiplier()) ) );
 	}
 	
 	public static void cure( Char ch ) {

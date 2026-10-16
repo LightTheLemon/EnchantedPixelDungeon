@@ -213,8 +213,10 @@ public class StartScene extends PixelScene {
 					level = null;
 				}
 			} else {
-				
-				if (info.subClass != HeroSubClass.NONE){
+
+				if (info.customName != null && !info.customName.isEmpty()){
+					name.text(Messages.titleCase(info.customName));
+				} else if (info.subClass != HeroSubClass.NONE){
 					name.text(Messages.titleCase(info.subClass.title()));
 				} else {
 					name.text(Messages.titleCase(info.heroClass.title()));
@@ -260,11 +262,16 @@ public class StartScene extends PixelScene {
 				level.text(Integer.toString(info.level));
 				level.measure();
 				
-				if (info.challenges > 0){
+				if (info.difficulty > 1) {
 					name.hardlight(Window.TITLE_COLOR);
 					lastPlayed.hardlight(Window.TITLE_COLOR);
 					depth.hardlight(Window.TITLE_COLOR);
 					level.hardlight(Window.TITLE_COLOR);
+				} else if (info.difficulty < 1) {
+					name.hardlight(0x99FCFF);
+					lastPlayed.hardlight(0x99FCFF);
+					depth.hardlight(0x99FCFF);
+					level.hardlight(0x99FCFF);
 				} else {
 					name.resetColor();
 					lastPlayed.resetColor();

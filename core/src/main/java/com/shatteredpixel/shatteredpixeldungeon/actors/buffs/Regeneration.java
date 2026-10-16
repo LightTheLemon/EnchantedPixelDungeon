@@ -41,8 +41,8 @@ public class Regeneration extends Buff {
 
 	private float partialRegen = 0f;
 
-	private static final float REGENERATION_DELAY = 10; //1HP every 10 turns
-	
+	private static final float REGENERATION_DELAY = 9.5f; //1HP every 9.5 turns unless difficulty is under 1.0
+
 	@Override
 	public boolean act() {
 		if (target.isAlive()) {
@@ -80,6 +80,10 @@ public class Regeneration extends Buff {
 				//salt cube is turned off while regen is disabled.
 				if (target.buff(LockedFloor.class) == null) {
 					delay /= SaltCube.healthRegenMultiplier();
+				}
+
+				if (Dungeon.difficulty < 1.0) {
+					delay *= Math.min(1f,((Dungeon.difficulty / 3f) + 0.67f));
 				}
 
 				partialRegen += 1f / delay;
@@ -120,15 +124,19 @@ public class Regeneration extends Buff {
 
 	public static final String PARTIAL_REGEN = "partial_regen";
 
+	//public static final String REGEN_DELAY = "regeneration_delay";
+
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
 		bundle.put(PARTIAL_REGEN, partialRegen);
+		//bundle.put(REGEN_DELAY, REGENERATION_DELAY);
 	}
 
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
 		partialRegen = bundle.getFloat(PARTIAL_REGEN);
+		//REGENERATION_DELAY = bundle.getFloat(REGEN_DELAY);
 	}
 }

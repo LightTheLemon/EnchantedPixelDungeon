@@ -100,10 +100,7 @@ public class HornOfPlenty extends Artifact {
 			else if (charge == 0)  GLog.i( Messages.get(this, "no_food") );
 			else {
 				//consume as much food as it takes to be full, to a minimum of 1
-				int satietyPerCharge = (int) (Hunger.STARVING/5f);
-				if (Dungeon.isChallenged(Challenges.NO_FOOD)){
-					satietyPerCharge /= 3;
-				}
+				int satietyPerCharge = Math.round(Hunger.STARVING / (5f * Dungeon.foodDifficultyMultiplier() ) );
 
 				Hunger hunger = Buff.affect(Dungeon.hero, Hunger.class);
 				int chargesToUse = Math.max( 1, hunger.hunger() / satietyPerCharge);
@@ -125,10 +122,7 @@ public class HornOfPlenty extends Artifact {
 	}
 
 	public void doEatEffect(Hero hero, int chargesToUse){
-		int satietyPerCharge = (int) (Hunger.STARVING/5f);
-		if (Dungeon.isChallenged(Challenges.NO_FOOD)){
-			satietyPerCharge /= 3;
-		}
+		int satietyPerCharge = Math.round(Hunger.STARVING / (5f * Dungeon.foodDifficultyMultiplier() ) );
 
 		Buff.affect(hero, Hunger.class).satisfy(satietyPerCharge * chargesToUse);
 

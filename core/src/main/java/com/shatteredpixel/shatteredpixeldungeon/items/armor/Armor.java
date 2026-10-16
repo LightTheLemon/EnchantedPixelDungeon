@@ -380,11 +380,14 @@ public class Armor extends EquipableItem {
 	}
 
 	public int DRMax(int lvl){
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-			return 1 + tier + lvl + augment.defenseFactor(lvl);
-		}
+		//Default armor multiplier changed from 2f to 1.95f. This nerf is because at 1.0 difficulty health regeneration is now 5% faster
 
-		int max = tier * (2 + lvl) + augment.defenseFactor(lvl);
+		//0.0 difficulty: max blocking *= 1.25
+		//1.0 difficulty: max blocking *= 1 (no change)
+		//2.0 difficulty: max blocking *= 0.75
+		//3.0 difficulty: max blocking *= 0.5
+		//4.0 difficulty: max blocking *= 0.25
+		int max = Math.round( (tier * ( ( 1.95f * Dungeon.armorDifficultyMultiplier()) + lvl) + augment.defenseFactor(lvl)) );
 		if (lvl > max){
 			return ((lvl - max)+1)/2;
 		} else {
@@ -397,15 +400,19 @@ public class Armor extends EquipableItem {
 	}
 
 	public int DRMin(int lvl){
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-			return 0;
-		}
+
+		float difficultyMultiplier = (Dungeon.difficulty / -2f) + 1.5f;
+		//0.0 difficulty: minimum blocking *= 1.5
+		//1.0 difficulty: minimum blocking *= 1 (no change)
+		//2.0 difficulty: minimum blocking *= 0.5
+		//3.0 difficulty: minimum blocking *= 0 (always zero)
+		//4.0 difficulty: minimum blocking *= -0.5
 
 		int max = DRMax(lvl);
 		if (lvl >= max){
-			return (lvl - max);
+			return Math.round( (lvl - max) * difficultyMultiplier);
 		} else {
-			return lvl;
+			return Math.round(lvl * difficultyMultiplier);
 		}
 	}
 

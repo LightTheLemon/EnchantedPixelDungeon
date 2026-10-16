@@ -94,7 +94,7 @@ public class Sungrass extends Plant {
 			}
 			
 			//for the hero, full heal takes ~50/93/111/120 turns at levels 1/10/20/30
-			partialHeal += (40 + target.HT)/150f;
+			partialHeal += (40 + target.HT)/150f * ((Dungeon.difficulty / -4f) + 1.25f);
 			
 			if (partialHeal > 1){
 				int healThisTurn = (int)partialHeal;

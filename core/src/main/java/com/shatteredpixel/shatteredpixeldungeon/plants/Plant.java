@@ -152,7 +152,7 @@ public abstract class Plant implements Bundlable {
 		@Override
 		public ArrayList<String> actions( Hero hero ) {
 			ArrayList<String> actions = super.actions( hero );
-			actions.add( AC_PLANT );
+			if (Dungeon.difficulty < 3) actions.add( AC_PLANT );
 			return actions;
 		}
 
@@ -161,7 +161,7 @@ public abstract class Plant implements Bundlable {
 			if (Dungeon.level.map[cell] == Terrain.ALCHEMY
 					|| Dungeon.level.pit[cell]
 					|| Dungeon.level.traps.get(cell) != null
-					|| Dungeon.isChallenged(Challenges.NO_HERBALISM)
+					|| Dungeon.difficulty >= 3
 					|| !isPlanting) {
 				super.onThrow( cell );
 			} else {

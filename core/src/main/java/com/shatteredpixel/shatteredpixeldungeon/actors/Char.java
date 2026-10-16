@@ -913,8 +913,8 @@ public abstract class Char extends Actor {
 		}
 		if (this.buff(MagicalSleep.class) != null){
 			Buff.detach(this, MagicalSleep.class);
-			//Do I want to buff magical sleep?
-			Buff.affect(this, Sleep.class);
+			////In case I want to buff magical sleep. Probably not.
+			//Buff.affect(this, Sleep.class);
 		}
 		if (this.buff(Doom.class) != null && !isImmune(Doom.class)){
 			damage *= 1.67f;

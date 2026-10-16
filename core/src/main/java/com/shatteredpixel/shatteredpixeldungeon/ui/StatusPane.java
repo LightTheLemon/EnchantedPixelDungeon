@@ -59,7 +59,7 @@ public class StatusPane extends Component {
 
 	private Image shieldHP;
 	private Image hp;
-	private Image Dot; //a visual darkening over HP and shield that shows total incoming DOT
+	private Image Dot; //Damage Over Time. A visual darkening over HP and shield that shows total incoming DOT
 	private BitmapText hpText;
 	private Button heroInfoOnBar;
 
@@ -91,7 +91,7 @@ public class StatusPane extends Component {
 
 	private void updateHealthBar(boolean large) {
 
-		int dynamicBarWidthLarge = Math.min(360, (Dungeon.hero.HT / 2) + 45);
+		int dynamicBarWidthLarge = Math.min(200, (Dungeon.hero.HT + 45));
 
 		int dynamicBarWidthSmall = Math.min(72, (Dungeon.hero.HT / 3) + 10);
 
@@ -116,7 +116,7 @@ public class StatusPane extends Component {
 			exp.scale.x = (dynamicBarWidthLarge / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
 
 			hpText.measure();
-			hpText.x = hp.x - 9 + ((Math.min(180, Dungeon.hero.HT + 30))/2f);
+			hpText.x = hp.x - 9 + ((Math.min(180, Dungeon.hero.HT + 45))/2f);
 
 		} else {
 			exp.scale.x = ((17 + heroPaneExtraWidth) / exp.width) * Dungeon.hero.exp / Dungeon.hero.maxExp();
@@ -133,7 +133,7 @@ public class StatusPane extends Component {
 			hpText.y = hp.y + 1;
 			PixelScene.align(hpText);
 
-			expText.x = exp.x + 1 - (dynamicBarWidthLarge / 2f);
+			expText.x = exp.x - 9 - (dynamicBarWidthLarge / 2f);
 			expText.y = exp.y;
 			PixelScene.align(expText);
 
@@ -145,8 +145,8 @@ public class StatusPane extends Component {
 			busy.x = x + bg.width + 1;
 			busy.y = y + bg.height - 9;
 
-			counter.x = x + bg.width + 6;
-			counter.y = y + bg.height - 6;
+			counter.x = x + bg.width + 5;
+			counter.y = y + bg.height - 5;
 
 		} else {
 			exp.x = x+2;
@@ -394,7 +394,7 @@ public class StatusPane extends Component {
 		if (large) {
 			expText.text(Dungeon.hero.exp + "/" + Dungeon.hero.maxExp());
 			expText.measure();
-			expText.x = hp.x - 7 + ((Math.min(180, Dungeon.hero.HT + 30))/2f);
+			expText.x = hp.x - 7 + ((Math.min(360, Dungeon.hero.HT + 45))/2f);
 
 		} else {
 			expText.text(Dungeon.hero.exp + "/" + Dungeon.hero.maxExp());

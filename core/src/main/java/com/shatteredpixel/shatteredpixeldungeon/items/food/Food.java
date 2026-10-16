@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndDifficulty;
 import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
@@ -116,9 +117,7 @@ public class Food extends Item {
 	
 	protected void satisfy( Hero hero ){
 		float foodVal = energy;
-		if (Dungeon.isChallenged(Challenges.NO_FOOD)){
-			foodVal /= 3f;
-		}
+		foodVal /= Dungeon.foodDifficultyMultiplier();
 
 		Artifact.ArtifactBuff buff = hero.buff( HornOfPlenty.hornRecharge.class );
 		if (buff != null && buff.isCursed()){

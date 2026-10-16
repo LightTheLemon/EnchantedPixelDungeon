@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GooSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndDifficulty;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
@@ -51,7 +52,7 @@ import com.watabou.utils.Random;
 public class Goo extends Mob {
 
 	{
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 120 : 100;
+		HP = HT = Math.round(100 * Dungeon.bossDifficultyMultiplier());
 		EXP = 10;
 		defenseSkill = 8;
 		spriteClass = GooSprite.class;
@@ -112,14 +113,13 @@ public class Goo extends Mob {
 
 			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 			if (lock != null){
-				if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.removeTime(healInc);
-				else                                                    lock.removeTime(healInc*1.5f);
+				lock.removeTime(healInc * Dungeon.bossDifficultyMultiplier());
 			}
 
 			if (Dungeon.level.heroFOV[pos] ){
 				sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(healInc), FloatingText.HEALING );
 			}
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) && healInc < 3) {
+			if (healInc < Dungeon.difficulty) {
 				healInc++;
 			}
 			if (HP*2 > HT) {
@@ -207,7 +207,7 @@ public class Goo extends Mob {
 
 		} else {
 
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+			if (Dungeon.difficulty > 1){
 				pumpedUp += 2;
 				//don't want to overly punish players with slow move or attack speed
 				spend(GameMath.gate(attackDelay(), (int)Math.ceil(enemy.cooldown()), 3*attackDelay()));
@@ -274,8 +274,7 @@ public class Goo extends Mob {
 		}
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg);
-			else                                                    lock.addTime(dmg*1.5f);
+			lock.addTime(dmg * 1.5f * ((Dungeon.difficulty / -8) + 1.05f) );
 		}
 	}
 

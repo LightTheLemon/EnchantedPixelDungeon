@@ -238,10 +238,12 @@ public abstract class Level implements Bundlable {
 				//TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
 				//for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
 				//or give a random scroll (from a separate RNG) instead of every 2nd SOU
-				if (!Dungeon.isChallenged(Challenges.NO_SCROLLS) || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count%2 != 0){
+				if (Random.Float() < Dungeon.upgradeDifficultyMultiplier() ){
 					addItemToSpawn(new ScrollOfUpgrade());
+					System.out.println("SCROLL SPAWNED");
 				}
 			}
+			System.out.println("Dungeon.upgradeDifficultyMultiplier(): " + Dungeon.upgradeDifficultyMultiplier());
 			if (Dungeon.asNeeded()) {
 				Dungeon.LimitedDrops.ARCANE_STYLI.count++;
 				addItemToSpawn( new Stylus() );
@@ -766,10 +768,10 @@ public abstract class Level implements Bundlable {
 		} else {
 			cooldown = TIME_TO_RESPAWN;
 		}
-		System.out.println("cooldown: " + cooldown);
-		System.out.println("BurningSage.enemySpawnMultiplier(): " + BurningSage.enemySpawnMultiplier());
-		System.out.println("AmuletShard.enemySpawnMultiplier(): " + AmuletShard.enemySpawnMultiplier());
-		System.out.println("SPAWN RATE: " + cooldown * BurningSage.enemySpawnMultiplier() * AmuletShard.enemySpawnMultiplier());
+		//System.out.println("cooldown: " + cooldown);
+		//System.out.println("BurningSage.enemySpawnMultiplier(): " + BurningSage.enemySpawnMultiplier());
+		//System.out.println("AmuletShard.enemySpawnMultiplier(): " + AmuletShard.enemySpawnMultiplier());
+		//System.out.println("SPAWN RATE: " + cooldown * BurningSage.enemySpawnMultiplier() * AmuletShard.enemySpawnMultiplier());
 
 		return cooldown * BurningSage.enemySpawnMultiplier() * AmuletShard.enemySpawnMultiplier();
 	}
@@ -1080,7 +1082,7 @@ public abstract class Level implements Bundlable {
 		}
 
 		//we have to get this far as grass placement has RNG implications in levelgen
-		if (Dungeon.isChallenged(Challenges.NO_HERBALISM)){
+		if (Dungeon.difficulty >= 3){
 			return null;
 		}
 		

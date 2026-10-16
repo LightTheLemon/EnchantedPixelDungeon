@@ -45,6 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TormentedSpirit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
@@ -333,7 +334,15 @@ public class DriedRose extends Artifact {
 
 								Rose.ghost = new GhostHero( Rose );
 
+								System.out.println("target: " + target);
+								System.out.println("Actor.findChar(target): " + Actor.findChar(target));
 
+								//If you're targeting an enemy, direct the ghost to attack it
+								if (Actor.findChar(target) != null ) {
+									Rose.ghost.directTocell(target);
+								} else if (!BossHealthBar.isAssigned()) {
+									Rose.ghost.saySpawned();
+								}
 
 								Rose.ghostID = Rose.ghost.id();
 								Rose.ghost.pos = spawnCell; //spawnPos
@@ -352,11 +361,6 @@ public class DriedRose extends Artifact {
 									Rose.ghost.sayBoss();
 								}
 
-								if (Actor.findChar(target) != null) {
-									Rose.ghost.directTocell(target);
-								} else if (!BossHealthBar.isAssigned()) {
-									Rose.ghost.saySpawned();
-								}
 
 								//for (Buff b : storedBuffs) {
 								//	Rose.ghost.add(b);

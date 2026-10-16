@@ -90,13 +90,6 @@ public class Shadows extends Invisibility {
 				detach();
 				return true;
 			}
-
-			for (Mob m : Dungeon.level.mobs){
-				if (Dungeon.level.adjacent(m.pos, target.pos) && m.alignment != target.alignment){
-					detach();
-					return true;
-				}
-			}
 			
 		} else {
 			
@@ -116,10 +109,6 @@ public class Shadows extends Invisibility {
 		return BuffIndicator.SHADOWS;
 	}
 
-	@Override
-	public float iconFadePercent() {
-		return 0;
-	}
 
 	@Override
 	public String desc() {

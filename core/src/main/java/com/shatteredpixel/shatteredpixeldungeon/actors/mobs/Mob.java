@@ -341,7 +341,7 @@ public abstract class Mob extends Char {
 
 	protected void processSwarmIntel( boolean enemyInFOV ){
 		if (alignment == Alignment.ENEMY && state == HUNTING
-				&& Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)
+				&& Dungeon.difficulty >= 1.5
 				&& enemyInFOV && enemy != null && enemy.alignment == Alignment.ALLY) {
 
 			if (timeSeenAt >= now()){
@@ -364,7 +364,7 @@ public abstract class Mob extends Char {
 	}
 
 	public int swarmAlertRange(){
-		int range = 2*(int)Math.max(now() - timeSeenAt, 0);
+		int range = (int)((Dungeon.difficulty / 2f) * Math.max(now() - timeSeenAt, 0));
 		return (int)GameMath.gate(0, range, 12);
 	}
 
@@ -496,7 +496,7 @@ public abstract class Mob extends Char {
 			Charm charm = buff( Charm.class );
 			if (charm != null){
 				Char source = (Char)Actor.findById( charm.object );
-				if (source != null && enemies.contains(source)){ //enemies.size() > 1
+				if (source != null && enemies.contains(source) && enemies.size() > 1){
 					enemies.remove(source);
 				}
 			}

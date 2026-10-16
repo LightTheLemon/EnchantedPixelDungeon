@@ -27,6 +27,11 @@ public class AmuletShard extends Trinket {
         }
     }
 
+    @Override
+    protected void onThrow( int cell ) {
+        super.onThrow( cell );
+    }
+
     public static float enemySpawnMultiplier(){
         return enemySpawnMultiplier(trinketLevel(AmuletShard.class));
     }

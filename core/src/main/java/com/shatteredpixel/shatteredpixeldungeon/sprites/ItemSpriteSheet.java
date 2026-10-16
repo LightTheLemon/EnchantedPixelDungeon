@@ -539,7 +539,7 @@ public class ItemSpriteSheet {
 		assignItemRect(CHAOTIC_CENSER,  13, 15);
 		assignItemRect(FERRET_TUFT,     16, 15);
 		assignItemRect(SPYGLASS,        15, 15);
-		assignItemRect(AMULET_SHARD,    7,   8);
+		assignItemRect(AMULET_SHARD,    9,   10);
 	}
 
 	private static final int SCROLLS        =                               xy(1, 20);  //16 slots

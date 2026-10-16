@@ -70,7 +70,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImag
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.AmuletShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
@@ -204,52 +206,50 @@ public enum HeroClass {
 
 		// TODO: remove these
 
-		//Pickaxe pickaxe = new Pickaxe();
-		//pickaxe.collect();
+//		Pickaxe pickaxe = new Pickaxe();
+//		pickaxe.collect();
 
 		AmuletShard amulet = new AmuletShard();
 		amulet.collect();
 
-		//BurningSage sage = new BurningSage();
-		//sage.collect();
+//		RingOfMana mana = new RingOfMana();
+//		mana.identify().collect();
 
-		RingOfVitality vitality = new RingOfVitality();
-		vitality.identify().collect();
+//		CurseInfusion curse = new CurseInfusion();
+//		curse.quantity(10);
+//		curse.collect();
 
-		//RingOfMana mana = new RingOfMana();
-		//mana.identify().collect();
+//		DriedRose rose = new DriedRose();
+//		rose.identify().collect();
 
-		//CurseInfusion curse = new CurseInfusion();
-		//curse.quantity(10);
-		//curse.collect();
-
-		//DriedRose rose = new DriedRose();
-		//rose.identify().collect();
-
-		PotionOfExperience exp = new PotionOfExperience();
-		exp.quantity(100);
-		exp.identify().collect();
+//		PotionOfExperience exp = new PotionOfExperience();
+//		exp.quantity(100);
+//		exp.identify().collect();
 
 		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
 		upgrade.quantity(100);
 		upgrade.collect();
 
-		//CapeOfThorns cape = new CapeOfThorns();
-		//cape.collect();
+//		PotionOfHealing heal = new PotionOfHealing();
+//		heal.quantity(100);
+//		heal.identify().collect();
 
-		//WandOfCharm charm = new WandOfCharm();
-		//charm.identify().collect();
+//		CapeOfThorns cape = new CapeOfThorns();
+//		cape.collect();
 
-		//PhantomStopwatch watch = new PhantomStopwatch();
-		//watch.identify().collect();
+		WandOfCharm charm = new WandOfCharm();
+		charm.identify().collect();
 
-		//ScrollOfEnchantment ench = new ScrollOfEnchantment();
-		//ench.quantity(10);
-		//ench.identify().collect();
+//		PhantomStopwatch watch = new PhantomStopwatch();
+//		watch.identify().collect();
 
-		//TimekeepersHourglass time = new TimekeepersHourglass();
-		//time.identify().collect();
-		//time.cursed = true;
+//		ScrollOfEnchantment ench = new ScrollOfEnchantment();
+//		ench.quantity(10);
+//		ench.identify().collect();
+
+//		TimekeepersHourglass time = new TimekeepersHourglass();
+//		time.identify().collect();
+//		time.cursed = true;
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
