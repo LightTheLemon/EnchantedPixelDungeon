@@ -417,11 +417,8 @@ public class ElementalBlast extends ArmorAbility {
 
 						//*** Wand of Prismatic Light ***
 						} else if (finalWandCls == WandOfPrismaticLight.class){
-							if (Dungeon.isChallenged(Challenges.DARKNESS)){
-								Buff.prolong(hero, Light.class, effectMulti * 10f);
-							} else {
-								Buff.prolong(hero, Light.class, effectMulti * 50f);
-							}
+
+							Buff.prolong(hero, Light.class, effectMulti * (10f * Math.max(1, (-2*Dungeon.difficulty+7))) );
 
 						}
 

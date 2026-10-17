@@ -25,14 +25,14 @@ public class WndDifficulty extends Window {
     private RenderedTextBlock armorStats = PixelScene.renderTextBlock(( String.valueOf( "Armor effectiveness: " + 100 * Math.round((getDifficulty() / -4) + 1.25f)) + "%"), 5 );
     private RenderedTextBlock bossStats = PixelScene.renderTextBlock(( String.valueOf( "Boss health: " + 100 * Math.round((getDifficulty() / 8f) + 0.875f) + "%")), 5 );
     private RenderedTextBlock foodStats = PixelScene.renderTextBlock(( String.valueOf( "Food effectiveness: " + Math.round( 100 / getDifficulty())) + "%"), 5);
-    private RenderedTextBlock potionStats = PixelScene.renderTextBlock(String.valueOf("Potion of health healing: " + Math.round(100 * (getDifficulty() / -1.8 ) + 1.56)) + "%", 5);
+    private RenderedTextBlock potionStats = PixelScene.renderTextBlock(String.valueOf("Potion of health healing: " + Math.round(100 * (getDifficulty() / -1.6 ) + 1.63)) + "%", 5);
     private RenderedTextBlock championStats = PixelScene.renderTextBlock(( String.valueOf( "Hostile champion spawn rate: " + Math.round(1f / (17f - (3 * Dungeon.difficulty)))) + "%"), 5 );
     private RenderedTextBlock dewdropStats = PixelScene.renderTextBlock(( String.valueOf( "Dewdrop rate: " + Math.round(25 * Math.min(1.5f, Math.max(0f, ( getDifficulty() / -2f ) + 1.5f))) + "%")), 5 );
     private RenderedTextBlock plantStats = PixelScene.renderTextBlock( String.valueOf( "Seeds do not sprout."), 5 );
     private RenderedTextBlock regenStats = PixelScene.renderTextBlock(( String.valueOf( "Health regeneration speed: " + Math.round(100 / (getDifficulty() / 3 ) + 0.6)) + "%"), 5);
     private RenderedTextBlock upgradeStats = PixelScene.renderTextBlock(( String.valueOf( "Upgrade scrolls: " + Math.max(25 , Math.round(100 * ((getDifficulty()/-5f) + 0.95f))) + "% chance per floor")), 5 );
     private RenderedTextBlock swarmIntelStats = PixelScene.renderTextBlock(( String.valueOf( "Swarm intelligence counter: " + ((getDifficulty() / 2f) - 0.5f)) + " per turn"), 5 );
-
+    private RenderedTextBlock visionStats = PixelScene.renderTextBlock(( String.valueOf( "Brightness: " + Math.min(10, Math.max(2, Math.round(-3 * getDifficulty() + 11 ))) + " tiles of vision")), 5 );
 
     public WndDifficulty( float value, boolean editable ) {
 
@@ -130,6 +130,14 @@ public class WndDifficulty extends Window {
         );
         upgradeStats.text(( String.valueOf( "Upgrade scrolls: " + Math.max(25 , Math.round(100 * ((getDifficulty()/-5f) + 0.95f))) + "% chance per floor")), WIDTH );
 
+        add(visionStats);
+        visionStats.hardlight(WHITE);
+        visionStats.setPos(
+                0,
+                39
+        );
+        visionStats.text(( String.valueOf( "Brightness: " + Math.min(10, Math.max(2, Math.round(-3 * getDifficulty() + 11 ))) + " tiles of vision")), WIDTH );
+
 
         if (getDifficulty() >= 1) {
 
@@ -139,7 +147,7 @@ public class WndDifficulty extends Window {
             armorStats.hardlight(WHITE);
             armorStats.setPos(
                     0,
-                    39
+                    46
             );
             armorStats.text(( String.valueOf( "Armor effectiveness: " + Math.round(100 * ((getDifficulty() / -4) + 1.25f))) + "%"), WIDTH );
 
@@ -147,7 +155,7 @@ public class WndDifficulty extends Window {
             foodStats.hardlight(WHITE);
             foodStats.setPos(
                     0,
-                    46
+                    53
             );
             foodStats.text(String.valueOf("Food effectiveness: " + Math.round( 100 / getDifficulty())) + "%", WIDTH);
 
@@ -155,9 +163,9 @@ public class WndDifficulty extends Window {
             potionStats.hardlight(WHITE);
             potionStats.setPos(
                     0,
-                    53
+                    60
             );
-            potionStats.text(String.valueOf("Potion of health healing: " + Math.round(100 * ((getDifficulty() / -1.8 ) + 1.56))) + "%", WIDTH);
+            potionStats.text(String.valueOf("Potion of health healing: " + Math.round(100 * ((getDifficulty() / -1.6 ) + 1.63))) + "%", WIDTH);
 
         } else {
             remove(foodStats);
@@ -168,7 +176,7 @@ public class WndDifficulty extends Window {
             regenStats.hardlight(WHITE);
             regenStats.setPos(
                     0,
-                    39
+                    46
             );
             regenStats.text(( String.valueOf( "Health regeneration speed: " + Math.round(100 / ((getDifficulty() / 3 ) + 0.6))) + "%"), WIDTH);
 
@@ -179,7 +187,7 @@ public class WndDifficulty extends Window {
             championStats.hardlight(WHITE);
             championStats.setPos(
                     0,
-                    60
+                    67
             );
             championStats.text(( String.valueOf( "Hostile champion spawn rate: " + Math.round(100 * (1f / (17f - (3 * getDifficulty()))))) + "%"), WIDTH );
         } else {
@@ -191,7 +199,7 @@ public class WndDifficulty extends Window {
             swarmIntelStats.hardlight(WHITE);
             swarmIntelStats.setPos(
                     0,
-                    67
+                    74
             );
             swarmIntelStats.text(( String.valueOf( "Swarm intelligence counter: +" + Messages.decimalFormat("#.#", (getDifficulty() / 2f))) + " per turn"), WIDTH );
         } else {
@@ -203,7 +211,7 @@ public class WndDifficulty extends Window {
             plantStats.hardlight(TITLE_COLOR);
             plantStats.setPos(
                     0,
-                    74
+                    81
             );
             plantStats.text( String.valueOf( "Seeds do not sprout."), WIDTH );
         } else {

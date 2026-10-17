@@ -245,7 +245,7 @@ public enum Rankings {
 
 		}
 
-		Statistics.chalMultiplier = (float)Math.pow(1.25, Challenges.activeChallenges());
+		Statistics.chalMultiplier = (float)Math.pow(1.95, Dungeon.difficulty     );
 		Statistics.chalMultiplier = Math.round(Statistics.chalMultiplier*20f)/20f;
 
 		Statistics.totalScore = Statistics.progressScore + Statistics.treasureScore + Statistics.exploreScore
@@ -260,7 +260,7 @@ public enum Rankings {
 	public static final String STATS        = "stats";
 	public static final String BADGES       = "badges";
 	public static final String HANDLERS     = "handlers";
-	public static final String CHALLENGES   = "challenges";
+	public static final String DIFFICULTY   = "difficulty";
 	public static final String GAME_VERSION = "game_version";
 	public static final String SEED         = "seed";
 	public static final String CUSTOM_SEED	= "custom_seed";
@@ -329,8 +329,7 @@ public enum Rankings {
 		//restore items now that we're done saving
 		belongings.backpack.items = allItems;
 		
-		//save challenges
-		rec.gameData.put( CHALLENGES, Dungeon.challenges );
+		rec.gameData.put( DIFFICULTY, Dungeon.difficulty );
 
 		rec.gameData.put( GAME_VERSION, Dungeon.initialVersion );
 
@@ -366,7 +365,7 @@ public enum Rankings {
 
 		Statistics.restoreFromBundle(data.getBundle(STATS));
 		
-		Dungeon.challenges = data.getInt(CHALLENGES);
+		Dungeon.difficulty = data.getFloat(DIFFICULTY);
 
 		Dungeon.initialVersion = data.getInt(GAME_VERSION);
 

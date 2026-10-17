@@ -226,19 +226,19 @@ public enum HeroClass {
 //		exp.quantity(100);
 //		exp.identify().collect();
 
-		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
-		upgrade.quantity(100);
-		upgrade.collect();
+//		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
+//		upgrade.quantity(100);
+//		upgrade.collect();
 
-//		PotionOfHealing heal = new PotionOfHealing();
-//		heal.quantity(100);
-//		heal.identify().collect();
+		PotionOfHealing heal = new PotionOfHealing();
+		heal.quantity(100);
+		heal.identify().collect();
 
 //		CapeOfThorns cape = new CapeOfThorns();
 //		cape.collect();
 
-		WandOfCharm charm = new WandOfCharm();
-		charm.identify().collect();
+//		WandOfCharm charm = new WandOfCharm();
+//		charm.identify().collect();
 
 //		PhantomStopwatch watch = new PhantomStopwatch();
 //		watch.identify().collect();

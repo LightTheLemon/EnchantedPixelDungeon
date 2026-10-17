@@ -127,7 +127,7 @@ public class WaterOfEnchantment extends WellWater {
 	}
 	@Override
 	protected Item affectItem( Item item, int pos ) {
-		if (!(item instanceof SpiritBow) && !(item instanceof Pickaxe) && item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
+		if (!(item instanceof SpiritBow) && !(item instanceof Pickaxe) && !item.unique && item instanceof Weapon || item instanceof Armor || item instanceof Ring || item instanceof Wand) {
 			item.upgrade();
 			CellEmitter.get( pos ).start( Speck.factory( Speck.ENCHANT_STAR ), 0.6f, 6 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );

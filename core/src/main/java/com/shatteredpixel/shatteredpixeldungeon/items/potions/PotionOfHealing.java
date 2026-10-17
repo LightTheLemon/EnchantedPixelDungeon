@@ -71,7 +71,7 @@ public class PotionOfHealing extends Potion {
 
 	public static void heal( Char ch ){
 
-		if (ch == Dungeon.hero && Dungeon.difficulty > 2.8){
+		if (ch == Dungeon.hero && Dungeon.difficulty > 2.6){
 			pharmacophobiaProc(Dungeon.hero);
 		} else {
 			CellEmitter.get( ch.pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
@@ -82,7 +82,7 @@ public class PotionOfHealing extends Potion {
 			} else {
 				float healAmount = ch.HT;
 				healAmount /= RingOfVitality.HealingMultiplier(Dungeon.hero);
-				healAmount *= Math.max(0, Dungeon.healingDifficultyMultiplier());
+				healAmount *= Math.max(0.03f, Dungeon.healingDifficultyMultiplier());
 
 				ch.HP = Math.round( Math.min(ch.HT, ch.HP + healAmount) );
 
@@ -110,11 +110,11 @@ public class PotionOfHealing extends Potion {
 		}
 
 		Char ch = Actor.findChar(cell);
-		if (ch != null && Dungeon.difficulty <= 2.8 ){
+		if (ch != null && Dungeon.difficulty <= 2.6 ){
 
 			//Base healing for throwing a potion at a character is lower
 			float healAmount = ch.HT * 0.66f;
-			healAmount *= (Dungeon.healingDifficultyMultiplier());
+			healAmount *= Math.max(0.03f, Dungeon.healingDifficultyMultiplier());
 
 			if (ch != Dungeon.hero) {
 
@@ -154,8 +154,8 @@ public class PotionOfHealing extends Potion {
 	}
 
 	public static void pharmacophobiaProc( Hero hero ){
-		// harms the hero depending on difficulty
-		Buff.affect( hero, Poison.class).set(6 + hero.lvl/1.5f * (Math.max(0.05f, -Dungeon.healingDifficultyMultiplier()) ) );
+		// harms the hero depending on difficulty,
+		Buff.affect( hero, Poison.class).set( (8 + hero.lvl) * (-Dungeon.healingDifficultyMultiplier() + 0.15f) );
 	}
 	
 	public static void cure( Char ch ) {

@@ -611,7 +611,7 @@ public class VaultLevel extends CityLevel {
 		}
 
 		//also generate 2 torches if into darkness is enabled. Separate seed to avoid affecting other parts of levelgen
-		if (Dungeon.isChallenged(Challenges.DARKNESS)){
+		if ((Dungeon.difficulty > 1) && (Random.Float() < Dungeon.difficulty / 2f + 1.5f)){
 			Random.pushGenerator(Random.Long());
 			for (int i = 0; i < 2; i++){
 				int cell = randomDropCell();

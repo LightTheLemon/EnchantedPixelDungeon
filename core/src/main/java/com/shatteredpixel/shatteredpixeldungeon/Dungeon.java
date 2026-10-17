@@ -304,7 +304,7 @@ public class Dungeon {
 	}
 
 	public static float healingDifficultyMultiplier() {
-		return ( difficulty / -1.8f ) + 1.56f;
+		return ( difficulty / -1.6f ) + 1.63f;
 	}
 
 	public static float foodDifficultyMultiplier() {

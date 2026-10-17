@@ -158,7 +158,7 @@ public abstract class Level implements Bundlable {
 	public boolean[] mapped;
 	public boolean[] discoverable;
 
-	public int viewDistance = Dungeon.isChallenged( Challenges.DARKNESS ) ? 2 : 8;
+	public int viewDistance = Math.min(10, Math.max(2, Math.round(-3 * Dungeon.difficulty + 11 )));
 	
 	public boolean[] heroFOV;
 	

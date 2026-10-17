@@ -70,11 +70,13 @@ public class WandOfPrismaticLight extends DamageWand {
 		affectMap(beam);
 		
 		if (Dungeon.level.viewDistance < 6 ){
-			if (Dungeon.isChallenged(Challenges.DARKNESS)){
-				Buff.prolong( curUser, Light.class, 2f + buffedLvl());
-			} else {
-				Buff.prolong( curUser, Light.class, 10f+buffedLvl()*5);
-			}
+			//0.0: 14 + lvl * 7
+			//1.0: 10 + lvl * 5
+			//2.0: 6 +  lvl * 3
+			//3.0: 2 +  lvl * 1
+			//4.0: 2 +  lvl * 1
+
+			Buff.prolong( curUser, Light.class, Math.max(2, (-4*Dungeon.difficulty+14)) + buffedLvl() * Math.max(1, (-2*Dungeon.difficulty+7)) );
 		}
 		
 		Char ch = Actor.findChar(beam.collisionPos);
@@ -145,11 +147,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
 	@Override
 	public String upgradeStat3(int level) {
-		if (Dungeon.isChallenged(Challenges.DARKNESS)){
-			return Integer.toString(2 + level);
-		} else {
-			return Integer.toString(10 + 5*level);
-		}
+		return Integer.toString(Math.round( Math.max(2, (-4*Dungeon.difficulty+14)) + level * Math.max(1, (-2*Dungeon.difficulty+7)) ));
 	}
 
 	@Override

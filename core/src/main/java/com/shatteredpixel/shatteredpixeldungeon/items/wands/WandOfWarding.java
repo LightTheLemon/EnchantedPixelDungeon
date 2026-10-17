@@ -242,7 +242,7 @@ public class WandOfWarding extends Wand {
 			properties.add(Property.IMMOVABLE);
 			properties.add(Property.INORGANIC);
 
-			viewDistance = Dungeon.isChallenged( Challenges.DARKNESS ) ? 2 : 6;
+			viewDistance = Math.max(2, Math.round(-2 * Dungeon.difficulty + 8 ));
 			state = WANDERING;
 		}
 
@@ -509,7 +509,7 @@ public class WandOfWarding extends Wand {
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			tier = bundle.getInt(TIER);
-			viewDistance = Dungeon.isChallenged( Challenges.DARKNESS ) ? 1 + tier : 5 + tier;
+			viewDistance = Math.max(2, Math.round(-2 * Dungeon.difficulty + 8 )) - 1 + tier;
 			wandLevel = bundle.getInt(WAND_LEVEL);
 			totalZaps = bundle.getInt(TOTAL_ZAPS);
 		}
