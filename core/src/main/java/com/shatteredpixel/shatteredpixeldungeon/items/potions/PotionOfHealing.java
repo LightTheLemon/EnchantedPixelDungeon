@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -45,7 +44,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -57,7 +55,8 @@ import com.watabou.noosa.audio.Sample;
 public class PotionOfHealing extends Potion {
 
 	{
-		icon = ItemSpriteSheet.Icons.POTION_HEALING;
+
+		icon = Dungeon.swapHealing ? ItemSpriteSheet.Icons.POTION_SHIELDING : ItemSpriteSheet.Icons.POTION_HEALING;
 
 		bones = true;
 	}
@@ -65,7 +64,7 @@ public class PotionOfHealing extends Potion {
 	@Override
 	public void apply( Hero hero ) {
 		identify();
-		cure( hero );
+		Buff.detach( hero, Poison.class );
 		heal( hero );
 	}
 
@@ -75,25 +74,30 @@ public class PotionOfHealing extends Potion {
 			pharmacophobiaProc(Dungeon.hero);
 		} else {
 			CellEmitter.get( ch.pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
-			if (VialOfBlood.delayBurstHealing()){
-				Healing healing = Buff.affect(ch, Healing.class);
-				healing.setHeal(ch.HT, 0, VialOfBlood.maxHealPerTurn(), true);
-				healing.applyVitalityEffect();
+
+			if (Dungeon.swapHealing) {
+
+				//TODO: Add functionality with vial of blood
+				float shielding = (0.6f * ch.HT + 10) * Dungeon.healingDifficultyMultiplier();
+				Buff.affect(ch, Barrier.class).setShield( Math.round(shielding) );
+				ch.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(Math.round(shielding)), FloatingText.SHIELDING );
+
 			} else {
-				float healAmount = ch.HT;
-				healAmount /= RingOfVitality.HealingMultiplier(Dungeon.hero);
-				healAmount *= Math.max(0.03f, Dungeon.healingDifficultyMultiplier());
+				if (VialOfBlood.delayBurstHealing()){
+					Healing healing = Buff.affect(ch, Healing.class);
+					healing.setHeal(ch.HT, 0, VialOfBlood.maxHealPerTurn(), true);
+					healing.applyVitalityEffect();
+				} else {
+					float healAmount = ch.HT;
+					healAmount /= RingOfVitality.HealingMultiplier(Dungeon.hero);
+					healAmount *= Math.max(0.03f, Dungeon.healingDifficultyMultiplier());
 
-				ch.HP = Math.round( Math.min(ch.HT, ch.HP + healAmount) );
+					ch.HP = Math.round( Math.min(ch.HT, ch.HP + healAmount) );
 
-				System.out.println("healAmount: " + healAmount );
+					System.out.println("healAmount: " + healAmount );
 
+				}
 			}
-
-			////starts out healing 30 hp, equalizes with hero health total at level 11
-			//Healing healing = Buff.affect(ch, Healing.class);
-			//healing.setHeal((int) (0.8f * ch.HT + 14), 0.25f, 0);
-			//Buff.affect(ch, Healing.class).applyVialEffect();
 
 			if (ch == Dungeon.hero){
 				GLog.p( Messages.get(PotionOfHealing.class, "heal") );
@@ -104,6 +108,7 @@ public class PotionOfHealing extends Potion {
 	@Override
 	public void shatter(int cell) {
 		splash( cell );
+		identify();
 		if (Dungeon.level.heroFOV[cell]) {
 			GLog.i( Messages.get(Potion.class, "shatter") );
 			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
@@ -133,7 +138,7 @@ public class PotionOfHealing extends Potion {
 
 			}
 
-			PotionOfHealing.cure(ch);
+			Buff.detach( ch, Poison.class );
 			ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), 1);
 
 			if (ch != Dungeon.hero && ch.HP == ch.HT) {
@@ -153,9 +158,37 @@ public class PotionOfHealing extends Potion {
 		}
 	}
 
+	@Override
+	public String name() {
+		if (isKnown()) {
+			if (Dungeon.swapHealing) {
+				return Messages.get(this, "alt_name");
+			} else {
+				return super.name();
+			}
+		} else {
+			return Messages.get(this, color);
+		}
+
+	}
+
+	@Override
+	public String desc() {
+		if (isKnown()) {
+			if (Dungeon.swapHealing) {
+				return Messages.get(this, "alt_desc");
+			} else {
+				return super.desc();
+			}
+		} else {
+			return Messages.get(this, "unknown_desc");
+		}
+
+	}
+
 	public static void pharmacophobiaProc( Hero hero ){
 		// harms the hero depending on difficulty,
-		Buff.affect( hero, Poison.class).set( (8 + hero.lvl) * (-Dungeon.healingDifficultyMultiplier() + 0.15f) );
+		Buff.affect( hero, Poison.class).set( (10 + hero.lvl) * (-Dungeon.healingDifficultyMultiplier() + 0.15f) );
 	}
 	
 	public static void cure( Char ch ) {
@@ -173,6 +206,12 @@ public class PotionOfHealing extends Potion {
 
 	@Override
 	public int value() {
-		return isKnown() ? 30 * quantity : super.value();
+		return isKnown() ? 40 * quantity : super.value();
 	}
+
+	@Override
+	public int energyVal() {
+		return 6 * quantity;
+	}
+
 }

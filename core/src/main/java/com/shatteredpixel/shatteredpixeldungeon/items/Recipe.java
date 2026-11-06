@@ -28,16 +28,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.StewedMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.BlizzardBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.InfernalBrew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.ShockingBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAquaticRejuvenation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfDragonsBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfFeatherFall;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfHoneyedHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfToxicEssence;
@@ -172,20 +168,23 @@ public abstract class Recipe {
 	};
 	
 	private static Recipe[] oneIngredientRecipes = new Recipe[]{
+		new Item.ItemToIdentify(),
+		new Item.ItemToEnergy(),
+		new UnstableSpell.Recipe(),
+		new UnstableBrew.Recipe(),
+		new Honeypot.Recipe(),
 		new Scroll.ScrollToStone(),
-		new ExoticPotion.PotionToExotic(),
-		new ExoticScroll.ScrollToExotic(),
 		new ArcaneResin.Recipe(),
 		new LiquidMetal.Recipe(),
-		new BlizzardBrew.Recipe(),
-		new InfernalBrew.Recipe(),
-		new AquaBrew.Recipe(),
-		new ShockingBrew.Recipe(),
+		//new BlizzardBrew.Recipe(),
+		//new InfernalBrew.Recipe(),
+		//new ShockingBrew.Recipe(),
 		new ElixirOfDragonsBlood.Recipe(),
 		new ElixirOfIcyTouch.Recipe(),
 		new ElixirOfToxicEssence.Recipe(),
 		new ElixirOfMight.Recipe(),
 		new ElixirOfFeatherFall.Recipe(),
+		new AquaBrew.Recipe(),
 		new MagicalInfusion.Recipe(),
 		new BeaconOfReturning.Recipe(),
 		new PhaseShift.Recipe(),
@@ -198,15 +197,16 @@ public abstract class Recipe {
 	};
 	
 	private static Recipe[] twoIngredientRecipes = new Recipe[]{
+		new Potion.PotionDuplication(),
+		new Scroll.ScrollDuplication(),
+		new Scroll.ScrollCrafting(),
 		new Blandfruit.CookFruit(),
 		new Bomb.EnhanceBomb(),
-		new UnstableBrew.Recipe(),
 		new CausticBrew.Recipe(),
 		new ElixirOfArcaneArmor.Recipe(),
 		new ElixirOfAquaticRejuvenation.Recipe(),
-		new ElixirOfHoneyedHealing.Recipe(),
-		new UnstableSpell.Recipe(),
-		new Alchemize.Recipe(),
+		//new ElixirOfHoneyedHealing.Recipe(),
+		//new Alchemize.Recipe(),
 		new CurseInfusion.Recipe(),
 		new ReclaimTrap.Recipe(),
 		new WildEnergy.Recipe(),

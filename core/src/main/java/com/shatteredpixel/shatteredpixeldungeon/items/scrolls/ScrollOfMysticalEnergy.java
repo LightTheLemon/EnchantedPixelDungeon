@@ -19,33 +19,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.potions;
+package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 
-public class PotionOfHaste extends Potion {
+public class ScrollOfMysticalEnergy extends Scroll {
 	
 	{
-		icon = ItemSpriteSheet.Icons.POTION_HASTE;
+		icon = ItemSpriteSheet.Icons.SCROLL_MYSTENRG;
 	}
 	
 	@Override
-	public void apply(Hero hero) {
-		identify();
+	public void doRead() {
+
+		RingOfConservation.detachProc(curItem, 1);
+		//append buff
+		Buff.affect(curUser, ArtifactRecharge.class).set( 30 ).ignoreHornOfPlenty = false;
+
+		Sample.INSTANCE.play( Assets.Sounds.READ );
+		Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );
 		
-		GLog.w( Messages.get(this, "energetic") );
-		Buff.prolong( hero, Haste.class, Haste.DURATION);
-		SpellSprite.show(hero, SpellSprite.HASTE, 1, 1, 0);
+		SpellSprite.show( curUser, SpellSprite.CHARGE, 0, 1, 1 );
+		identify();
+		ScrollOfRecharging.charge(curUser);
+		
+		readAnimation();
 	}
 	
-	@Override
-	public int value() {
-		return isKnown() ? 40 * quantity : super.value();
-	}
 }

@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.plants;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
@@ -50,11 +51,11 @@ public class Dreamfoil extends Plant {
 
 			if (ch instanceof Hero) {
 				GLog.i( Messages.get(this, "refreshed") );
-				Buff.affect(ch, MagicalSleep.class).limitedTurns(hero.HT / 5);
+				Buff.affect(ch, MagicalSleep.class).limitedTurns((int) (hero.HT / ((Dungeon.difficulty * 2f)  + 1f)));
 
 				if (((Hero) ch).subClass == HeroSubClass.WARDEN){
 					Buff.affect(ch, MagicalSleep.class);
-					Buff.affect(ch, Healing.class).setHeal(ch.HT / 3, 0, 10);
+					Buff.affect(ch, Healing.class).setHeal((int) (ch.HT / Dungeon.difficulty), 0, 10);
 				}
 			} else if (ch instanceof Mob) {
 				Buff.affect(ch, MagicalSleep.class);

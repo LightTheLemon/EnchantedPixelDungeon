@@ -24,10 +24,12 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -36,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.watabou.utils.Point;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -94,13 +97,13 @@ public class ToxicGasRoom extends SpecialRoom {
 		}
 
 		goldPositions.remove((Integer) furthestPos);
-		Item mainGold = new Gold().random();
+		Item mainGold = Random.Float() < ExoticCrystals.goldToEnergyChance() ? new EnergyCrystal().quantity(1 + Dungeon.hero.lvl / 2) : new Gold().random();
 		mainGold.quantity(mainGold.quantity()*2);
 		level.drop(mainGold, furthestPos).type = Heap.Type.SKELETON;
 
 		for (int i = 0; i < 2; i++){
 			Item item = level.findPrizeItem(TrinketCatalyst.class);
-			if (item == null) item = new Gold().random();
+			if (item == null) item = mainGold;
 			level.drop(item, goldPositions.remove(0)).type = Heap.Type.CHEST;
 		}
 

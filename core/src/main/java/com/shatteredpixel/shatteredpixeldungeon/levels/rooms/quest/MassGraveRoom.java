@@ -22,13 +22,16 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Skeleton;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -99,12 +102,13 @@ public class MassGraveRoom extends SpecialRoom {
 		}
 
 		ArrayList<Item> items = new ArrayList<>();
+		Item goldOrEnergy = Random.Float() < ExoticCrystals.goldToEnergyChance() ? new EnergyCrystal() : new Gold().quantity(1);
 		//100% corpse dust, 2x100% 1 coin, 2x30% coins, 1x60% random item, 1x30% armor
 		items.add(new CorpseDust());
-		items.add(new Gold(1));
-		items.add(new Gold(1));
-		if (Random.Float() <= 0.3f) items.add(new Gold());
-		if (Random.Float() <= 0.3f) items.add(new Gold());
+		items.add(goldOrEnergy);
+		items.add(goldOrEnergy);
+		if (Random.Float() <= 0.3f) items.add(goldOrEnergy);
+		if (Random.Float() <= 0.3f) items.add(goldOrEnergy);
 		if (Random.Float() <= 0.6f) items.add(Generator.random());
 		if (Random.Float() <= 0.3f) items.add(Generator.randomArmor());
 

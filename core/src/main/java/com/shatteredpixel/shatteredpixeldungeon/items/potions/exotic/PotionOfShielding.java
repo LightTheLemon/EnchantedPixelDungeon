@@ -45,7 +45,7 @@ public class PotionOfShielding extends ExoticPotion {
 			PotionOfHealing.pharmacophobiaProc(hero);
 		} else {
 
-			float shielding = (0.6f * hero.HT + 10) * Math.max(0.02f, Dungeon.healingDifficultyMultiplier());
+			float shielding = (0.6f * hero.HT + 10) * Dungeon.healingDifficultyMultiplier();
 			Buff.affect(hero, Barrier.class).setShield( Math.round(shielding) );
 			hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(Math.round(shielding)), FloatingText.SHIELDING );
 		}

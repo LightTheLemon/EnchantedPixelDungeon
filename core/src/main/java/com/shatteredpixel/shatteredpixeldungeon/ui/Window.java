@@ -92,6 +92,7 @@ public class Window extends Group implements Signal.Listener<KeyEvent> {
 
 		chrome.x = -chrome.marginLeft();
 		chrome.y = -chrome.marginTop();
+		chrome.alpha(0.9f);
 		chrome.size(
 			width - chrome.x + chrome.marginRight(),
 			height - chrome.y + chrome.marginBottom() );

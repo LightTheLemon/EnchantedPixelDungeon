@@ -21,6 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.BlankScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
@@ -54,20 +57,18 @@ public class SecretLibraryRoom extends SecretRoom {
 	public int minHeight() {
 		return Math.max(7, super.minHeight());
 	}
-	
+
 	private static HashMap<Class<? extends Scroll>, Float> scrollChances = new HashMap<>();
 	static{
-		scrollChances.put( ScrollOfIdentify.class,      1f );
-		scrollChances.put( ScrollOfRemoveCurse.class,   2f );
-		scrollChances.put( ScrollOfMirrorImage.class,   3f );
-		scrollChances.put( ScrollOfRecharging.class,    3f );
-		scrollChances.put( ScrollOfTeleportation.class, 3f );
-		scrollChances.put( ScrollOfLullaby.class,       4f );
-		scrollChances.put( ScrollOfMagicMapping.class,  4f );
-		scrollChances.put( ScrollOfRage.class,          4f );
-		scrollChances.put( ScrollOfRetribution.class,   4f );
-		scrollChances.put( ScrollOfTerror.class,        4f );
-		scrollChances.put( ScrollOfTransmutation.class, 6f );
+		scrollChances.put( ScrollOfIdentify.class,            1f );
+		scrollChances.put( ScrollOfRemoveCurse.class,         2f );
+		scrollChances.put( Dungeon.selectedScrolls.get(0),    3f );
+		scrollChances.put( Dungeon.selectedScrolls.get(1),    3f );
+		scrollChances.put( Dungeon.selectedScrolls.get(2),    3f );
+		scrollChances.put( Dungeon.selectedScrolls.get(3),    4f );
+		scrollChances.put( Dungeon.selectedScrolls.get(4),    4f );
+		scrollChances.put( ScrollOfMagicMapping.class,        4f );
+		scrollChances.put( ScrollOfTransmutation.class,       6f );
 	}
 	
 	public void paint( Level level ) {
@@ -92,17 +93,12 @@ public class SecretLibraryRoom extends SecretRoom {
 			do {
 				pos = level.pointToCell(random());
 			} while (level.map[pos] != Terrain.EMPTY_SP || level.heaps.get( pos ) != null);
-			
+
 			Class<?extends Scroll> scrollCls = Random.chances(chances);
 			chances.put(scrollCls, 0f);
 
-			if (ExoticScroll.regToExo.containsKey(scrollCls)){
-				if (Random.Float() < ExoticCrystals.consumableExoticChance()){
-					scrollCls = ExoticScroll.regToExo.get(scrollCls);
-				}
-			}
-
-			level.drop( Reflection.newInstance(scrollCls), pos );
+			Item scroll = Random.Float() > 0.3f ? Reflection.newInstance(scrollCls) : new BlankScroll();
+			level.drop( scroll, pos );
 		}
 	}
 	

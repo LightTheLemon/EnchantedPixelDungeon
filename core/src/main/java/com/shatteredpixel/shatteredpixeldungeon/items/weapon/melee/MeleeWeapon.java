@@ -301,7 +301,7 @@ public class MeleeWeapon extends Weapon {
 				damage += Hero.heroDamageIntRange( 0, exStr );
 			}
 			if ( exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
-				damage = (int)(damage * (exStr + 4f) / 10f);
+				damage *= (int) Math.round(Math.pow(1.1, exStr - 5));
 			}
 
 		}
@@ -321,8 +321,9 @@ public class MeleeWeapon extends Weapon {
 				} else if (Dungeon.hero.STR() > STRReq()) {
 					info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
 
-					if (Dungeon.hero.STR() >= 10 + STRReq() && Dungeon.hero.buff(RingOfMight.Might.class) != null ) {
-						info += " " + Messages.get(Weapon.class, "might_bonus", 10 * (Dungeon.hero.STR() - STRReq() + 4 - 10));
+					int exStr = Dungeon.hero.STR() - STRReq();
+					if (exStr >= 10 && Dungeon.hero.buff(RingOfMight.Might.class) != null ) {
+						info += " " + Messages.get(Weapon.class, "might_bonus", 100 - (100 * Math.round(Math.pow(1.1, exStr - 5))));
 					}
 				}
 			}

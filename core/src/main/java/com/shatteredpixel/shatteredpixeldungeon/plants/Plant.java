@@ -258,7 +258,7 @@ public abstract class Plant implements Bundlable {
 			
 			@Override
 			public String info() {
-				return "";
+				return "Just a seed. Could be any type.";
 			}
 		}
 	}

@@ -51,8 +51,19 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesi
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfAntiMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMysticalEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
@@ -94,8 +105,12 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -217,6 +232,12 @@ public class Dungeon {
 	public static String customSeedText = "";
 	public static long seed;
 	public static long lastPlayed;
+	public static boolean swapHealing;
+	public static boolean swapStrength;
+	public static boolean swapExperience;
+	public static List<Class<? extends Scroll>> selectedScrolls = new ArrayList<>();
+
+	public static String[] scrollNames;
 
 	//we initialize the seed separately so that things like interlevelscene can access it early
 	public static void initSeed(){
@@ -234,13 +255,51 @@ public class Dungeon {
 			seed = DungeonSeed.randomSeed();
 		}
 	}
-	
+
+	public static void choosePotions() {
+
+		swapHealing = Random.Float() < 0.5f;
+
+		swapStrength = Random.Float() < 0.5f;
+
+		swapExperience = Random.Float() < 0.5f;
+
+    }
+
+	public static void chooseScrolls() {
+
+		//Extra scrolls to select from to add to drop pool. Only 5 will be added.
+		Class<? extends Scroll>[] extraScrolls = new Class[]{
+				ScrollOfMirrorImage.class,
+				ScrollOfRecharging.class,
+				ScrollOfTeleportation.class,
+				ScrollOfLullaby.class,
+				ScrollOfRetribution.class,
+				ScrollOfTerror.class,
+				ScrollOfRage.class,
+				ScrollOfPsionicBlast.class,
+				ScrollOfMysticalEnergy.class,
+				ScrollOfAntiMagic.class,
+		};
+		selectedScrolls = new ArrayList<> (Arrays.asList(extraScrolls));
+		Collections.shuffle(selectedScrolls);
+		selectedScrolls.remove(9);
+		selectedScrolls.remove(8);
+		selectedScrolls.remove(7);
+		selectedScrolls.remove(6);
+		selectedScrolls.remove(5);
+
+	}
+
 	public static void init() {
 
 		initialVersion = version = Game.versionCode;
 		challenges = SPDSettings.challenges();
 		difficulty = SPDSettings.difficulty() / 10f;
 		mobsToChampion = 1;
+
+		choosePotions();
+		chooseScrolls();
 
 		Actor.clear();
 		Actor.resetNextID();
@@ -299,12 +358,8 @@ public class Dungeon {
 		
 	}
 
-	public static boolean isChallenged( int mask ) {
-		return (challenges & mask) != 0;
-	}
-
 	public static float healingDifficultyMultiplier() {
-		return ( difficulty / -1.6f ) + 1.63f;
+		return ( difficulty / -1.5f ) + 1.67f;
 	}
 
 	public static float foodDifficultyMultiplier() {
@@ -325,6 +380,10 @@ public class Dungeon {
 
 	public static float upgradeDifficultyMultiplier() {
 		return Math.max(0.25f, ( difficulty / -5f ) + 0.95f);
+	}
+
+	public static int brightnessDifficultyMultiplier() {
+		return Math.round(difficulty * -3f + 11f);
 	}
 
 	public static boolean levelHasBeenGenerated(int depth, int branch){
@@ -640,6 +699,14 @@ public class Dungeon {
 	private static final String LAST_PLAYED = "last_played";
 	private static final String CHALLENGES	= "challenges";
 	private static final String DIFFICULTY	= "difficulty";
+	private static final String SELECTED_SCROLLS_0 = "selected_scrolls_0";
+	private static final String SELECTED_SCROLLS_1 = "selected_scrolls_1";
+	private static final String SELECTED_SCROLLS_2 = "selected_scrolls_2";
+	private static final String SELECTED_SCROLLS_3 = "selected_scrolls_3";
+	private static final String SELECTED_SCROLLS_4 = "selected_scrolls_4";
+	private static final String SWAP_HEALING = "swap_healing";
+	private static final String SWAP_STRENGTH = "swap_strength";
+	private static final String SWAP_EXPERIENCE = "swap_experience";
 	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
 	private static final String HERO		= "hero";
 	private static final String DEPTH		= "depth";
@@ -668,6 +735,23 @@ public class Dungeon {
 			bundle.put( LAST_PLAYED, lastPlayed = Game.realTime);
 			bundle.put( CHALLENGES, challenges );
 			bundle.put( DIFFICULTY, difficulty );
+
+			bundle.put(SWAP_HEALING, swapHealing);
+			bundle.put(SWAP_STRENGTH, swapStrength);
+			bundle.put(SWAP_EXPERIENCE, swapExperience);
+
+			bundle.put(SELECTED_SCROLLS_0, selectedScrolls.get(0).getName() );
+			bundle.put(SELECTED_SCROLLS_1, selectedScrolls.get(1).getName() );
+			bundle.put(SELECTED_SCROLLS_2, selectedScrolls.get(2).getName() );
+			bundle.put(SELECTED_SCROLLS_3, selectedScrolls.get(3).getName() );
+			bundle.put(SELECTED_SCROLLS_4, selectedScrolls.get(4).getName() );
+
+			System.out.println("SAVE SELECTED_SCROLLS_0: " + selectedScrolls.get(0).getName());
+			System.out.println("SAVE SELECTED_SCROLLS_1: " + selectedScrolls.get(1).getName());
+			System.out.println("SAVE SELECTED_SCROLLS_2: " + selectedScrolls.get(2).getName());
+			System.out.println("SAVE SELECTED_SCROLLS_3: " + selectedScrolls.get(3).getName());
+			System.out.println("SAVE SELECTED_SCROLLS_4: " + selectedScrolls.get(4).getName());
+
 			bundle.put( MOBS_TO_CHAMPION, mobsToChampion );
 			bundle.put( HERO, hero );
 			bundle.put( DEPTH, depth );
@@ -777,7 +861,33 @@ public class Dungeon {
 		Dungeon.challenges = bundle.getInt( CHALLENGES );
 		Dungeon.difficulty = bundle.getFloat( DIFFICULTY );
 		Dungeon.mobsToChampion = bundle.getFloat( MOBS_TO_CHAMPION );
-		
+
+		//selectedScrolls = new ArrayList<>();
+
+		selectedScrolls.clear();
+
+		try {
+			selectedScrolls.add((Class<? extends Scroll>)Class.forName(bundle.getString(SELECTED_SCROLLS_0)));
+			selectedScrolls.add((Class<? extends Scroll>)Class.forName(bundle.getString(SELECTED_SCROLLS_1)));
+			selectedScrolls.add((Class<? extends Scroll>)Class.forName(bundle.getString(SELECTED_SCROLLS_2)));
+			selectedScrolls.add((Class<? extends Scroll>) Class.forName(bundle.getString(SELECTED_SCROLLS_3)));
+			selectedScrolls.add((Class<? extends Scroll>) Class.forName(bundle.getString(SELECTED_SCROLLS_4)));
+			System.out.println("LOAD SELECTED_SCROLLS_0: " + ((Class<? extends Scroll>)Class.forName(bundle.getString(SELECTED_SCROLLS_0))));
+			System.out.println("LOAD SELECTED_SCROLLS_1: " + ((Class<? extends Scroll>)Class.forName(bundle.getString(SELECTED_SCROLLS_1))));
+			System.out.println("LOAD SELECTED_SCROLLS_2: " + ((Class<? extends Scroll>)Class.forName(bundle.getString(SELECTED_SCROLLS_2))));
+			System.out.println("LOAD SELECTED_SCROLLS_3: " + ((Class<? extends Scroll>)Class.forName(bundle.getString(SELECTED_SCROLLS_3))));
+			System.out.println("LOAD SELECTED_SCROLLS_4: " + ((Class<? extends Scroll>)Class.forName(bundle.getString(SELECTED_SCROLLS_4))));
+
+
+
+		} catch (ClassNotFoundException e) {
+			throw new IOException(e);
+		}
+
+		Dungeon.swapHealing = bundle.getBoolean(SWAP_HEALING);
+		Dungeon.swapStrength = bundle.getBoolean(SWAP_STRENGTH);
+		Dungeon.swapExperience = bundle.getBoolean(SWAP_EXPERIENCE);
+
 		Dungeon.level = null;
 		Dungeon.depth = -1;
 		

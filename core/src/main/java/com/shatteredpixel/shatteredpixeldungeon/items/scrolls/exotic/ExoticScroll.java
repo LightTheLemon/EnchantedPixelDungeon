@@ -24,12 +24,13 @@ package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
@@ -53,14 +54,14 @@ public abstract class ExoticScroll extends Scroll {
 		regToExo.put(ScrollOfIdentify.class, ScrollOfDivination.class);
 		exoToReg.put(ScrollOfDivination.class, ScrollOfIdentify.class);
 		
-		regToExo.put(ScrollOfRemoveCurse.class, ScrollOfAntiMagic.class);
-		exoToReg.put(ScrollOfAntiMagic.class, ScrollOfRemoveCurse.class);
+		//regToExo.put(ScrollOfRemoveCurse.class, ScrollOfAntiMagic.class);
+		//exoToReg.put(ScrollOfAntiMagic.class, ScrollOfRemoveCurse.class);
 
 		regToExo.put(ScrollOfMirrorImage.class, ScrollOfPrismaticImage.class);
 		exoToReg.put(ScrollOfPrismaticImage.class, ScrollOfMirrorImage.class);
 
-		regToExo.put(ScrollOfRecharging.class, ScrollOfMysticalEnergy.class);
-		exoToReg.put(ScrollOfMysticalEnergy.class, ScrollOfRecharging.class);
+//		regToExo.put(ScrollOfRecharging.class, ScrollOfMysticalEnergy.class);
+//		exoToReg.put(ScrollOfMysticalEnergy.class, ScrollOfRecharging.class);
 
 		regToExo.put(ScrollOfTeleportation.class, ScrollOfPassage.class);
 		exoToReg.put(ScrollOfPassage.class, ScrollOfTeleportation.class);
@@ -74,8 +75,8 @@ public abstract class ExoticScroll extends Scroll {
 		regToExo.put(ScrollOfRage.class, ScrollOfChallenge.class);
 		exoToReg.put(ScrollOfChallenge.class, ScrollOfRage.class);
 
-		regToExo.put(ScrollOfRetribution.class, ScrollOfPsionicBlast.class);
-		exoToReg.put(ScrollOfPsionicBlast.class, ScrollOfRetribution.class);
+		//regToExo.put(ScrollOfRetribution.class, ScrollOfPsionicBlast.class);
+		//exoToReg.put(ScrollOfPsionicBlast.class, ScrollOfRetribution.class);
 		
 		regToExo.put(ScrollOfTerror.class, ScrollOfDread.class);
 		exoToReg.put(ScrollOfDread.class, ScrollOfTerror.class);
@@ -105,47 +106,5 @@ public abstract class ExoticScroll extends Scroll {
 			rune = handler.label(exoToReg.get(this.getClass()));
 		}
 	}
-	
-	@Override
-	//20 gold more than its none-exotic equivalent
-	public int value() {
-		return (Reflection.newInstance(exoToReg.get(getClass())).value() + 30) * quantity;
-	}
 
-	@Override
-	//6 more energy than its none-exotic equivalent
-	public int energyVal() {
-		return (Reflection.newInstance(exoToReg.get(getClass())).energyVal() + 6) * quantity;
-	}
-	
-	public static class ScrollToExotic extends Recipe {
-		
-		@Override
-		public boolean testIngredients(ArrayList<Item> ingredients) {
-			if (ingredients.size() == 1 && regToExo.containsKey(ingredients.get(0).getClass())){
-				return true;
-			}
-
-			return false;
-		}
-		
-		@Override
-		public int cost(ArrayList<Item> ingredients) {
-			return 6;
-		}
-		
-		@Override
-		public Item brew(ArrayList<Item> ingredients) {
-			for (Item i : ingredients){
-				i.quantity(i.quantity()-1);
-			}
-
-			return Reflection.newInstance(regToExo.get(ingredients.get(0).getClass()));
-		}
-		
-		@Override
-		public Item sampleOutput(ArrayList<Item> ingredients) {
-			return Reflection.newInstance(regToExo.get(ingredients.get(0).getClass()));
-		}
-	}
 }

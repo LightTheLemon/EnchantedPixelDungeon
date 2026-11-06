@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -37,6 +38,16 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.ChargrilledMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.StewedMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
@@ -44,11 +55,15 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundlable;
@@ -115,6 +130,110 @@ public class Item implements Bundlable {
 			actions.add( AC_DROP_ALL );
 		}
 		return actions;
+	}
+
+	public static class ItemToEnergy extends Recipe {
+
+		@Override
+		public boolean testIngredients(ArrayList<Item> ingredients) {
+			boolean singleValidIngredient= false;
+
+			for (Item ingredient : ingredients){
+				if (ingredient.quantity() == 1) {
+					if (ingredient.energyVal() > 0) {
+						singleValidIngredient = true;
+					}
+				}
+			}
+
+			return singleValidIngredient;
+		}
+
+		@Override
+		public int cost(ArrayList<Item> ingredients) {
+			return 0;
+		}
+
+		@Override
+		public Item brew(ArrayList<Item> ingredients) {
+
+			Item energizable = ingredients.get(0);
+			Dungeon.energy += energizable.energyVal();
+			((AlchemyScene) ShatteredPixelDungeon.scene()).createEnergy();
+
+			energizable.quantity(energizable.quantity - 1 );
+
+			if (!energizable.isIdentified()){
+				((AlchemyScene) ShatteredPixelDungeon.scene()).showIdentify(energizable);
+			}
+
+			//TODO: This should be changed to not have the 0 which may be confusing. Also why is the energy value not updating?
+			return new EnergyCrystal().quantity(energizable.energyVal());
+		}
+
+		@Override
+		public Item sampleOutput(ArrayList<Item> ingredients) {
+
+			return new EnergyCrystal().quantity(ingredients.get(0).energyVal());
+		}
+	}
+
+	public static class ItemToIdentify extends Recipe {
+
+		@Override
+		public boolean testIngredients(ArrayList<Item> ingredients) {
+			boolean unidentifiedConsumable = false;
+			for (Item ingredient : ingredients){
+				if (ingredient.quantity() == 1) {
+					if ( !ingredient.isIdentified() && (ingredient instanceof Potion || ingredient instanceof Scroll)) {
+						unidentifiedConsumable = true;
+					}
+				}
+			}
+
+			return unidentifiedConsumable;
+		}
+
+		@Override
+		public int cost(ArrayList<Item> ingredients) {
+			return 4;
+		}
+
+		@Override
+		public Item brew(ArrayList<Item> ingredients) {
+			ingredients.get(0).identify();
+			return ingredients.get(0);
+		}
+
+		@Override
+		public Item sampleOutput(ArrayList<Item> ingredients) {
+
+			return new WndBag.Placeholder(ingredients.get(0).image){
+
+				@Override
+				public String name() {
+					if (ingredients.get(0) instanceof Potion ) {
+						return Messages.get(Potion.class, "id_name");
+					} else if (ingredients.get(0) instanceof Scroll) {
+						return Messages.get(Scroll.class, "id_name");
+					} else {
+						return super.name();
+					}
+				}
+
+				@Override
+				public String info() {
+
+					if (ingredients.get(0) instanceof Potion ) {
+						return Messages.get(Potion.class, "id_desc");
+					} else if (ingredients.get(0) instanceof Scroll) {
+						return Messages.get(Scroll.class, "id_desc");
+					} else {
+						return super.name();
+					}
+				}
+			};
+		}
 	}
 
 	public String actionName(String action, Hero hero){

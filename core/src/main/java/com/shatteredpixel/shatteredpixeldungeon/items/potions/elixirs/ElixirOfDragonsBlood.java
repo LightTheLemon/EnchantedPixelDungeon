@@ -22,13 +22,19 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Inferno;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDragonsBreath;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.PathFinder;
 
 public class ElixirOfDragonsBlood extends Elixir {
 	
@@ -42,14 +48,36 @@ public class ElixirOfDragonsBlood extends Elixir {
 		Sample.INSTANCE.play( Assets.Sounds.BURNING );
 		hero.sprite.emitter().burst(FlameParticle.FACTORY, 10);
 	}
+
+	//Infernal brew logic
+	@Override
+	public void shatter(int cell) {
+
+		splash( cell );
+		if (Dungeon.level.heroFOV[cell]) {
+			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
+			Sample.INSTANCE.play( Assets.Sounds.GAS );
+		}
+
+		int centerVolume = 120;
+		for (int i : PathFinder.NEIGHBOURS8){
+			if (!Dungeon.level.solid[cell+i]){
+				GameScene.add( Blob.seed( cell+i, 120, Inferno.class ) );
+			} else {
+				centerVolume += 120;
+			}
+		}
+
+		GameScene.add( Blob.seed( cell, centerVolume, Inferno.class ) );
+	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 		
 		{
-			inputs =  new Class[]{PotionOfDragonsBreath.class};
+			inputs =  new Class[]{PotionOfLiquidFlame.class};
 			inQuantity = new int[]{1};
 			
-			cost = 10;
+			cost = 8;
 			
 			output = ElixirOfDragonsBlood.class;
 			outQuantity = 1;

@@ -564,7 +564,7 @@ abstract public class MissileWeapon extends Weapon {
 			int exStr = ((Hero)owner).STR() - STRReq();
 
 			if ( exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
-				damage = (int)(damage * (exStr + 4f) / 10f);
+				damage *= (int) Math.round(Math.pow(1.1, exStr - 5));
 
 				//GLog.i("Your ring of might is giving your weapon bonus damage due to your excess strength!");
 			} else if (exStr > 0) {
@@ -694,10 +694,12 @@ abstract public class MissileWeapon extends Weapon {
 				if (STRReq() > Dungeon.hero.STR()) {
 					info += " " + Messages.get(Weapon.class, "too_heavy");
 				} else if (Dungeon.hero.STR() > STRReq()) {
-					//info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
 
-					if (Dungeon.hero.STR() >= 10 + STRReq() && Dungeon.hero.buff(RingOfMight.Might.class) != null ) {
-						info += " " + Messages.get(Weapon.class, "might_bonus", 10 * (Dungeon.hero.STR() - STRReq() + 4 - 10));
+					int exStr = Dungeon.hero.STR() - STRReq();
+					if (exStr >= 10 && Dungeon.hero.buff(RingOfMight.Might.class) != null ) {
+						info += " " + Messages.get(Weapon.class, "might_bonus", 100 - (100 * Math.round(Math.pow(1.1, exStr - 5))));
+					} else {
+						info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
 					}
 				}
 			}

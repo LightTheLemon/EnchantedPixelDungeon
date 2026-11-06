@@ -25,7 +25,6 @@ import static com.shatteredpixel.shatteredpixeldungeon.actors.Char.Property.MINI
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -67,7 +66,9 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
@@ -77,12 +78,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
@@ -1147,9 +1145,7 @@ public abstract class Mob extends Char {
 			if (this instanceof Senior) return new MeatPie();
 			if (this instanceof Monk) return new Pasty();
 			if (this instanceof Warlock) return new PotionOfCleansing();
-
 		}
-
 
 		Item item;
 		if (loot instanceof Generator.Category) {
@@ -1158,17 +1154,13 @@ public abstract class Mob extends Char {
 
 		} else if (loot instanceof Class<?>) {
 
-			if (ExoticPotion.regToExo.containsKey(loot)){
-				if (Random.Float() < ExoticCrystals.consumableExoticChance()){
-					return Generator.random(ExoticPotion.regToExo.get(loot));
-				}
-			} else if (ExoticScroll.regToExo.containsKey(loot)){
-				if (Random.Float() < ExoticCrystals.consumableExoticChance()){
-					return Generator.random(ExoticScroll.regToExo.get(loot));
-				}
+			if (loot.equals(Gold.class) && Random.Float() < ExoticCrystals.goldToEnergyChance()){
+				item = new EnergyCrystal().quantity(1 + (Dungeon.hero.lvl / 2));
+			} else {
+				item = Generator.random( (Class<? extends Item>)loot );
+
 			}
 
-			item = Generator.random( (Class<? extends Item>)loot );
 
 		} else {
 

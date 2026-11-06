@@ -147,7 +147,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
 	@Override
 	public String upgradeStat3(int level) {
-		return Integer.toString(Math.round( Math.max(2, (-4*Dungeon.difficulty+14)) + level * Math.max(1, (-2*Dungeon.difficulty+7)) ));
+		return Integer.toString(Math.round( Math.max(2, ((-4*Dungeon.difficulty)+14)) + level * Math.max(1, (-2*Dungeon.difficulty+7)) ));
 	}
 
 	@Override

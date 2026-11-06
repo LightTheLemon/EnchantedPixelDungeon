@@ -26,7 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
@@ -68,8 +68,8 @@ public class ExoticPotion extends Potion {
 		regToExo.put(PotionOfToxicGas.class, PotionOfCorrosiveGas.class);
 		exoToReg.put(PotionOfCorrosiveGas.class, PotionOfToxicGas.class);
 
-		regToExo.put(PotionOfHaste.class, PotionOfStamina.class);
-		exoToReg.put(PotionOfStamina.class, PotionOfHaste.class);
+		regToExo.put(PotionOfEnergy.class, PotionOfStamina.class);
+		exoToReg.put(PotionOfStamina.class, PotionOfEnergy.class);
 
 		regToExo.put(PotionOfInvisibility.class, PotionOfShroudingFog.class);
 		exoToReg.put(PotionOfShroudingFog.class, PotionOfInvisibility.class);
@@ -110,46 +110,5 @@ public class ExoticPotion extends Potion {
 		}
 	}
 	
-	@Override
-	//20 gold more than its none-exotic equivalent
-	public int value() {
-		return (Reflection.newInstance(exoToReg.get(getClass())).value() + 20) * quantity;
-	}
 
-	@Override
-	//4 more energy than its none-exotic equivalent
-	public int energyVal() {
-		return (Reflection.newInstance(exoToReg.get(getClass())).energyVal() + 4) * quantity;
-	}
-
-	public static class PotionToExotic extends Recipe{
-
-		@Override
-		public boolean testIngredients(ArrayList<Item> ingredients) {
-			if (ingredients.size() == 1 && regToExo.containsKey(ingredients.get(0).getClass())){
-				return true;
-			}
-
-			return false;
-		}
-		
-		@Override
-		public int cost(ArrayList<Item> ingredients) {
-			return 4;
-		}
-
-		@Override
-		public Item brew(ArrayList<Item> ingredients) {
-			for (Item i : ingredients){
-				i.quantity(i.quantity()-1);
-			}
-
-			return Reflection.newInstance(regToExo.get(ingredients.get(0).getClass()));
-		}
-
-		@Override
-		public Item sampleOutput(ArrayList<Item> ingredients) {
-			return Reflection.newInstance(regToExo.get(ingredients.get(0).getClass()));
-		}
-	}
 }

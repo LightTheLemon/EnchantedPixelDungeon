@@ -21,10 +21,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -55,7 +58,7 @@ public class SuspiciousChestRoom extends StandardRoom {
 		Item i = level.findPrizeItem();
 
 		if ( i == null ){
-			i = new Gold().random();
+			i = Random.Float() < ExoticCrystals.goldToEnergyChance() ? new EnergyCrystal().quantity(1 + Dungeon.hero.lvl / 2) : new Gold().random();
 		}
 
 		int center = level.pointToCell(center());

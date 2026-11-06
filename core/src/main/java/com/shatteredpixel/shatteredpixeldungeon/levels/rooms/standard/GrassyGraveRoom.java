@@ -21,13 +21,17 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.UnstableSpell;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -82,7 +86,8 @@ public class GrassyGraveRoom extends StandardRoom {
 			} else if (lootChance < 0.50f && i == index) {
 				level.drop( Generator.random(), pos ).type = Heap.Type.TOMB;
 			} else {
-				level.drop( new Gold().random(), pos ).type = Heap.Type.TOMB;
+				Item loot = Random.Float() < ExoticCrystals.goldToEnergyChance() ? new EnergyCrystal().quantity(1 + Dungeon.hero.lvl / 2) : new Gold().random();
+				level.drop( loot, pos ).type = Heap.Type.TOMB;
 			}
 
 		}

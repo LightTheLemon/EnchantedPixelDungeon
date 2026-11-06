@@ -479,7 +479,7 @@ public class AlchemyScene extends PixelScene {
 		};
 		energyAdd.setRect(energyLeft.right(), energyLeft.top() - (16 - energyLeft.height())/2, 16, 16);
 		align(energyAdd);
-		add(energyAdd);
+		//add(energyAdd);
 
 		sparkEmitter = new Emitter();
 		sparkEmitter.pos(energyLeft.left(), energyLeft.top(), energyLeft.width(), energyLeft.height());

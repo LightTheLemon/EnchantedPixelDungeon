@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
@@ -132,7 +132,7 @@ public class Blandfruit extends Food {
 		if (potionAttrib instanceof PotionOfLevitation)     return Messages.get(this, "stormfruit");
 		if (potionAttrib instanceof PotionOfPurity)         return Messages.get(this, "dreamfruit");
 		if (potionAttrib instanceof PotionOfExperience)     return Messages.get(this, "starfruit");
-		if (potionAttrib instanceof PotionOfHaste)          return Messages.get(this, "swiftfruit");
+		if (potionAttrib instanceof PotionOfEnergy)          return Messages.get(this, "swiftfruit");
 		return super.name();
 	}
 
@@ -181,7 +181,7 @@ public class Blandfruit extends Food {
 		if (potionAttrib instanceof PotionOfLevitation)     potionGlow = new ItemSprite.Glowing( 0x1B5F79 );
 		if (potionAttrib instanceof PotionOfPurity)         potionGlow = new ItemSprite.Glowing( 0xC152AA );
 		if (potionAttrib instanceof PotionOfExperience)     potionGlow = new ItemSprite.Glowing( 0x404040 );
-		if (potionAttrib instanceof PotionOfHaste)          potionGlow = new ItemSprite.Glowing( 0xCCBB00 );
+		if (potionAttrib instanceof PotionOfEnergy)          potionGlow = new ItemSprite.Glowing( 0xCCBB00 );
 
 		return this;
 	}

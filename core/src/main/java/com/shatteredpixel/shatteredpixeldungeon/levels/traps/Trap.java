@@ -114,7 +114,6 @@ public abstract class Trap implements Bundlable {
 	}
 
 	public static void heroStep( final Hero hero, Trap trap ) {
-		//heroPos = hero.pos;
 		Game.runOnRenderThread(new Callback() {
 			@Override
 			public void call() {

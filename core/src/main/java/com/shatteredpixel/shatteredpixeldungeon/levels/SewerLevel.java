@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -45,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Recycle;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.SewerPainter;
@@ -234,7 +236,8 @@ public class SewerLevel extends RegularLevel {
 					Emitter emitter = new Emitter();
 					emitter.fillTarget = false;
 					emitter.pour(SparkParticle.FACTORY, 0.125f);
-					Dungeon.level.drop(new Gold().random(), pos).sprite.drop(pos);
+					Item loot = Random.Float() < ExoticCrystals.goldToEnergyChance() * 2f ? new EnergyCrystal().quantity(Dungeon.hero.lvl) : new Gold().random();
+					Dungeon.level.drop(loot, pos).sprite.drop(pos);
 					break;
 				case 4:
 					set(pos, Terrain.EMPTY);

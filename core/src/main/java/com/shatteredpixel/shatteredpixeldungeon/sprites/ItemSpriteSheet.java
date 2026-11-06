@@ -555,12 +555,13 @@ public class ItemSpriteSheet {
 	public static final int SCROLL_BERKANAN = SCROLLS+9;
 	public static final int SCROLL_ODAL     = SCROLLS+10;
 	public static final int SCROLL_TIWAZ    = SCROLLS+11;
-
+	public static final int BLANK_SCROLL    = SCROLLS+12;
 	public static final int ARCANE_RESIN    = SCROLLS+13;
 	static {
 		for (int i = SCROLLS; i < SCROLLS+16; i++)
 			assignItemRect(i, 15, 15);
 		assignItemRect(ARCANE_RESIN   , 12, 11);
+		assignItemRect(BLANK_SCROLL   , 15, 15);
 	}
 	
 	private static final int EXOTIC_SCROLLS =                               xy(1, 21);  //16 slots
@@ -612,11 +613,12 @@ public class ItemSpriteSheet {
 	public static final int POTION_CHARCOAL = POTIONS+9;
 	public static final int POTION_SILVER   = POTIONS+10;
 	public static final int POTION_IVORY    = POTIONS+11;
-
+	public static final int EMPTY_BOTTLE    = POTIONS+12;
 	public static final int LIQUID_METAL    = POTIONS+13;
 	static {
 		for (int i = POTIONS; i < POTIONS+16; i++)
 			assignItemRect(i, 12, 14);
+		assignItemRect(EMPTY_BOTTLE,    12, 14);
 		assignItemRect(LIQUID_METAL,    8, 15);
 	}
 	

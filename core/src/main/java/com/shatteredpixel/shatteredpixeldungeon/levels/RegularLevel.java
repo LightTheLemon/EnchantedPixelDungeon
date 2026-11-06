@@ -471,7 +471,7 @@ public abstract class RegularLevel extends Level {
 
 		Random.pushGenerator( Random.Long() );
 			//Odds of getting a torch increase with difficulty
-			if ( Dungeon.difficulty > 1 && Random.Float() < Dungeon.difficulty / 2f + 1.5f ){
+			if ( Dungeon.difficulty > 1 && Random.Float() < Dungeon.difficulty / 2f - 0.5f ){
 				int cell = randomDropCell();
 				if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 					map[cell] = Terrain.GRASS;

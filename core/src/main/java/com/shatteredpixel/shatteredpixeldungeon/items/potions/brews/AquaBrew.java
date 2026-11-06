@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.brews;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStormClouds;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GeyserTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -65,10 +66,10 @@ public class AquaBrew extends Brew {
 		private static final int OUT_QUANTITY = 8;
 
 		{
-			inputs =  new Class[]{PotionOfStormClouds.class};
+			inputs =  new Class[]{PotionOfLevitation.class};
 			inQuantity = new int[]{1};
 
-			cost = 8;
+			cost = 12;
 
 			output = AquaBrew.class;
 			outQuantity = OUT_QUANTITY;

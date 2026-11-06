@@ -431,11 +431,15 @@ public class Armor extends EquipableItem {
 			int aEnc = STRReq() - ((Hero) owner).STR();
 			if (aEnc > 0) evasion /= (float) Math.pow(1.6, aEnc);
 
+			//With the ring of might:
+			//no bonus evasion with 9 excess strength
+			//250% evasion with 10 excess strength,
+			//300% evasion with 11 excess strength, etc.
 			int exStr = -aEnc;
 			if (exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
-				evasion *= (float) (exStr + 5) / 10;
+				evasion *= (float) Math.pow(1.202, exStr - 5);
 			}
-			
+
 			Momentum momentum = owner.buff(Momentum.class);
 			if (momentum != null){
 				evasion += momentum.evasionBonus(((Hero) owner).lvl, Math.max(0, -aEnc));
@@ -601,11 +605,12 @@ public class Armor extends EquipableItem {
 		if (levelKnown) {
 
 			info += "\n\n" + Messages.get(Armor.class, "curr_absorb", tier, DRMin(), DRMax(), STRReq());
-			
+
+			int exStr = Dungeon.hero.STR() - STRReq();
 			if (Dungeon.hero != null && STRReq() > Dungeon.hero.STR()) {
 				info += " " + Messages.get(Armor.class, "too_heavy");
-			} else if (Dungeon.hero.STR() >= 10 + STRReq() && Dungeon.hero.buff(RingOfMight.Might.class) != null ) {
-				info += " " + Messages.get(Armor.class, "might_bonus", 10 * (Dungeon.hero.STR() - STRReq() + 5 - 10));
+			} else if (exStr >= 10 && Dungeon.hero != null && Dungeon.hero.buff(RingOfMight.Might.class) != null) {
+				info += " " + Messages.get(Armor.class, "might_bonus", (float) Math.pow(1.202, exStr - 5));
 			}
 
 		} else {

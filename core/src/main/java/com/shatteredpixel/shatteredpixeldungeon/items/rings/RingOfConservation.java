@@ -59,7 +59,7 @@ public class RingOfConservation extends Ring {
             }
             return info;
         } else if ( !visiblyCursed() ){
-            return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 0.08f));
+            return Messages.get(this, "typical_stats", Messages.decimalFormat("#.##", 8f));
         } else {
             return Messages.get(this, "cursed_stats", Messages.decimalFormat("#.##", 100f * ( (soloBuffedBonus() * -0.05f ) + 0.1)) );
         }

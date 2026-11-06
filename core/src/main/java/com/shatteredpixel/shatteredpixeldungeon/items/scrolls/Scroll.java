@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
+import static com.shatteredpixel.shatteredpixeldungeon.items.Generator.Category.SCROLL;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -30,14 +32,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
@@ -54,15 +56,23 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfShock;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.QuickRecipe;
+import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -108,7 +118,7 @@ public abstract class Scroll extends Item {
 	
 	@SuppressWarnings("unchecked")
 	public static void initLabels() {
-		handler = new ItemStatusHandler<>( (Class<? extends Scroll>[])Generator.Category.SCROLL.classes, runes );
+		handler = new ItemStatusHandler<>( (Class<? extends Scroll>[]) SCROLL.classes, runes );
 	}
 
 	public static void clearLabels(){
@@ -122,14 +132,8 @@ public abstract class Scroll extends Item {
 	public static void saveSelectively( Bundle bundle, ArrayList<Item> items ) {
 		ArrayList<Class<?extends Item>> classes = new ArrayList<>();
 		for (Item i : items){
-			if (i instanceof ExoticScroll){
-				if (!classes.contains(ExoticScroll.exoToReg.get(i.getClass()))){
-					classes.add(ExoticScroll.exoToReg.get(i.getClass()));
-				}
-			} else if (i instanceof Scroll){
-				if (!classes.contains(i.getClass())){
-					classes.add(i.getClass());
-				}
+			if (!classes.contains(i.getClass())){
+				classes.add(i.getClass());
 			}
 		}
 		handler.saveClassesSelectively( bundle, classes );
@@ -137,7 +141,7 @@ public abstract class Scroll extends Item {
 
 	@SuppressWarnings("unchecked")
 	public static void restore( Bundle bundle ) {
-		handler = new ItemStatusHandler<>( (Class<? extends Scroll>[])Generator.Category.SCROLL.classes, runes, bundle );
+		handler = new ItemStatusHandler<>( (Class<? extends Scroll>[]) SCROLL.classes, runes, bundle );
 	}
 	
 	public Scroll() {
@@ -170,7 +174,7 @@ public abstract class Scroll extends Item {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		//actions.add( AC_CRAFT );
+		actions.add( AC_CRAFT );
 		actions.add( AC_READ );
 		return actions;
 	}
@@ -196,12 +200,105 @@ public abstract class Scroll extends Item {
 			
 		}
 		if (action.equals( AC_CRAFT)) {
-			curUser.spend( -1 );
+			craftMenu();
 
 		}
 
 	}
-	
+
+	public void craftMenu() {
+
+		Class<?extends Item> stoneClass = stones.get(this.getClass());
+
+		Scroll scroll = isIdentified() ? this : new PlaceHolder();
+
+		GameScene.show( new WndOptions(new ItemSprite(Scroll.this),
+				Messages.get(Scroll.class, "crafting_title"),
+				Messages.get(Scroll.class, "crafting_menu"),
+				Messages.get(Scroll.class, "yes"),
+				Messages.get(Scroll.class, "no") ) {
+
+			@Override
+			protected void onSelect( int index ) {
+				switch (index) {
+					case 0:
+						//"Yes" option
+
+						if (stoneClass != null) {
+							curItem.detach(curUser.belongings.backpack);
+
+							Item runestone = Reflection.newInstance(stoneClass);
+
+							runestone.quantity(2);
+							runestone.doPickUp(Dungeon.hero);
+
+							curUser.spend(1);
+							Sample.INSTANCE.play(Assets.Sounds.PUFF);
+
+							GLog.i("You crafted the scroll into 2 stones of " + stoneClass.getSimpleName().substring(7) );
+
+						}
+						break;
+					case 1:
+						//"No" option
+						break;
+				}
+			}
+			//Most of this code copied from WndOptions.java
+			@Override
+			protected void layoutBody(float pos, String message, String... options){
+
+				int width = PixelScene.landscape() ? WIDTH_L : WIDTH_P;
+
+				//Code to display the recipe
+				Recipe r = new ScrollToStone();
+				int recipeHeight = 20;
+				ArrayList<Item> in = new ArrayList<Item>(Arrays.asList(scroll));
+				Item sampleOutput = isIdentified() ? r.sampleOutput(in) : new Runestone.PlaceHolder();
+
+				int originalQuantity = in.get(0).quantity();
+				in.get(0).quantity(1);
+				QuickRecipe result = new QuickRecipe(r, in, sampleOutput.quantity(2) );
+				in.get(0).quantity(originalQuantity);
+
+				result.setPos(MARGIN + width / 4f, recipeHeight + 16);
+				add(result);
+
+				RenderedTextBlock tfMesage = PixelScene.renderTextBlock( 6 );
+				tfMesage.text(message, width);
+				tfMesage.setPos( 0, pos );
+				add( tfMesage );
+
+				pos = tfMesage.bottom() + 2*MARGIN;
+
+				for (int i=0; i < options.length; i++) {
+					final int index = i;
+					RedButton btn = new RedButton( options[i] ) {
+						@Override
+						protected void onClick() {
+							hide();
+							onSelect( index );
+						}
+					};
+					if (hasIcon(i)) btn.icon(getIcon(i));
+					btn.multiline = true;
+					add( btn );
+
+					btn.setRect(0, pos + recipeHeight, width, BUTTON_HEIGHT);
+
+					btn.enable(enabled(i));
+
+					pos += BUTTON_HEIGHT + MARGIN;
+				}
+
+				resize( width, (int)(pos - MARGIN) + recipeHeight );
+
+			}
+
+		} );
+
+	}
+
 	public abstract void doRead();
 
 	public void readAnimation() {
@@ -282,7 +379,7 @@ public abstract class Scroll extends Item {
 	}
 	
 	public static boolean allKnown() {
-		return handler != null && handler.known().size() == Generator.Category.SCROLL.classes.length;
+		return handler != null && handler.known().size() == SCROLL.classes.length;
 	}
 	
 	@Override
@@ -312,28 +409,179 @@ public abstract class Scroll extends Item {
 		
 		@Override
 		public String info() {
-			return "";
+			return "A regular scroll. Could be any type.";
 		}
 	}
-	
-	public static class ScrollToStone extends Recipe {
-		
-		private static HashMap<Class<?extends Scroll>, Class<?extends Runestone>> stones = new HashMap<>();
-		static {
-			stones.put(ScrollOfIdentify.class,      StoneOfIntuition.class);
-			stones.put(ScrollOfLullaby.class,       StoneOfDeepSleep.class);
-			stones.put(ScrollOfMagicMapping.class,  StoneOfClairvoyance.class);
-			stones.put(ScrollOfMirrorImage.class,   StoneOfFlock.class);
-			stones.put(ScrollOfRetribution.class,   StoneOfBlast.class);
-			stones.put(ScrollOfRage.class,          StoneOfAggression.class);
-			stones.put(ScrollOfRecharging.class,    StoneOfShock.class);
-			stones.put(ScrollOfRemoveCurse.class,   StoneOfDetectMagic.class);
-			stones.put(ScrollOfTeleportation.class, StoneOfBlink.class);
-			stones.put(ScrollOfTerror.class,        StoneOfFear.class);
-			stones.put(ScrollOfTransmutation.class, StoneOfAugmentation.class);
-			stones.put(ScrollOfUpgrade.class,       StoneOfEnchantment.class);
+
+	public static class ScrollDuplication extends Recipe {
+
+		@Override
+		public boolean testIngredients(ArrayList<Item> ingredients) {
+			boolean scroll = false;
+			boolean template = false;
+
+			for (Item i : ingredients){
+				if (i instanceof Scroll) {
+					scroll = true;
+				} else if (i instanceof BlankScroll) {
+					template = true;
+				}
+			}
+
+			return scroll && template;
 		}
-		
+
+		@Override
+		public int cost(ArrayList<Item> ingredients) {
+			int cost = 6;
+
+			for (Item i : ingredients){
+				if (i instanceof ScrollOfUpgrade) {
+					cost += 10;
+				} else if (i instanceof ScrollOfTransmutation) {
+					cost += 6;
+				}
+			}
+
+			return cost;
+		}
+
+		@Override
+		public Item brew(ArrayList<Item> ingredients) {
+
+			Item scroll = null;
+
+			for (Item i : ingredients){
+
+				if (i instanceof BlankScroll) {
+					i.quantity(i.quantity() - 1);
+				}
+
+				if (i instanceof Scroll) {
+					scroll = i;
+					i.quantity(i.quantity() + 1);
+				}
+			}
+
+			return scroll;
+		}
+
+		@Override
+		public Item sampleOutput(ArrayList<Item> ingredients) {
+
+			for (Item i : ingredients){
+
+				if (i instanceof Scroll) {
+
+					return i.quantity(2);
+				}
+
+			}
+
+			return null;
+		}
+	}
+
+	public static class ScrollCrafting extends Recipe {
+
+		@Override
+		public boolean testIngredients(ArrayList<Item> ingredients) {
+			boolean runestone = false;
+			boolean template = false;
+
+			for (Item i : ingredients){
+				if (i instanceof Runestone) {
+					runestone = true;
+				} else if (i instanceof BlankScroll) {
+					template = true;
+				}
+			}
+
+			return runestone && template;
+		}
+
+		@Override
+		public int cost(ArrayList<Item> ingredients) {
+			int cost = 3;
+
+			for (Item i : ingredients){
+				if (i instanceof StoneOfEnchantment) {
+					cost += 7;
+				} else if (i instanceof StoneOfAugmentation) {
+					cost += 5;
+				}
+			}
+
+			return cost;
+		}
+
+		@Override
+		public Item brew(ArrayList<Item> ingredients) {
+
+			//			Scroll s = (Scroll) ingredients.get(0);
+
+			//			return Reflection.newInstance(stones.get(s.getClass())).quantity(2);
+
+//
+//			if (ingredients.get(0) instanceof Runestone) {
+//				Runestone stone = (Runestone) ingredients.get(0);
+//			} else if (ingredients.get(1) instanceof Runestone) {
+//				Runestone stone = (Runestone) ingredients.get(1);
+//			}
+
+			Item stone = null;
+
+			for (Item i : ingredients){
+
+				if (i instanceof BlankScroll) {
+					i.quantity(i.quantity() - 1);
+				} else if (i instanceof Runestone) {
+					i.quantity(i.quantity() - 1);
+					stone = i;
+				}
+			}
+
+
+			return Reflection.newInstance(scrolls.get(stone.getClass()));
+		}
+
+		@Override
+		public Item sampleOutput(ArrayList<Item> ingredients) {
+
+			for (Item i : ingredients){
+				if (i instanceof Runestone) {
+
+					Item scroll = Reflection.newInstance(scrolls.get(i.getClass()));
+
+					if (scroll != null) return scroll.isIdentified() ? Reflection.newInstance(scrolls.get(i.getClass())) : new ScrollHolder();
+				}
+
+			}
+
+			return null;
+		}
+	}
+	public static class ScrollToStone extends Recipe {
+
+//		private static HashMap<Class<?extends Scroll>, Class<?extends Runestone>> stones = new HashMap<>();
+//		static {
+//			stones.put(ScrollOfIdentify.class,       StoneOfIntuition.class);
+//			stones.put(ScrollOfLullaby.class,        StoneOfDeepSleep.class);
+//			stones.put(ScrollOfMagicMapping.class,   StoneOfClairvoyance.class);
+//			stones.put(ScrollOfMirrorImage.class,    StoneOfFlock.class);
+//			stones.put(ScrollOfRetribution.class,    StoneOfBlast.class);
+//			stones.put(ScrollOfRage.class,           StoneOfAggression.class);
+//			stones.put(ScrollOfRecharging.class,     StoneOfShock.class);
+//			stones.put(ScrollOfRemoveCurse.class,    StoneOfDetectMagic.class);
+//			stones.put(ScrollOfTeleportation.class,  StoneOfBlink.class);
+//			stones.put(ScrollOfTerror.class,         StoneOfFear.class);
+//			stones.put(ScrollOfTransmutation.class,  StoneOfAugmentation.class);
+//			stones.put(ScrollOfUpgrade.class,        StoneOfEnchantment.class);
+//			stones.put(ScrollOfAntiMagic.class,      StoneOfDetectMagic.class);
+//			stones.put(ScrollOfMysticalEnergy.class, StoneOfShock.class);
+//			stones.put(ScrollOfPsionicBlast.class,   StoneOfBlast.class);
+//		}
+
 		@Override
 		public boolean testIngredients(ArrayList<Item> ingredients) {
 			if (ingredients.size() != 1
@@ -341,21 +589,21 @@ public abstract class Scroll extends Item {
 					|| !stones.containsKey(ingredients.get(0).getClass())){
 				return false;
 			}
-			
+
 			return true;
 		}
-		
+
 		@Override
 		public int cost(ArrayList<Item> ingredients) {
 			return 0;
 		}
-		
+
 		@Override
 		public Item brew(ArrayList<Item> ingredients) {
 			if (!testIngredients(ingredients)) return null;
-			
+
 			Scroll s = (Scroll) ingredients.get(0);
-			
+
 			s.quantity(s.quantity() - 1);
 			if (ShatteredPixelDungeon.scene() instanceof AlchemyScene){
 				if (!s.isIdentified()){
@@ -364,14 +612,14 @@ public abstract class Scroll extends Item {
 			} else {
 				s.identify();
 			}
-			
+
 			return Reflection.newInstance(stones.get(s.getClass())).quantity(2);
 		}
-		
+
 		@Override
 		public Item sampleOutput(ArrayList<Item> ingredients) {
 			if (!testIngredients(ingredients)) return null;
-			
+
 			Scroll s = (Scroll) ingredients.get(0);
 
 			if (!s.isKnown()){
@@ -381,4 +629,41 @@ public abstract class Scroll extends Item {
 			}
 		}
 	}
+
+	private static HashMap<Class<?extends Scroll>, Class<?extends Runestone>> stones = new HashMap<>();
+	static {
+		stones.put(ScrollOfIdentify.class,       StoneOfIntuition.class);
+		stones.put(ScrollOfLullaby.class,        StoneOfDeepSleep.class);
+		stones.put(ScrollOfMagicMapping.class,   StoneOfClairvoyance.class);
+		stones.put(ScrollOfMirrorImage.class,    StoneOfFlock.class);
+		stones.put(ScrollOfRetribution.class,    StoneOfBlast.class);
+		stones.put(ScrollOfRage.class,           StoneOfAggression.class);
+		stones.put(ScrollOfRecharging.class,     StoneOfShock.class);
+		stones.put(ScrollOfRemoveCurse.class,    StoneOfDetectMagic.class);
+		stones.put(ScrollOfTeleportation.class,  StoneOfBlink.class);
+		stones.put(ScrollOfTerror.class,         StoneOfFear.class);
+		stones.put(ScrollOfTransmutation.class,  StoneOfAugmentation.class);
+		stones.put(ScrollOfUpgrade.class,        StoneOfEnchantment.class);
+		stones.put(ScrollOfAntiMagic.class,      StoneOfDetectMagic.class);
+		stones.put(ScrollOfMysticalEnergy.class, StoneOfShock.class);
+		stones.put(ScrollOfPsionicBlast.class,   StoneOfBlast.class);
+	}
+
+	private static HashMap<Class<?extends Runestone>, Class<?extends Scroll>> scrolls = new HashMap<>();
+	static {
+		//Maybe we can make unique runestones for each scroll instead of some sharing the same scroll counterpart
+		scrolls.put(StoneOfIntuition.class,      ScrollOfIdentify.class);
+		scrolls.put(StoneOfDeepSleep.class,      ScrollOfLullaby.class);
+		scrolls.put(StoneOfClairvoyance.class,   ScrollOfMagicMapping.class);
+		scrolls.put(StoneOfFlock.class,          ScrollOfMirrorImage.class);
+		scrolls.put(StoneOfBlast.class,          Dungeon.selectedScrolls.contains(ScrollOfRetribution.class) ? ScrollOfRetribution.class : ScrollOfPsionicBlast.class);
+		scrolls.put(StoneOfAggression.class,     ScrollOfRage.class);
+		scrolls.put(StoneOfShock.class,          Dungeon.selectedScrolls.contains(ScrollOfRecharging.class) ? ScrollOfRecharging.class : ScrollOfMysticalEnergy.class);
+		scrolls.put(StoneOfDetectMagic.class,    Dungeon.selectedScrolls.contains(ScrollOfRemoveCurse.class) ? ScrollOfRemoveCurse.class : ScrollOfAntiMagic.class);
+		scrolls.put(StoneOfBlink.class,          ScrollOfTeleportation.class);
+		scrolls.put(StoneOfFear.class,           ScrollOfTerror.class );
+		scrolls.put(StoneOfAugmentation.class,   ScrollOfTransmutation.class);
+		scrolls.put(StoneOfEnchantment.class,    ScrollOfUpgrade.class);
+	}
+
 }

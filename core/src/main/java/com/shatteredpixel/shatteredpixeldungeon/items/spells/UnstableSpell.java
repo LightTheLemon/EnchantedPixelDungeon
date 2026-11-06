@@ -21,14 +21,21 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.EmptyBottle;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.BlankScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMysticalEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
@@ -55,17 +62,26 @@ public class UnstableSpell extends Spell {
 	
 	private static HashMap<Class<? extends Scroll>, Float> scrollChances = new HashMap<>();
 	static{
-		scrollChances.put( ScrollOfIdentify.class,      3f );
-		scrollChances.put( ScrollOfRemoveCurse.class,   2f );
-		scrollChances.put( ScrollOfMagicMapping.class,  2f );
-		scrollChances.put( ScrollOfMirrorImage.class,   2f );
-		scrollChances.put( ScrollOfRecharging.class,    2f );
-		scrollChances.put( ScrollOfLullaby.class,       2f );
-		scrollChances.put( ScrollOfRetribution.class,   2f );
-		scrollChances.put( ScrollOfRage.class,          2f );
-		scrollChances.put( ScrollOfTeleportation.class, 2f );
-		scrollChances.put( ScrollOfTerror.class,        2f );
-		scrollChances.put( ScrollOfTransmutation.class, 1f );
+		scrollChances.put( ScrollOfIdentify.class,          3f );
+		scrollChances.put( ScrollOfRemoveCurse.class,       2f );
+		scrollChances.put( ScrollOfMagicMapping.class,      2f );
+//		scrollChances.put( ScrollOfMirrorImage.class,   2f );
+//		scrollChances.put( ScrollOfRecharging.class,    2f );
+//		scrollChances.put( ScrollOfLullaby.class,       2f );
+//		scrollChances.put( ScrollOfRetribution.class,   2f );
+//		scrollChances.put( ScrollOfRage.class,          2f );
+//		scrollChances.put( ScrollOfTeleportation.class, 2f );
+//		scrollChances.put( ScrollOfTerror.class,        2f );
+//		scrollChances.put( ScrollOfAntiMagic.class,     2f );
+//		scrollChances.put( ScrollOfPsionicBlast.class,  2f );
+//		scrollChances.put( ScrollOfMysticalEnergy.class,2f );
+		scrollChances.put( ScrollOfTransmutation.class,    1f );
+		scrollChances.put( Dungeon.selectedScrolls.get(0), 2f );
+		scrollChances.put( Dungeon.selectedScrolls.get(1), 2f );
+		scrollChances.put( Dungeon.selectedScrolls.get(2), 2f );
+		scrollChances.put( Dungeon.selectedScrolls.get(3), 3f );
+		scrollChances.put( Dungeon.selectedScrolls.get(4), 3f );
+
 	}
 
 	private static HashSet<Class<? extends Scroll>> nonCombatScrolls = new HashSet<>();
@@ -76,6 +92,8 @@ public class UnstableSpell extends Spell {
 		nonCombatScrolls.add( ScrollOfRecharging.class );
 		nonCombatScrolls.add( ScrollOfLullaby.class );
 		nonCombatScrolls.add( ScrollOfTeleportation.class );
+		nonCombatScrolls.add( ScrollOfAntiMagic.class );
+		nonCombatScrolls.add( ScrollOfMysticalEnergy.class);
 		nonCombatScrolls.add( ScrollOfTransmutation.class );
 	}
 
@@ -88,6 +106,7 @@ public class UnstableSpell extends Spell {
 		combatScrolls.add( ScrollOfRage.class );
 		combatScrolls.add( ScrollOfTeleportation.class );
 		combatScrolls.add( ScrollOfTerror.class );
+		combatScrolls.add( ScrollOfPsionicBlast.class);
 	}
 	
 	@Override
@@ -101,11 +120,11 @@ public class UnstableSpell extends Spell {
 
 		//reroll the scroll until it is relevant for the situation (whether there are visible enemies)
 		if (hero.visibleEnemies() == 0){
-			while (!nonCombatScrolls.contains(s.getClass())){
+			while (!nonCombatScrolls.contains(s.getClass()) && Dungeon.selectedScrolls.contains(s) ){
 				s = Reflection.newInstance(Random.chances(scrollChances));
 			}
 		} else {
-			while (!combatScrolls.contains(s.getClass())){
+			while (!combatScrolls.contains(s.getClass()) && Dungeon.selectedScrolls.contains(s)){
 				s = Reflection.newInstance(Random.chances(scrollChances));
 			}
 		}
@@ -127,47 +146,19 @@ public class UnstableSpell extends Spell {
 
 	@Override
 	public int energyVal() {
-		return 8 * quantity;
+		return 10 * quantity;
 	}
 
-	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe {
+	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 
-		@Override
-		public boolean testIngredients(ArrayList<Item> ingredients) {
-			boolean scroll = false;
-			boolean stone = false;
+		{
+			inputs =  new Class[]{BlankScroll.class};
+			inQuantity = new int[]{1};
 
-			for (Item i : ingredients){
-				if (i instanceof Runestone){
-					stone = true;
-					//if it is a regular or exotic potion
-				} else if (ExoticScroll.regToExo.containsKey(i.getClass())
-						|| ExoticScroll.regToExo.containsValue(i.getClass())) {
-					scroll = true;
-				}
-			}
+			cost = 2;
 
-			return scroll && stone;
-		}
-		
-		@Override
-		public int cost(ArrayList<Item> ingredients) {
-			return 1;
+			output = UnstableSpell.class;
+			outQuantity = 1;
 		}
 
-		@Override
-		public Item brew(ArrayList<Item> ingredients) {
-
-			for (Item i : ingredients){
-				i.quantity(i.quantity()-1);
-			}
-
-			return sampleOutput(null);
-		}
-
-		@Override
-		public Item sampleOutput(ArrayList<Item> ingredients) {
-			return new UnstableSpell();
-		}
-	}
-}
+	}}

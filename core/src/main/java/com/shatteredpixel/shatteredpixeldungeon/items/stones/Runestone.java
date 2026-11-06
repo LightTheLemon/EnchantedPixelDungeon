@@ -116,7 +116,7 @@ public abstract class Runestone extends Item {
 		
 		@Override
 		public String info() {
-			return "";
+			return "An ordinary runestone. Could be any type.";
 		}
 	}
 }

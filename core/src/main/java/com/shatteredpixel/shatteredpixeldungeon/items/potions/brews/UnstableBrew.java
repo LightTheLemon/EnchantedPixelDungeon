@@ -21,14 +21,14 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.brews;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.EmptyBottle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
@@ -38,6 +38,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticG
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShielding;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
@@ -66,17 +70,16 @@ public class UnstableBrew extends Brew {
 
 	private static HashMap<Class<? extends Potion>, Float> potionChances = new HashMap<>();
 	static {
-		potionChances.put(PotionOfHealing.class, 3f);
+		potionChances.put(Dungeon.swapHealing ? PotionOfShielding.class : PotionOfHealing.class, 3f);
 		potionChances.put(PotionOfMindVision.class, 2f);
 		potionChances.put(PotionOfFrost.class, 2f);
 		potionChances.put(PotionOfLiquidFlame.class, 2f);
 		potionChances.put(PotionOfToxicGas.class, 2f);
-		potionChances.put(PotionOfHaste.class, 2f);
+		potionChances.put(PotionOfEnergy.class, 2f);
 		potionChances.put(PotionOfInvisibility.class, 2f);
 		potionChances.put(PotionOfLevitation.class, 2f);
-		potionChances.put(PotionOfParalyticGas.class, 2f);
 		potionChances.put(PotionOfPurity.class, 2f);
-		potionChances.put(PotionOfExperience.class, 1f);
+		potionChances.put(Dungeon.swapExperience ? PotionOfDivineInspiration.class : PotionOfExperience.class, 1f);
 	}
 	
 	@Override
@@ -127,48 +130,22 @@ public class UnstableBrew extends Brew {
 
 	@Override
 	public int energyVal() {
-		return 8 * quantity;
+		return 6 * quantity;
 	}
 
-	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe {
-		
-		@Override
-		public boolean testIngredients(ArrayList<Item> ingredients) {
-			boolean potion = false;
-			boolean seed = false;
+	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 
-			for (Item i : ingredients){
-				if (i instanceof Plant.Seed) {
-					seed = true;
-					//if it is a regular or exotic potion
-				} else if (ExoticPotion.regToExo.containsKey(i.getClass())
-						|| ExoticPotion.regToExo.containsValue(i.getClass())) {
-					potion = true;
-				}
-			}
+		{
+			inputs =  new Class[]{EmptyBottle.class};
+			inQuantity = new int[]{1};
 
-			return potion && seed;
+			cost = 2;
+
+			//Could produce aqua brews instead?
+			output = UnstableBrew.class;
+			outQuantity = 1;
 		}
 
-		@Override
-		public int cost(ArrayList<Item> ingredients) {
-			return 1;
-		}
-
-		@Override
-		public Item brew(ArrayList<Item> ingredients) {
-
-			for (Item i : ingredients){
-				i.quantity(i.quantity()-1);
-			}
-			
-			return sampleOutput(null);
-		}
-		
-		@Override
-		public Item sampleOutput(ArrayList<Item> ingredients) {
-			return new UnstableBrew();
-		}
 	}
 	
 }

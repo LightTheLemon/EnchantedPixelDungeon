@@ -19,51 +19,58 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.potions.brews;
+package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.utils.BArray;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 
-public class ShockingBrew extends Brew {
+public class PotionOfEnergy extends Potion {
 	
 	{
-		image = ItemSpriteSheet.BREW_SHOCKING;
+		icon = ItemSpriteSheet.Icons.POTION_HASTE;
 	}
 	
+	@Override
+	public void apply(Hero hero) {
+		identify();
+		
+		GLog.w( Messages.get(this, "energetic") );
+		Buff.prolong( hero, Haste.class, Haste.DURATION);
+		SpellSprite.show(hero, SpellSprite.HASTE, 1, 1, 0);
+	}
+
+	//Shocking brew logic
 	@Override
 	public void shatter(int cell) {
 		splash( cell );
 		if (Dungeon.level.heroFOV[cell]) {
 			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
 			Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
+			identify();
 		}
-		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 3 );
+		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 2 );
 		for (int i = 0; i < PathFinder.distance.length; i++) {
 			if (PathFinder.distance[i] < Integer.MAX_VALUE) {
-				GameScene.add(Blob.seed(i, 20, Electricity.class));
+				GameScene.add(Blob.seed(i, 10, Electricity.class));
 			}
 		}
 	}
 	
-	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
-		
-		{
-			inputs =  new Class[]{PotionOfParalyticGas.class};
-			inQuantity = new int[]{1};
-			
-			cost = 10;
-			
-			output = ShockingBrew.class;
-			outQuantity = 1;
-		}
-		
+	@Override
+	public int value() {
+		return isKnown() ? 40 * quantity : super.value();
 	}
 }

@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -44,7 +45,7 @@ import com.watabou.utils.Random;
 public class PotionOfDivineInspiration extends ExoticPotion {
 
 	{
-		icon = ItemSpriteSheet.Icons.POTION_DIVINE;
+		icon = ItemSpriteSheet.Icons.POTION_EXP;
 
 		talentFactor = 2f;
 	}
@@ -57,41 +58,16 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 
 		if (!isKnown()) {
 			identify();
-			//curItem = detach( hero.belongings.backpack );
 			RingOfConservation.detachProc(curItem, 1);
 			identifiedByUse = true;
 		} else {
 			identifiedByUse = false;
 		}
 
-		/*
-
-		boolean[] enabled = new boolean[5];
-		enabled[1] = enabled[2] = enabled[3] = enabled[4] = true;
-
-		DivineInspirationTracker tracker = hero.buff(DivineInspirationTracker.class);
-
-		if (tracker != null){
-			boolean allBoosted = true;
-			for (int i = 1; i <= 4; i++){
-				if (tracker.isBoosted(i)){
-					enabled[i] = false;
-				} else {
-					allBoosted = false;
-				}
-			}
-
-			if (allBoosted){
-				GLog.w(Messages.get(this, "no_more_points"));
-				return;
-			}
-		}
-
-		 */
 
 		GameScene.show(new WndOptions(
 				new ItemSprite(this),
-				Messages.titleCase(trueName()),
+				Messages.get(PotionOfExperience.class, "alt_name"),
 				Messages.get(PotionOfDivineInspiration.class, "select_tier"),
 				Messages.titleCase(Messages.get(TalentsPane.class, "tier", 1)),
 				Messages.titleCase(Messages.get(TalentsPane.class, "tier", 2)),
@@ -120,19 +96,8 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 
 					curUser.spendAndNext(1f);
 
-					//removing this code doesn't break anything:
-
-					//boolean unspentTalents = false;
-					//for (int i = 1; i <= Dungeon.hero.talents.size(); i++){
-					//	if (Dungeon.hero.talentPointsAvailable(i) > 0){
-					//		unspentTalents = true;
-					//		break;
-					//	}
-					//}
-					//if (unspentTalents){
 					StatusPane.talentBlink = 10f;
 					WndHero.lastIdx = 1;
-					//}
 
 					GameScene.showlevelUpStars();
 

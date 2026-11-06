@@ -158,7 +158,7 @@ public abstract class Level implements Bundlable {
 	public boolean[] mapped;
 	public boolean[] discoverable;
 
-	public int viewDistance = Math.min(10, Math.max(2, Math.round(-3 * Dungeon.difficulty + 11 )));
+	public int viewDistance = Math.min(10, Math.max(2, Dungeon.brightnessDifficultyMultiplier()));
 	
 	public boolean[] heroFOV;
 	
@@ -240,7 +240,7 @@ public abstract class Level implements Bundlable {
 				//or give a random scroll (from a separate RNG) instead of every 2nd SOU
 				if (Random.Float() < Dungeon.upgradeDifficultyMultiplier() ){
 					addItemToSpawn(new ScrollOfUpgrade());
-					System.out.println("SCROLL SPAWNED");
+					//System.out.println("SCROLL SPAWNED");
 				}
 			}
 			System.out.println("Dungeon.upgradeDifficultyMultiplier(): " + Dungeon.upgradeDifficultyMultiplier());

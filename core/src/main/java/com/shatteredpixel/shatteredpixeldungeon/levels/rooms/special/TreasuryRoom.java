@@ -23,10 +23,12 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -49,7 +51,7 @@ public class TreasuryRoom extends SpecialRoom {
 		float mimicChance = 1/5f * MimicTooth.mimicChanceMultiplier();
 		for (int i=0; i < n; i++) {
 			Item item = level.findPrizeItem(TrinketCatalyst.class);
-			if (item == null) item = new Gold().random();
+			if (item == null) item = Random.Float() < ExoticCrystals.goldToEnergyChance() ? new EnergyCrystal().quantity(1 + Dungeon.hero.lvl / 2) : new Gold().random();
 
 			int pos;
 			do {

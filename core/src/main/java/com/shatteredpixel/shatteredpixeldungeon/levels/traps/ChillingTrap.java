@@ -39,22 +39,6 @@ public class ChillingTrap extends Trap{
 	{
 		color = WHITE;
 		shape = DOTS;
-		if (Dungeon.depth < 10) showWarning = false;
-	}
-
-	@Override
-	public void trigger() {
-		if (Dungeon.depth >= 10) showWarning = true;
-		if (active) {
-			if (Dungeon.level.heroFOV[pos]) {
-				Sample.INSTANCE.play(Assets.Sounds.TRAP);
-			}
-			if (disarmedByActivation) disarm();
-			Dungeon.level.discover(pos);
-			Bestiary.setSeen(getClass());
-			Bestiary.countEncounter(getClass());
-			activate();
-		}
 	}
 
 	@Override

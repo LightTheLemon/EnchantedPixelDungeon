@@ -282,7 +282,7 @@ public class BeaconOfReturning extends Spell {
 		private static final int OUT_QUANTITY = 5;
 		
 		{
-			inputs =  new Class[]{ScrollOfPassage.class};
+			inputs =  new Class[]{ScrollOfTeleportation.class};
 			inQuantity = new int[]{1};
 			
 			cost = 12;

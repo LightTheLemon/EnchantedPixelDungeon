@@ -39,8 +39,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.DocumentPage;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.EmptyBottle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.BlankScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
@@ -230,7 +232,7 @@ public class Heap implements Bundlable {
 		boolean evaporated = false;
 
 		for (Item item : items.toArray( new Item[0] )) {
-			if (Random.Float() < 0.5f && item instanceof Scroll && !item.unique) {
+			if (Random.Float() < 0.5f && (item instanceof Scroll || item instanceof BlankScroll) && !item.unique) {
 				items.remove( item );
 				burnt = true;
 			} else if (Random.Float() < 0.5f && item instanceof Plant.Seed) {
@@ -339,7 +341,7 @@ public class Heap implements Bundlable {
 			if (item instanceof MysteryMeat) {
 				replace( item, FrozenCarpaccio.cook( (MysteryMeat)item ) );
 				frozen = true;
-			} else if (item instanceof Potion && !item.unique) {
+			} else if ((item instanceof Potion || item instanceof EmptyBottle) && !item.unique) {
 				items.remove(item);
 				((Potion) item).shatter(pos);
 				frozen = true;

@@ -57,13 +57,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
@@ -89,15 +88,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
@@ -327,11 +319,13 @@ public class Generator {
 			return Short.MAX_VALUE+item.image();
 		}
 
+		//All of this runs when we select "Enter the Dungeon" on the title screen
 		static {
 			GOLD.classes = new Class<?>[]{
 					Gold.class };
 			GOLD.probs = new float[]{ 1 };
-			
+
+			Dungeon.choosePotions();
 			POTION.classes = new Class<?>[]{
 					PotionOfStrength.class, //2 drop every chapter, see Dungeon.posNeeded()
 					PotionOfHealing.class,
@@ -339,14 +333,12 @@ public class Generator {
 					PotionOfFrost.class,
 					PotionOfLiquidFlame.class,
 					PotionOfToxicGas.class,
-					PotionOfHaste.class,
+					PotionOfEnergy.class,
 					PotionOfInvisibility.class,
 					PotionOfLevitation.class,
-					PotionOfParalyticGas.class,
 					PotionOfPurity.class,
 					PotionOfExperience.class};
-			POTION.defaultProbs  = new float[]{ 0, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1 };
-			POTION.defaultProbs2 = new float[]{ 0, 2, 2, 2, 1, 2, 1, 1, 1, 1, 1, 0 };
+			POTION.defaultProbs  = new float[]{ 0, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1};
 			POTION.probs = POTION.defaultProbs.clone();
 			
 			SEED.classes = new Class<?>[]{
@@ -364,25 +356,26 @@ public class Generator {
 					Starflower.Seed.class};
 			SEED.defaultProbs = new float[]{ 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 };
 			SEED.probs = SEED.defaultProbs.clone();
-			
+
+			// Running Dungeon.chooseScrolls() here doesn't actually matter, but we need it to prevent a crash.
+			// It's important to make Dungeon.selectedScrolls.get(x) non-null when SCROLL.classes actually runs, but the list itself is never used
+			Dungeon.chooseScrolls();
 			SCROLL.classes = new Class<?>[]{
-					ScrollOfUpgrade.class, //3 drop every chapter, see Dungeon.souNeeded()
+					ScrollOfUpgrade.class, //See Dungeon.upgradeDifficultyMultiplier() in Level.java
 					ScrollOfIdentify.class,
 					ScrollOfRemoveCurse.class,
-					ScrollOfMirrorImage.class,
-					ScrollOfRecharging.class,
-					ScrollOfTeleportation.class,
-					ScrollOfLullaby.class,
 					ScrollOfMagicMapping.class,
-					ScrollOfRage.class,
-					ScrollOfRetribution.class,
-					ScrollOfTerror.class,
-					ScrollOfTransmutation.class
+					ScrollOfTransmutation.class,
+					Dungeon.selectedScrolls.get(0),
+					Dungeon.selectedScrolls.get(1),
+					Dungeon.selectedScrolls.get(2),
+					Dungeon.selectedScrolls.get(3),
+					Dungeon.selectedScrolls.get(4),
 			};
-			SCROLL.defaultProbs  = new float[]{ 0, 3, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1 };
-			SCROLL.defaultProbs2 = new float[]{ 0, 3, 2, 2, 1, 2, 1, 1, 1, 1, 1, 0 };
+			SCROLL.defaultProbs = new float[]{ 0, 3, 2, 2, 1, 1, 1, 1, 2, 2};
 			SCROLL.probs = SCROLL.defaultProbs.clone();
-			
+			System.out.println("Dungeon.selectedScrolls: " + Dungeon.selectedScrolls);
+
 			STONE.classes = new Class<?>[]{
 					StoneOfEnchantment.class,
 					StoneOfIntuition.class,     //1 additional stone is also dropped on floors 1-3
@@ -618,6 +611,8 @@ public class Generator {
 					for (int i = 0; i < cat.defaultProbs.length; i++){
 						cat.defaultProbsTotal[i] = cat.defaultProbs[i] + cat.defaultProbs2[i];
 					}
+				} else {
+					cat.defaultProbsTotal = cat.defaultProbs;
 				}
 			}
 		}
@@ -740,15 +735,17 @@ public class Generator {
 					cat.dropped++;
 				}
 
-				if (ExoticPotion.regToExo.containsKey(itemCls)){
-					if (Random.Float() < ExoticCrystals.consumableExoticChance()){
-						itemCls = ExoticPotion.regToExo.get(itemCls);
-					}
-				} else if (ExoticScroll.regToExo.containsKey(itemCls)){
-					if (Random.Float() < ExoticCrystals.consumableExoticChance()){
-						itemCls = ExoticScroll.regToExo.get(itemCls);
-					}
+				//Only gives 1 energy crystal for a stack of gold so the chances are lower
+				if (itemCls == Gold.class && Random.Float() < ExoticCrystals.goldToEnergyChance() * 0.5f){
+					itemCls = EnergyCrystal.class;
 				}
+
+				//If the potion is shielding, the corresponding seed should be Earthroot
+//				if (Dungeon.swapHealing) {
+//					if (itemCls == Sungrass.Seed.class) itemCls = Earthroot.Seed.class;
+//				} else {
+//					if (itemCls == Earthroot.Seed.class) itemCls = Sungrass.Seed.class;
+//				}
 
 				return ((Item) Reflection.newInstance(itemCls)).random();
 		}
@@ -768,14 +765,9 @@ public class Generator {
 		} else {
 			Class<?> itemCls = cat.classes[Random.chances(cat.defaultProbs)];
 
-			if (ExoticPotion.regToExo.containsKey(itemCls)){
-				if (Random.Float() < ExoticCrystals.consumableExoticChance()){
-					itemCls = ExoticPotion.regToExo.get(itemCls);
-				}
-			} else if (ExoticScroll.regToExo.containsKey(itemCls)){
-				if (Random.Float() < ExoticCrystals.consumableExoticChance()){
-					itemCls = ExoticScroll.regToExo.get(itemCls);
-				}
+			//Only gives 1 energy crystal for a stack of gold so the chances are lower
+			if (itemCls.equals(Gold.class) && Random.Float() < ExoticCrystals.goldToEnergyChance() * 0.5f ){
+				itemCls = EnergyCrystal.class;
 			}
 
 			return ((Item) Reflection.newInstance(itemCls)).random();

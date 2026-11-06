@@ -171,6 +171,10 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.HighGrass;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.WeakFloorRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.FlockTrap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GatewayTrap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GeyserTrap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TeleportationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
@@ -251,9 +255,7 @@ public class Hero extends Char {
 	
 	public int lvl = 1;
 	public int exp = 0;
-	
-	public int HTBoost = 0;
-	
+
 	private ArrayList<Mob> visibleEnemies;
 
 	//This list is maintained so that some logic checks can be skipped
@@ -274,14 +276,10 @@ public class Hero extends Char {
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
 
-		HT = 20 + 5*(lvl-1) + HTBoost;
+		HT = 20 + 5*(lvl-1);
 
 		float multiplier = RingOfVitality.HTMultiplier(this);
 		HT = Math.round(multiplier * HT);
-		
-		if (buff(ElixirOfMight.HTBoost.class) != null){
-			HT += buff(ElixirOfMight.HTBoost.class).boost();
-		}
 		
 		if (boostHP){
 			HP += Math.max(HT - curHT, 0);
@@ -315,7 +313,6 @@ public class Hero extends Char {
 	private static final String STRENGTH	= "STR";
 	private static final String LEVEL		= "lvl";
 	private static final String EXPERIENCE	= "exp";
-	private static final String HTBOOST     = "htboost";
 	private static final String CUSTOM_NAME = "customName";
 
 	@Override
@@ -338,8 +335,6 @@ public class Hero extends Char {
 		
 		bundle.put( LEVEL, lvl );
 		bundle.put( EXPERIENCE, exp );
-		
-		bundle.put( HTBOOST, HTBoost );
 
 		belongings.storeInBundle( bundle );
 	}
@@ -349,8 +344,6 @@ public class Hero extends Char {
 
 		lvl = bundle.getInt( LEVEL );
 		exp = bundle.getInt( EXPERIENCE );
-
-		HTBoost = bundle.getInt(HTBOOST);
 
 		super.restoreFromBundle( bundle );
 
@@ -1415,7 +1408,6 @@ public class Hero extends Char {
 						//1 hunger spent total
 						if (Dungeon.level.map[action.dst] == Terrain.WALL_DECO){
 							//only mine gold in CavesLevel
-							// Dungeon.depth < 16 && Dungeon.depth > 10
 							if (Dungeon.level instanceof CavesLevel) {
 								DarkGold gold = new DarkGold();
 								if (gold.doPickUp( Dungeon.hero )) {
@@ -2058,10 +2050,13 @@ public class Hero extends Char {
 				return false;
 			}
 
+			//Conditions required to show the trap warning dialogue
+			Trap trap = Dungeon.level.traps.get(step);
 			if (Dungeon.level.map[step] == Terrain.TRAP
 				&& (!flying || buff(Levitation.class) != null
 				&& buff(Levitation.class).detachesWithinDelay(delay / speed()))
-				&& (Trap.showWarning && Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) == null)) {
+				&& (Trap.showWarning && Dungeon.hero.buff(PhantomStopwatch.timeFreeze.class) == null)
+				&& !(trap instanceof GatewayTrap) && !(trap instanceof FlockTrap) && !(trap instanceof TeleportationTrap) && !(trap instanceof GeyserTrap)) {
 
 				Trap.heroStep(this, Dungeon.level.traps.get(step));
 				interrupt(); //TODO: this might cancel movement when it shouldn't
@@ -2254,11 +2249,7 @@ public class Hero extends Char {
 			if (lvl < MAX_LEVEL) {
 				lvl++;
 				levelUp = true;
-				
-				if (buff(ElixirOfMight.HTBoost.class) != null){
-					buff(ElixirOfMight.HTBoost.class).onLevelUp();
-				}
-				
+
 				updateHT( true );
 				attackSkill++;
 				defenseSkill++;

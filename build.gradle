@@ -14,8 +14,8 @@ allprojects {
         appName = 'Enchanted Pixel Dungeon'
         appPackageName = 'com.enchanted.enchantedpixeldungeon'
 
-        appVersionCode = 1002
-        appVersionName = '0.0.3'
+        appVersionCode = 1003
+        appVersionName = '0.0.4'
 
         appJavaCompatibility = JavaVersion.VERSION_11
 

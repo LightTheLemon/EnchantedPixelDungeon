@@ -26,10 +26,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ThiefSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -137,7 +139,8 @@ public class Thief extends Mob {
 	@Override
 	public int defenseProc(Char enemy, int damage) {
 		if (state == FLEEING) {
-			Dungeon.level.drop( new Gold(), pos ).sprite.drop();
+			Item loot = Random.Float() < ExoticCrystals.goldToEnergyChance() * 2f ? new EnergyCrystal() : new Gold();
+			Dungeon.level.drop( loot, pos ).sprite.drop();
 		}
 
 		return super.defenseProc(enemy, damage);

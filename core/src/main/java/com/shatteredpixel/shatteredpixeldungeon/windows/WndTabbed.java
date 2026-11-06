@@ -175,6 +175,7 @@ public class WndTabbed extends Window {
 			if (bg != null) {
 				bg.x = x;
 				bg.y = y;
+				bg.alpha(0.8f);
 				bg.size( width, height );
 			}
 		}

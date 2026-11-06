@@ -39,21 +39,21 @@ public class ExoticCrystals extends Trinket {
 	@Override
 	public String statsDesc() {
 		if (isIdentified()){
-			return Messages.get(this, "stats_desc", Messages.decimalFormat("#.##", 100*consumableExoticChance(buffedLvl())));
+			return Messages.get(this, "stats_desc", Messages.decimalFormat("#.##", 100* goldToEnergyChance(buffedLvl())));
 		} else {
-			return Messages.get(this, "typical_stats_desc", Messages.decimalFormat("#.##", 100*consumableExoticChance(0)));
+			return Messages.get(this, "typical_stats_desc", Messages.decimalFormat("#.##", 100* goldToEnergyChance(0)));
 		}
 	}
 
-	public static float consumableExoticChance(){
-		return consumableExoticChance(trinketLevel(ExoticCrystals.class));
+	public static float goldToEnergyChance(){
+		return goldToEnergyChance(trinketLevel(ExoticCrystals.class));
 	}
 
-	public static float consumableExoticChance( int level ){
+	public static float goldToEnergyChance(int level ){
 		if (level == -1){
 			return 0f;
 		} else {
-			return 0.2f + 0.2f*level;
+			return 0.25f + 0.25f*level;
 		}
 	}
 

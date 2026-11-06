@@ -29,7 +29,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.AlchemyPage;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.EmptyBottle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.BlankScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -71,7 +73,16 @@ public class LaboratoryRoom extends SpecialRoom {
 		} while (
 				level.map[pos] != Terrain.EMPTY_SP ||
 						level.heaps.get( pos ) != null);
-		level.drop( new EnergyCrystal().quantity(5), pos );
+		level.drop( new EnergyCrystal().quantity(3 + Random.Int(3)), pos );
+
+		Item ingredient = Random.Float() < 0.5f ? new EmptyBottle() : new BlankScroll();
+		int quantity = Random.Int(1, (3 + Dungeon.depth / 5));
+		do {
+			pos = level.pointToCell(random());
+		} while (
+				level.map[pos] != Terrain.EMPTY_SP ||
+						level.heaps.get( pos ) != null);
+		level.drop( ingredient.quantity(quantity), pos );
 
 		int n = Random.NormalIntRange( 1, 2 );
 		for (int i=0; i < n; i++) {

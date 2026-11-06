@@ -162,7 +162,7 @@ public class ArcaneResin extends Item {
 
 		@Override
 		public int cost(ArrayList<Item> ingredients) {
-			return 5;
+			return 6;
 		}
 
 		@Override

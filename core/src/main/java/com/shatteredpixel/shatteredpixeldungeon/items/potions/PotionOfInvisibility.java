@@ -22,13 +22,18 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SmokeScreen;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.PathFinder;
 
 public class PotionOfInvisibility extends Potion {
 
@@ -42,6 +47,29 @@ public class PotionOfInvisibility extends Potion {
 		Buff.prolong( hero, Invisibility.class, Invisibility.DURATION );
 		GLog.i( Messages.get(this, "invisible") );
 		Sample.INSTANCE.play( Assets.Sounds.MELD );
+	}
+
+	@Override
+	public void shatter( int cell ) {
+
+		splash( cell );
+		if (Dungeon.level.heroFOV[cell]) {
+			identify();
+
+			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
+			Sample.INSTANCE.play( Assets.Sounds.GAS );
+		}
+
+		int centerVolume = 90;
+		for (int i : PathFinder.NEIGHBOURS8){
+			if (!Dungeon.level.solid[cell+i]){
+				GameScene.add( Blob.seed( cell+i, 90, SmokeScreen.class ) );
+			} else {
+				centerVolume += 180;
+			}
+		}
+
+		GameScene.add( Blob.seed( cell, centerVolume, SmokeScreen.class ) );
 	}
 	
 	@Override

@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.RemainsItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.FileUtils;
@@ -214,6 +215,8 @@ public class Bones {
 
 						item = artifact;
 						
+					} else if (Random.Float() < ExoticCrystals.goldToEnergyChance()) {
+						item = new ExoticCrystals().quantity(1 + Dungeon.hero.lvl / 2);
 					} else {
 						item = new Gold(item.value());
 					}

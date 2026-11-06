@@ -35,13 +35,16 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.Brew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfDragonsBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfHoneyedHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCorrosiveGas;
@@ -49,6 +52,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShr
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfSnapFreeze;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStormClouds;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -128,13 +133,16 @@ public class Potion extends Item {
 	static{
 		canThrowPots.add(PotionOfPurity.class);
 		canThrowPots.add(PotionOfLevitation.class);
-		//canThrowPots.add(PotionOfHealing.class);
-		
+		canThrowPots.add(PotionOfHealing.class);
+		canThrowPots.add(PotionOfEnergy.class);
+		canThrowPots.add(PotionOfInvisibility.class);
+
 		//exotic
 		canThrowPots.add(PotionOfCleansing.class);
 		
 		//elixirs
-		canThrowPots.add(ElixirOfHoneyedHealing.class);
+		canThrowPots.add(ElixirOfDragonsBlood.class);
+		canThrowPots.add(ElixirOfIcyTouch.class);
 	}
 	
 	protected static ItemStatusHandler<Potion> handler;
@@ -215,10 +223,10 @@ public class Potion extends Item {
 	public String defaultAction() {
 		if (isKnown() && mustThrowPots.contains(this.getClass())) {
 			return AC_THROW;
-		} else if (isKnown() && canThrowPots.contains(this.getClass() )){
-			return AC_CHOOSE;
-		} else {
+		} else if ( isKnown() ){
 			return AC_DRINK;
+		} else {
+			return AC_CHOOSE;
 		}
 	}
 	
@@ -319,7 +327,6 @@ public class Potion extends Item {
 
 			super.onThrow(cell);
 
-		//} else if (cell == hero.pos) {
 
 		} else {
 
@@ -484,10 +491,114 @@ public class Potion extends Item {
 		
 		@Override
 		public String info() {
-			return "";
+			return "A regular potion. Could be any type.";
 		}
 	}
-	
+
+	public static class PotionDuplication extends Recipe {
+
+		@Override
+		public boolean testIngredients(ArrayList<Item> ingredients) {
+			boolean potionOrSeed = false;
+			boolean template = false;
+
+			for (Item i : ingredients){
+				if (i instanceof Potion || i instanceof Plant.Seed) {
+					potionOrSeed = true;
+				} else if (i instanceof EmptyBottle) {
+					template = true;
+				}
+			}
+
+			return potionOrSeed && template;
+		}
+
+		@Override
+		public int cost(ArrayList<Item> ingredients) {
+
+			int cost = 4;
+
+			ingredients.get(0).isIdentified();
+			for (Item i : ingredients){
+				if (i.isIdentified()) {
+					if (i instanceof PotionOfExperience) {
+						cost += 4;
+					} else if (i instanceof PotionOfHealing) {
+						cost += 4;
+					}
+				}
+				if (i instanceof PotionOfStrength) {
+					cost += 8;
+				}
+			}
+
+			return cost;
+		}
+
+		@Override
+		public Item brew(ArrayList<Item> ingredients) {
+
+			Item potion = null;
+
+			for (Item i : ingredients){
+
+				if (i instanceof EmptyBottle) {
+					i.quantity(i.quantity() - 1);
+				}
+
+				if (i instanceof Potion) {
+					potion = i;
+					potion.quantity(potion.quantity() + 1);
+				}
+
+				if (i instanceof Plant.Seed) {
+					i.quantity(i.quantity() - 1);
+					potion = Reflection.newInstance(SeedToPotion.types.get(i.getClass()));
+				}
+
+			}
+
+			return potion;
+		}
+
+		@Override
+		public Item sampleOutput(ArrayList<Item> ingredients) {
+
+			for (Item i : ingredients){
+
+				if (i instanceof Plant.Seed || i instanceof Potion) {
+					return new WndBag.Placeholder(i instanceof Potion ? i.image() : ItemSpriteSheet.POTION_HOLDER){
+
+						@Override
+						public String name() {
+							if (i instanceof Plant.Seed) {
+								Item potion = Reflection.newInstance(SeedToPotion.types.get(i.getClass()));
+								System.out.println(potion);
+								return Messages.get(potion, "name");
+							} else {
+								return i.name();
+							}
+						}
+
+						@Override
+						public String info() {
+							if (i instanceof Plant.Seed) {
+								Item potion = Reflection.newInstance(SeedToPotion.types.get(i.getClass()));
+								return Messages.get(potion, "desc");
+							} else {
+								return i.desc();
+							}
+						}
+
+					};
+				}
+			}
+
+			return null;
+		}
+	}
+
+
 	public static class SeedToPotion extends Recipe {
 		
 		public static HashMap<Class<?extends Plant.Seed>, Class<?extends Potion>> types = new HashMap<>();
@@ -503,7 +614,7 @@ public class Potion extends Item {
 			types.put(Starflower.Seed.class,    PotionOfExperience.class);
 			types.put(Stormvine.Seed.class,     PotionOfLevitation.class);
 			types.put(Sungrass.Seed.class,      PotionOfHealing.class);
-			types.put(Swiftthistle.Seed.class,  PotionOfHaste.class);
+			types.put(Swiftthistle.Seed.class,  PotionOfEnergy.class);
 		}
 		
 		@Override

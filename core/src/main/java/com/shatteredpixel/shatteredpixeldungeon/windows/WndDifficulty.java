@@ -25,7 +25,7 @@ public class WndDifficulty extends Window {
     private RenderedTextBlock armorStats = PixelScene.renderTextBlock(( String.valueOf( "Armor effectiveness: " + 100 * Math.round((getDifficulty() / -4) + 1.25f)) + "%"), 5 );
     private RenderedTextBlock bossStats = PixelScene.renderTextBlock(( String.valueOf( "Boss health: " + 100 * Math.round((getDifficulty() / 8f) + 0.875f) + "%")), 5 );
     private RenderedTextBlock foodStats = PixelScene.renderTextBlock(( String.valueOf( "Food effectiveness: " + Math.round( 100 / getDifficulty())) + "%"), 5);
-    private RenderedTextBlock potionStats = PixelScene.renderTextBlock(String.valueOf("Potion of health healing: " + Math.round(100 * (getDifficulty() / -1.6 ) + 1.63)) + "%", 5);
+    private RenderedTextBlock potionStats = PixelScene.renderTextBlock(String.valueOf("Potion of health healing: " + Math.round(100 * (getDifficulty() / -1.5 ) + 1.67)) + "%", 5);
     private RenderedTextBlock championStats = PixelScene.renderTextBlock(( String.valueOf( "Hostile champion spawn rate: " + Math.round(1f / (17f - (3 * Dungeon.difficulty)))) + "%"), 5 );
     private RenderedTextBlock dewdropStats = PixelScene.renderTextBlock(( String.valueOf( "Dewdrop rate: " + Math.round(25 * Math.min(1.5f, Math.max(0f, ( getDifficulty() / -2f ) + 1.5f))) + "%")), 5 );
     private RenderedTextBlock plantStats = PixelScene.renderTextBlock( String.valueOf( "Seeds do not sprout."), 5 );
@@ -165,7 +165,7 @@ public class WndDifficulty extends Window {
                     0,
                     60
             );
-            potionStats.text(String.valueOf("Potion of health healing: " + Math.round(100 * ((getDifficulty() / -1.6 ) + 1.63))) + "%", WIDTH);
+            potionStats.text(String.valueOf("Potion of health healing: " + Math.round(100 * ((getDifficulty() / -1.5 ) + 1.67))) + "%", WIDTH);
 
         } else {
             remove(foodStats);

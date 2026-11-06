@@ -21,13 +21,16 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Alchemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.EmptyBottle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
@@ -37,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticG
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.BlankScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -56,10 +60,9 @@ public class SecretLaboratoryRoom extends SecretRoom {
 		potionChances.put(PotionOfFrost.class,          3f);
 		potionChances.put(PotionOfLiquidFlame.class,    3f);
 		potionChances.put(PotionOfToxicGas.class,       3f);
-		potionChances.put(PotionOfHaste.class,          4f);
+		potionChances.put(PotionOfEnergy.class,         4f);
 		potionChances.put(PotionOfInvisibility.class,   4f);
 		potionChances.put(PotionOfLevitation.class,     4f);
-		potionChances.put(PotionOfParalyticGas.class,   4f);
 		potionChances.put(PotionOfPurity.class,         4f);
 		potionChances.put(PotionOfExperience.class,     6f);
 	}
@@ -80,12 +83,14 @@ public class SecretLaboratoryRoom extends SecretRoom {
 		do {
 			pos = level.pointToCell(random());
 		} while (level.map[pos] != Terrain.EMPTY_SP || level.heaps.get( pos ) != null);
-		level.drop( new EnergyCrystal().quantity(Random.IntRange(3, 5)), pos );
+		level.drop( new EnergyCrystal().quantity(Random.IntRange(4, 6)), pos );
 
+		Item ingredient = Random.Float() < 0.5f ? new EmptyBottle() : new BlankScroll();
+		int quantity = Random.Int(1, (3 + Dungeon.depth / 5));
 		do {
 			pos = level.pointToCell(random());
 		} while (level.map[pos] != Terrain.EMPTY_SP || level.heaps.get( pos ) != null);
-		level.drop( new EnergyCrystal().quantity(Random.IntRange(3, 5)), pos );
+		level.drop( ingredient.quantity(quantity), pos );
 
 		int n = Random.IntRange( 2, 3 );
 		HashMap<Class<? extends Potion>, Float> chances = new HashMap<>(potionChances);
@@ -96,12 +101,6 @@ public class SecretLaboratoryRoom extends SecretRoom {
 			
 			Class<?extends Potion> potionCls = Random.chances(chances);
 			chances.put(potionCls, 0f);
-
-			if (ExoticPotion.regToExo.containsKey(potionCls)){
-				if (Random.Float() < ExoticCrystals.consumableExoticChance()){
-					potionCls = ExoticPotion.regToExo.get(potionCls);
-				}
-			}
 
 			level.drop( Reflection.newInstance(potionCls), pos );
 		}

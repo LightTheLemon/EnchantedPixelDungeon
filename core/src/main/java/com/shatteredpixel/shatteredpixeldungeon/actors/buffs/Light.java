@@ -33,7 +33,7 @@ public class Light extends FlavourBuff {
 	}
 
 	public static final float DURATION	= 250f;
-	public static final int DISTANCE	= 6;
+	public static final int DISTANCE	= Math.min(10, 4 + Dungeon.brightnessDifficultyMultiplier());
 	
 	@Override
 	public boolean attachTo( Char target ) {

@@ -45,7 +45,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.EmptyBottle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.BlankScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
@@ -267,12 +269,15 @@ public class ShopRoom extends SpecialRoom {
 		
 		itemsToSpawn.add( TippedDart.randomTipped(2) );
 
-		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));
+		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 4)));
 
 		Bag bag = ChooseBag(Dungeon.hero.belongings);
 		if (bag != null) {
 			itemsToSpawn.add(bag);
 		}
+
+		Item potionIngredient = Random.Float() > 0.5f ? new EmptyBottle() : new BlankScroll();
+		itemsToSpawn.add( potionIngredient.quantity(Random.IntRange(2, 4)) );
 
 		itemsToSpawn.add( new PotionOfHealing() );
 		itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.POTION ) );

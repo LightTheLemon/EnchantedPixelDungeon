@@ -48,7 +48,6 @@ public class GeyserTrap extends Trap {
 		color = TEAL;
 		shape = DIAMOND;
 
-		showWarning = false;
 	}
 
 	//Same method but without repeating the show warning
