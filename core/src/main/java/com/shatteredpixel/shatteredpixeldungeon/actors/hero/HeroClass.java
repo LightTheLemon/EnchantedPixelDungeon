@@ -79,6 +79,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnc
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.UnstableSpell;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.AmuletShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.HailMary;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
@@ -217,18 +218,17 @@ public enum HeroClass {
 //		Pickaxe pickaxe = new Pickaxe();
 //		pickaxe.collect();
 
-		ExoticCrystals ex = new ExoticCrystals();
-		ex.collect();
-
-		VialOfBlood vial = new VialOfBlood();
-		vial.collect();
-
-		EmptyBottle bottle = new EmptyBottle();
-		bottle.collect();
-
-		BlankScroll blank = new BlankScroll();
-		blank.collect();
-
+//		ExoticCrystals ex = new ExoticCrystals();
+//		ex.collect();
+//
+//		VialOfBlood vial = new VialOfBlood();
+//		vial.collect();
+//
+//		EmptyBottle bottle = new EmptyBottle();
+//		bottle.collect();
+//
+//		BlankScroll blank = new BlankScroll();
+//		blank.collect();
 
 //		RingOfMana mana = new RingOfMana();
 //		mana.identify().collect();
@@ -244,19 +244,19 @@ public enum HeroClass {
 //		exp.quantity(100);
 //		exp.identify().collect();
 
+//		HailMary hail = new HailMary();
+//		hail.collect();
+
 //		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
 //		upgrade.quantity(100);
 //		upgrade.collect();
 
-		ScrollOfDivination div = new ScrollOfDivination();
-		div.quantity(100);
-		div.collect();
+//		ScrollOfDivination div = new ScrollOfDivination();
+//		div.quantity(100);
+//		div.collect();
 
-		UnstableSpellbook spellbook = new UnstableSpellbook();
-		spellbook.collect();
-
-		UnstableSpell spell = new UnstableSpell();
-		spell.collect();
+//		UnstableSpellbook spellbook = new UnstableSpellbook();
+//		spellbook.collect();
 
 //		CapeOfThorns cape = new CapeOfThorns();
 //		cape.collect();

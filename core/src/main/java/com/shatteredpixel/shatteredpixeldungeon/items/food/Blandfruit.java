@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibili
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLevitation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
@@ -121,18 +120,18 @@ public class Blandfruit extends Food {
 
 	@Override
 	public String name() {
-		if (potionAttrib instanceof PotionOfHealing)        return Messages.get(this, "sunfruit");
-		if (potionAttrib instanceof PotionOfStrength)       return Messages.get(this, "rotfruit");
-		if (potionAttrib instanceof PotionOfParalyticGas)   return Messages.get(this, "earthfruit");
-		if (potionAttrib instanceof PotionOfInvisibility)   return Messages.get(this, "blindfruit");
-		if (potionAttrib instanceof PotionOfLiquidFlame)    return Messages.get(this, "firefruit");
-		if (potionAttrib instanceof PotionOfFrost)          return Messages.get(this, "icefruit");
-		if (potionAttrib instanceof PotionOfMindVision)     return Messages.get(this, "fadefruit");
-		if (potionAttrib instanceof PotionOfToxicGas)       return Messages.get(this, "sorrowfruit");
-		if (potionAttrib instanceof PotionOfLevitation)     return Messages.get(this, "stormfruit");
-		if (potionAttrib instanceof PotionOfPurity)         return Messages.get(this, "dreamfruit");
-		if (potionAttrib instanceof PotionOfExperience)     return Messages.get(this, "starfruit");
-		if (potionAttrib instanceof PotionOfEnergy)          return Messages.get(this, "swiftfruit");
+		if (potionAttrib instanceof PotionOfHealing)                            return Messages.get(this, "sunfruit");
+		if (potionAttrib instanceof PotionOfStrength)                           return Messages.get(this, "rotfruit");
+		if (potionAttrib instanceof PotionOfInvisibility)                       return Messages.get(this, "blindfruit");
+		if (potionAttrib instanceof PotionOfLiquidFlame)                        return Messages.get(this, "firefruit");
+		if (potionAttrib instanceof PotionOfFrost)                              return Messages.get(this, "icefruit");
+		if (potionAttrib instanceof PotionOfMindVision)                         return Messages.get(this, "fadefruit");
+		if (potionAttrib instanceof PotionOfToxicGas && !Dungeon.swapGas)       return Messages.get(this, "sorrowfruit");
+		if (potionAttrib instanceof PotionOfToxicGas && Dungeon.swapGas)        return Messages.get(this, "earthfruit");
+		if (potionAttrib instanceof PotionOfLevitation)                         return Messages.get(this, "stormfruit");
+		if (potionAttrib instanceof PotionOfPurity)                             return Messages.get(this, "dreamfruit");
+		if (potionAttrib instanceof PotionOfExperience)                         return Messages.get(this, "starfruit");
+		if (potionAttrib instanceof PotionOfEnergy)                             return Messages.get(this, "swiftfruit");
 		return super.name();
 	}
 
@@ -144,8 +143,7 @@ public class Blandfruit extends Food {
 			String desc = Messages.get(this, "desc_cooked") + "\n\n";
 			if (potionAttrib instanceof PotionOfFrost
 				|| potionAttrib instanceof PotionOfLiquidFlame
-				|| potionAttrib instanceof PotionOfToxicGas
-				|| potionAttrib instanceof PotionOfParalyticGas) {
+				|| potionAttrib instanceof PotionOfToxicGas) {
 				desc += Messages.get(this, "desc_throw");
 			} else {
 				desc += Messages.get(this, "desc_eat");
@@ -170,18 +168,18 @@ public class Blandfruit extends Food {
 
 		potionAttrib.image = ItemSpriteSheet.BLANDFRUIT;
 
-		if (potionAttrib instanceof PotionOfHealing)        potionGlow = new ItemSprite.Glowing( 0x2EE62E );
-		if (potionAttrib instanceof PotionOfStrength)       potionGlow = new ItemSprite.Glowing( 0xCC0022 );
-		if (potionAttrib instanceof PotionOfParalyticGas)   potionGlow = new ItemSprite.Glowing( 0x67583D );
-		if (potionAttrib instanceof PotionOfInvisibility)   potionGlow = new ItemSprite.Glowing( 0xD9D9D9 );
-		if (potionAttrib instanceof PotionOfLiquidFlame)    potionGlow = new ItemSprite.Glowing( 0xFF7F00 );
-		if (potionAttrib instanceof PotionOfFrost)          potionGlow = new ItemSprite.Glowing( 0x66B3FF );
-		if (potionAttrib instanceof PotionOfMindVision)     potionGlow = new ItemSprite.Glowing( 0x919999 );
-		if (potionAttrib instanceof PotionOfToxicGas)       potionGlow = new ItemSprite.Glowing( 0xA15CE5 );
-		if (potionAttrib instanceof PotionOfLevitation)     potionGlow = new ItemSprite.Glowing( 0x1B5F79 );
-		if (potionAttrib instanceof PotionOfPurity)         potionGlow = new ItemSprite.Glowing( 0xC152AA );
-		if (potionAttrib instanceof PotionOfExperience)     potionGlow = new ItemSprite.Glowing( 0x404040 );
-		if (potionAttrib instanceof PotionOfEnergy)          potionGlow = new ItemSprite.Glowing( 0xCCBB00 );
+		if (potionAttrib instanceof PotionOfHealing)                       potionGlow = new ItemSprite.Glowing( 0x2EE62E );
+		if (potionAttrib instanceof PotionOfStrength)                      potionGlow = new ItemSprite.Glowing( 0xCC0022 );
+		if (potionAttrib instanceof PotionOfToxicGas && Dungeon.swapGas)   potionGlow = new ItemSprite.Glowing( 0x67583D );
+		if (potionAttrib instanceof PotionOfInvisibility)                  potionGlow = new ItemSprite.Glowing( 0xD9D9D9 );
+		if (potionAttrib instanceof PotionOfLiquidFlame)                   potionGlow = new ItemSprite.Glowing( 0xFF7F00 );
+		if (potionAttrib instanceof PotionOfFrost)                         potionGlow = new ItemSprite.Glowing( 0x66B3FF );
+		if (potionAttrib instanceof PotionOfMindVision)                    potionGlow = new ItemSprite.Glowing( 0x919999 );
+		if (potionAttrib instanceof PotionOfToxicGas && !Dungeon.swapGas)  potionGlow = new ItemSprite.Glowing( 0xA15CE5 );
+		if (potionAttrib instanceof PotionOfLevitation)                    potionGlow = new ItemSprite.Glowing( 0x1B5F79 );
+		if (potionAttrib instanceof PotionOfPurity)                        potionGlow = new ItemSprite.Glowing( 0xC152AA );
+		if (potionAttrib instanceof PotionOfExperience)                    potionGlow = new ItemSprite.Glowing( 0x404040 );
+		if (potionAttrib instanceof PotionOfEnergy)                        potionGlow = new ItemSprite.Glowing( 0xCCBB00 );
 
 		return this;
 	}
@@ -195,7 +193,6 @@ public class Blandfruit extends Food {
 			
 		} else if (potionAttrib instanceof PotionOfLiquidFlame ||
 				potionAttrib instanceof PotionOfToxicGas ||
-				potionAttrib instanceof PotionOfParalyticGas ||
 				potionAttrib instanceof PotionOfFrost ||
 				potionAttrib instanceof PotionOfLevitation ||
 				potionAttrib instanceof PotionOfPurity) {

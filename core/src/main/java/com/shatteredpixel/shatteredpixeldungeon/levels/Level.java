@@ -126,7 +126,7 @@ import java.util.HashSet;
 
 public abstract class Level implements Bundlable {
 	
-	public static enum Feeling {
+	public enum Feeling {
 		NONE,
 		CHASM,
 		WATER,
@@ -258,7 +258,7 @@ public abstract class Level implements Bundlable {
 			}
 			if ( Dungeon.trinketCataNeeded() ){
 				Dungeon.LimitedDrops.TRINKET_CATA.drop();
-				addItemToSpawn( new TrinketCatalyst());
+				addItemToSpawn( Random.Float() < 0.5 ? Generator.random(Generator.Category.TRINKET) : new TrinketCatalyst() );
 			}
 			
 			if (Dungeon.depth > 1) {
@@ -782,12 +782,11 @@ public abstract class Level implements Bundlable {
 		float spawnChance = Random.Float();
 		Mob mob = createMob();
 		if (mob.state != mob.PASSIVE) {
-			//TODO: trinket could affect this like amulet shard
-			if (spawnChance < 0.1f) {
-				mob.state = mob.SLEEPING;
-			} else if (spawnChance < 0.2f) {
+			if (spawnChance < 0.05f) {
 				mob.state = mob.SLEEPING;
 				Buff.affect(mob, MagicalSleep.class);
+			} else if (spawnChance < 0.1f) {
+				mob.state = mob.SLEEPING;
 			} else {
 				mob.state = mob.WANDERING;
 			}

@@ -73,7 +73,7 @@ public class WondrousResin extends Trinket {
 
 	public static float extraCurseEffectChance( int level ){
 		if (level >= 0){
-			return 0.1f + 0.1f * level;
+			return 0.15f + 0.15f * level;
 		} else {
 			return 0;
 		}

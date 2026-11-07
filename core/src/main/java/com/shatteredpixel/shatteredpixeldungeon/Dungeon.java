@@ -235,9 +235,8 @@ public class Dungeon {
 	public static boolean swapHealing;
 	public static boolean swapStrength;
 	public static boolean swapExperience;
+	public static boolean swapGas;
 	public static List<Class<? extends Scroll>> selectedScrolls = new ArrayList<>();
-
-	public static String[] scrollNames;
 
 	//we initialize the seed separately so that things like interlevelscene can access it early
 	public static void initSeed(){
@@ -263,6 +262,8 @@ public class Dungeon {
 		swapStrength = Random.Float() < 0.5f;
 
 		swapExperience = Random.Float() < 0.5f;
+
+		swapGas = Random.Float() < 0.5f;
 
     }
 
@@ -707,6 +708,7 @@ public class Dungeon {
 	private static final String SWAP_HEALING = "swap_healing";
 	private static final String SWAP_STRENGTH = "swap_strength";
 	private static final String SWAP_EXPERIENCE = "swap_experience";
+	private static final String SWAP_GAS = "swap_gas";
 	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
 	private static final String HERO		= "hero";
 	private static final String DEPTH		= "depth";
@@ -739,6 +741,7 @@ public class Dungeon {
 			bundle.put(SWAP_HEALING, swapHealing);
 			bundle.put(SWAP_STRENGTH, swapStrength);
 			bundle.put(SWAP_EXPERIENCE, swapExperience);
+			bundle.put(SWAP_GAS, swapGas);
 
 			bundle.put(SELECTED_SCROLLS_0, selectedScrolls.get(0).getName() );
 			bundle.put(SELECTED_SCROLLS_1, selectedScrolls.get(1).getName() );
@@ -887,6 +890,7 @@ public class Dungeon {
 		Dungeon.swapHealing = bundle.getBoolean(SWAP_HEALING);
 		Dungeon.swapStrength = bundle.getBoolean(SWAP_STRENGTH);
 		Dungeon.swapExperience = bundle.getBoolean(SWAP_EXPERIENCE);
+		Dungeon.swapGas = bundle.getBoolean(SWAP_GAS);
 
 		Dungeon.level = null;
 		Dungeon.depth = -1;

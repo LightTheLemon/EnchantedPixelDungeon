@@ -32,14 +32,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
@@ -225,6 +222,10 @@ public abstract class Scroll extends Item {
 						//"Yes" option
 
 						if (stoneClass != null) {
+							if (!scroll.isIdentified()) {
+								scroll.identify();
+								GLog.i("You've identified the scroll as " + Messages.titleCase(scroll.getClass().getSimpleName()));
+							}
 							curItem.detach(curUser.belongings.backpack);
 
 							Item runestone = Reflection.newInstance(stoneClass);
@@ -399,12 +400,6 @@ public abstract class Scroll extends Item {
 		}
 		
 		@Override
-		public boolean isSimilar(Item item) {
-			return ExoticScroll.regToExo.containsKey(item.getClass())
-					|| ExoticScroll.regToExo.containsValue(item.getClass());
-		}
-		
-		@Override
 		public void doRead() {}
 		
 		@Override
@@ -436,10 +431,13 @@ public abstract class Scroll extends Item {
 			int cost = 6;
 
 			for (Item i : ingredients){
+				if (!i.isIdentified()) {
+					cost -= 2;
+				}
 				if (i instanceof ScrollOfUpgrade) {
-					cost += 10;
-				} else if (i instanceof ScrollOfTransmutation) {
 					cost += 6;
+				} else if (i instanceof ScrollOfTransmutation) {
+					cost += 4;
 				}
 			}
 
@@ -455,9 +453,7 @@ public abstract class Scroll extends Item {
 
 				if (i instanceof BlankScroll) {
 					i.quantity(i.quantity() - 1);
-				}
-
-				if (i instanceof Scroll) {
+				} else if (i instanceof Scroll) {
 					scroll = i;
 					i.quantity(i.quantity() + 1);
 				}
@@ -473,7 +469,7 @@ public abstract class Scroll extends Item {
 
 				if (i instanceof Scroll) {
 
-					return i.quantity(2);
+					return i.duplicate().quantity(2);
 				}
 
 			}
@@ -518,17 +514,6 @@ public abstract class Scroll extends Item {
 		@Override
 		public Item brew(ArrayList<Item> ingredients) {
 
-			//			Scroll s = (Scroll) ingredients.get(0);
-
-			//			return Reflection.newInstance(stones.get(s.getClass())).quantity(2);
-
-//
-//			if (ingredients.get(0) instanceof Runestone) {
-//				Runestone stone = (Runestone) ingredients.get(0);
-//			} else if (ingredients.get(1) instanceof Runestone) {
-//				Runestone stone = (Runestone) ingredients.get(1);
-//			}
-
 			Item stone = null;
 
 			for (Item i : ingredients){
@@ -562,25 +547,6 @@ public abstract class Scroll extends Item {
 		}
 	}
 	public static class ScrollToStone extends Recipe {
-
-//		private static HashMap<Class<?extends Scroll>, Class<?extends Runestone>> stones = new HashMap<>();
-//		static {
-//			stones.put(ScrollOfIdentify.class,       StoneOfIntuition.class);
-//			stones.put(ScrollOfLullaby.class,        StoneOfDeepSleep.class);
-//			stones.put(ScrollOfMagicMapping.class,   StoneOfClairvoyance.class);
-//			stones.put(ScrollOfMirrorImage.class,    StoneOfFlock.class);
-//			stones.put(ScrollOfRetribution.class,    StoneOfBlast.class);
-//			stones.put(ScrollOfRage.class,           StoneOfAggression.class);
-//			stones.put(ScrollOfRecharging.class,     StoneOfShock.class);
-//			stones.put(ScrollOfRemoveCurse.class,    StoneOfDetectMagic.class);
-//			stones.put(ScrollOfTeleportation.class,  StoneOfBlink.class);
-//			stones.put(ScrollOfTerror.class,         StoneOfFear.class);
-//			stones.put(ScrollOfTransmutation.class,  StoneOfAugmentation.class);
-//			stones.put(ScrollOfUpgrade.class,        StoneOfEnchantment.class);
-//			stones.put(ScrollOfAntiMagic.class,      StoneOfDetectMagic.class);
-//			stones.put(ScrollOfMysticalEnergy.class, StoneOfShock.class);
-//			stones.put(ScrollOfPsionicBlast.class,   StoneOfBlast.class);
-//		}
 
 		@Override
 		public boolean testIngredients(ArrayList<Item> ingredients) {

@@ -142,6 +142,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.HailMary;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ThirteenLeafClover;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCharm;
@@ -432,9 +433,9 @@ public class Hero extends Char {
 				|| (tier == 3 && subClass == HeroSubClass.NONE)
 				|| (tier == 4 && armorAbility == null)) {
 			return 0;
-		} else if (buff(PotionOfDivineInspiration.DivineInspirationTracker.class) != null
-				&& buff(PotionOfDivineInspiration.DivineInspirationTracker.class).boostCount(tier) > 0) {
-			return buff(PotionOfDivineInspiration.DivineInspirationTracker.class).boostCount(tier) * 2;
+		} else if (buff(PotionOfExperience.DivineInspirationTracker.class) != null
+				&& buff(PotionOfExperience.DivineInspirationTracker.class).boostCount(tier) > 0) {
+			return buff(PotionOfExperience.DivineInspirationTracker.class).boostCount(tier) * 2;
 		} else {
 			return 0;
 		}
@@ -2369,7 +2370,7 @@ public class Hero extends Char {
 
 
 				PotionOfHealing.cure(this);
-				Buff.prolong(this, Invulnerability.class, Invulnerability.DURATION * 2);
+				Buff.prolong(this, Invulnerability.class, Invulnerability.DURATION);
 
 				SpellSprite.show(this, SpellSprite.ANKH);
 				GameScene.flash(0x80FFFF40);
@@ -2410,6 +2411,29 @@ public class Hero extends Char {
 					sacMark.detach();
 				}
 
+			}
+			return;
+		}
+
+		if (Random.Float() < HailMary.revivalChance()) {
+			interrupt();
+
+			PotionOfHealing.cure(this);
+			Buff.prolong(this, Levitation.class, Levitation.DURATION);
+			Buff.prolong(this, Bless.class, Bless.DURATION);
+			this.HP = HT;
+			Dungeon.hero.buff( Hunger.class ).satisfy( Hunger.HUNGRY / 3 );
+
+			GameScene.flash(0xFFFFFFFF, false);
+			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+			GLog.w(Messages.get(HailMary.class, "revive"));
+			Catalog.countUse(HailMary.class);
+
+			for (Char ch : Actor.chars()) {
+				if (ch instanceof DriedRose.GhostHero) {
+					((DriedRose.GhostHero) ch).sayAnhk();
+					return;
+				}
 			}
 			return;
 		}

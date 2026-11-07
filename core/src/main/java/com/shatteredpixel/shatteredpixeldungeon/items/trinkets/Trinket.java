@@ -69,7 +69,7 @@ public abstract class Trinket extends Item {
 	public abstract String statsDesc();
 
 	public int energyVal() {
-		return 5;
+		return 4 + level() * 4;
 	}
 
 	@Override
@@ -104,6 +104,11 @@ public abstract class Trinket extends Item {
 			return "";
 		}
 
+	}
+
+	@Override
+	public boolean isIdentified() {
+		return true;
 	}
 
 	public static class UpgradeTrinket extends Recipe {

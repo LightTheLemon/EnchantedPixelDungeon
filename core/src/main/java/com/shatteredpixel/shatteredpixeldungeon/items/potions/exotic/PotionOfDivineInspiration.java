@@ -67,7 +67,7 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 
 		GameScene.show(new WndOptions(
 				new ItemSprite(this),
-				Messages.get(PotionOfExperience.class, "alt_name"),
+				Messages.titleCase(Messages.get(PotionOfExperience.class, "alt_name")),
 				Messages.get(PotionOfDivineInspiration.class, "select_tier"),
 				Messages.titleCase(Messages.get(TalentsPane.class, "tier", 1)),
 				Messages.titleCase(Messages.get(TalentsPane.class, "tier", 2)),
@@ -84,7 +84,7 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 				super.onSelect(index);
 
 				if (index != -1){
-					Buff.affect(curUser, DivineInspirationTracker.class).setBoosted(index+1);
+					//Buff.affect(curUser, DivineInspirationTracker.class).setBoosted(index+1);
 
 					if (!identifiedByUse) {
 						curItem.detach(curUser.belongings.backpack);
@@ -128,37 +128,5 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 
 	}
 
-	public static class DivineInspirationTracker extends Buff {
-
-		{
-			type = buffType.POSITIVE;
-			revivePersists = true;
-		}
-
-		private int[] boostedTiers = new int[5];
-
-		private static final String BOOSTED_TIERS = "boosted_tiers";
-
-		@Override
-		public void storeInBundle(Bundle bundle) {
-			super.storeInBundle(bundle);
-			bundle.put(BOOSTED_TIERS, boostedTiers);
-		}
-
-		@Override
-		public void restoreFromBundle(Bundle bundle) {
-			super.restoreFromBundle(bundle);
-			boostedTiers = bundle.getIntArray(BOOSTED_TIERS);
-		}
-
-		public void setBoosted( int tier ){
-			boostedTiers[tier]++;
-		}
-
-		public int boostCount(int tier ){
-			return boostedTiers[tier];
-		}
-
-	}
 
 }

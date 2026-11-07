@@ -24,7 +24,9 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
@@ -32,7 +34,7 @@ import com.watabou.noosa.audio.Sample;
 public class PotionOfToxicGas extends Potion {
 
 	{
-		icon = ItemSpriteSheet.Icons.POTION_TOXICGAS;
+		icon = Dungeon.swapGas ? ItemSpriteSheet.Icons.POTION_PARAGAS : ItemSpriteSheet.Icons.POTION_TOXICGAS;
 	}
 
 	@Override
@@ -46,11 +48,31 @@ public class PotionOfToxicGas extends Potion {
 			Sample.INSTANCE.play( Assets.Sounds.GAS );
 		}
 
-		GameScene.add( Blob.seed( cell, 1000, ToxicGas.class ) );
+		var gasType = Dungeon.swapGas ? ParalyticGas.class : ToxicGas.class;
+		GameScene.add( Blob.seed( cell, 1000, gasType ) );
 	}
 	
 	@Override
 	public int value() {
 		return isKnown() ? 30 * quantity : super.value();
 	}
+
+	@Override
+	public String name() {
+		if (isKnown()) {
+			return Dungeon.swapGas ? Messages.get(this, "alt_name") : super.name();
+		} else {
+			return Messages.get(this, color);
+		}
+	}
+
+	@Override
+	public String desc() {
+		if (isKnown()) {
+			return Dungeon.swapGas ? Messages.get(this, "alt_desc") : super.name();
+		} else {
+			return Messages.get(this, "unknown_desc");
+		}
+	}
+
 }

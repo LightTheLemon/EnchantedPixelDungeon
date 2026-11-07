@@ -132,110 +132,6 @@ public class Item implements Bundlable {
 		return actions;
 	}
 
-	public static class ItemToEnergy extends Recipe {
-
-		@Override
-		public boolean testIngredients(ArrayList<Item> ingredients) {
-			boolean singleValidIngredient= false;
-
-			for (Item ingredient : ingredients){
-				if (ingredient.quantity() == 1) {
-					if (ingredient.energyVal() > 0) {
-						singleValidIngredient = true;
-					}
-				}
-			}
-
-			return singleValidIngredient;
-		}
-
-		@Override
-		public int cost(ArrayList<Item> ingredients) {
-			return 0;
-		}
-
-		@Override
-		public Item brew(ArrayList<Item> ingredients) {
-
-			Item energizable = ingredients.get(0);
-			Dungeon.energy += energizable.energyVal();
-			((AlchemyScene) ShatteredPixelDungeon.scene()).createEnergy();
-
-			energizable.quantity(energizable.quantity - 1 );
-
-			if (!energizable.isIdentified()){
-				((AlchemyScene) ShatteredPixelDungeon.scene()).showIdentify(energizable);
-			}
-
-			//TODO: This should be changed to not have the 0 which may be confusing. Also why is the energy value not updating?
-			return new EnergyCrystal().quantity(energizable.energyVal());
-		}
-
-		@Override
-		public Item sampleOutput(ArrayList<Item> ingredients) {
-
-			return new EnergyCrystal().quantity(ingredients.get(0).energyVal());
-		}
-	}
-
-	public static class ItemToIdentify extends Recipe {
-
-		@Override
-		public boolean testIngredients(ArrayList<Item> ingredients) {
-			boolean unidentifiedConsumable = false;
-			for (Item ingredient : ingredients){
-				if (ingredient.quantity() == 1) {
-					if ( !ingredient.isIdentified() && (ingredient instanceof Potion || ingredient instanceof Scroll)) {
-						unidentifiedConsumable = true;
-					}
-				}
-			}
-
-			return unidentifiedConsumable;
-		}
-
-		@Override
-		public int cost(ArrayList<Item> ingredients) {
-			return 4;
-		}
-
-		@Override
-		public Item brew(ArrayList<Item> ingredients) {
-			ingredients.get(0).identify();
-			return ingredients.get(0);
-		}
-
-		@Override
-		public Item sampleOutput(ArrayList<Item> ingredients) {
-
-			return new WndBag.Placeholder(ingredients.get(0).image){
-
-				@Override
-				public String name() {
-					if (ingredients.get(0) instanceof Potion ) {
-						return Messages.get(Potion.class, "id_name");
-					} else if (ingredients.get(0) instanceof Scroll) {
-						return Messages.get(Scroll.class, "id_name");
-					} else {
-						return super.name();
-					}
-				}
-
-				@Override
-				public String info() {
-
-					if (ingredients.get(0) instanceof Potion ) {
-						return Messages.get(Potion.class, "id_desc");
-					} else if (ingredients.get(0) instanceof Scroll) {
-						return Messages.get(Scroll.class, "id_desc");
-					} else {
-						return super.name();
-					}
-				}
-			};
-		}
-	}
-
 	public String actionName(String action, Hero hero){
 		return Messages.get(this, "ac_" + action);
 	}
@@ -665,7 +561,108 @@ public class Item implements Bundlable {
 
 		return desc();
 	}
-	
+	public static class ItemToEnergy extends Recipe {
+
+		@Override
+		public boolean testIngredients(ArrayList<Item> ingredients) {
+			boolean singleValidIngredient= false;
+
+			for (Item ingredient : ingredients){
+				if (ingredient.quantity() == 1) {
+					if (ingredient.energyVal() > 0) {
+						singleValidIngredient = true;
+					}
+				}
+			}
+
+			return singleValidIngredient;
+		}
+
+		@Override
+		public int cost(ArrayList<Item> ingredients) {
+			return 0;
+		}
+
+		@Override
+		public Item brew(ArrayList<Item> ingredients) {
+
+			Item energizable = ingredients.get(0);
+			Dungeon.energy += energizable.energyVal();
+			((AlchemyScene) ShatteredPixelDungeon.scene()).createEnergy();
+
+			energizable.quantity(energizable.quantity - 1 );
+
+			if (!energizable.isIdentified()){
+				((AlchemyScene) ShatteredPixelDungeon.scene()).showIdentify(energizable);
+			}
+
+			return new EnergyCrystal().quantity(energizable.energyVal());
+		}
+
+		@Override
+		public Item sampleOutput(ArrayList<Item> ingredients) {
+
+			return new EnergyCrystal().quantity(ingredients.get(0).energyVal());
+		}
+	}
+	public static class ItemToIdentify extends Recipe {
+
+		@Override
+		public boolean testIngredients(ArrayList<Item> ingredients) {
+			boolean unidentifiedConsumable = false;
+			for (Item ingredient : ingredients){
+				if (ingredient.quantity() == 1) {
+					if ( !ingredient.isIdentified() && (ingredient instanceof Potion || ingredient instanceof Scroll)) {
+						unidentifiedConsumable = true;
+					}
+				}
+			}
+
+			return unidentifiedConsumable;
+		}
+
+		@Override
+		public int cost(ArrayList<Item> ingredients) {
+			return 4;
+		}
+
+		@Override
+		public Item brew(ArrayList<Item> ingredients) {
+			ingredients.get(0).identify();
+			return ingredients.get(0);
+		}
+
+		@Override
+		public Item sampleOutput(ArrayList<Item> ingredients) {
+
+			return new WndBag.Placeholder(ingredients.get(0).image){
+
+				@Override
+				public String name() {
+					if (ingredients.get(0) instanceof Potion ) {
+						return Messages.get(Potion.class, "id_name");
+					} else if (ingredients.get(0) instanceof Scroll) {
+						return Messages.get(Scroll.class, "id_name");
+					} else {
+						return super.name();
+					}
+				}
+
+				@Override
+				public String info() {
+
+					if (ingredients.get(0) instanceof Potion ) {
+						return Messages.get(Potion.class, "id_desc");
+					} else if (ingredients.get(0) instanceof Scroll) {
+						return Messages.get(Scroll.class, "id_desc");
+					} else {
+						return super.name();
+					}
+				}
+			};
+		}
+	}
+
 	public String desc() {
 		return Messages.get(this, "desc");
 	}

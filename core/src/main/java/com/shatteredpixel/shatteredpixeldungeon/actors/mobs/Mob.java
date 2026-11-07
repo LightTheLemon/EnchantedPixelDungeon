@@ -137,10 +137,11 @@ public abstract class Mob extends Char {
 		if (enemy != null) enemy.HP = (int) (enemy.HP * ( 1 + Random.Float() - 0.5f) );
 
 		float chance = Random.Float();
-		if (chance < 0.04f && !Char.hasProp(this.enemy, Char.Property.MINIBOSS) && !Char.hasProp(this.enemy, Char.Property.BOSS) && !(Dungeon.level instanceof VaultLevel) ) {
+		boolean bossType = Char.hasProp(this.enemy, Char.Property.MINIBOSS) || Char.hasProp(this.enemy, Char.Property.BOSS) || (Dungeon.level instanceof VaultLevel);
+		if (chance < 0.04f && !bossType) {
 			Buff.affect(this, MagicalSleep.class);
 			return SLEEPING;
-		} else if (chance < 0.12f) {
+		} else if (chance < 0.12f && !bossType) {
 			return HUNTING;
 		} else {
 			return SLEEPING;

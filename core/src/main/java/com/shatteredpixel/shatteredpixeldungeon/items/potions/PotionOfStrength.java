@@ -110,7 +110,7 @@ public class PotionOfStrength extends Potion {
 
 		@Override
 		public String textPrompt() {
-			return Messages.get(PotionOfMastery.class, "prompt");
+			return Messages.get(this, "prompt");
 		}
 
 		@Override
@@ -147,10 +147,10 @@ public class PotionOfStrength extends Potion {
 
 				if (item instanceof Weapon) {
 					((Weapon) item).masteryPotionBonus += 1;
-					GLog.p( Messages.get(PotionOfMastery.class, "weapon_easier") );
+					GLog.p( Messages.get(PotionOfStrength.class, "weapon_easier") );
 				} else if (item instanceof Armor) {
 					((Armor) item).masteryPotionBonus += 1;
-					GLog.p( Messages.get(PotionOfMastery.class, "armor_easier") );
+					GLog.p( Messages.get(PotionOfStrength.class, "armor_easier") );
 				}
 				updateQuickslot();
 
@@ -163,7 +163,7 @@ public class PotionOfStrength extends Potion {
 				identifiedByUse = false;
 
 				if (!anonymous) {
-					Catalog.countUse(PotionOfMastery.class);
+					Catalog.countUse(PotionOfStrength.class);
 					if (Random.Float() < talentChance) {
 						Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
 					}

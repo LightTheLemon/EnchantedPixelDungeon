@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHero;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class PotionOfExperience extends Potion {
@@ -85,8 +86,8 @@ public class PotionOfExperience extends Potion {
 
 			GameScene.show(new WndOptions(
 					new ItemSprite(this),
-					Messages.get(this, "alt_name"),
-					Messages.get(this, "select_tier"),
+					Messages.titleCase(Messages.get(PotionOfExperience.class, "alt_name")),
+					Messages.get(PotionOfExperience.class, "select_tier"),
 					Messages.titleCase(Messages.get(TalentsPane.class, "tier", 1)),
 					Messages.titleCase(Messages.get(TalentsPane.class, "tier", 2)),
 					Messages.titleCase(Messages.get(TalentsPane.class, "tier", 3)),
@@ -102,7 +103,7 @@ public class PotionOfExperience extends Potion {
 					super.onSelect(index);
 
 					if (index != -1){
-						Buff.affect(curUser, PotionOfDivineInspiration.DivineInspirationTracker.class).setBoosted(index+1);
+						Buff.affect(curUser, DivineInspirationTracker.class).setBoosted(index+1);
 
 						if (!identifiedByUse) {
 							curItem.detach(curUser.belongings.backpack);
@@ -123,7 +124,7 @@ public class PotionOfExperience extends Potion {
 						Sample.INSTANCE.playDelayed(Assets.Sounds.LEVELUP, 0.3f, 0.7f, 1.2f);
 						Sample.INSTANCE.playDelayed(Assets.Sounds.LEVELUP, 0.6f, 0.7f, 1.2f);
 						new Flare( 6, 32 ).color(0xFFFF00, true).show( curUser.sprite, 2f );
-						GLog.p(Messages.get(this, "bonus"));
+						GLog.p(Messages.get(PotionOfExperience.class, "bonus"));
 
 						if (!anonymous) {
 							Catalog.countUse(PotionOfExperience.class);
@@ -165,7 +166,7 @@ public class PotionOfExperience extends Potion {
 	public String name() {
 		if (isKnown()) {
 			if (Dungeon.swapExperience) {
-				return Messages.get(this, "alt_name");
+				return Messages.get(PotionOfExperience.class, "alt_name");
 			} else {
 				return super.name();
 			}
@@ -178,7 +179,7 @@ public class PotionOfExperience extends Potion {
 	public String desc() {
 		if (isKnown()) {
 			if (Dungeon.swapExperience) {
-				return Messages.get(this, "alt_desc");
+				return Messages.get(PotionOfExperience.class, "alt_desc");
 			} else {
 				return super.desc();
 			}
@@ -186,5 +187,39 @@ public class PotionOfExperience extends Potion {
 			return Messages.get(this, "unknown_desc");
 		}
 	}
+
+	public static class DivineInspirationTracker extends Buff {
+
+		{
+			type = buffType.POSITIVE;
+			revivePersists = true;
+		}
+
+		private int[] boostedTiers = new int[5];
+
+		private static final String BOOSTED_TIERS = "boosted_tiers";
+
+		@Override
+		public void storeInBundle(Bundle bundle) {
+			super.storeInBundle(bundle);
+			bundle.put(BOOSTED_TIERS, boostedTiers);
+		}
+
+		@Override
+		public void restoreFromBundle(Bundle bundle) {
+			super.restoreFromBundle(bundle);
+			boostedTiers = bundle.getIntArray(BOOSTED_TIERS);
+		}
+
+		public void setBoosted( int tier ){
+			boostedTiers[tier]++;
+		}
+
+		public int boostCount(int tier ){
+			return boostedTiers[tier];
+		}
+
+	}
+
 
 }

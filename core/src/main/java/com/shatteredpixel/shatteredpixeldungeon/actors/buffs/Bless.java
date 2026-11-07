@@ -25,7 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 
 public class Bless extends FlavourBuff {
 	
-	public static final float DURATION	= 25f;
+	public static final float DURATION	= 20f;
 	
 	{
 		type = buffType.POSITIVE;

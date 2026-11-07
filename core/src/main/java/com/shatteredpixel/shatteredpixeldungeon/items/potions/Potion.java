@@ -25,6 +25,7 @@ import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -35,7 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
-import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
@@ -43,7 +43,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.Brew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfDragonsBlood;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfHoneyedHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
@@ -52,8 +51,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShr
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfSnapFreeze;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStormClouds;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -70,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Starflower;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Stormvine;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sungrass;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -117,7 +115,6 @@ public class Potion extends Item {
 	static{
 		mustThrowPots.add(PotionOfToxicGas.class);
 		mustThrowPots.add(PotionOfLiquidFlame.class);
-		mustThrowPots.add(PotionOfParalyticGas.class);
 		mustThrowPots.add(PotionOfFrost.class);
 		
 		//exotic
@@ -175,11 +172,7 @@ public class Potion extends Item {
 	public static void saveSelectively( Bundle bundle, ArrayList<Item> items ) {
 		ArrayList<Class<?extends Item>> classes = new ArrayList<>();
 		for (Item i : items){
-			if (i instanceof ExoticPotion){
-				if (!classes.contains(ExoticPotion.exoToReg.get(i.getClass()))){
-					classes.add(ExoticPotion.exoToReg.get(i.getClass()));
-				}
-			} else if (i instanceof Potion){
+			if (i instanceof Potion){
 				if (!classes.contains(i.getClass())){
 					classes.add(i.getClass());
 				}
@@ -484,12 +477,6 @@ public class Potion extends Item {
 		}
 		
 		@Override
-		public boolean isSimilar(Item item) {
-			return ExoticPotion.regToExo.containsKey(item.getClass())
-					|| ExoticPotion.regToExo.containsValue(item.getClass());
-		}
-		
-		@Override
 		public String info() {
 			return "A regular potion. Could be any type.";
 		}
@@ -524,8 +511,10 @@ public class Potion extends Item {
 					if (i instanceof PotionOfExperience) {
 						cost += 4;
 					} else if (i instanceof PotionOfHealing) {
-						cost += 4;
+						cost += 2;
 					}
+				} else {
+					cost -= 2;
 				}
 				if (i instanceof PotionOfStrength) {
 					cost += 8;
@@ -554,6 +543,9 @@ public class Potion extends Item {
 				if (i instanceof Plant.Seed) {
 					i.quantity(i.quantity() - 1);
 					potion = Reflection.newInstance(SeedToPotion.types.get(i.getClass()));
+
+					if (potion != null) ((AlchemyScene) ShatteredPixelDungeon.scene()).showIdentify(potion);
+
 				}
 
 			}
@@ -566,31 +558,25 @@ public class Potion extends Item {
 
 			for (Item i : ingredients){
 
-				if (i instanceof Plant.Seed || i instanceof Potion) {
-					return new WndBag.Placeholder(i instanceof Potion ? i.image() : ItemSpriteSheet.POTION_HOLDER){
+				if (i instanceof Potion) {
+					return i.duplicate().quantity(2);
+
+				} else if (i instanceof Plant.Seed) {
+					return new WndBag.Placeholder(ItemSpriteSheet.POTION_HOLDER) {
 
 						@Override
 						public String name() {
-							if (i instanceof Plant.Seed) {
-								Item potion = Reflection.newInstance(SeedToPotion.types.get(i.getClass()));
-								System.out.println(potion);
-								return Messages.get(potion, "name");
-							} else {
-								return i.name();
-							}
+							Item potion = Reflection.newInstance(SeedToPotion.types.get(i.getClass()));
+							return potion.isIdentified() ? super.name() : Messages.get(potion, "name");
 						}
 
 						@Override
 						public String info() {
-							if (i instanceof Plant.Seed) {
-								Item potion = Reflection.newInstance(SeedToPotion.types.get(i.getClass()));
-								return Messages.get(potion, "desc");
-							} else {
-								return i.desc();
-							}
+							Item potion = Reflection.newInstance(SeedToPotion.types.get(i.getClass()));
+							return potion.isIdentified() ? super.desc() : Messages.get(potion, "desc");
 						}
-
 					};
+
 				}
 			}
 
@@ -605,7 +591,6 @@ public class Potion extends Item {
 		static {
 			types.put(Blindweed.Seed.class,     PotionOfInvisibility.class);
 			types.put(Dreamfoil.Seed.class,     PotionOfPurity.class);
-			types.put(Earthroot.Seed.class,     PotionOfParalyticGas.class);
 			types.put(Fadeleaf.Seed.class,      PotionOfMindVision.class);
 			types.put(Firebloom.Seed.class,     PotionOfLiquidFlame.class);
 			types.put(Icecap.Seed.class,        PotionOfFrost.class);
@@ -614,6 +599,7 @@ public class Potion extends Item {
 			types.put(Starflower.Seed.class,    PotionOfExperience.class);
 			types.put(Stormvine.Seed.class,     PotionOfLevitation.class);
 			types.put(Sungrass.Seed.class,      PotionOfHealing.class);
+			types.put(Earthroot.Seed.class,     PotionOfHealing.class);
 			types.put(Swiftthistle.Seed.class,  PotionOfEnergy.class);
 		}
 		

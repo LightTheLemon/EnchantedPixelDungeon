@@ -112,6 +112,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Swiftness;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.PhantomStopwatch;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixerOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -120,6 +122,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.FerretTuft;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.HailMary;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
@@ -504,6 +507,10 @@ public abstract class Char extends Actor {
 
 				if (enemy.buff(Frost.class) != null) {
 					effectiveDamage *= 1.33f;
+				}
+
+				if (this != Dungeon.hero && HailMary.damageMultiplier() != 1) {
+					effectiveDamage *= HailMary.damageMultiplier();
 				}
 
 				effectiveDamage = attackProc(enemy, effectiveDamage);
@@ -1240,7 +1247,7 @@ public abstract class Char extends Actor {
 
 	public synchronized boolean add( Buff buff ) {
 
-		if (buff(PotionOfCleansing.Cleanse.class) != null) { //cleansing buff
+		if (buff(ElixerOfCleansing.Cleanse.class) != null) { //cleansing buff
 			if (buff.type == Buff.buffType.NEGATIVE
 					&& !(buff instanceof AllyBuff)
 					&& !(buff instanceof LostInventory)){
