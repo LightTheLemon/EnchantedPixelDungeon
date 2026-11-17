@@ -49,13 +49,21 @@ public class TalentsPane extends ScrollPane {
 	ColorBlock sep;
 	ColorBlock blocker;
 	RenderedTextBlock blockText;
+	StarsPane stars;
 
 	public TalentsPane( TalentButton.Mode mode ) {
 		this( mode, Dungeon.hero.talents );
 	}
+	public void updateStars() {
+		stars.updateStars(TalentButton.Mode.UPGRADE);
+		stars.layout();
+	}
 
 	public TalentsPane( TalentButton.Mode mode, ArrayList<LinkedHashMap<Talent, Integer>> talents ) {
 		super(new Component());
+
+		stars = new StarsPane(mode);
+		content.add(stars);
 
 		Ratmogrify.useRatroicEnergy = Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ratmogrify;
 
@@ -88,7 +96,7 @@ public class TalentsPane extends ScrollPane {
 		for (int i = 0; i < Math.min(tiersAvailable, talents.size()); i++){
 			if (talents.get(i).isEmpty()) continue;
 
-			TalentTierPane pane = new TalentTierPane(talents.get(i), i+1, mode);
+			TalentTierPane pane = new TalentTierPane(talents.get(i), i+1, mode, this);
 			panes.add(pane);
 			content.add(pane);
 
@@ -125,7 +133,10 @@ public class TalentsPane extends ScrollPane {
 	protected void layout() {
 		super.layout();
 
-		float top = 0;
+		stars.setRect(20, 20, 20, 20);
+		stars.layout();
+		float top = 12;
+
 		for (int i = 0; i < panes.size(); i++){
 			top += 2;
 			panes.get(i).setRect(x, top, width, 0);
@@ -159,75 +170,84 @@ public class TalentsPane extends ScrollPane {
 		content.setSize(width, bottom);
 	}
 
+	public static class StarsPane extends Component {
+		private ArrayList<Image> stars = new ArrayList<>();
+
+		public RenderedTextBlock title;
+		private int rows = 1;
+
+		public StarsPane(TalentButton.Mode mode) {
+			title = PixelScene.renderTextBlock(" ", 9);
+			add(title);
+			updateStars(mode);
+		}
+		//Runs every time you open the menu or upgrade a talent
+		public void updateStars(TalentButton.Mode mode) {
+
+			if (mode == TalentButton.Mode.UPGRADE) {
+
+				if (!stars.isEmpty()){
+					for (Image im : stars){
+						im.killAndErase();
+					}
+					stars.clear();
+				}
+
+				int availableStars = Dungeon.hero.talentPointsAvailable();
+				int usedStars = Dungeon.hero.talentPointsSpent();
+				int totalStars = availableStars + usedStars;
+
+				for (int i = 0; i < totalStars; i++){
+					Image im = new Speck().image(Speck.STAR);
+
+					if (i >= availableStars) {
+						//im.tint(0.75f, 0.75f, 0.75f, 0.9f);
+						continue;
+					}
+					stars.add(im);
+					add(im);
+
+				}
+
+			}
+
+		}
+
+		@Override
+		protected void layout() {
+			super.layout();
+
+			float left = 60 - (stars.size() * 3);
+			float top = 3;
+
+			for (Image star : stars){
+				star.x = left;
+				star.y = top;
+
+				left += 6;
+			}
+
+		}
+
+	}
+
 	public static class TalentTierPane extends Component {
 
 		private int tier;
 
 		public RenderedTextBlock title;
 		ArrayList<TalentButton> buttons;
+		private TalentsPane talentsPane;
 
-		ArrayList<Image> stars = new ArrayList<>();
-		IconButton random;
-
-		public TalentTierPane(LinkedHashMap<Talent, Integer> talents, int tier, TalentButton.Mode mode){
+		public TalentTierPane(LinkedHashMap<Talent, Integer> talents, int tier, TalentButton.Mode mode, TalentsPane talentsPane	){
 			super();
 
 			this.tier = tier;
+			this.talentsPane = talentsPane;
 
 			title = PixelScene.renderTextBlock(Messages.titleCase(Messages.get(TalentsPane.class, "tier", tier)), 9);
 			title.hardlight(Window.TITLE_COLOR);
 			add(title);
-
-			if (mode == TalentButton.Mode.UPGRADE) {
-				setupStars();
-				if (Dungeon.hero.talentPointsAvailable(tier) > 0){
-
-					random = new IconButton(Icons.SHUFFLE.get()){
-						@Override
-						protected void onClick() {
-							super.onClick();
-							GameScene.show(new WndOptions(
-									Icons.SHUFFLE.get(),
-									Messages.get(TalentsPane.class, "random_title"),
-									Messages.get(TalentsPane.class, "random_sure"),
-									Messages.get(TalentsPane.class, "random_yes"),
-									Messages.get(TalentsPane.class, "random_one"),
-									Messages.get(TalentsPane.class, "random_no")) {
-								@Override
-								protected void onSelect(int index) {
-									super.onSelect(index);
-									//safety check to ensure previous UI is still there
-									if (TalentTierPane.this.parent == null){
-										return;
-									}
-									if (index == 0 || index == 1){
-										while (Dungeon.hero.talentPointsAvailable(tier) > 0){
-											TalentButton button = Random.element(buttons);
-											if (Dungeon.hero.pointsInTalent(button.talent) < button.talent.maxPoints()){
-												button.upgradeTalent();
-												if (index == 1){
-													break;
-												}
-											}
-										};
-										setupStars();
-										TalentTierPane.this.layout();
-									}
-								}
-							});
-						};
-
-						@Override
-						public void update() {
-							if (Dungeon.hero.lvl >= 3 && Statistics.qualifiedForRandomVictoryBadge){
-								icon.tint(1, 1, 1, (float)Math.abs(Math.cos(1.5f*Math.PI*Game.timeTotal)/2f));
-							}
-							super.update();
-						}
-					};
-					add(random);
-				}
-			}
 
 			buttons = new ArrayList<>();
 			for (Talent talent : talents.keySet()){
@@ -235,8 +255,10 @@ public class TalentsPane extends ScrollPane {
 					@Override
 					public void upgradeTalent() {
 						super.upgradeTalent();
+
 						if (parent != null) {
-							setupStars();
+							talentsPane.updateStars();
+
 							TalentTierPane.this.layout();
 						}
 					}
@@ -247,68 +269,15 @@ public class TalentsPane extends ScrollPane {
 
 		}
 
-		private void setupStars(){
-			if (!stars.isEmpty()){
-				for (Image im : stars){
-					im.killAndErase();
-				}
-				stars.clear();
-			}
-
-			int totStars = Talent.tierLevelThresholds[tier+1] - Talent.tierLevelThresholds[tier] + Dungeon.hero.bonusTalentPoints(tier);
-			int openStars = Dungeon.hero.talentPointsAvailable(tier);
-			int usedStars = Dungeon.hero.talentPointsSpent(tier);
-			for (int i = 0; i < totStars; i++){
-				Image im = new Speck().image(Speck.STAR);
-				stars.add(im);
-				add(im);
-				if (i >= openStars && i < (openStars + usedStars)){
-					im.tint(0.75f, 0.75f, 0.75f, 0.9f);
-				} else if (i >= (openStars + usedStars)){
-					im.tint(0f, 0f, 0f, 0.9f);
-				}
-			}
-
-			if (random != null && openStars == 0){
-				random.killAndErase();
-				random.destroy();
-				random = null;
-			}
-		}
-
 		@Override
 		protected void layout() {
 			super.layout();
 
-			int regStars = Talent.tierLevelThresholds[tier+1] - Talent.tierLevelThresholds[tier];
-
 			float titleWidth = title.width();
-			titleWidth += 2 + Math.min(stars.size(), regStars)*6;
 			title.setPos(x + (width - titleWidth)/2f, y);
 
-			float left = title.right() + 2;
-
-			float starTop = title.top();
-			if (regStars < stars.size()) starTop -= 2;
-
-			for (Image star : stars){
-				star.x = left;
-				star.y = starTop;
-				PixelScene.align(star);
-				left += 6;
-				regStars--;
-				if (regStars == 0){
-					starTop += 6;
-					left = title.right() + 2;
-				}
-			}
-
-			if (random != null){
-				random.setRect(width - 16, y-2, 16, 14);
-			}
-
 			float gap = (width - buttons.size()*TalentButton.WIDTH)/(buttons.size()+1);
-			left = x + gap;
+			float left = x + gap;
 			for (TalentButton btn : buttons){
 				btn.setPos(left, title.bottom() + 4);
 				PixelScene.align(btn);

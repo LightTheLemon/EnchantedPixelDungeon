@@ -69,7 +69,7 @@ public class PotionOfToxicGas extends Potion {
 	@Override
 	public String desc() {
 		if (isKnown()) {
-			return Dungeon.swapGas ? Messages.get(this, "alt_desc") : super.name();
+			return Dungeon.swapGas ? Messages.get(this, "alt_desc") : super.desc();
 		} else {
 			return Messages.get(this, "unknown_desc");
 		}

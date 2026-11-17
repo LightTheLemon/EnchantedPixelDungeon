@@ -50,7 +50,7 @@ public class ElixirOfArcaneArmor extends Elixir {
 			inputs =  new Class[]{EmptyBottle.class, GooBlob.class};
 			inQuantity = new int[]{1, 1};
 			
-			cost = 8;
+			cost = 4;
 			
 			output = ElixirOfArcaneArmor.class;
 			outQuantity = 1;

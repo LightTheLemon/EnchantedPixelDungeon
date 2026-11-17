@@ -240,7 +240,6 @@ public enum Catalog {
 				ScrollOfMysticalEnergy.class,
 				ScrollOfTransmutation.class,
 				ScrollOfMirrorImage.class,
-				ScrollOfRetribution.class,
 				ScrollOfRage.class,
 				ScrollOfTerror.class,
 				ScrollOfPsionicBlast.class);

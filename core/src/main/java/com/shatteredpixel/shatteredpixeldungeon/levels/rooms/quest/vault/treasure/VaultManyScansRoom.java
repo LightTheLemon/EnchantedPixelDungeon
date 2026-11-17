@@ -76,7 +76,7 @@ public class VaultManyScansRoom extends VaultTreasureRoom {
 		Item treasureItem = ((VaultLevel)level).createEquipment(3);
 		level.drop(treasureItem, c.x + w*c.y).type = Heap.Type.CHEST;
 
-		treasureItem = ((VaultLevel)level).createConsumabe(3);
+		treasureItem = ((VaultLevel)level).createConsumable(3);
 		level.drop(treasureItem, c.x + w*c.y + PathFinder.NEIGHBOURS8[Random.Int(PathFinder.NEIGHBOURS8.length)]);
 		level.drop(new DwarfToken(), c.x + w*c.y + PathFinder.NEIGHBOURS8[Random.Int(PathFinder.NEIGHBOURS8.length)]);
 

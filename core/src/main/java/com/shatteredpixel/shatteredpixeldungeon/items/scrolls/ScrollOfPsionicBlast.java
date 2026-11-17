@@ -52,7 +52,7 @@ public class ScrollOfPsionicBlast extends Scroll {
 		GameScene.flash( 0x80FFFFFF );
 		
 		Sample.INSTANCE.play( Assets.Sounds.BLAST );
-		GLog.i(Messages.get(ScrollOfRetribution.class, "blast"));
+		GLog.i(Messages.get(ScrollOfPsionicBlast.class, "blast"));
 
 		ArrayList<Mob> targets = new ArrayList<>();
 
@@ -64,15 +64,14 @@ public class ScrollOfPsionicBlast extends Scroll {
 		}
 
 		for (Mob mob : targets){
-			//resistant enemies take 50% current HP at full health, scaling to 75% at 1/2 HP, and 100% at 1/3 hp
-			mob.damage(Math.round(mob.HT/3f + mob.HP/2f), this);
+			mob.damage(Math.round(mob.HT/3f + mob.HP/3f), this);
 			if (mob.isAlive()) {
 				Buff.prolong(mob, Blindness.class, Blindness.DURATION);
 				Buff.prolong(curUser, Weakness.class, Weakness.DURATION);
 			}
 		}
 		
-		curUser.damage(Math.max(0, Math.round(curUser.HT*(0.35f))), this); //(float)Math.pow(0.9, targets.size())
+		curUser.damage(Math.max(0, Math.round(curUser.HT*(0.30f))), this); //(float)Math.pow(0.9, targets.size())
 		if (curUser.isAlive()) {
 			Buff.prolong(curUser, Blindness.class, Blindness.DURATION);
 			Buff.prolong(curUser, Weakness.class, Weakness.DURATION);

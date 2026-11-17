@@ -78,7 +78,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
@@ -1145,7 +1145,7 @@ public abstract class Mob extends Char {
 			if (this instanceof Snake || this instanceof RotLasher) return new Berry();
 			if (this instanceof Senior) return new MeatPie();
 			if (this instanceof Monk) return new Pasty();
-			if (this instanceof Warlock) return new PotionOfCleansing();
+			if (this instanceof Warlock) return new ElixirOfCleansing();
 		}
 
 		Item item;

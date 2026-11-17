@@ -70,7 +70,7 @@ public class VaultSingleEnemyTreasureRoom extends VaultTreasureRoom {
 			i = PathFinder.NEIGHBOURS4[Random.Int(PathFinder.NEIGHBOURS4.length)];
 		} while (level.map[treasurePos+i] == Terrain.WALL || treasurePos+i == enemy.pos);
 
-		treasureItem = ((VaultLevel)level).createConsumabe(2);
+		treasureItem = ((VaultLevel)level).createConsumable(2);
 		level.drop(treasureItem, treasurePos+i);
 
 		entrance().set(Door.Type.REGULAR);

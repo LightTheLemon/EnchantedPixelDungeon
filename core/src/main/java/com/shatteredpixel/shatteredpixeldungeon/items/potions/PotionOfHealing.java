@@ -211,7 +211,7 @@ public class PotionOfHealing extends Potion {
 
 	@Override
 	public int energyVal() {
-		return 6 * quantity;
+		return 8 * quantity;
 	}
 
 }

@@ -38,7 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 
-public class ElixerOfCleansing extends Elixir {
+public class ElixirOfCleansing extends Elixir {
 	
 	{
 		image = ItemSpriteSheet.ELIXER_CLEANSE;
@@ -129,7 +129,7 @@ public class ElixerOfCleansing extends Elixir {
 			
 			cost = 4;
 			
-			output = ElixerOfCleansing.class;
+			output = ElixirOfCleansing.class;
 			outQuantity = 1;
 		}
 		

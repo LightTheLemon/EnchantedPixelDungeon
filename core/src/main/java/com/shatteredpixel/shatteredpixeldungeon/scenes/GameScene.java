@@ -678,9 +678,10 @@ public class GameScene extends PixelScene {
 				Random.popGenerator();
 			}
 
+			//If you have at least 2 unspent talents you get a warning
 			boolean unspentTalents = false;
 			for (int i = 1; i <= Dungeon.hero.talents.size(); i++){
-				if (Dungeon.hero.talentPointsAvailable(i) > 0){
+				if (Dungeon.hero.talentPointsAvailable() > 1){
 					unspentTalents = true;
 					break;
 				}

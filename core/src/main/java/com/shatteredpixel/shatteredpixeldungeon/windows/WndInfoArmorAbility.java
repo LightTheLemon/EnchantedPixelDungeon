@@ -42,7 +42,7 @@ public class WndInfoArmorAbility extends WndTitledMessage {
 		Talent.initArmorTalents(ability, talentList);
 
 		Ratmogrify.useRatroicEnergy = ability instanceof Ratmogrify;
-		TalentsPane.TalentTierPane talentPane = new TalentsPane.TalentTierPane(talentList.get(3), 4, TalentButton.Mode.INFO);
+		TalentsPane.TalentTierPane talentPane = new TalentsPane.TalentTierPane(talentList.get(3), 4, TalentButton.Mode.INFO, null);
 		talentPane.title.text( Messages.titleCase(Messages.get(WndHeroInfo.class, "talents")));
 		talentPane.setRect(0, height + 5, width, talentPane.height());
 		add(talentPane);

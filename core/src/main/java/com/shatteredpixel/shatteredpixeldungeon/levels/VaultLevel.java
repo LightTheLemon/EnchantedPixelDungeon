@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -63,8 +62,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
@@ -136,7 +135,7 @@ public class VaultLevel extends CityLevel {
 		}
 		addItemToSpawn(new Dart());
 		for (int i = 0; i < 5; i++){
-			addItemToSpawn(createConsumabe(0));
+			addItemToSpawn(createConsumable(0));
 		}
 		addItemToSpawn(Generator.randomUsingDefaults(Generator.Category.FOOD));
 		addItemToSpawn(Generator.randomUsingDefaults(Generator.Category.FOOD));
@@ -475,14 +474,14 @@ public class VaultLevel extends CityLevel {
 			consumableLoot.get(3).addAll(Arrays.asList(
 					Reflection.newInstance(Random.oneOf(PotionOfExperience.class, PotionOfInvisibility.class)),
 					Reflection.newInstance(Random.oneOf(Earthroot.Seed.class, Starflower.Seed.class)),
-					Reflection.newInstance(Random.oneOf(ScrollOfRetribution.class, ScrollOfTransmutation.class)),
+					Reflection.newInstance(Random.oneOf(ScrollOfPsionicBlast.class, ScrollOfTransmutation.class)),
 					Reflection.newInstance(Random.oneOf(StoneOfEnchantment.class, StoneOfAugmentation.class)),
 					new PotionOfHealing()));
 			Collections.shuffle(consumableLoot.get(3));
 		}
 	}
 
-	public Item createConsumabe(int tier){
+	public Item createConsumable(int tier){
 		if (consumableLoot.isEmpty() || consumableLoot.get(tier).isEmpty()){
 			setupConsumables();
 		}

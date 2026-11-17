@@ -152,7 +152,6 @@ public class UnstableSpellbook extends Artifact {
 				thisScroll instanceof ScrollOfTransmutation) && Random.Int(3) == 0));
 
 		thisScroll.anonymize();
-		//scroll.talentChance = 0;  //spellbook does not trigger on-scroll talents
 		curItem = thisScroll;
 		curUser = hero;
 
@@ -228,11 +227,11 @@ public class UnstableSpellbook extends Artifact {
 
 		if (isEquipped(Dungeon.hero)) {
 
-			if (nextScroll.isIdentified()) {
-				desc += " The next scroll the Spellbook will use will be the _" + Messages.get(nextScroll, "name") + "._";
-			} else {
-				desc += " You have no idea what scroll the Spellbook will use next!";
-			}
+			desc += " The next scroll the Spellbook will use will be the _" + Messages.get(nextScroll, "name") + "._";
+//			if (nextScroll.isIdentified()) {
+//			} else {
+//				desc += " You have no idea what scroll the Spellbook will use next!";
+//			}
 
 			if (cursed) {
 				desc += "\n\n" + Messages.get(this, "desc_cursed");

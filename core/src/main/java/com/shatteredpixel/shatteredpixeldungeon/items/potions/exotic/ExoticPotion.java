@@ -45,41 +45,38 @@ public class ExoticPotion extends Potion {
 	public static final LinkedHashMap<Class<?extends Potion>, Class<?extends ExoticPotion>> regToExo = new LinkedHashMap<>();
 	public static final LinkedHashMap<Class<?extends ExoticPotion>, Class<?extends Potion>> exoToReg = new LinkedHashMap<>();
 	static{
-		regToExo.put(PotionOfStrength.class, PotionOfMastery.class);
-		exoToReg.put(PotionOfMastery.class, PotionOfStrength.class);
-
-		regToExo.put(PotionOfHealing.class, PotionOfShielding.class);
-		exoToReg.put(PotionOfShielding.class, PotionOfHealing.class);
-
-		regToExo.put(PotionOfMindVision.class, PotionOfMagicalSight.class);
-		exoToReg.put(PotionOfMagicalSight.class, PotionOfMindVision.class);
-
-		regToExo.put(PotionOfFrost.class, PotionOfSnapFreeze.class);
-		exoToReg.put(PotionOfSnapFreeze.class, PotionOfFrost.class);
-
-		regToExo.put(PotionOfLiquidFlame.class, PotionOfDragonsBreath.class);
-		exoToReg.put(PotionOfDragonsBreath.class, PotionOfLiquidFlame.class);
-
-		regToExo.put(PotionOfToxicGas.class, PotionOfCorrosiveGas.class);
-		exoToReg.put(PotionOfCorrosiveGas.class, PotionOfToxicGas.class);
-
-		regToExo.put(PotionOfEnergy.class, PotionOfStamina.class);
-		exoToReg.put(PotionOfStamina.class, PotionOfEnergy.class);
-
-		regToExo.put(PotionOfInvisibility.class, PotionOfShroudingFog.class);
-		exoToReg.put(PotionOfShroudingFog.class, PotionOfInvisibility.class);
-		
-		regToExo.put(PotionOfLevitation.class, PotionOfStormClouds.class);
-		exoToReg.put(PotionOfStormClouds.class, PotionOfLevitation.class);
-
-		//regToExo.put(PotionOfParalyticGas.class, PotionOfEarthenArmor.class);
-		//exoToReg.put(PotionOfEarthenArmor.class, PotionOfParalyticGas.class);
-
-		regToExo.put(PotionOfPurity.class, PotionOfCleansing.class);
-		exoToReg.put(PotionOfCleansing.class, PotionOfPurity.class);
-
-		regToExo.put(PotionOfExperience.class, PotionOfDivineInspiration.class);
-		exoToReg.put(PotionOfDivineInspiration.class, PotionOfExperience.class);
+//		regToExo.put(PotionOfStrength.class, PotionOfMastery.class);
+//		exoToReg.put(PotionOfMastery.class, PotionOfStrength.class);
+//
+//		regToExo.put(PotionOfHealing.class, PotionOfShielding.class);
+//		exoToReg.put(PotionOfShielding.class, PotionOfHealing.class);
+//
+//		regToExo.put(PotionOfMindVision.class, PotionOfMagicalSight.class);
+//		exoToReg.put(PotionOfMagicalSight.class, PotionOfMindVision.class);
+//
+//		regToExo.put(PotionOfFrost.class, PotionOfSnapFreeze.class);
+//		exoToReg.put(PotionOfSnapFreeze.class, PotionOfFrost.class);
+//
+//		regToExo.put(PotionOfLiquidFlame.class, PotionOfDragonsBreath.class);
+//		exoToReg.put(PotionOfDragonsBreath.class, PotionOfLiquidFlame.class);
+//
+//		regToExo.put(PotionOfToxicGas.class, PotionOfCorrosiveGas.class);
+//		exoToReg.put(PotionOfCorrosiveGas.class, PotionOfToxicGas.class);
+//
+//		regToExo.put(PotionOfEnergy.class, PotionOfStamina.class);
+//		exoToReg.put(PotionOfStamina.class, PotionOfEnergy.class);
+//
+//		regToExo.put(PotionOfLevitation.class, PotionOfStormClouds.class);
+//		exoToReg.put(PotionOfStormClouds.class, PotionOfLevitation.class);
+//
+//		//regToExo.put(PotionOfParalyticGas.class, PotionOfEarthenArmor.class);
+//		//exoToReg.put(PotionOfEarthenArmor.class, PotionOfParalyticGas.class);
+//
+//		regToExo.put(PotionOfPurity.class, PotionOfCleansing.class);
+//		exoToReg.put(PotionOfCleansing.class, PotionOfPurity.class);
+//
+//		regToExo.put(PotionOfExperience.class, PotionOfDivineInspiration.class);
+//		exoToReg.put(PotionOfDivineInspiration.class, PotionOfExperience.class);
 
 	}
 	

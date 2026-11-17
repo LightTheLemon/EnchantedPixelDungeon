@@ -32,8 +32,8 @@ public class BurningSage extends Trinket {
 
 	@Override
 	protected int upgradeEnergyCost() {
-		//6 -> 8(14) -> 10(24) -> 12(36)
-		return 6+2*level();
+		//4 -> 6(10) -> 8(18) -> 10(28)
+		return 4+2*level();
 	}
 
 	@Override

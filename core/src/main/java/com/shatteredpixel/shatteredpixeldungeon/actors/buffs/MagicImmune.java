@@ -33,7 +33,7 @@ import com.watabou.noosa.Image;
 
 public class MagicImmune extends FlavourBuff {
 
-	public static final float DURATION = 20f;
+	public static final float DURATION = 30f;
 	
 	{
 		type = buffType.POSITIVE;
@@ -71,8 +71,8 @@ public class MagicImmune extends FlavourBuff {
 			((Hero) target).updateHT(false);
 		}
 		GLog.i(Messages.get(ScrollOfAntiMagic.class, "detach"));
-		Buff.affect(target, Recharging.class, MagicImmune.DURATION);
-		Buff.affect(target, ArtifactRecharge.class).set( MagicImmune.DURATION ).ignoreHornOfPlenty = false;
+		Buff.affect(target, Recharging.class, MagicImmune.DURATION / 2);
+		Buff.affect(target, ArtifactRecharge.class).set( MagicImmune.DURATION / 2 ).ignoreHornOfPlenty = false;
 	}
 
 	@Override

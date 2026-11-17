@@ -86,7 +86,7 @@ public class VaultFlamesTreasureRoom extends VaultTreasureRoom {
 
 		treasureItem = ((VaultLevel) level).findT3SolveItem();
 		if (treasureItem == null) {
-			treasureItem = ((VaultLevel) level).createConsumabe(2);
+			treasureItem = ((VaultLevel) level).createConsumable(2);
 		}
 		if (Random.Int(2) == 0){
 			level.drop(treasureItem, treasurePositions[treasureIdx-1]);

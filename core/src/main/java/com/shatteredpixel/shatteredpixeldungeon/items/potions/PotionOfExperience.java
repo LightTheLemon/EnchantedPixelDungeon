@@ -28,19 +28,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StatusPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TalentsPane;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHero;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -84,73 +80,41 @@ public class PotionOfExperience extends Potion {
 				identifiedByUse = false;
 			}
 
-			GameScene.show(new WndOptions(
-					new ItemSprite(this),
-					Messages.titleCase(Messages.get(PotionOfExperience.class, "alt_name")),
-					Messages.get(PotionOfExperience.class, "select_tier"),
-					Messages.titleCase(Messages.get(TalentsPane.class, "tier", 1)),
-					Messages.titleCase(Messages.get(TalentsPane.class, "tier", 2)),
-					Messages.titleCase(Messages.get(TalentsPane.class, "tier", 3)),
-					Messages.titleCase(Messages.get(TalentsPane.class, "tier", 4))
-			){
-				@Override
-				protected boolean enabled(int index) {
-					return true; //was enabled[index+1]
+			Buff.affect(curUser, DivineInspirationTracker.class).potionUses++;
+
+			if (!identifiedByUse) {
+				curItem.detach(curUser.belongings.backpack);
+			}
+			identifiedByUse = false;
+
+			curUser.busy();
+			curUser.sprite.operate(curUser.pos);
+
+			curUser.spendAndNext(1f);
+
+			StatusPane.talentBlink = 10f;
+			WndHero.lastIdx = 1;
+
+			GameScene.showlevelUpStars();
+
+			Sample.INSTANCE.play( Assets.Sounds.DRINK );
+			Sample.INSTANCE.playDelayed(Assets.Sounds.LEVELUP, 0.3f, 0.7f, 1.2f);
+			Sample.INSTANCE.playDelayed(Assets.Sounds.LEVELUP, 0.6f, 0.7f, 1.2f);
+			new Flare( 6, 32 ).color(0xFFFF00, true).show( curUser.sprite, 2f );
+			GLog.p(Messages.get(PotionOfExperience.class, "bonus"));
+
+			if (!anonymous) {
+				Catalog.countUse(PotionOfExperience.class);
+				if (Random.Float() < talentChance) {
+					Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
 				}
-
-				@Override
-				protected void onSelect(int index) {
-					super.onSelect(index);
-
-					if (index != -1){
-						Buff.affect(curUser, DivineInspirationTracker.class).setBoosted(index+1);
-
-						if (!identifiedByUse) {
-							curItem.detach(curUser.belongings.backpack);
-						}
-						identifiedByUse = false;
-
-						curUser.busy();
-						curUser.sprite.operate(curUser.pos);
-
-						curUser.spendAndNext(1f);
-
-						StatusPane.talentBlink = 10f;
-						WndHero.lastIdx = 1;
-
-						GameScene.showlevelUpStars();
-
-						Sample.INSTANCE.play( Assets.Sounds.DRINK );
-						Sample.INSTANCE.playDelayed(Assets.Sounds.LEVELUP, 0.3f, 0.7f, 1.2f);
-						Sample.INSTANCE.playDelayed(Assets.Sounds.LEVELUP, 0.6f, 0.7f, 1.2f);
-						new Flare( 6, 32 ).color(0xFFFF00, true).show( curUser.sprite, 2f );
-						GLog.p(Messages.get(PotionOfExperience.class, "bonus"));
-
-						if (!anonymous) {
-							Catalog.countUse(PotionOfExperience.class);
-							if (Random.Float() < talentChance) {
-								Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
-							}
-						}
-
-					}
-				}
-
-				@Override
-				public void onBackPressed() {
-					//window can be closed if potion is already IDed
-					if (!identifiedByUse){
-						super.onBackPressed();
-					}
-				}
-			});
+			}
 
 		} else {
 			super.drink(hero);
 		}
 
 	}
-
 
 	@Override
 	public int value() {
@@ -195,28 +159,20 @@ public class PotionOfExperience extends Potion {
 			revivePersists = true;
 		}
 
-		private int[] boostedTiers = new int[5];
+		public int potionUses = 0;
 
-		private static final String BOOSTED_TIERS = "boosted_tiers";
+		private static final String BONUS_TALENT_POINTS = "bonus_talent_points";
 
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
-			bundle.put(BOOSTED_TIERS, boostedTiers);
+			bundle.put(BONUS_TALENT_POINTS, potionUses);
 		}
 
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
-			boostedTiers = bundle.getIntArray(BOOSTED_TIERS);
-		}
-
-		public void setBoosted( int tier ){
-			boostedTiers[tier]++;
-		}
-
-		public int boostCount(int tier ){
-			return boostedTiers[tier];
+			potionUses = bundle.getInt(BONUS_TALENT_POINTS);
 		}
 
 	}

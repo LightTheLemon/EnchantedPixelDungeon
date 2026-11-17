@@ -151,7 +151,7 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom {
 
 		treasureItem = ((VaultLevel) level).findT2SolveItem();
 		if (treasureItem == null){
-			treasureItem = ((VaultLevel)level).createConsumabe(1);
+			treasureItem = ((VaultLevel)level).createConsumable(1);
 		}
 		do {
 			treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));

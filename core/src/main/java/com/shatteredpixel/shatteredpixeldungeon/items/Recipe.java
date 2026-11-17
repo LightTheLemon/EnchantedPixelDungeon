@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAquaticRejuvenation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfArcaneArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfDragonsBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfFeatherFall;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
@@ -178,6 +179,7 @@ public abstract class Recipe {
 		//new BlizzardBrew.Recipe(),
 		//new InfernalBrew.Recipe(),
 		//new ShockingBrew.Recipe(),
+		new ElixirOfCleansing.Recipe(),
 		new ElixirOfDragonsBlood.Recipe(),
 		new ElixirOfIcyTouch.Recipe(),
 		new ElixirOfToxicEssence.Recipe(),
@@ -198,13 +200,12 @@ public abstract class Recipe {
 	private static Recipe[] twoIngredientRecipes = new Recipe[]{
 		new Potion.PotionDuplication(),
 		new Scroll.ScrollDuplication(),
-		new Scroll.ScrollCrafting(),
+		new Scroll.StoneToScroll(),
 		new Blandfruit.CookFruit(),
 		new Bomb.EnhanceBomb(),
 		new CausticBrew.Recipe(),
 		new ElixirOfArcaneArmor.Recipe(),
 		new ElixirOfAquaticRejuvenation.Recipe(),
-		//new ElixirOfHoneyedHealing.Recipe(),
 		//new Alchemize.Recipe(),
 		new CurseInfusion.Recipe(),
 		new ReclaimTrap.Recipe(),

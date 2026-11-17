@@ -35,8 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDivineInspiration;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShielding;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
@@ -64,7 +62,7 @@ public class UnstableBrew extends Brew {
 
 	private static HashMap<Class<? extends Potion>, Float> potionChances = new HashMap<>();
 	static {
-		potionChances.put(Dungeon.swapHealing ? PotionOfShielding.class : PotionOfHealing.class, 3f);
+		potionChances.put(PotionOfHealing.class, 3f);
 		potionChances.put(PotionOfMindVision.class, 2f);
 		potionChances.put(PotionOfFrost.class, 2f);
 		potionChances.put(PotionOfLiquidFlame.class, 2f);
@@ -73,7 +71,7 @@ public class UnstableBrew extends Brew {
 		potionChances.put(PotionOfInvisibility.class, 2f);
 		potionChances.put(PotionOfLevitation.class, 2f);
 		potionChances.put(PotionOfPurity.class, 2f);
-		potionChances.put(Dungeon.swapExperience ? PotionOfDivineInspiration.class : PotionOfExperience.class, 1f);
+		potionChances.put(PotionOfExperience.class, 1f);
 	}
 	
 	@Override

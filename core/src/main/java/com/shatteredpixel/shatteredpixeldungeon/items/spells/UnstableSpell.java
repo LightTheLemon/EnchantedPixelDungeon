@@ -39,12 +39,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfPsionicBla
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
-import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
@@ -65,16 +62,6 @@ public class UnstableSpell extends Spell {
 		scrollChances.put( ScrollOfIdentify.class,          3f );
 		scrollChances.put( ScrollOfRemoveCurse.class,       2f );
 		scrollChances.put( ScrollOfMagicMapping.class,      2f );
-//		scrollChances.put( ScrollOfMirrorImage.class,   2f );
-//		scrollChances.put( ScrollOfRecharging.class,    2f );
-//		scrollChances.put( ScrollOfLullaby.class,       2f );
-//		scrollChances.put( ScrollOfRetribution.class,   2f );
-//		scrollChances.put( ScrollOfRage.class,          2f );
-//		scrollChances.put( ScrollOfTeleportation.class, 2f );
-//		scrollChances.put( ScrollOfTerror.class,        2f );
-//		scrollChances.put( ScrollOfAntiMagic.class,     2f );
-//		scrollChances.put( ScrollOfPsionicBlast.class,  2f );
-//		scrollChances.put( ScrollOfMysticalEnergy.class,2f );
 		scrollChances.put( ScrollOfTransmutation.class,    1f );
 		scrollChances.put( Dungeon.selectedScrolls.get(0), 2f );
 		scrollChances.put( Dungeon.selectedScrolls.get(1), 2f );
@@ -102,7 +89,6 @@ public class UnstableSpell extends Spell {
 		combatScrolls.add( ScrollOfMirrorImage.class );
 		combatScrolls.add( ScrollOfRecharging.class );
 		combatScrolls.add( ScrollOfLullaby.class );
-		combatScrolls.add( ScrollOfRetribution.class );
 		combatScrolls.add( ScrollOfRage.class );
 		combatScrolls.add( ScrollOfTeleportation.class );
 		combatScrolls.add( ScrollOfTerror.class );
@@ -146,7 +132,7 @@ public class UnstableSpell extends Spell {
 
 	@Override
 	public int energyVal() {
-		return 10 * quantity;
+		return 8 * quantity;
 	}
 
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
@@ -155,7 +141,7 @@ public class UnstableSpell extends Spell {
 			inputs =  new Class[]{BlankScroll.class};
 			inQuantity = new int[]{1};
 
-			cost = 2;
+			cost = 3;
 
 			output = UnstableSpell.class;
 			outQuantity = 1;

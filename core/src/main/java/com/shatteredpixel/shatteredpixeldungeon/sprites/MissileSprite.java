@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.FishingSpear;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Boomerang;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Javelin;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Kunai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
@@ -54,19 +54,19 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 	private Callback callback;
 	
 	public void reset( int from, int to, Item item, Callback listener ) {
-		reset(Dungeon.level.solid[from] ? DungeonTilemap.raisedTileCenterToWorld(from) : DungeonTilemap.raisedTileCenterToWorld(from),
-				Dungeon.level.solid[to] ? DungeonTilemap.raisedTileCenterToWorld(to) : DungeonTilemap.raisedTileCenterToWorld(to),
+		reset(DungeonTilemap.raisedTileCenterToWorld(from),
+                DungeonTilemap.raisedTileCenterToWorld(to),
 				item, listener);
 	}
 
 	public void reset( Visual from, int to, Item item, Callback listener ) {
 		reset(from.center(),
-				Dungeon.level.solid[to] ? DungeonTilemap.raisedTileCenterToWorld(to) : DungeonTilemap.raisedTileCenterToWorld(to),
+                DungeonTilemap.raisedTileCenterToWorld(to),
 				item, listener );
 	}
 
 	public void reset( int from, Visual to, Item item, Callback listener ) {
-		reset(Dungeon.level.solid[from] ? DungeonTilemap.raisedTileCenterToWorld(from) : DungeonTilemap.raisedTileCenterToWorld(from),
+		reset(DungeonTilemap.raisedTileCenterToWorld(from),
 				to.center(),
 				item, listener );
 	}
@@ -108,7 +108,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 
 		ANGULAR_SPEEDS.put(GnollGeomancer.Boulder.class,   90);
 		
-		ANGULAR_SPEEDS.put(HeavyBoomerang.class,1440);
+		ANGULAR_SPEEDS.put(Boomerang.class,1440);
 		ANGULAR_SPEEDS.put(Bolas.class,         1440);
 		
 		ANGULAR_SPEEDS.put(Shuriken.class,                  2160);
@@ -116,7 +116,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 	}
 
 	//TODO it might be nice to have a source and destination angle, to improve thrown weapon visuals
-	private void setup( PointF from, PointF to, Item item, Callback listener ){
+    protected void setup(PointF from, PointF to, Item item, Callback listener){
 
 		originToCenter();
 
@@ -170,6 +170,8 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 				|| item instanceof ScorpioSprite.ScorpioShot
 				|| item instanceof TenguSprite.TenguShuriken){
 			speed *= 1.5f;
+		} else if (item instanceof Dart || item instanceof Shuriken) {
+			speed *= 1.25f;
 		}
 		
 		PosTweener tweener = new PosTweener( this, to, d.length() / speed );

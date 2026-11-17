@@ -217,7 +217,7 @@ public abstract class ChampionEnemy extends Buff {
 
 		@Override
 		public float damageTakenFactor() {
-			return 0.2f;
+			return 0.3f;
 		}
 
 		@Override

@@ -209,6 +209,8 @@ public abstract class Scroll extends Item {
 
 		Scroll scroll = isIdentified() ? this : new PlaceHolder();
 
+		Scroll realScroll = this;
+
 		GameScene.show( new WndOptions(new ItemSprite(Scroll.this),
 				Messages.get(Scroll.class, "crafting_title"),
 				Messages.get(Scroll.class, "crafting_menu"),
@@ -220,11 +222,11 @@ public abstract class Scroll extends Item {
 				switch (index) {
 					case 0:
 						//"Yes" option
-
 						if (stoneClass != null) {
-							if (!scroll.isIdentified()) {
-								scroll.identify();
-								GLog.i("You've identified the scroll as " + Messages.titleCase(scroll.getClass().getSimpleName()));
+							if (!realScroll.isIdentified()) {
+								realScroll.identify();
+								GLog.i("You've identified the scroll as a _" + Messages.titleCase(realScroll.name()) + "_" );
+								GLog.newLine();
 							}
 							curItem.detach(curUser.belongings.backpack);
 
@@ -236,7 +238,7 @@ public abstract class Scroll extends Item {
 							curUser.spend(1);
 							Sample.INSTANCE.play(Assets.Sounds.PUFF);
 
-							GLog.i("You crafted the scroll into 2 stones of " + stoneClass.getSimpleName().substring(7) );
+							GLog.i("You crafted the scroll into 2 _" + Messages.titleCase(runestone.name()) + "_" );
 
 						}
 						break;
@@ -478,7 +480,7 @@ public abstract class Scroll extends Item {
 		}
 	}
 
-	public static class ScrollCrafting extends Recipe {
+	public static class StoneToScroll extends Recipe {
 
 		@Override
 		public boolean testIngredients(ArrayList<Item> ingredients) {
@@ -504,7 +506,7 @@ public abstract class Scroll extends Item {
 				if (i instanceof StoneOfEnchantment) {
 					cost += 7;
 				} else if (i instanceof StoneOfAugmentation) {
-					cost += 5;
+					cost += 3;
 				}
 			}
 
@@ -525,9 +527,11 @@ public abstract class Scroll extends Item {
 					stone = i;
 				}
 			}
-
-
-			return Reflection.newInstance(scrolls.get(stone.getClass()));
+			Item correspondingScroll = Reflection.newInstance(scrolls.get(stone.getClass()));
+			if (!correspondingScroll.isIdentified()) {
+				((AlchemyScene) ShatteredPixelDungeon.scene()).showIdentify(correspondingScroll);
+			}
+			return correspondingScroll;
 		}
 
 		@Override
@@ -538,7 +542,7 @@ public abstract class Scroll extends Item {
 
 					Item scroll = Reflection.newInstance(scrolls.get(i.getClass()));
 
-					if (scroll != null) return scroll.isIdentified() ? Reflection.newInstance(scrolls.get(i.getClass())) : new ScrollHolder();
+					if (scroll != null) return scroll.isIdentified() ? Reflection.newInstance(scrolls.get(i.getClass())) : new Scroll.PlaceHolder();
 				}
 
 			}
@@ -602,7 +606,6 @@ public abstract class Scroll extends Item {
 		stones.put(ScrollOfLullaby.class,        StoneOfDeepSleep.class);
 		stones.put(ScrollOfMagicMapping.class,   StoneOfClairvoyance.class);
 		stones.put(ScrollOfMirrorImage.class,    StoneOfFlock.class);
-		stones.put(ScrollOfRetribution.class,    StoneOfBlast.class);
 		stones.put(ScrollOfRage.class,           StoneOfAggression.class);
 		stones.put(ScrollOfRecharging.class,     StoneOfShock.class);
 		stones.put(ScrollOfRemoveCurse.class,    StoneOfDetectMagic.class);
@@ -622,7 +625,7 @@ public abstract class Scroll extends Item {
 		scrolls.put(StoneOfDeepSleep.class,      ScrollOfLullaby.class);
 		scrolls.put(StoneOfClairvoyance.class,   ScrollOfMagicMapping.class);
 		scrolls.put(StoneOfFlock.class,          ScrollOfMirrorImage.class);
-		scrolls.put(StoneOfBlast.class,          Dungeon.selectedScrolls.contains(ScrollOfRetribution.class) ? ScrollOfRetribution.class : ScrollOfPsionicBlast.class);
+		scrolls.put(StoneOfBlast.class,          ScrollOfPsionicBlast.class);
 		scrolls.put(StoneOfAggression.class,     ScrollOfRage.class);
 		scrolls.put(StoneOfShock.class,          Dungeon.selectedScrolls.contains(ScrollOfRecharging.class) ? ScrollOfRecharging.class : ScrollOfMysticalEnergy.class);
 		scrolls.put(StoneOfDetectMagic.class,    Dungeon.selectedScrolls.contains(ScrollOfRemoveCurse.class) ? ScrollOfRemoveCurse.class : ScrollOfAntiMagic.class);

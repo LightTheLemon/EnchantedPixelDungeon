@@ -28,9 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixerOfCleansing;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -56,7 +54,7 @@ public class CleansingDart extends TippedDart {
 		if (processingChargedShot && defender == attacker) {
 			//do nothing to the hero when processing charged shot
 		} else if (attacker.alignment == defender.alignment){
-			ElixerOfCleansing.cleanse(defender, ElixerOfCleansing.Cleanse.DURATION*2f);
+			ElixirOfCleansing.cleanse(defender, ElixirOfCleansing.Cleanse.DURATION*2f);
 			return 0; //also skips on-hit fx like enchants for allies
 		} else {
 			for (Buff b : defender.buffs()){

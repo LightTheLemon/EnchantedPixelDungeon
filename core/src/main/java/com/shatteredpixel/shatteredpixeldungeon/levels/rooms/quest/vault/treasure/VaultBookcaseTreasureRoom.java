@@ -84,7 +84,7 @@ public class VaultBookcaseTreasureRoom extends VaultTreasureRoom {
 
 		treasureItem = ((VaultLevel)level).findT3SolveItem();
 		if (treasureItem == null){
-			treasureItem = ((VaultLevel) level).createConsumabe(2);
+			treasureItem = ((VaultLevel) level).createConsumable(2);
 		}
 		level.drop(treasureItem, secondItem + PathFinder.NEIGHBOURS8[Random.Int(PathFinder.NEIGHBOURS8.length)]);
 

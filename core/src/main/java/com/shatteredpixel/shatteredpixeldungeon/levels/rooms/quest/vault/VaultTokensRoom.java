@@ -113,10 +113,10 @@ public class VaultTokensRoom extends VaultLongRoom {
 
 		if (Random.Int(2) == 0) {
 			level.drop(((VaultLevel) level).createEquipment(3), c.x - 2 + c.y * level.width());
-			level.drop(((VaultLevel) level).createConsumabe(3), c.x + 2 + c.y * level.width());
+			level.drop(((VaultLevel) level).createConsumable(3), c.x + 2 + c.y * level.width());
 		} else {
 			level.drop(((VaultLevel) level).createEquipment(3), c.x + 2 + c.y * level.width());
-			level.drop(((VaultLevel) level).createConsumabe(3), c.x - 2 + c.y * level.width());
+			level.drop(((VaultLevel) level).createConsumable(3), c.x - 2 + c.y * level.width());
 		}
 
 		Mob enemy;

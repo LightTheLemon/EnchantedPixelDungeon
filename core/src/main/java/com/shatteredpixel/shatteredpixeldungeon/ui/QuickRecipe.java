@@ -41,7 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixerOfCleansing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAquaticRejuvenation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfDragonsBlood;
@@ -51,7 +51,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMi
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfToxicEssence;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.BlankScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
-import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.BeaconOfReturning;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
@@ -272,7 +271,7 @@ public class QuickRecipe extends Component {
 				Recipe r = new Scroll.ScrollToStone();
 				for (Class<?> cls : Generator.Category.SCROLL.classes){
 					Scroll scroll = (Scroll) Reflection.newInstance(cls);
-					if (!scroll.isKnown()) scroll.anonymize();
+					//if (!scroll.isKnown()) scroll.anonymize();
 					ArrayList<Item> in = new ArrayList<Item>(Arrays.asList(scroll));
 					result.add(new QuickRecipe( r, in, r.sampleOutput(in)));
 				}
@@ -341,10 +340,10 @@ public class QuickRecipe extends Component {
 				//Acts as a divider between recipes
 				result.add(null);
 
-				//Scroll duplication:
+				//Stone to Scroll:
 				ArrayList<Item> recipe5 = new ArrayList<>( Arrays.asList(new Runestone.PlaceHolder()) );
 				recipe5.add(1, new BlankScroll());
-				result.add(new QuickRecipe( new Scroll.ScrollCrafting(), recipe5, new Scroll.PlaceHolder()));
+				result.add(new QuickRecipe( new Scroll.StoneToScroll(), recipe5, new Scroll.PlaceHolder()));
 
 				//Acts as a divider between recipes
 				result.add(null);
@@ -396,7 +395,7 @@ public class QuickRecipe extends Component {
 				result.add(new QuickRecipe(new CausticBrew.Recipe()));
 				result.add(new QuickRecipe(new ElixirOfArcaneArmor.Recipe()));
 
-				result.add(new QuickRecipe(new ElixerOfCleansing.Recipe()));
+				result.add(new QuickRecipe(new ElixirOfCleansing.Recipe()));
 
 
 				return result;

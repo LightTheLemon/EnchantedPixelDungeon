@@ -115,7 +115,7 @@ public class TalentButton extends Button {
 		if (mode == Mode.UPGRADE
 				&& Dungeon.hero != null
 				&& Dungeon.hero.isAlive()
-				&& Dungeon.hero.talentPointsAvailable(tier) > 0
+				&& Dungeon.hero.talentPointsAvailable() > 0
 				&& Dungeon.hero.pointsInTalent(talent) < talent.maxPoints()){
 			toAdd = new WndInfoTalent(talent, pointsInTalent, new WndInfoTalent.TalentButtonCallback() {
 
@@ -247,7 +247,7 @@ public class TalentButton extends Button {
 	}
 
 	public void upgradeTalent(){
-		if (Dungeon.hero.talentPointsAvailable(tier) > 0 && parent != null) {
+		if (Dungeon.hero.talentPointsAvailable() > 0 && parent != null) {
 			Dungeon.hero.upgradeTalent(talent);
 			float oldWidth = fill.width();
 			pointsInTalent++;

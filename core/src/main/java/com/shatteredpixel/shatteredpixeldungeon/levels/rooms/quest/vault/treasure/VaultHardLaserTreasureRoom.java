@@ -156,7 +156,7 @@ public class VaultHardLaserTreasureRoom extends VaultTreasureRoom {
 		Item treasureItem = ((VaultLevel) level).createEquipment(3);
 		level.drop(treasureItem, treasurePos).type = Heap.Type.CHEST;
 
-		treasureItem = ((VaultLevel) level).createConsumabe(3);
+		treasureItem = ((VaultLevel) level).createConsumable(3);
 		do {
 			treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));
 		} while (level.heaps.get(treasurePos) != null);
