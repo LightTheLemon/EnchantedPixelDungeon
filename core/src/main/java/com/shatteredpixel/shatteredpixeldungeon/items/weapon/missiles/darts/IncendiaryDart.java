@@ -55,8 +55,7 @@ public class IncendiaryDart extends TippedDart {
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
-		//when processing charged shot, only burn enemies
-		if (!processingChargedShot || attacker.alignment != defender.alignment) {
+		if (attacker.alignment != defender.alignment) {
 			Buff.affect(defender, Burning.class).reignite(defender);
 		}
 		return super.proc( attacker, defender, damage );

@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -38,7 +37,7 @@ import com.watabou.utils.GameMath;
 
 import java.util.ArrayList;
 
-public class Waterskin extends Item {
+public class DewVial extends Item {
 
 	private static final int MAX_VOLUME	= 20;
 
@@ -51,7 +50,7 @@ public class Waterskin extends Item {
 	private static final String TXT_STATUS	= "%d/%d";
 
 	{
-		image = ItemSpriteSheet.WATERSKIN;
+		image = ItemSpriteSheet.VIAL;
 
 		defaultAction = AC_SIP;
 

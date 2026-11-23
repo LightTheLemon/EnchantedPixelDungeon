@@ -25,7 +25,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Foresight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
@@ -33,7 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
+import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes.Landmark;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -79,8 +78,8 @@ public class WaterOfAwareness extends WellWater {
 	
 	@Override
 	protected Item affectItem( Item item, int pos ) {
-		if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
-			((Waterskin)item).fill(10);
+		if (item instanceof DewVial && !((DewVial)item).isFull()) {
+			((DewVial)item).fill(10);
 			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.2f, 1 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;

@@ -47,9 +47,7 @@ public class AdrenalineDart extends TippedDart {
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
 
-		if (processingChargedShot && defender == attacker) {
-			//do nothing to the hero when processing charged shot
-		} else if (attacker.alignment == defender.alignment){
+		if (attacker.alignment == defender.alignment){
 			Buff.prolong( defender, Adrenaline.class, Adrenaline.DURATION);
 			return 0; //also skips on-hit fx like enchants for allies
 		} else {

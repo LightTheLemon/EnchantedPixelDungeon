@@ -155,7 +155,7 @@ public class TelekineticGrab extends TargetedSpell {
 			inputs =  new Class[]{LiquidMetal.class};
 			inQuantity = new int[]{10};
 
-			cost = 10;
+			cost = 8;
 
 			output = TelekineticGrab.class;
 			outQuantity = OUT_QUANTITY;

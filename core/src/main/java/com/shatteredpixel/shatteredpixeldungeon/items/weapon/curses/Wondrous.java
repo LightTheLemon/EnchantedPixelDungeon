@@ -36,11 +36,11 @@ public class Wondrous extends Weapon.Enchantment {
 
 	@Override
 	public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
-		float procChance = 1/8f * procChanceMultiplier(attacker);
+		float procChance = 1/8f * procChanceMultiplier(attacker) + weapon.buffedLvl()/50f;
 
 		if (Random.Float() < procChance){
 
-			boolean positiveOnly = Random.Float() < WondrousResin.positiveCurseEffectChance();
+			boolean positiveOnly = Random.Float() < WondrousResin.positiveCurseEffectChance() + 0.25f;
 
 			Ballistica aim = new Ballistica(attacker.pos, defender.pos, Ballistica.STOP_TARGET);
 			defender.sprite.emitter().burst(RainbowParticle.BURST, 25);

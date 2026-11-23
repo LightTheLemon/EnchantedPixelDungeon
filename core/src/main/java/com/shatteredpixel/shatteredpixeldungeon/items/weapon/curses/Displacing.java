@@ -41,7 +41,7 @@ public class Displacing extends Weapon.Enchantment {
 	@Override
 	public int proc(Weapon weapon, Char attacker, Char defender, int damage ) {
 
-		float procChance = 1/12f * procChanceMultiplier(attacker);
+		float procChance = 1/12f * procChanceMultiplier(attacker) + weapon.buffedLvl()/50f;
 		if (Random.Float() < procChance && !defender.properties().contains(Char.Property.IMMOVABLE)){
 
 			int oldpos = defender.pos;
@@ -49,16 +49,14 @@ public class Displacing extends Weapon.Enchantment {
 				if (Dungeon.level.heroFOV[oldpos]) {
 					CellEmitter.get( oldpos ).start( Speck.factory( Speck.LIGHT ), 0.2f, 3 );
 					if (weapon.buffedLvl() != 0) {
-						Buff.affect(attacker, Daze.class, 5f + weapon.buffedLvl());
-						Buff.affect(attacker, Slow.class, 6f + weapon.buffedLvl());
+						Buff.affect(attacker, Slow.class, 3f + weapon.buffedLvl() * 1.5f);
 					}
 				}
 
 				if (defender instanceof Mob && ((Mob) defender).state == ((Mob) defender).HUNTING){
 					((Mob) defender).state = ((Mob) defender).WANDERING;
 					if (weapon.buffedLvl() != 0) {
-						Buff.affect(attacker, Daze.class, 5f + weapon.buffedLvl() * 1.2f);
-						Buff.affect(attacker, Slow.class, 6f + weapon.buffedLvl() * 1.2f);
+						Buff.affect(attacker, Slow.class, 3f + weapon.buffedLvl() * 1.5f);
 					}
 				}
 			}

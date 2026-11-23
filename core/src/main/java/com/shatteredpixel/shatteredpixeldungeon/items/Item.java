@@ -594,6 +594,8 @@ public class Item implements Bundlable {
 
 			if (!energizable.isIdentified()){
 				((AlchemyScene) ShatteredPixelDungeon.scene()).showIdentify(energizable);
+				//Gain a bonus when unidentified
+				Dungeon.energy += 2;
 			}
 
 			return new EnergyCrystal().quantity(energizable.energyVal());
@@ -602,7 +604,13 @@ public class Item implements Bundlable {
 		@Override
 		public Item sampleOutput(ArrayList<Item> ingredients) {
 
-			return new EnergyCrystal().quantity(ingredients.get(0).energyVal());
+			Item i = ingredients.get(0);
+			if (!i.isIdentified()) {
+				//Gain a bonus when unidentified
+				return new EnergyCrystal().quantity(i.energyVal() + 2);
+			}
+
+			return new EnergyCrystal().quantity(i.energyVal());
 		}
 	}
 	public static class ItemToIdentify extends Recipe {

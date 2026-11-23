@@ -29,10 +29,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.watabou.utils.Point;
+import com.watabou.utils.Random;
 
 public class CryptRoom extends SpecialRoom {
 
@@ -69,6 +71,9 @@ public class CryptRoom extends SpecialRoom {
 		}
 		
 		level.drop( prize( level ), cx + cy * level.width() ).type = Heap.Type.TOMB;
+
+		if (Random.Float() < 0.3) level.drop( new CurseInfusion().quantity(1), cx + cy * level.width() ).type = Heap.Type.TOMB;
+
 	}
 	
 	private static Item prize( Level level ) {

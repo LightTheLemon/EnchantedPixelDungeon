@@ -43,8 +43,7 @@ public class ShockingDart extends TippedDart {
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
 
-		//when processing charged shot, only shock enemies
-		if (!processingChargedShot || attacker.alignment != defender.alignment) {
+		if (attacker.alignment != defender.alignment) {
 			defender.damage(Random.NormalIntRange(5 + Dungeon.scalingDepth() / 4, 10 + Dungeon.scalingDepth() / 4), new Electricity());
 
 			CharSprite s = defender.sprite;

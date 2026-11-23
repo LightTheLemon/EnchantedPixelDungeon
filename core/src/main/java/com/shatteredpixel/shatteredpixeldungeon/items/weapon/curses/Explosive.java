@@ -103,7 +103,7 @@ public class Explosive extends Weapon.Enchantment {
 			durability = 100;
 		}
 
-		return damage;
+		return (int) (damage * 1.1f);
 	}
 
 	public void merge(Explosive other){

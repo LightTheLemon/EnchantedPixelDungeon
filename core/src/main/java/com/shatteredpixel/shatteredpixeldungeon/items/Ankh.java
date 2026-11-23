@@ -59,8 +59,8 @@ public class Ankh extends Item {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions(hero);
-		Waterskin waterskin = hero.belongings.getItem(Waterskin.class);
-		if (waterskin != null && waterskin.isFull() && !blessed)
+		DewVial dewVial = hero.belongings.getItem(DewVial.class);
+		if (dewVial != null && dewVial.isFull() && !blessed)
 			actions.add( AC_BLESS );
 		return actions;
 	}
@@ -72,10 +72,10 @@ public class Ankh extends Item {
 
 		if (action.equals( AC_BLESS )) {
 
-			Waterskin waterskin = hero.belongings.getItem(Waterskin.class);
-			if (waterskin != null){
+			DewVial dewVial = hero.belongings.getItem(DewVial.class);
+			if (dewVial != null){
 				blessed = true;
-				waterskin.empty();
+				dewVial.empty();
 				GLog.p( Messages.get(this, "bless") );
 				hero.spend( 1f );
 				hero.busy();

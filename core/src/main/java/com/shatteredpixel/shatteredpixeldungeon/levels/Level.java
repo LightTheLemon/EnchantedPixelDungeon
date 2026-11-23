@@ -257,7 +257,7 @@ public abstract class Level implements Bundlable {
 			}
 			if ( Dungeon.trinketCataNeeded() ){
 				Dungeon.LimitedDrops.TRINKET_CATA.drop();
-				addItemToSpawn( Random.Float() < 0.5 ? Generator.random(Generator.Category.TRINKET) : new TrinketCatalyst() );
+				addItemToSpawn( Random.Float() < 0.2 ? Generator.random(Generator.Category.TRINKET) : new TrinketCatalyst() );
 			}
 			
 			if (Dungeon.depth > 1) {
@@ -778,18 +778,20 @@ public abstract class Level implements Bundlable {
 	public boolean spawnMob(int disLimit){
 		PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.or(passable, avoid, null));
 
-		float spawnChance = Random.Float();
+		float chance = Random.Float();
+
 		Mob mob = createMob();
+
+		boolean bossType = Char.hasProp(mob, Char.Property.MINIBOSS) || Char.hasProp(mob, Char.Property.BOSS);
 		if (mob.state != mob.PASSIVE) {
-			if (spawnChance < 0.05f) {
+			if (chance < 0.05f) {
 				mob.state = mob.SLEEPING;
 				Buff.affect(mob, MagicalSleep.class);
-			} else if (spawnChance < 0.1f) {
+			} else if (chance < 0.1f || bossType) {
 				mob.state = mob.SLEEPING;
 			} else {
 				mob.state = mob.WANDERING;
 			}
-
 		}
 		int tries = 30;
 		do {

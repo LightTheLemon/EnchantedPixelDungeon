@@ -36,28 +36,12 @@ public class Displacement extends Armor.Glyph {
 
 	@Override
 	public int proc(Armor armor, Char attacker, Char defender, int damage ) {
-		boolean noDamage = false;
-		float procChance = 1/20f * procChanceMultiplier(defender) + armor.buffedLvl()/100f ;
+		float procChance = 1/18f * procChanceMultiplier(defender) + armor.buffedLvl()/50f ;
 		if ( Random.Float() < procChance ) {
 			ScrollOfTeleportation.teleportChar(defender);
-			noDamage = true;
-			Buff.affect(defender, Daze.class, armor.buffedLvl()*1.1f);
-			Buff.affect(defender, Vertigo.class, armor.buffedLvl()*1.1f);
-			Buff.affect(attacker, Daze.class, armor.buffedLvl()*.7f);
-			Buff.affect(attacker, Vertigo.class, armor.buffedLvl()*.7f);
+			return 0;
 		}
-
-		if ( Random.Float() < procChance ) {
-			ScrollOfTeleportation.teleportChar(attacker);
-			noDamage = true;
-			Buff.affect(attacker, Daze.class, armor.buffedLvl()*1.1f);
-			Buff.affect(attacker, Vertigo.class, armor.buffedLvl()*1.1f);
-			Buff.affect(defender, Daze.class, armor.buffedLvl()*.7f);
-			Buff.affect(defender, Vertigo.class, armor.buffedLvl()*.7f);
-		}
-
-
-		return !noDamage ? damage : 0;
+		return damage;
 	}
 
 	@Override

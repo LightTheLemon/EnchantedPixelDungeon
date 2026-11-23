@@ -47,8 +47,6 @@ public class Sacrificial extends Weapon.Enchantment {
 			hits += 0.2f;
 		}
 		if (damage >= defender.HP) {
-			//Other possible conditions: && attacker.HP < attacker.HT * 0.75f, && attacker.buff(Bleeding.class) != null
-			//Do I want to increase the healing for more hits? I think not.
 			hits = 1;
 			if (attacker.buff(Bleeding.class) != null) {
 				Buff.detach(attacker, Bleeding.class);

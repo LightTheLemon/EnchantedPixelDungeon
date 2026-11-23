@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -62,15 +63,9 @@ public class StoneOfDeepSleep extends Runestone {
 		if (Actor.findChar(cell) != null) {
 
 			Char c = Actor.findChar(cell);
-
-			if (c instanceof Mob && ((Mob)c).state == ((Mob)c).SLEEPING) { //only apply magical sleep on already sleeping enemies
-
+			if (c instanceof Mob) {
 				Buff.affect(c, MagicalSleep.class);
 				c.sprite.centerEmitter().start(Speck.factory(Speck.NOTE), 0.3f, 5);
-
-			} else if (c instanceof Mob) {
-				Buff.affect(c, Sleep.class);
-				c.sprite.centerEmitter().start(Speck.factory(Speck.NOTE), 0.3f, 3);
 
 			} else if (c instanceof Hero) {
 

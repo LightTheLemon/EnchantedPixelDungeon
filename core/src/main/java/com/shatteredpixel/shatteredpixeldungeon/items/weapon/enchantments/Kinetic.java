@@ -47,7 +47,7 @@ public class Kinetic extends Weapon.Enchantment {
 		//use a tracker so that we can know the true final damage
 		Buff.affect(attacker, KineticTracker.class).conservedDamage = conservedDamage;
 		
-		return damage + conservedDamage * (1 + weapon.buffedLvl() / 50);
+		return (damage + conservedDamage) * (1 + (weapon.buffedLvl() / 50));
 	}
 
 	@Override
@@ -55,8 +55,6 @@ public class Kinetic extends Weapon.Enchantment {
 
 		return Messages.decimalFormat("#.##", 100 * (1 + level / 50f) ) + "%";
 	}
-
-
 
 	@Override
 	public ItemSprite.Glowing glowing() {
@@ -117,7 +115,7 @@ public class Kinetic extends Weapon.Enchantment {
 		
 		@Override
 		public boolean act() {
-			preservedDamage -= Math.max(preservedDamage*.025f, 0.1f);
+			preservedDamage -= (float) (preservedDamage*.01);
 			if (preservedDamage <= 0) detach();
 			
 			spend(TICK);

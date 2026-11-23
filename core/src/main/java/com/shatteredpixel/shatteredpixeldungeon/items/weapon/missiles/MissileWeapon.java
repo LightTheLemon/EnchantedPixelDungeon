@@ -41,7 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
@@ -103,9 +103,7 @@ abstract public class MissileWeapon extends Weapon {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		actions.add( AC_THROW );
 		actions.remove( AC_EQUIP );
-		actions.remove( AC_THROW);
 		return actions;
 	}
 
@@ -297,13 +295,11 @@ abstract public class MissileWeapon extends Weapon {
 
 			//metamorphed seer shot logic
 			if (curUser.hasTalent(Talent.SEER_SHOT)
-					&& curUser.heroClass != HeroClass.HUNTRESS
-					&& curUser.buff(Talent.SeerShotCooldown.class) == null){
+					&& curUser.heroClass != HeroClass.HUNTRESS){
 				if (Actor.findChar(cell) == null) {
-					RevealedArea a = Buff.affect(curUser, RevealedArea.class, 5 * curUser.pointsInTalent(Talent.SEER_SHOT));
+					RevealedArea a = Buff.affect(curUser, RevealedArea.class, (int) Math.pow(curUser.pointsInTalent(Talent.SEER_SHOT), 2) + 2 );
 					a.depth = Dungeon.depth;
 					a.pos = cell;
-					Buff.affect(curUser, Talent.SeerShotCooldown.class, 20f);
 				}
 			}
 

@@ -60,12 +60,12 @@ public class PotionOfInvisibility extends Potion {
 			Sample.INSTANCE.play( Assets.Sounds.GAS );
 		}
 
-		int centerVolume = 90;
+		int centerVolume = 45;
 		for (int i : PathFinder.NEIGHBOURS8){
 			if (!Dungeon.level.solid[cell+i]){
-				GameScene.add( Blob.seed( cell+i, 90, SmokeScreen.class ) );
+				GameScene.add( Blob.seed( cell+i, 45, SmokeScreen.class ) );
 			} else {
-				centerVolume += 180;
+				centerVolume += 90;
 			}
 		}
 

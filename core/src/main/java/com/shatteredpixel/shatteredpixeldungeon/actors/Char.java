@@ -1220,11 +1220,14 @@ public abstract class Char extends Actor {
 		return filtered;
 	}
 
-	@SuppressWarnings("unchecked")
+	//zrp200
+	public synchronized final <T extends Buff> T buff(Class<T> c) {
+		return buff(c, true);
+	}
 	//returns an instance of the specific buff class, if it exists. Not just assignable
-	public synchronized  <T extends Buff> T buff( Class<T> c ) {
+	public synchronized  <T extends Buff> T buff( Class<T> c, boolean matchClass ) {
 		for (Buff b : buffs) {
-			if (b.getClass() == c) {
+			if (matchClass ? b.getClass() == c : c.isInstance(b)) {
 				return (T)b;
 			}
 		}

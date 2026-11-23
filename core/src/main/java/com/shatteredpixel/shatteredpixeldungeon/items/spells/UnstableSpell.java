@@ -23,18 +23,13 @@ package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.EmptyBottle;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfConservation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.BlankScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMysticalEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
@@ -47,7 +42,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -79,8 +73,6 @@ public class UnstableSpell extends Spell {
 		nonCombatScrolls.add( ScrollOfRecharging.class );
 		nonCombatScrolls.add( ScrollOfLullaby.class );
 		nonCombatScrolls.add( ScrollOfTeleportation.class );
-		nonCombatScrolls.add( ScrollOfAntiMagic.class );
-		nonCombatScrolls.add( ScrollOfMysticalEnergy.class);
 		nonCombatScrolls.add( ScrollOfTransmutation.class );
 	}
 
@@ -132,7 +124,7 @@ public class UnstableSpell extends Spell {
 
 	@Override
 	public int energyVal() {
-		return 8 * quantity;
+		return 4 * quantity;
 	}
 
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
@@ -141,7 +133,7 @@ public class UnstableSpell extends Spell {
 			inputs =  new Class[]{BlankScroll.class};
 			inQuantity = new int[]{1};
 
-			cost = 3;
+			cost = 2;
 
 			output = UnstableSpell.class;
 			outQuantity = 1;

@@ -64,8 +64,24 @@ public class AboutScene extends PixelScene {
 		Component content = list.content();
 		content.clear();
 
-		//*** Shattered Pixel Dungeon Credits ***
+		//*** Enchanted Pixel Dungeon Credits ***
+		final int EPD_COLOR = 0xFFAAFF;
+		CreditsBlock epd = new CreditsBlock(true, EPD_COLOR,
+				"Enchanted Pixel Dungeon",
+				Icons.LIGHT_THE_LEMON.get(),
+				"Developed by: _LightTheLemon_",
+				"EPD's Github Page",
+				"https://github.com/LightTheLemon/EnchantedPixelDungeon/");
+		if (landscape()){
+			epd.setRect((Camera.main.width - colWidth)/2f, insets.top + 6, 120, 0);
+		} else {
+			epd.setRect((w - fullWidth)/2f, insets.top + 8, 120, 0);
+		}
+		content.add(epd);
 
+		addLine(epd.bottom() + 4, content);
+
+		//*** Shattered Pixel Dungeon Credits ***
 		CreditsBlock shpx = new CreditsBlock(true, Window.SHPX_COLOR,
 				"Shattered Pixel Dungeon",
 				Icons.SHPX.get(),
@@ -73,9 +89,9 @@ public class AboutScene extends PixelScene {
 				"ShatteredPixel.com",
 				"https://ShatteredPixel.com");
 		if (landscape()){
-			shpx.setRect((w - fullWidth)/2f - 6, insets.top + 26, 120, 0);
+			shpx.setRect((w - fullWidth)/2f - 6, insets.top + 56, 120, 0);
 		} else {
-			shpx.setRect((w - fullWidth)/2f, insets.top + 6, 120, 0);
+			shpx.setRect((w - fullWidth)/2f, insets.top + 65, 120, 0);
 		}
 		content.add(shpx);
 
@@ -87,9 +103,9 @@ public class AboutScene extends PixelScene {
 				"https://www.alekskomitov.com/");
 		aleks.setSize(colWidth/2f, 0);
 		if (landscape()){
-			aleks.setPos(shpx.right(), insets.top+6);
+			aleks.setPos(shpx.right(), insets.top+56);
 		} else {
-			aleks.setPos(w/2f - colWidth/2f, shpx.bottom()+6);
+			aleks.setPos(w/2f - colWidth/2f, shpx.bottom()+2);
 		}
 		content.add(aleks);
 
@@ -128,7 +144,7 @@ public class AboutScene extends PixelScene {
 				null,
 				null);
 		alastair.setSize(colWidth/2f, 0);
-		alastair.setRect(pumpkin.left(), celesti.bottom()+6, colWidth/2f, 0);
+		alastair.setRect(pumpkin.left(), celesti.bottom(), colWidth/2f, 0);
 		content.add(alastair);
 
 		//*** Pixel Dungeon Credits ***

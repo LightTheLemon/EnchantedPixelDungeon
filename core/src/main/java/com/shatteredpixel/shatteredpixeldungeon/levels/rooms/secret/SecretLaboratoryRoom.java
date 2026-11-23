@@ -83,7 +83,7 @@ public class SecretLaboratoryRoom extends SecretRoom {
 		level.drop( new EnergyCrystal().quantity(Random.IntRange(4, 6)), pos );
 
 		Item ingredient = Random.Float() < 0.5f ? new EmptyBottle() : new BlankScroll();
-		int quantity = Random.Int(1, (3 + Dungeon.depth / 5));
+		int quantity = Random.Int(2, (4 + Dungeon.depth / 5));
 		do {
 			pos = level.pointToCell(random());
 		} while (level.map[pos] != Terrain.EMPTY_SP || level.heaps.get( pos ) != null);

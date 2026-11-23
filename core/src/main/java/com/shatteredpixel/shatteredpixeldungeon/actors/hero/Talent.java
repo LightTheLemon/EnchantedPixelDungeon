@@ -67,7 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
@@ -258,11 +258,6 @@ public enum Talent {
 		public float iconFadePercent() { return GameMath.gate(0, visualcooldown() / (15 - 5*Dungeon.hero.pointsInTalent(REJUVENATING_STEPS)), 1); }
 	};
 	public static class RejuvenatingStepsFurrow extends CounterBuff{{revivePersists = true;}};
-	public static class SeerShotCooldown extends FlavourBuff{
-		public int icon() { return target.buff(RevealedArea.class) != null ? BuffIndicator.NONE : BuffIndicator.TIME; }
-		public void tintIcon(Image icon) { icon.hardlight(0.7f, 0.4f, 0.7f); }
-		public float iconFadePercent() { return Math.max(0, visualcooldown() / 20); }
-	};
 	public static class SpiritBladesTracker extends FlavourBuff{};
 	public static class PatientStrikeTracker extends Buff {
 		public int pos;
@@ -391,7 +386,7 @@ public enum Talent {
 		}
 	}
 	public static class CombinedLethalityAbilityTracker extends FlavourBuff{
-		public MeleeWeapon weapon;
+		public Weapon weapon;
 	};
 	public static class CombinedEnergyAbilityTracker extends FlavourBuff{
 		public boolean monkAbilused = false;

@@ -95,14 +95,12 @@ public class Rapier extends MeleeWeapon {
 		}
 
 		Char enemy = Actor.findChar(target);
-		//duelist can lunge out of her FOV, but this wastes the ability instead of cancelling if there is no target
-		if (Dungeon.level.heroFOV[target]) {
-			if (enemy == null || enemy == hero || hero.isCharmedBy(enemy)) {
-				GLog.w(Messages.get(wep, "ability_no_target"));
-				return;
-			}
+		if (enemy == null || enemy == hero || hero.isCharmedBy(enemy)) {
+			GLog.w(Messages.get(wep, "ability_no_target"));
+			return;
 		}
 
+		//Too close or can't move
 		if (hero.rooted || Dungeon.level.distance(hero.pos, target) < 2
 				|| Dungeon.level.distance(hero.pos, target)-1 > wep.reachFactor(hero)){
 			GLog.w(Messages.get(wep, "ability_target_range"));
@@ -110,6 +108,7 @@ public class Rapier extends MeleeWeapon {
 			return;
 		}
 
+		//TODO: ability to move further but damage decreases with range
 		int lungeCell = -1;
 		for (int i : PathFinder.NEIGHBOURS8){
 			if (Dungeon.level.distance(hero.pos+i, target) <= wep.reachFactor(hero)

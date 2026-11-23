@@ -31,7 +31,7 @@ import com.watabou.utils.Bundle;
 
 public class ArtifactRecharge extends Buff {
 
-	public static final float DURATION = 30f;
+	public static final float DURATION = 25f;
 
 	{
 		type = buffType.POSITIVE;

@@ -54,8 +54,9 @@ public class Boomerang extends MissileWeapon {
 
 	@Override
 	public int max(int lvl) {
-		return  6 * tier +                  //instead of 5 * tier
-				(tier+1) * lvl;             //instead of tier * lvl
+		return  8 * tier +                                      //32 base, up from 20 because you get less of them
+				Math.round(1.3f*(tier + 1)) * lvl;              //+6.5 per level, up from +4
+
 	}
 
 	boolean circlingBack = false;

@@ -189,7 +189,7 @@ public abstract class Scroll extends Item {
 				GLog.w( Messages.get(this, "blinded") );
 			} else if (hero.buff(UnstableSpellbook.bookRecharge.class) != null
 					&& hero.buff(UnstableSpellbook.bookRecharge.class).isCursed()
-					&& !(this instanceof ScrollOfRemoveCurse || this instanceof ScrollOfAntiMagic)){
+					&& !(this instanceof ScrollOfRemoveCurse)){
 				GLog.n( Messages.get(this, "cursed") );
 			} else {
 				doRead();
@@ -238,7 +238,7 @@ public abstract class Scroll extends Item {
 							curUser.spend(1);
 							Sample.INSTANCE.play(Assets.Sounds.PUFF);
 
-							GLog.i("You crafted the scroll into 2 _" + Messages.titleCase(runestone.name()) + "_" );
+							GLog.i("You crafted the scroll into 2 " + Messages.titleCase(runestone.name()) );
 
 						}
 						break;
@@ -406,7 +406,7 @@ public abstract class Scroll extends Item {
 		
 		@Override
 		public String info() {
-			return "A regular scroll. Could be any type.";
+			return "A scroll, but you're not sure which type.";
 		}
 	}
 
@@ -613,8 +613,6 @@ public abstract class Scroll extends Item {
 		stones.put(ScrollOfTerror.class,         StoneOfFear.class);
 		stones.put(ScrollOfTransmutation.class,  StoneOfAugmentation.class);
 		stones.put(ScrollOfUpgrade.class,        StoneOfEnchantment.class);
-		stones.put(ScrollOfAntiMagic.class,      StoneOfDetectMagic.class);
-		stones.put(ScrollOfMysticalEnergy.class, StoneOfShock.class);
 		stones.put(ScrollOfPsionicBlast.class,   StoneOfBlast.class);
 	}
 
@@ -627,8 +625,8 @@ public abstract class Scroll extends Item {
 		scrolls.put(StoneOfFlock.class,          ScrollOfMirrorImage.class);
 		scrolls.put(StoneOfBlast.class,          ScrollOfPsionicBlast.class);
 		scrolls.put(StoneOfAggression.class,     ScrollOfRage.class);
-		scrolls.put(StoneOfShock.class,          Dungeon.selectedScrolls.contains(ScrollOfRecharging.class) ? ScrollOfRecharging.class : ScrollOfMysticalEnergy.class);
-		scrolls.put(StoneOfDetectMagic.class,    Dungeon.selectedScrolls.contains(ScrollOfRemoveCurse.class) ? ScrollOfRemoveCurse.class : ScrollOfAntiMagic.class);
+		scrolls.put(StoneOfShock.class,          ScrollOfRecharging.class);
+		scrolls.put(StoneOfDetectMagic.class,    ScrollOfRemoveCurse.class);
 		scrolls.put(StoneOfBlink.class,          ScrollOfTeleportation.class);
 		scrolls.put(StoneOfFear.class,           ScrollOfTerror.class );
 		scrolls.put(StoneOfAugmentation.class,   ScrollOfTransmutation.class);

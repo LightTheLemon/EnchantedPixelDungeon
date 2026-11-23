@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.utils.BArray;
@@ -201,13 +202,21 @@ public class EtherealChains extends Artifact {
 						Talent.onArtifactUsed(hero);
 						updateQuickslot();
 
-						Buff.affect(enemy, Cripple.class, 1f + (level() / 2f));
+						Buff.affect(enemy, Cripple.class, 5f + level());
 
-						Paralysis para = Buff.affect(enemy, Paralysis.class, 1);
-						para.announced = false;
-						para.fx(false);
+						//Instead of calling paralysis normally, we do this to remove fx and prevent it from being announced
+						Paralysis buff = enemy.buff( Paralysis.class);
+						if (buff == null) {
+							buff = new Paralysis();
 
-						hero.spend(1);
+							//Doesn't announce or show sprite paused
+							buff.announced = false;
+							buff.attachTo(enemy);
+
+							enemy.sprite.remove(CharSprite.State.PARALYSED);
+
+						}
+						Buff.affect(enemy, Paralysis.class, 1f);
 
 						Dungeon.level.occupyCell(enemy);
 						Dungeon.observe();

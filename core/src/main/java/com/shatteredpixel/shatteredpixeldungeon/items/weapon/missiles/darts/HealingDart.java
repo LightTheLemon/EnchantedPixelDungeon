@@ -47,11 +47,6 @@ public class HealingDart extends TippedDart {
 
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
-
-		//do nothing to the hero or enemies when processing charged shot
-		if (processingChargedShot && (defender == attacker || attacker.alignment != defender.alignment)){
-			return super.proc(attacker, defender, damage);
-		}
 		
 		//heals 30 hp at base, scaling with enemy HT
 		PotionOfHealing.cure( defender );

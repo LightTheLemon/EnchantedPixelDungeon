@@ -32,20 +32,18 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShaftParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
+import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfVitality;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.VialOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes.Landmark;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -71,7 +69,7 @@ public class WaterOfHealth extends WellWater {
 			healing.setHeal(hero.HT, 0, VialOfBlood.maxHealPerTurn(), true);
 			healing.applyVitalityEffect();
 		} else {
-			hero.HP = (int)(hero.HT / RingOfVitality.HealingMultiplier(Dungeon.hero));
+			hero.HP = Math.min(hero.HT, hero.HP + (int)(hero.HT / RingOfVitality.HealingMultiplier(Dungeon.hero)));
 			hero.sprite.emitter().start(Speck.factory(Speck.HEALING), 0.4f, 4);
 			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(hero.HT), FloatingText.HEALING);
 		}
@@ -87,8 +85,8 @@ public class WaterOfHealth extends WellWater {
 	
 	@Override
 	protected Item affectItem( Item item, int pos ) {
-		if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
-			((Waterskin)item).fill(20);
+		if (item instanceof DewVial && !((DewVial)item).isFull()) {
+			((DewVial)item).fill(20);
 			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;

@@ -55,14 +55,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfAntiMagic;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMysticalEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.RangedWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
@@ -274,18 +272,13 @@ public class Dungeon {
 				ScrollOfRecharging.class,
 				ScrollOfTeleportation.class,
 				ScrollOfLullaby.class,
-				ScrollOfRetribution.class,
 				ScrollOfTerror.class,
 				ScrollOfRage.class,
 				ScrollOfPsionicBlast.class,
-				ScrollOfMysticalEnergy.class,
-				ScrollOfAntiMagic.class,
 		};
+		System.out.println("chooseScrolls() runs: " + selectedScrolls);
 		selectedScrolls = new ArrayList<> (Arrays.asList(extraScrolls));
 		Collections.shuffle(selectedScrolls);
-		selectedScrolls.remove(9);
-		selectedScrolls.remove(8);
-		selectedScrolls.remove(7);
 		selectedScrolls.remove(6);
 		selectedScrolls.remove(5);
 
@@ -671,7 +664,7 @@ public class Dungeon {
 	public static boolean trinketCataNeeded(){
 		//extra on higher depths
 		if ( (Math.pow(1.12, depth) - 2) > Random.Int(50) ) {
-			GLog.i("trinketCataNeeded");
+			System.out.println("trinketCataNeeded");
 			return true;
 		}
 		//one trinket catalyst on floors 1-3

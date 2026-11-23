@@ -122,7 +122,7 @@ public class UnstableBrew extends Brew {
 
 	@Override
 	public int energyVal() {
-		return 6 * quantity;
+		return 4 * quantity;
 	}
 
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
@@ -131,7 +131,7 @@ public class UnstableBrew extends Brew {
 			inputs =  new Class[]{EmptyBottle.class};
 			inQuantity = new int[]{1};
 
-			cost = 2;
+			cost = 1;
 
 			//Could produce aqua brews instead?
 			output = UnstableBrew.class;

@@ -30,14 +30,14 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShaftParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
+import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes.Landmark;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -132,8 +132,8 @@ public class WaterOfEnchantment extends WellWater {
 			CellEmitter.get( pos ).start( Speck.factory( Speck.ENCHANT_STAR ), 0.6f, 6 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;
-		} else if (item instanceof Waterskin && !((Waterskin)item).isFull()) {
-			((Waterskin)item).fill(20);
+		} else if (item instanceof DewVial && !((DewVial)item).isFull()) {
+			((DewVial)item).fill(20);
 			CellEmitter.get( pos ).start( Speck.factory( Speck.HEALING ), 0.4f, 4 );
 			Sample.INSTANCE.play( Assets.Sounds.DRINK );
 			return item;

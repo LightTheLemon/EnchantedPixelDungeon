@@ -138,7 +138,8 @@ public enum Icons {
 	CUBE_CODE,
 	PURIGRO,
 	ARCNOR,
-	ALASTAIR;
+	ALASTAIR,
+	LIGHT_THE_LEMON;
 
 	public Image get() {
 		return get( this );
@@ -449,6 +450,9 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 192, 96, 32, 32 ) );
 				icon.scale.set(PixelScene.align(0.49f));
 				break;
+			case LIGHT_THE_LEMON:
+				icon.frame( icon.texture.uvRectBySize( 224, 96, 32, 32 ) );
+				icon.scale.set(PixelScene.align(0.49f));
 
 		}
 		return icon;
@@ -481,7 +485,7 @@ public enum Icons {
 			case ROGUE:
 				return new ItemSprite(ItemSpriteSheet.ARTIFACT_CLOAK);
 			case HUNTRESS:
-				return new ItemSprite(ItemSpriteSheet.SPIRIT_BOW);
+				return new ItemSprite(ItemSpriteSheet.SPIRIT_BOW_2);
 			case DUELIST:
 				return new ItemSprite(ItemSpriteSheet.RAPIER);
 			case CLERIC:

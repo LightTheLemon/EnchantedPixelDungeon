@@ -46,32 +46,27 @@ public class MagicalSleep extends Buff {
 			return true;
 		}
 
-		// ALLY LOGIC ONLY
-		if (target.alignment == Char.Alignment.ALLY) {
+		if (turnsLeft > 0) {
+			target.HP = Math.min(target.HP + 1, target.HT);
+			turnsLeft--;
 
-			// Handle limited turns
-			if (turnsLeft > 0) {
-				target.HP = Math.min(target.HP + 1, target.HT);
-				turnsLeft--;
-
-				if (turnsLeft == 0 && target.HP < target.HT) {
-					if (target instanceof Hero) GLog.i("\nYou wake up after a short nap, restoring some HP.");
-					detach();
-					return true;
-				}
-			}
-			// Handle original infinite turns
-			else if (turnsLeft == -1) {
-				target.HP = Math.min(target.HP + 1, target.HT);
-			}
-
-			if (target instanceof Hero) ((Hero) target).resting = true;
-
-			if (target.HP == target.HT) {
-				if (target instanceof Hero) GLog.p(Messages.get(this, "wakeup"));
+			if (turnsLeft == 0 && target.HP < target.HT) {
+				if (target instanceof Hero) GLog.i("\nYou wake up after a short nap, restoring some HP.");
 				detach();
 				return true;
 			}
+		}
+		// Handle original infinite turns
+		else if (turnsLeft == -1) {
+			target.HP = Math.min(target.HP + 1, target.HT);
+		}
+
+		if (target instanceof Hero) ((Hero) target).resting = true;
+
+		if (target instanceof Hero && target.HP == target.HT) {
+			GLog.p(Messages.get(this, "wakeup"));
+			detach();
+			return true;
 		}
 
 		spend(STEP);

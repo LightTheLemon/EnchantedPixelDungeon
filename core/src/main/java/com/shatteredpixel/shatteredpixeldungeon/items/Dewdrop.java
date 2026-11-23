@@ -52,7 +52,7 @@ public class Dewdrop extends Item {
 	@Override
 	public boolean doPickUp(Hero hero, int pos) {
 		
-		Waterskin flask = hero.belongings.getItem( Waterskin.class );
+		DewVial flask = hero.belongings.getItem( DewVial.class );
 		Catalog.setSeen(getClass());
 		Statistics.itemTypesDiscovered.add(getClass());
 		

@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
+import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -278,7 +278,7 @@ public class QuickSlotButton extends Button {
 		if (Statistics.duration + Actor.now() <= 10){
 			boolean containsWaterskin = false;
 			for (int i = 0; i < instance.length; i++) {
-				if (select(i) instanceof Waterskin) containsWaterskin = true;
+				if (select(i) instanceof DewVial) containsWaterskin = true;
 			}
 			if (containsWaterskin) SPDSettings.quickslotWaterskin(true);
 		}
@@ -385,7 +385,7 @@ public class QuickSlotButton extends Button {
 		if (Statistics.duration + Actor.now() <= 10){
 			boolean containsWaterskin = false;
 			for (int i = 0; i < instance.length; i++) {
-				if (select(i) instanceof Waterskin) containsWaterskin = true;
+				if (select(i) instanceof DewVial) containsWaterskin = true;
 			}
 			if (!containsWaterskin) SPDSettings.quickslotWaterskin(false);
 		}

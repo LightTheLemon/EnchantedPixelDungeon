@@ -77,7 +77,7 @@ public class PotionOfHealing extends Potion {
 
 			if (Dungeon.swapHealing) {
 
-				//TODO: Add functionality with vial of blood
+				//TODO: Add vial of blood + shielding combo
 				float shielding = (0.6f * ch.HT + 10) * Dungeon.healingDifficultyMultiplier();
 				Buff.affect(ch, Barrier.class).setShield( Math.round(shielding) );
 				ch.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(Math.round(shielding)), FloatingText.SHIELDING );
@@ -211,7 +211,7 @@ public class PotionOfHealing extends Potion {
 
 	@Override
 	public int energyVal() {
-		return 8 * quantity;
+		return isKnown() ? 8 * quantity : super.energyVal();
 	}
 
 }

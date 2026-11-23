@@ -112,13 +112,6 @@ public class ArcaneResin extends Item {
 			if (item != null && item instanceof Wand) {
 				Wand w = (Wand)item;
 
-				/*
-				if (w.level() >= 3){
-					GLog.w(Messages.get(ArcaneResin.class, "level_too_high"));
-					return;
-				}
-				 */
-
 				int resinToUse = w.level()+1;
 
 				if (quantity() < resinToUse){
@@ -134,9 +127,6 @@ public class ArcaneResin extends Item {
 					}
 
 					w.upgrade();
-					//w.resinBonus++;
-					//w.curCharges++;
-					//w.updateLevel();
 					Item.updateQuickslot();
 
 					curUser.sprite.operate(curUser.pos);
@@ -162,7 +152,7 @@ public class ArcaneResin extends Item {
 
 		@Override
 		public int cost(ArrayList<Item> ingredients) {
-			return 6;
+			return 8;
 		}
 
 		@Override

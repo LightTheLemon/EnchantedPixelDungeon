@@ -34,22 +34,11 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.ChangeInfo;
+import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.EPD_v0_0_X_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.Pixel_Dungeon_Changes;
+import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.Shattered_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.WndChanges;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.WndChangesTabbed;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_1_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_2_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_3_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_4_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_5_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_6_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_7_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_8_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_9_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v1_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v2_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v3_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v4_X_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
@@ -158,35 +147,12 @@ public class ChangesScene extends PixelScene {
 		
 		switch (changesSelected){
 			case 0: default:
-				v4_X_Changes.addAllChanges(changeInfos);
+				EPD_v0_0_X_Changes.addAllChanges(changeInfos);
 				break;
 			case 1:
-				v3_X_Changes.addAllChanges(changeInfos);
+				Shattered_Changes.addAllChanges(changeInfos);
 				break;
 			case 2:
-				v2_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 3:
-				v1_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 4:
-				v0_9_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 5:
-				v0_8_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 6:
-				v0_7_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 7:
-				v0_6_X_Changes.addAllChanges(changeInfos);
-				break;
-			case 8:
-				v0_5_X_Changes.addAllChanges(changeInfos);
-				v0_4_X_Changes.addAllChanges(changeInfos);
-				v0_3_X_Changes.addAllChanges(changeInfos);
-				v0_2_X_Changes.addAllChanges(changeInfos);
-				v0_1_X_Changes.addAllChanges(changeInfos);
 				Pixel_Dungeon_Changes.addAllChanges(changeInfos);
 				break;
 		}
@@ -247,11 +213,12 @@ public class ChangesScene extends PixelScene {
 
 		if (changesSelected <= 3){
 
-			left = setupChangesSelectionButton(0, "v4.X", left, list.bottom(), 24);
-			left = setupChangesSelectionButton(1, "v3.X", left, list.bottom(), 24);
-			left = setupChangesSelectionButton(2, "v2.X", left, list.bottom(), 24);
-			left = setupChangesSelectionButton(3, "v1.X", left, list.bottom(), 24);
-			left = setupChangesSelectionButton(4, "PreRelease->", left, list.bottom(), 53);
+			left = setupChangesSelectionButton(0, "Enchanted", left, list.bottom(), 53);
+			//left = setupChangesSelectionButton(1, "v3.X", left, list.bottom(), 24);
+			//left = setupChangesSelectionButton(2, "v2.X", left, list.bottom(), 24);
+			//left = setupChangesSelectionButton(3, "v1.X", left, list.bottom(), 24);
+			left = setupChangesSelectionButton(1, "Shattered->", left, list.bottom(), 53);
+			left = setupChangesSelectionButton(2, "Legacy->", left, list.bottom(), 40);
 
 		} else {
 

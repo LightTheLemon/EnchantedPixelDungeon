@@ -49,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.RangedWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -70,7 +71,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 	@Override
 	protected boolean usableOnItem(Item item) {
 		//all melee weapons, except pickaxe when in a mining level
-		if (item instanceof MeleeWeapon){
+		if (item instanceof MeleeWeapon || item instanceof RangedWeapon){
 			return !(item instanceof Pickaxe && Dungeon.level instanceof MiningLevel);
 
 		//all missile weapons except untipped darts
@@ -159,7 +160,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 			return changeStaff((MagesStaff) item);
 		}else if (item instanceof TippedDart){
 			return changeTippedDart( (TippedDart)item );
-		} else if (item instanceof MeleeWeapon || item instanceof MissileWeapon) {
+		} else if (item instanceof Weapon) {
 			return changeWeapon( (Weapon)item );
 		} else if (item instanceof Scroll) {
 			return changeScroll( (Scroll)item );
@@ -233,6 +234,8 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		Generator.Category c;
 		if (w instanceof MeleeWeapon) {
 			c = Generator.wepTiers[((MeleeWeapon)w).tier - 1];
+		} else if (w instanceof RangedWeapon) {
+			c = Generator.wepTiers[((RangedWeapon)w).tier - 1];
 		} else {
 			c = Generator.misTiers[((MissileWeapon)w).tier - 1];
 		}

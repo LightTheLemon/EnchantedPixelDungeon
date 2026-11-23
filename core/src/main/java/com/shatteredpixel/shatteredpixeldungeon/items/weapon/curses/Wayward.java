@@ -38,14 +38,14 @@ public class Wayward extends Weapon.Enchantment {
 
 	@Override
 	public int proc( Weapon weapon, Char attacker, Char defender, int damage ) {
-		float procChance = 1/4f * procChanceMultiplier(attacker);
+		float procChance = 1/5f * procChanceMultiplier(attacker) + weapon.buffedLvl()/50f;
 
 		if (attacker.buff(WaywardBuff.class) != null && damage < defender.HP){
 
 			return (int) (damage * 1.5f);
 
 		} else if (Random.Float() < procChance){
-			Buff.prolong(attacker, WaywardBuff.class, WaywardBuff.DURATION + (weapon.buffedLvl() / 1.5f) );
+			Buff.prolong(attacker, WaywardBuff.class, WaywardBuff.DURATION + weapon.buffedLvl() * 2f );
 		}
 
 		return damage;

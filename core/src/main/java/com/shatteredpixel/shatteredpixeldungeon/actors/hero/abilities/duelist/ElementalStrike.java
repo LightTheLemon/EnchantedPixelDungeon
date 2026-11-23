@@ -101,6 +101,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
@@ -546,11 +547,12 @@ public class ElementalStrike extends ArmorAbility {
 		//*** Annoying ***
 		} else if (ench instanceof Annoying){
 			for (Char ch : affected){
-				if (Random.Float() < 0.2f*powerMulti){
-					//TODO totally should add a bit of dialogue here
-					Buff.affect(ch, Amok.class, 6f);
+				if (Random.Float() < 0.5f*powerMulti){
+					GLog.n(Messages.get(this, "msg_" + Random.IntRange(1, 13)));
+					Buff.affect(ch, Amok.class, 12f);
+					Sample.INSTANCE.play(Assets.Sounds.MIMIC);
 				}
-			}
+		}
 
 		//*** Displacing ***
 		} else if (ench instanceof Displacing){
@@ -594,7 +596,7 @@ public class ElementalStrike extends ArmorAbility {
 		} else if (ench instanceof Wayward){
 			for (Char ch : affected){
 				if (Random.Float() < 0.5f*powerMulti){
-					Buff.affect(ch, Hex.class, 6f);
+					Buff.affect(ch, Hex.class, 20f);
 				}
 			}
 
@@ -610,7 +612,7 @@ public class ElementalStrike extends ArmorAbility {
 		} else if (ench instanceof Friendly){
 			for (Char ch : affected){
 				if (Random.Float() < 0.5f*powerMulti){
-					Buff.affect(ch, Charm.class, 6f).object = hero.id();
+					Buff.affect(ch, Charm.class, 10f).object = hero.id();
 				}
 			}
 
@@ -639,7 +641,7 @@ public class ElementalStrike extends ArmorAbility {
 				if (ch == primaryTarget && oldEnemyPos != primaryTarget.pos) continue;
 
 				Ballistica aim = new Ballistica(hero.pos, ch.pos, Ballistica.WONT_STOP);
-				int knockback = Math.round(2*powerMulti);
+				int knockback = Math.round(3*powerMulti);
 				WandOfBlastWave.throwChar(ch,
 						new Ballistica(ch.pos, aim.collisionPos, Ballistica.MAGIC_BOLT),
 						knockback,

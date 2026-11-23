@@ -21,9 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.DewVial;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.LiquidMetal;
-import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.EmptyBottle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -38,7 +38,7 @@ public class PotionBandolier extends Bag {
 	public boolean canHold( Item item ) {
 		if (item instanceof Potion
 				|| item instanceof LiquidMetal
-				|| item instanceof Waterskin
+				|| item instanceof DewVial
 				|| item instanceof EmptyBottle){
 			return super.canHold(item);
 		} else {

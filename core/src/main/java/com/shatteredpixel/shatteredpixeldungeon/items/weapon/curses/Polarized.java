@@ -40,7 +40,7 @@ public class Polarized extends Weapon.Enchantment {
 			return (int) Math.round(damage*(1.5+weapon.buffedLvl()*.1f));
 		} else {
 			double shieldAmount = damage*(0.5+weapon.buffedLvl()*.1f);
-			if (shieldAmount > 0)
+			if (shieldAmount > 2)
 				Buff.affect(defender, Barrier.class).setShield((int) shieldAmount);
 			return 0;
 

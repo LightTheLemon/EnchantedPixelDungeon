@@ -104,12 +104,7 @@ public class Corrosion extends Buff implements Hero.Doom, Buff.DOTbuff {
 	public boolean act() {
 		if (target.isAlive()) {
 			target.damage((int)damage, this);
-			if (damage < (Dungeon.scalingDepth()/2)+2) {
-				damage++;
-			} else {
-				damage += 0.5f;
-			}
-			
+			damage += 0.5f;
 			spend( TICK );
 			if ((left -= TICK) <= 0) {
 				detach();

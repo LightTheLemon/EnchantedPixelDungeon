@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.weapon;
+package com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -33,17 +33,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.N
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Firebloom;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Icecap;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sorrowmoss;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Stormvine;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
@@ -55,43 +53,39 @@ import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 
-public class SpiritBow extends Weapon {
-	
-	public static final String AC_SHOOT		= "SHOOT";
-	
+public class SpiritBow extends RangedWeapon {
+
 	{
-		image = ItemSpriteSheet.SPIRIT_BOW;
-		
-		defaultAction = AC_SHOOT;
-		usesTargeting = true;
-		
 		unique = true;
 		bones = false;
 	}
-	
+
+	@Override
+	protected int unloadedTexture() {
+		return ItemSpriteSheet.SPIRIT_BOW_1;
+	}
+	@Override
+	protected int loadedTexture() {
+		return ItemSpriteSheet.SPIRIT_BOW_2;
+	}
+	@Override
+	protected int projectileTexture() {
+		return ItemSpriteSheet.SPIRIT_ARROW;
+	}
+
+	@Override
+	protected String projectileHitsound() {
+		return Assets.Sounds.HIT_ARROW;
+	}
+
 	public boolean sniperSpecial = false;
 	public float sniperSpecialBonusDamage = 0f;
-	
+
 	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions(hero);
 		actions.remove(AC_EQUIP);
-		actions.add(AC_SHOOT);
 		return actions;
-	}
-	
-	@Override
-	public void execute(Hero hero, String action) {
-		
-		super.execute(hero, action);
-		
-		if (action.equals(AC_SHOOT)) {
-			
-			curUser = hero;
-			curItem = this;
-			GameScene.selectCell( shooter );
-			
-		}
 	}
 
 	private static Class[] harmfulPlants = new Class[]{
@@ -135,56 +129,10 @@ public class SpiritBow extends Weapon {
 	}
 
 	@Override
-	public String info() {
-		String info = super.info();
-		
-		info += "\n\n" + Messages.get( SpiritBow.class, "stats",
-				Math.round(augment.damageFactor(min())),
-				Math.round(augment.damageFactor(max())),
-				STRReq());
-		
-		if (STRReq() > Dungeon.hero.STR()) {
-			info += " " + Messages.get(Weapon.class, "too_heavy");
-		} else if (Dungeon.hero.STR() > STRReq()){
-			info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
-		}
-		
-		switch (augment) {
-			case SPEED:
-				info += "\n\n" + Messages.get(Weapon.class, "faster");
-				break;
-			case DAMAGE:
-				info += "\n\n" + Messages.get(Weapon.class, "stronger");
-				break;
-			case NONE:
-		}
-
-		if (enchantment != null && (cursedKnown || !enchantment.curse())){
-			info += "\n\n" + Messages.capitalize(Messages.get(Weapon.class, "enchanted", enchantment.name()));
-			if (enchantHardened) info += " " + Messages.get(Weapon.class, "enchant_hardened");
-			info += " " + enchantment.desc();
-		} else if (enchantHardened){
-			info += "\n\n" + Messages.get(Weapon.class, "hardened_no_enchant");
-		}
-		
-		if (cursed && isEquipped( Dungeon.hero )) {
-			info += "\n\n" + Messages.get(Weapon.class, "cursed_worn");
-		} else if (cursedKnown && cursed) {
-			info += "\n\n" + Messages.get(Weapon.class, "cursed");
-		} else if (!isIdentified() && cursedKnown){
-			info += "\n\n" + Messages.get(Weapon.class, "not_cursed");
-		}
-		
-		info += "\n\n" + Messages.get(MissileWeapon.class, "distance");
-		
-		return info;
-	}
-	
-	@Override
 	public int STRReq(int lvl) {
 		return STRReq(1, lvl); //tier 1
 	}
-	
+
 	@Override
 	public int min(int lvl) {
 		int dmg = 1 + Dungeon.hero.lvl/5
@@ -192,32 +140,18 @@ public class SpiritBow extends Weapon {
 				+ (curseInfusionBonus ? 1 + Dungeon.hero.lvl/30 : 0);
 		return Math.max(0, dmg);
 	}
-	
+
 	@Override
 	public int max(int lvl) {
-		int dmg = 6 + (int)(Dungeon.hero.lvl/2.5f)
+		int dmg = 2 * (6 + (int)(Dungeon.hero.lvl/2.5f))
 				+ RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
 				+ (curseInfusionBonus ? 2 + Dungeon.hero.lvl/15 : 0);
 		return Math.max(0, dmg);
 	}
 
 	@Override
-	public int targetingPos(Hero user, int dst) {
-		return knockArrow().targetingPos(user, dst);
-	}
-	
-	private int targetPos;
-	
-	@Override
 	public int damageRoll(Char owner) {
-		int damage = augment.damageFactor(super.damageRoll(owner));
-		
-		if (owner instanceof Hero) {
-			int exStr = ((Hero)owner).STR() - STRReq();
-			if (exStr > 0) {
-				damage += Hero.heroDamageIntRange( 0, exStr );
-			}
-		}
+		int damage = super.damageRoll(owner);
 
 		if (sniperSpecial){
 			damage = Math.round(damage * (1f + sniperSpecialBonusDamage));
@@ -238,7 +172,7 @@ public class SpiritBow extends Weapon {
 					break;
 			}
 		}
-		
+
 		return damage;
 	}
 	
@@ -253,7 +187,7 @@ public class SpiritBow extends Weapon {
 				case DAMAGE:
 					return 2f;
 			}
-		} else{
+		} else {
 			return super.baseDelay(owner);
 		}
 	}
@@ -286,10 +220,11 @@ public class SpiritBow extends Weapon {
 		return false;
 	}
 	
-	public SpiritArrow knockArrow(){
+	@Override
+	public SpiritArrow shootProjectile(){
 		return new SpiritArrow();
 	}
-	
+
 	public class SpiritArrow extends MissileWeapon {
 		
 		{
@@ -350,10 +285,12 @@ public class SpiritBow extends Weapon {
 		
 		@Override
 		public float accuracyFactor(Char owner, Char target) {
+			System.out.println("super.accuracyFactor(owner, target); in SpiritBow" + super.accuracyFactor(owner, target));
+			System.out.println("SpiritBow.this.accuracyFactor(owner, target); in SpiritBow" + SpiritBow.this.accuracyFactor(owner, target));
 			if (sniperSpecial && SpiritBow.this.augment == Augment.DAMAGE){
 				return Float.POSITIVE_INFINITY;
 			} else {
-				return super.accuracyFactor(owner, target);
+				return SpiritBow.this.accuracyFactor(owner, target);
 			}
 		}
 		
@@ -473,15 +410,13 @@ public class SpiritBow extends Weapon {
 				
 			} else {
 
-				if (user.hasTalent(Talent.SEER_SHOT)
-						&& user.buff(Talent.SeerShotCooldown.class) == null){
+				if (user.hasTalent(Talent.SEER_SHOT)){
 					int shotPos = throwPos(user, dst);
 					if (Actor.findChar(shotPos) == null) {
-						RevealedArea a = Buff.affect(user, RevealedArea.class, 5 * user.pointsInTalent(Talent.SEER_SHOT));
+						RevealedArea a = Buff.affect(user, RevealedArea.class, (int) Math.pow(user.pointsInTalent(Talent.SEER_SHOT), 2) + 2 );
 						a.depth = Dungeon.depth;
 						a.branch = Dungeon.branch;
 						a.pos = shotPos;
-						Buff.affect(user, Talent.SeerShotCooldown.class, 20f);
 					}
 				}
 
@@ -490,16 +425,4 @@ public class SpiritBow extends Weapon {
 		}
 	}
 	
-	private CellSelector.Listener shooter = new CellSelector.Listener() {
-		@Override
-		public void onSelect( Integer target ) {
-			if (target != null) {
-				knockArrow().cast(curUser, target);
-			}
-		}
-		@Override
-		public String prompt() {
-			return Messages.get(SpiritBow.class, "prompt");
-		}
-	};
 }

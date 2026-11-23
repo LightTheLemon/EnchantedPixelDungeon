@@ -429,15 +429,15 @@ public class Armor extends EquipableItem {
 		
 		if (owner instanceof Hero){
 			int aEnc = STRReq() - ((Hero) owner).STR();
-			if (aEnc > 0) evasion /= (float) Math.pow(1.6, aEnc);
+			if (aEnc > 0) evasion /= (float) Math.pow(1.5, aEnc);
 
 			//With the ring of might:
 			//no bonus evasion with 9 excess strength
-			//250% evasion with 10 excess strength,
-			//300% evasion with 11 excess strength, etc.
+			//300% evasion with 10 excess strength,
+			//374% evasion with 11 excess strength, etc.
 			int exStr = -aEnc;
 			if (exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
-				evasion *= (float) Math.pow(1.202, exStr - 5);
+				evasion *= (float) Math.pow(1.246, exStr - 5);
 			}
 
 			Momentum momentum = owner.buff(Momentum.class);
@@ -450,10 +450,14 @@ public class Armor extends EquipableItem {
 	}
 	
 	public float speedFactor( Char owner, float speed ){
-		
-		if (owner instanceof Hero) {
-			int aEnc = STRReq() - ((Hero) owner).STR();
-			if (aEnc > 0) speed /= (float) Math.pow(1.5, aEnc);
+		int aEnc = STRReq() - ((Hero) owner).STR();
+
+
+		if (aEnc > 0) speed /= (float) Math.pow(1.4, aEnc);
+
+		int exStr = -aEnc;
+		if (exStr >= 10 && owner.buff(RingOfMight.Might.class) != null) {
+			speed *= (float) 0.109 * exStr;
 		}
 		return speed;
 		
@@ -610,7 +614,7 @@ public class Armor extends EquipableItem {
 			if (Dungeon.hero != null && STRReq() > Dungeon.hero.STR()) {
 				info += " " + Messages.get(Armor.class, "too_heavy");
 			} else if (exStr >= 10 && Dungeon.hero != null && Dungeon.hero.buff(RingOfMight.Might.class) != null) {
-				info += " " + Messages.get(Armor.class, "might_bonus", (float) Math.pow(1.202, exStr - 5));
+				info += " " + Messages.get(Armor.class, "might_bonus", (float) Math.pow(1.246, exStr - 5), 0.109 * exStr );
 			}
 
 		} else {

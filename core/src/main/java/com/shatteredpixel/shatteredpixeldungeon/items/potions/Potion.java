@@ -467,7 +467,7 @@ public class Potion extends Item {
 		
 		@Override
 		public String info() {
-			return "A regular potion. Could be any type.";
+			return "A potion, but you're not sure which type.";
 		}
 	}
 
@@ -492,7 +492,7 @@ public class Potion extends Item {
 		@Override
 		public int cost(ArrayList<Item> ingredients) {
 
-			int cost = 4;
+			int cost = 6;
 
 			ingredients.get(0).isIdentified();
 			for (Item i : ingredients){

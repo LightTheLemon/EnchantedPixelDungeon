@@ -141,10 +141,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.HailMary;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ThirteenLeafClover;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Covert;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
@@ -548,8 +547,6 @@ public class Hero extends Char {
 				}
 
 				if (wep instanceof Flail && buff(Flail.SpinAbilityTracker.class) != null){
-					//do nothing, this is not a regular attack so don't consume talent fx
-				} else if (wep instanceof Crossbow && buff(Crossbow.ChargedShot.class) != null){
 					//do nothing, this is not a regular attack so don't consume talent fx
 				} else if (buff(Talent.PreciseAssaultTracker.class) != null) {
 					// 2x/5x/inf. ACC for duelist if she just used a weapon ability
@@ -1561,6 +1558,10 @@ public class Hero extends Char {
 			ready();
 			return false;
 
+		} else if (flying) {
+			GLog.w( Messages.get("You can't descend while flying!") );
+			return false;
+
 		} else if (!Dungeon.level.locked && transition != null && transition.inside(pos)) {
 
 			if (Dungeon.level.activateTransition(this, transition)){
@@ -2333,6 +2334,30 @@ public class Hero extends Char {
 
 		curAction = null;
 
+		//Should Hail Mary save you an Ankh if it procs? Probably. If not, put it after the check.
+		if (Random.Float() < HailMary.revivalChance()) {
+			interrupt();
+
+			PotionOfHealing.cure(this);
+			Buff.prolong(this, Levitation.class, Levitation.DURATION);
+			Buff.prolong(this, Bless.class, Bless.DURATION);
+			this.HP = HT;
+			Dungeon.hero.buff( Hunger.class ).satisfy( Hunger.HUNGRY / 3 );
+
+			GameScene.flash(0xFFFFFFFF, false);
+			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+			GLog.w(Messages.get(HailMary.class, "revive"));
+			Catalog.countUse(HailMary.class);
+
+			for (Char ch : Actor.chars()) {
+				if (ch instanceof DriedRose.GhostHero) {
+					((DriedRose.GhostHero) ch).sayAnhk();
+					return;
+				}
+			}
+			return;
+		}
+
 		Ankh ankh = null;
 
 		//look for ankhs in player inventory, prioritize ones which are blessed.
@@ -2392,29 +2417,6 @@ public class Hero extends Char {
 					sacMark.detach();
 				}
 
-			}
-			return;
-		}
-
-		if (Random.Float() < HailMary.revivalChance()) {
-			interrupt();
-
-			PotionOfHealing.cure(this);
-			Buff.prolong(this, Levitation.class, Levitation.DURATION);
-			Buff.prolong(this, Bless.class, Bless.DURATION);
-			this.HP = HT;
-			Dungeon.hero.buff( Hunger.class ).satisfy( Hunger.HUNGRY / 3 );
-
-			GameScene.flash(0xFFFFFFFF, false);
-			Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
-			GLog.w(Messages.get(HailMary.class, "revive"));
-			Catalog.countUse(HailMary.class);
-
-			for (Char ch : Actor.chars()) {
-				if (ch instanceof DriedRose.GhostHero) {
-					((DriedRose.GhostHero) ch).sayAnhk();
-					return;
-				}
 			}
 			return;
 		}

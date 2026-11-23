@@ -74,11 +74,11 @@ public class GrassyGraveRoom extends StandardRoom {
 					(left + 2 + Random.Int( w-2 )) + (top + 1 + shift + i * 2) * level.width();
 
 			float lootChance = Random.Float();
-			if (lootChance < 0.05f) {
+			if (lootChance < 0.06f) {
 				level.drop( new UnstableSpell(), pos ).type = Heap.Type.TOMB;
-			} else if (lootChance < 0.10f) {
+			} else if (lootChance < 0.12f) {
 				level.drop( new CurseInfusion(), pos ).type = Heap.Type.TOMB;
-			} else if (lootChance < 0.15f) {
+			} else if (lootChance < 0.16f) {
 				var chalice = new ChaliceOfBlood();
 				chalice.cursed = true;
 				chalice.cursedKnown = true;

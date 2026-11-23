@@ -25,8 +25,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyLance;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.Crossbow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.RangedWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.ranged.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.FishingSpear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Boomerang;
@@ -91,18 +92,18 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 	
 	private static final HashMap<Class<?extends Item>, Integer> ANGULAR_SPEEDS = new HashMap<>();
 	static {
-		ANGULAR_SPEEDS.put(Dart.class,          0);
-		ANGULAR_SPEEDS.put(ThrowingKnife.class, 0);
-		ANGULAR_SPEEDS.put(ThrowingSpike.class, 0);
-		ANGULAR_SPEEDS.put(FishingSpear.class,  0);
-		ANGULAR_SPEEDS.put(ThrowingSpear.class, 0);
-		ANGULAR_SPEEDS.put(Kunai.class,         0);
-		ANGULAR_SPEEDS.put(Javelin.class,       0);
-		ANGULAR_SPEEDS.put(Trident.class,       0);
-		
-		ANGULAR_SPEEDS.put(SpiritBow.SpiritArrow.class,       0);
-		ANGULAR_SPEEDS.put(ScorpioSprite.ScorpioShot.class,   0);
-		ANGULAR_SPEEDS.put(HolyLance.HolyLanceVFX.class,      0);
+		ANGULAR_SPEEDS.put(Dart.class,                     0);
+		ANGULAR_SPEEDS.put(ThrowingKnife.class,            0);
+		ANGULAR_SPEEDS.put(ThrowingSpike.class,            0);
+		ANGULAR_SPEEDS.put(FishingSpear.class,             0);
+		ANGULAR_SPEEDS.put(ThrowingSpear.class,            0);
+		ANGULAR_SPEEDS.put(Kunai.class,                    0);
+		ANGULAR_SPEEDS.put(Javelin.class,                  0);
+		ANGULAR_SPEEDS.put(Trident.class,                  0);
+		ANGULAR_SPEEDS.put(SpiritBow.SpiritArrow.class,    0);
+		ANGULAR_SPEEDS.put(RangedWeapon.Projectile,        0);
+		ANGULAR_SPEEDS.put(ScorpioSprite.ScorpioShot.class,0);
+		ANGULAR_SPEEDS.put(HolyLance.HolyLanceVFX.class,   0);
 		
 		//720 is default
 
@@ -116,37 +117,37 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 	}
 
 	//TODO it might be nice to have a source and destination angle, to improve thrown weapon visuals
-    protected void setup(PointF from, PointF to, Item item, Callback listener){
+    protected void setup(PointF from, PointF to, Item item, Callback listener) {
 
 		originToCenter();
 
 		//adjust points so they work with the center of the missile sprite, not the corner
-		from.x -= width()/2;
-		to.x -= width()/2;
-		from.y -= height()/2;
-		to.y -= height()/2;
+		from.x -= width() / 2;
+		to.x -= width() / 2;
+		from.y -= height() / 2;
+		to.y -= height() / 2;
 
 		this.callback = listener;
 
-		point( from );
+		point(from);
 
-		PointF d = PointF.diff( to, from );
+		PointF d = PointF.diff(to, from);
 		speed.set(d).normalize().scale(SPEED);
-		
+
 		angularSpeed = DEFAULT_ANGULAR_SPEED;
-		for (Class<?extends Item> cls : ANGULAR_SPEEDS.keySet()){
-			if (cls.isAssignableFrom(item.getClass())){
+		for (Class<? extends Item> cls : ANGULAR_SPEEDS.keySet()) {
+			if (cls.isAssignableFrom(item.getClass())) {
 				angularSpeed = ANGULAR_SPEEDS.get(cls);
 				break;
 			}
 		}
-		
-		angle = 135 - (float)(Math.atan2( d.x, d.y ) / 3.1415926 * 180);
-		
-		if (d.x >= 0){
+
+		angle = 135 - (float) (Math.atan2(d.x, d.y) / 3.1415926 * 180);
+
+		if (d.x >= 0) {
 			flipHorizontal = false;
 			updateFrame();
-			
+
 		} else {
 			angularSpeed = -angularSpeed;
 			angle += 90;
@@ -154,24 +155,25 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 			updateFrame();
 		}
 
-		if (item instanceof GnollGeomancer.Boulder){
+		if (item instanceof GnollGeomancer.Boulder) {
 			angle = 0;
 			flipHorizontal = false;
 			updateFrame();
 		}
-		
+
 		float speed = SPEED;
-		if (item instanceof Dart
+		if (item instanceof RangedWeapon.Projectile
 				&& (Dungeon.hero.belongings.weapon() instanceof Crossbow
-				|| Dungeon.hero.belongings.secondWep() instanceof Crossbow)){
-			speed *= 3f;
-			
-		} else if (item instanceof SpiritBow.SpiritArrow
+				|| Dungeon.hero.belongings.secondWep() instanceof Crossbow)) {
+			speed *= 2.5f;
+
+		} else if (item instanceof RangedWeapon.Projectile
+				|| item instanceof SpiritBow.SpiritArrow
 				|| item instanceof ScorpioSprite.ScorpioShot
-				|| item instanceof TenguSprite.TenguShuriken){
-			speed *= 1.5f;
-		} else if (item instanceof Dart || item instanceof Shuriken) {
-			speed *= 1.25f;
+				|| item instanceof TenguSprite.TenguShuriken
+				|| item instanceof Dart
+				|| item instanceof Shuriken) {
+			speed *= 1.33f;
 		}
 		
 		PosTweener tweener = new PosTweener( this, to, d.length() / speed );

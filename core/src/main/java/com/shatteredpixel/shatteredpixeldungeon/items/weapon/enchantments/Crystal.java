@@ -62,7 +62,7 @@ public class Crystal extends Weapon.Enchantment {
 			} else {
 				thrownWeapon = false;
 				//lasts for an average of ~25 attacks at normal speed
-				durability -= Random.Float(2, 4) * weapon.delayFactor(attacker);
+				durability -= 3;
 
 				float prevHeuristicDur = visualDurability;
 				visualDurability = GameMath.gate(durability-10, visualDurability, durability);

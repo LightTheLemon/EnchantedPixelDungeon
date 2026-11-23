@@ -42,7 +42,7 @@ public class EmptyBottle extends Item {
         }
         Char ch = Dungeon.level.findMob(cell);
         if (ch != null) {
-            Buff.affect(ch, Bleeding.class).set(Dungeon.hero.HT/8f);
+            Buff.affect(ch, Bleeding.class).set(Dungeon.hero.HT/4f);
         }
     }
 
