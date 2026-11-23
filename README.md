@@ -1,10 +1,9 @@
 # Enchanted Pixel Dungeon
 
-<img width="1225" height="423" alt="Screenshot 2026-09-29 190205" src="https://github.com/user-attachments/assets/aa46e857-3545-4de4-8c84-2907071673fa" />
+<img width="1429" height="522" alt="Screenshot 2026-11-22 194920" src="https://github.com/user-attachments/assets/e9a2a481-b4d9-421d-988d-92c3291b4838" />
+
 
 Enchanted Pixel Dungeon is a mod of Shattered Pixel Dungeon that adds a simplified alchemy system, new difficulty slider, balance changes, items and more!
-
-
 
 This mod is based on [Shattered Pixel Dungeon](https://shatteredpixel.com/shatteredpd/). 
 
