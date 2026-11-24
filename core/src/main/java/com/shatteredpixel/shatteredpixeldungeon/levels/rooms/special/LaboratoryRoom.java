@@ -76,7 +76,7 @@ public class LaboratoryRoom extends SpecialRoom {
 		level.drop( new EnergyCrystal().quantity(3 + Random.Int(3)), pos );
 
 		Item ingredient = Random.Float() < 0.5f ? new EmptyBottle() : new BlankScroll();
-		int quantity = Random.Int(2, (4 + Dungeon.depth / 5));
+		int quantity = Random.Int(2, (5 + Dungeon.depth / 5));
 		do {
 			pos = level.pointToCell(random());
 		} while (

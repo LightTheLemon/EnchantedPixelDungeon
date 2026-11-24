@@ -399,7 +399,7 @@ public class ElementalStrike extends ArmorAbility {
 		if (ench == null) {
 			for (Char ch : affected){
 				ch.damage(Math.round(powerMulti* Hero.heroDamageIntRange(6, 12)), ElementalStrike.this);
-			}
+		}
 
 		//*** Kinetic ***
 		} else if (ench instanceof Kinetic){

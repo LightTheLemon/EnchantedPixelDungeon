@@ -90,9 +90,6 @@ abstract public class RangedWeapon extends Weapon {
                 hero.spendAndNext(1);
                 defaultAction = "SHOOT";
                 hero.sprite.operate(hero.pos);
-
-                //If i want to prompt the player again
-                //GameScene.selectCell( shooter );
             }
 
         }
@@ -272,7 +269,7 @@ abstract public class RangedWeapon extends Weapon {
     }
     @Override
     public int min(int lvl) {
-        return  tier  +                      //base
+        return  (tier / 2)  +                      //base
                 lvl;                         //level scaling
     }
     @Override
@@ -285,7 +282,7 @@ abstract public class RangedWeapon extends Weapon {
     }
     @Override
     public int max(int lvl) {
-        return  2 * tier +                               //Low melee damage, but arrows deal double damage
+        return  3 * tier +                               //Low melee damage, but arrows deal double damage
                 lvl*(tier+1);                            //Same level scaling
     }
 

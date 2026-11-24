@@ -138,8 +138,8 @@ public class EPD_v0_0_X_Changes {
                         "**-** Duplicate a scroll or potion with a template!\n\n" +
                         "Added blank scrolls and empty bottles for crafting.\n" +
                         "**Removed exotic scrolls/potions**\n" +
-                        "Updated potion of invisibility: throwing acts like a potion of shrouding fog.\n" +
-                        "New potion of haste: potion of ENERGY. Throw it to create an electrical storm (if you don't want to drink it).\n" +
+                        "Updated **potion of invisibility**: throwing acts like a potion of shrouding fog.\n" +
+                        "New potion of haste: **potion of ENERGY**. Throw it to create an electrical storm (if you don't want to drink it).\n" +
                         "Each dungeon now generates with a unique set of scrolls and potions.\n" +
                         "Added crafting menu for scrolls."));
 

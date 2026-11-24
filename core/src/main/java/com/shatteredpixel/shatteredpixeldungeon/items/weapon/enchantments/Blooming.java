@@ -68,14 +68,13 @@ public class Blooming extends Weapon.Enchantment {
 
 			if (Dungeon.level.map[defender.pos] == Terrain.HIGH_GRASS) {
 				if (Dungeon.level.adjacent(defender.pos, attacker.pos)) {
-					Buff.affect(defender, Roots.class, 5f);
+					Buff.prolong(defender, Roots.class, 10f);
 				} else {
-					Buff.affect(defender, Roots.class, 1f);
+					Buff.prolong(defender, Roots.class, 5f);
 				}
 			}
 			
 			if (plantGrass(defender.pos)){
-				//Buff.affect(defender, Roots.class, 1f);
 				plants--;
 				if (plants <= 0){
 					return damage;
@@ -111,19 +110,34 @@ public class Blooming extends Weapon.Enchantment {
 	
 	private boolean plantGrass(int cell){
 		int t = Dungeon.level.map[cell];
-		if ((t == Terrain.EMPTY || t == Terrain.EMPTY_DECO || t == Terrain.EMBERS
-				|| t == Terrain.GRASS || t == Terrain.FURROWED_GRASS)
-				&& Dungeon.level.plants.get(cell) == null){
-			if (!Regeneration.regenOn()){
-				Level.set(cell, Terrain.FURROWED_GRASS);
-			} else if (Random.Float() < 0.2 * Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero) && Dungeon.difficulty <= 3) {
-				Dungeon.level.plant((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED), cell);
-			} else {
-				Level.set(cell, Terrain.HIGH_GRASS);
+		boolean plantable = (t == Terrain.EMPTY || t == Terrain.EMPTY_DECO || t == Terrain.EMBERS || t == Terrain.FURROWED_GRASS || t == Terrain.GRASS) && Dungeon.level.plants.get(cell) == null;
+		float multi = Weapon.Enchantment.genericProcChanceMultiplier(Dungeon.hero);
+
+		if (plantable){
+
+			Level.set(cell, Regeneration.regenOn() ? Terrain.HIGH_GRASS : Terrain.FURROWED_GRASS);
+
+			//Plants extra grass or plants around
+			for (int i : PathFinder.NEIGHBOURS4) {
+
+				if (Random.Float() < 0.30 * multi) {
+
+					if ((Dungeon.level.map[cell + i] == Terrain.EMPTY || Dungeon.level.map[cell + i] == Terrain.EMPTY_DECO || Dungeon.level.map[cell + i] == Terrain.EMBERS) && Dungeon.level.plants.get(cell + i) == null) {
+
+						float c = Random.Float();
+						if (c < 0.30 * multi ) {
+							Dungeon.level.plant((Plant.Seed) Generator.randomUsingDefaults(Generator.Category.SEED), cell + i);
+						} else if (c < 0.50 * multi) {
+							Level.set(cell + i, Terrain.HIGH_GRASS);
+						} else {
+							Level.set(cell + i, Terrain.FURROWED_GRASS);
+						}
+					}
+				}
 			}
 
 			GameScene.updateMap(cell);
-			CellEmitter.get( cell ).burst( LeafParticle.LEVEL_SPECIFIC, 4 );
+			CellEmitter.get( cell ).burst( LeafParticle.LEVEL_SPECIFIC, Math.round(4f * multi));
 			return true;
 		}
 		return false;

@@ -133,7 +133,7 @@ public class UnstableSpell extends Spell {
 			inputs =  new Class[]{BlankScroll.class};
 			inQuantity = new int[]{1};
 
-			cost = 2;
+			cost = 3;
 
 			output = UnstableSpell.class;
 			outQuantity = 1;

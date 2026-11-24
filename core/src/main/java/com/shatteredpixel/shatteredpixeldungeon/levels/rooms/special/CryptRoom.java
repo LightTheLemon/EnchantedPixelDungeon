@@ -72,7 +72,7 @@ public class CryptRoom extends SpecialRoom {
 		
 		level.drop( prize( level ), cx + cy * level.width() ).type = Heap.Type.TOMB;
 
-		if (Random.Float() < 0.3) level.drop( new CurseInfusion().quantity(1), cx + cy * level.width() ).type = Heap.Type.TOMB;
+		if (Random.Float() < 0.15) level.drop( new CurseInfusion().quantity(1), cx + cy * level.width() ).type = Heap.Type.TOMB;
 
 	}
 	

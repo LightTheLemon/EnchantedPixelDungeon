@@ -23,10 +23,9 @@ public class BlankScroll extends Item {
         return true;
     }
 
-
     @Override
     public int value() {
-        return 20 * quantity;
+        return 15 * quantity;
     }
 
 }

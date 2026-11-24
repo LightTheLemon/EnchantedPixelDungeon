@@ -139,6 +139,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfPrismaticLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.AssassinsBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.BattleAxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
@@ -791,27 +792,27 @@ public class Generator {
 			Category.WEP_T5
 	};
 
-	public static MeleeWeapon randomWeapon(){
+	public static Weapon randomWeapon(){
 		return randomWeapon(Dungeon.depth / 5);
 	}
 
-	public static MeleeWeapon randomWeapon(int floorSet) {
+	public static Weapon randomWeapon(int floorSet) {
 		return randomWeapon(floorSet, false);
 	}
 
-	public static MeleeWeapon randomWeapon(boolean useDefaults) {
+	public static Weapon randomWeapon(boolean useDefaults) {
 		return randomWeapon(Dungeon.depth / 5, useDefaults);
 	}
 	
-	public static MeleeWeapon randomWeapon(int floorSet, boolean useDefaults) {
+	public static Weapon randomWeapon(int floorSet, boolean useDefaults) {
 
 		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
 
-		MeleeWeapon w;
+		Weapon w;
 		if (useDefaults){
-			w = (MeleeWeapon) randomUsingDefaults(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (Weapon) randomUsingDefaults(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
 		} else {
-			w = (MeleeWeapon) random(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (Weapon) random(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
 		}
 		return w;
 	}

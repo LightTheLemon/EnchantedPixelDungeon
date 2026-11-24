@@ -225,7 +225,7 @@ public abstract class Scroll extends Item {
 						if (stoneClass != null) {
 							if (!realScroll.isIdentified()) {
 								realScroll.identify();
-								GLog.i("You've identified the scroll as a _" + Messages.titleCase(realScroll.name()) + "_" );
+								GLog.i("You've identified the scroll as a " + Messages.titleCase(realScroll.name()) );
 								GLog.newLine();
 							}
 							curItem.detach(curUser.belongings.backpack);
