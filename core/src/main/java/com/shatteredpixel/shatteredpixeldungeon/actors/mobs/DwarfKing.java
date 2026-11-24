@@ -158,7 +158,7 @@ public class DwarfKing extends Mob {
 
 		if (phase == 1) {
 
-			if (summonCooldown <= 0 && summonSubject( Math.round (2.75f / Dungeon.bossDifficultyMultiplier()) )){
+			if (summonCooldown <= 0 && summonSubject( Dungeon.difficulty > 2 ? 3 : 2 )){
 				summonsMade++;
 				summonCooldown += Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 			} else if (summonCooldown > 0){
@@ -200,69 +200,105 @@ public class DwarfKing extends Mob {
 
 		} else if (phase == 2){
 
-			float diffScalingMulti = (Dungeon.difficulty / 4f ) + 0.75f;
-
-			if (summonsMade < 3 + Dungeon.difficulty ) {
-				if (summonsMade == 0) {
-					sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
-					Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
-					yell(Messages.get(this, "wave_1"));
-				}
-				summonSubject(3, DKGhoul.class);
-				if (Dungeon.difficulty > 2) {
+			if (Dungeon.difficulty > 2){
+				//challenge logic
+				if (summonsMade < 6){
+					if (summonsMade == 0) {
+						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
+						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+						yell(Messages.get(this, "wave_1"));
+					}
 					summonSubject(3, DKGhoul.class);
+					summonSubject(3, DKGhoul.class);
+					spend(3 * TICK);
+					summonsMade += 2;
+					return true;
+				} else if (shielding() <= 300 && summonsMade < 12){
+					if (summonsMade == 6) {
+						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
+						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+						yell(Messages.get(this, "wave_2"));
+					}
+					summonSubject(3, DKGhoul.class);
+					summonSubject(3, DKGhoul.class);
+					if (summonsMade == 6) {
+						summonSubject(3, DKMonk.class);
+					} else {
+						summonSubject(3, DKWarlock.class);
+					}
+					summonsMade += 3;
+					spend(3*TICK);
+					return true;
+				} else if (shielding() <= 150 && summonsMade < 18) {
+					if (summonsMade == 12) {
+						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
+						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+						yell(Messages.get(this, "wave_3"));
+						summonSubject(3, DKWarlock.class);
+						summonSubject(3, DKMonk.class);
+						summonSubject(3, DKGhoul.class);
+						summonSubject(3, DKGhoul.class);
+						summonsMade += 4;
+						spend(3*TICK);
+					} else {
+						summonSubject(3, DKGolem.class);
+						summonSubject(3, DKGolem.class);
+						summonsMade += 2;
+						spend(TICK);
+					}
+					return true;
+				} else {
+					spend(TICK);
+					return true;
+				}
+			} else {
+				//non-challenge logic
+				if (summonsMade < 4) {
+					if (summonsMade == 0) {
+						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
+						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+						yell(Messages.get(this, "wave_1"));
+					}
+					summonSubject(3, DKGhoul.class);
+					spend(3 * TICK);
 					summonsMade++;
-				}
-				spend(3 * TICK);
-				summonsMade++;
-				return true;
-			} else if (shielding() <= Math.round(200 * diffScalingMulti) && summonsMade < Math.round(8 * diffScalingMulti)) {
-				if (summonsMade == Math.round(4 * diffScalingMulti)) {
-					sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
-					Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
-					yell(Messages.get(this, "wave_2"));
-				}
-				for (int i = 1; i <= (int) Dungeon.difficulty; i++) {
-					if (summonsMade + i - 1 == 7) {
+					return true;
+				} else if (shielding() <= 200 && summonsMade < 8) {
+					if (summonsMade == 4) {
+						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
+						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
+						yell(Messages.get(this, "wave_2"));
+					}
+					if (summonsMade == 7) {
 						summonSubject(3, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
 					} else {
 						summonSubject(3, DKGhoul.class);
 					}
-				}
-				summonsMade += (int) Dungeon.difficulty;
-				spend((int) Dungeon.difficulty * TICK);
-				return true;
-			} else if (shielding() <= Math.round(100 * diffScalingMulti) && summonsMade < Math.round(12 * diffScalingMulti)) {
-				if (summonsMade >= Math.round(8 * diffScalingMulti) ) {
+					summonsMade++;
+					spend(TICK);
+					return true;
+				} else if (shielding() <= 100 && summonsMade < 12) {
 					sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 					Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 					yell(Messages.get(this, "wave_3"));
-					summonSubject(3, DKWarlock.class);
-					summonSubject(3, DKMonk.class);
-					summonSubject(3, DKGhoul.class);
-					summonSubject(3, DKGhoul.class);
-					summonsMade += 4;
-					spend(3*TICK);
-				} else {
-					summonSubject(3, DKGhoul.class);
-					summonSubject(3, DKGolem.class);
-					summonsMade += 2;
+					summonSubject(4, DKWarlock.class);
+					summonSubject(4, DKMonk.class);
+					summonSubject(4, DKGhoul.class);
+					summonSubject(4, DKGhoul.class);
+					summonsMade = 12;
 					spend(TICK);
+					return true;
+				} else {
+					spend(TICK);
+					return true;
 				}
-				return true;
-
-			} else {
-				spend(TICK);
-				return true;
 			}
-
 		} else if (phase == 3 && buffs(Summoning.class).size() < 4){
-			if (summonSubject(Math.round (2.75f / Dungeon.bossDifficultyMultiplier()) )) summonsMade++;
+			if (summonSubject(Dungeon.difficulty > 2 ? 2 : 3)) summonsMade++;
 		}
 
 		return super.act();
 	}
-
 	private boolean summonSubject( int delay ){
 		//every 3rd summon is always a monk or warlock, otherwise ghoul
 		//except every 9th summon, which is a golem!
