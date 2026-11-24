@@ -62,9 +62,9 @@ public class Statue extends Mob {
 
 	public void createWeapon( boolean useDecks ){
 		if (useDecks) {
-			weapon = (MeleeWeapon) Generator.random(Generator.Category.WEAPON);
+			weapon = (Weapon) Generator.random(Generator.Category.WEAPON);
 		} else {
-			weapon = (MeleeWeapon) Generator.randomUsingDefaults(Generator.Category.WEAPON);
+			weapon = (Weapon) Generator.randomUsingDefaults(Generator.Category.WEAPON);
 		}
 		levelGenStatue = useDecks;
 		weapon.cursed = false;

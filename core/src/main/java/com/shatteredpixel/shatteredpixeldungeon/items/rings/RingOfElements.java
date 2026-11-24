@@ -71,7 +71,7 @@ public class RingOfElements extends Ring {
 		if (isIdentified()){
 			String info = Messages.get(this, "stats",
 				Messages.decimalFormat("#.##", 100f * (1f - Math.pow(0.85f, soloBuffedBonus()))),
-				Messages.decimalFormat("#.##", 100f * ( Math.pow(0.3f * soloBuffedBonus(), 1.16f) - 1f)));
+				Messages.decimalFormat("#.##", 100f * ( Math.pow(0.3f * soloBuffedBonus(), 1.16f))));
 
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				info += "\n\n" + Messages.get(this, "combined_stats",
@@ -149,7 +149,9 @@ public class RingOfElements extends Ring {
 		
 		for (Class c : RESISTS){
 			if (c.isAssignableFrom(effect)){
-				return (float)Math.pow(0.85f, getBuffedBonus(target, Elements.class));
+				if (getBuffedBonus(target, Elements.class) >= 0) return (float)Math.pow(0.85f, getBuffedBonus(target, Elements.class));
+				//If level is negative (cursed)
+				else return 0.2f * getBuffedBonus(target, Elements.class) + 0.8f;
 			}
 		}
 		

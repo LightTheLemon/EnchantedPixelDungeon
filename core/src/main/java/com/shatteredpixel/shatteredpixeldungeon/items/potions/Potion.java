@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.Brew;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfDragonsBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
@@ -503,10 +504,13 @@ public class Potion extends Item {
 						cost += 2;
 					}
 				} else if (i instanceof Potion) {
-					cost -= 2;
+					cost -= 3;
 				}
 				if (i instanceof PotionOfStrength) {
 					cost += 12;
+				}
+				if (i instanceof UnstableBrew) {
+					cost -= 3;
 				}
 			}
 

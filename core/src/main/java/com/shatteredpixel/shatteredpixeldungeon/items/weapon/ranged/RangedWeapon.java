@@ -16,6 +16,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -302,6 +303,27 @@ abstract public class RangedWeapon extends Weapon {
 
         }
         return damage;
+    }
+
+    @Override
+    public int value() {
+        int price = 20 * tier;
+        if (hasGoodEnchant()) {
+            price *= 1.5f;
+            if (enchantment instanceof Crystal){
+                price *= 3;
+            }
+        }
+        if (cursedKnown && (cursed || hasCurseEnchant())) {
+            price /= 2;
+        }
+        if (levelKnown && level() > 0) {
+            price *= (level() + 1);
+        }
+        if (price < 1) {
+            price = 1;
+        }
+        return price;
     }
 
     @Override

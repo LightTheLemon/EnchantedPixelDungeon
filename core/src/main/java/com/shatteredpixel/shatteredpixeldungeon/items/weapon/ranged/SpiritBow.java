@@ -144,7 +144,7 @@ public class SpiritBow extends RangedWeapon {
 	@Override
 	public int max(int lvl) {
 		int dmg = 2 * (6 + (int)(Dungeon.hero.lvl/3f))
-				+ RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
+				+ Math.round(1.5f*RingOfSharpshooting.levelDamageBonus(Dungeon.hero))
 				+ (curseInfusionBonus ? 2 + Dungeon.hero.lvl/15 : 0);
 		return Math.max(0, dmg);
 	}

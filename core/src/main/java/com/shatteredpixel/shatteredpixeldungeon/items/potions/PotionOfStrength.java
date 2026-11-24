@@ -154,6 +154,7 @@ public class PotionOfStrength extends Potion {
 
 				Sample.INSTANCE.play( Assets.Sounds.DRINK );
 				curUser.sprite.operate(curUser.pos);
+				curUser.spendAndNext(1f);
 
 				if (!identifiedByUse) {
 					curItem.detach(curUser.belongings.backpack);
