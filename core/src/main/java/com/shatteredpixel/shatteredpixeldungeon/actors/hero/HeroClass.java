@@ -240,10 +240,6 @@ public enum HeroClass {
 //		HailMary hail = new HailMary();
 //		hail.collect();
 
-//		ScrollOfUpgrade upgrade = new ScrollOfUpgrade();
-//		upgrade.quantity(100);
-//		upgrade.collect();
-
 //		ScrollOfDivination div = new ScrollOfDivination();
 //		div.quantity(100);
 //		div.collect();
