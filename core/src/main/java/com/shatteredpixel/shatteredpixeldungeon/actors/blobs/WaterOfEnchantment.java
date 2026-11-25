@@ -57,21 +57,17 @@ public class WaterOfEnchantment extends WellWater {
 		//here's the logic for all worn equipment
 		Weapon weapon = (Weapon) hero.belongings.weapon();
 		if (weapon != null) {
-			if (!weapon.hasGoodEnchant() && !weapon.hasCurseEnchant()) {
-				weapon.enchant();
-			}
-			if (weapon.hasCurseEnchant()) {
-				hero.belongings.uncurseEquipped();
-			}
+
+			if (!weapon.hasCurseEnchant()) weapon.enchant();
+			else hero.belongings.weapon.cursed = false;
+
 		}
 		Armor armor = (Armor) hero.belongings.armor();
 		if (armor != null) {
-			if (!armor.hasGoodGlyph() && !armor.hasCurseGlyph()) {
-				armor.inscribe();
-			}
-			if (armor.hasCurseGlyph()) {
-				hero.belongings.uncurseEquipped();
-			}
+
+			if (!armor.hasCurseGlyph()) armor.inscribe();
+			else hero.belongings.armor.cursed = false;
+
 		}
 		Item ring = hero.belongings.ring();
 		if (ring != null) {

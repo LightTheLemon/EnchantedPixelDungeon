@@ -91,7 +91,7 @@ public class AboutScene extends PixelScene {
 		if (landscape()){
 			shpx.setRect((w - fullWidth)/2f - 6, insets.top + 56, 120, 0);
 		} else {
-			shpx.setRect((w - fullWidth)/2f, insets.top + 65, 120, 0);
+			shpx.setRect((w - fullWidth)/2f, insets.top + 48, 120, 0);
 		}
 		content.add(shpx);
 

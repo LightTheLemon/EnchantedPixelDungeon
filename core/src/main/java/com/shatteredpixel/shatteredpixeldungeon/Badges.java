@@ -74,6 +74,7 @@ public class Badges {
 		FOUND_RATMOGRIFY,
 
 		//bronze
+		UNLOCK_WARRIOR              ( 0 ),
 		UNLOCK_MAGE                 ( 1 ),
 		UNLOCK_ROGUE                ( 2 ),
 		UNLOCK_HUNTRESS             ( 3 ),
@@ -963,7 +964,34 @@ public class Badges {
 	public static void validateRatmogrify(){
 		unlock(Badge.FOUND_RATMOGRIFY);
 	}
-	
+
+	public static void validateClassUnlock(){
+		switch (Dungeon.hero.heroClass) {
+			case WARRIOR:
+				validateWarriorUnlock();
+				break;
+			case MAGE:
+				validateMageUnlock();
+				break;
+			case ROGUE:
+				validateRogueUnlock();
+				break;
+			case HUNTRESS:
+				validateHuntressUnlock();
+				break;
+			case DUELIST:
+				validateDuelistUnlock();
+				break;
+			case CLERIC:
+				validateClericUnlock();
+				break;
+		}
+	}
+	public static void validateWarriorUnlock(){
+		if (Statistics.foodEaten >= 20 && !isUnlocked(Badge.UNLOCK_WARRIOR)){
+			displayBadge( Badge.UNLOCK_WARRIOR );
+		}
+	}
 	public static void validateMageUnlock(){
 		if (Statistics.upgradesUsed >= 1 && !isUnlocked(Badge.UNLOCK_MAGE)){
 			displayBadge( Badge.UNLOCK_MAGE );

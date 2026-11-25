@@ -391,11 +391,11 @@ public enum HeroClass {
 	
 	public boolean isUnlocked(){
 		//always unlock on debug builds
-		if (DeviceCompat.isDebug()) return true;
+		if (DeviceCompat.isDebug() || SPDSettings.intro()) return true;
 
 		switch (this){
-			case WARRIOR: default:
-				return true;
+			case WARRIOR:
+				return Badges.isUnlocked(Badges.Badge.UNLOCK_WARRIOR);
 			case MAGE:
 				return Badges.isUnlocked(Badges.Badge.UNLOCK_MAGE);
 			case ROGUE:
@@ -404,7 +404,7 @@ public enum HeroClass {
 				return Badges.isUnlocked(Badges.Badge.UNLOCK_HUNTRESS);
 			case DUELIST:
 				return Badges.isUnlocked(Badges.Badge.UNLOCK_DUELIST);
-			case CLERIC:
+			case CLERIC: default:
 				return Badges.isUnlocked(Badges.Badge.UNLOCK_CLERIC);
 		}
 	}

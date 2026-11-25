@@ -131,7 +131,7 @@ public class UnstableBrew extends Brew {
 			inputs =  new Class[]{EmptyBottle.class};
 			inQuantity = new int[]{1};
 
-			cost = 3;
+			cost = 4;
 
 			//Could produce aqua brews instead?
 			output = UnstableBrew.class;

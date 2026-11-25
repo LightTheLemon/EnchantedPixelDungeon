@@ -211,11 +211,12 @@ public class SewerLevel extends RegularLevel {
 
 	@Override
 	public void destroy(int pos) {
-		//if we're burning barrels
 		int terr = map[pos];
 		if (terr == Terrain.REGION_DECO || terr == Terrain.REGION_DECO_ALT){
 
-			int lootTable = Random.chances(new float[]{1, 2, 2, 3, 1, 1, 5, 1, 13, 1, 1});
+			//Bombs and empty barrels are more common on higher difficulty
+			float dm = Dungeon.difficulty / 4f + 0.75f;
+			int lootTable = Random.chances(new float[]{1, 2, 2, 3, 1, 1, 5 * dm, 1, 10 * dm, 1, 1});
 
 			switch (lootTable) {
 				case 0:

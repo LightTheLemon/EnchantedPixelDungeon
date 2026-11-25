@@ -85,7 +85,7 @@ public class Monk extends Mob {
 	protected boolean act() {
 		boolean result = super.act();
 		if (buff(Focus.class) == null && state == HUNTING && focusCooldown <= 0) {
-			Buff.affect( this, Focus.class, 10 );
+			Buff.affect( this, Focus.class, 6 );
 		}
 		return result;
 	}
@@ -98,9 +98,9 @@ public class Monk extends Mob {
 	
 	@Override
 	public void move( int step, boolean travelling) {
-		// moving reduces cooldown by an additional 0.67, giving a total reduction of 1.67f.
-		// basically monks will become focused notably faster if you kite them.
-		if (travelling) focusCooldown -= 0.67f;
+		// total reduction of 2 per turn.
+		// so monks will become focused notably faster if you kite them.
+		if (travelling) focusCooldown -= 1f;
 		super.move( step, travelling);
 	}
 	
@@ -122,7 +122,7 @@ public class Monk extends Mob {
 			if (sprite != null && sprite.visible) {
 				Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
 			}
-			focusCooldown = 7;
+			focusCooldown = 10;
 			return Messages.get(this, "parried");
 		}
 	}
@@ -141,8 +141,8 @@ public class Monk extends Mob {
 		focusCooldown = bundle.getInt( FOCUS_COOLDOWN );
 	}
 
-	public class Focus extends FlavourBuff {
-		
+	public static class Focus extends FlavourBuff {
+
 		{
 			type = buffType.POSITIVE;
 			announced = true;
@@ -160,7 +160,7 @@ public class Monk extends Mob {
 
 		@Override
 		public void detach() {
-			focusCooldown = 7;
+			((Monk)target).focusCooldown = 10;
 			super.detach();
 		}
 	}

@@ -160,7 +160,7 @@ public class SPDSettings extends GameSettings {
 	
 	public static void quickSwapper(boolean value ){ put( KEY_QUICK_SWAP, value ); }
 	
-	public static boolean quickSwapper(){ return getBoolean( KEY_QUICK_SWAP, true); }
+	public static boolean quickSwapper(){ return getBoolean( KEY_QUICK_SWAP, false); }
 	
 	public static void flipToolbar( boolean value) {
 		put(KEY_FLIPTOOLBAR, value );
@@ -235,7 +235,7 @@ public class SPDSettings extends GameSettings {
 	}
 	
 	public static boolean intro() {
-		return getBoolean( KEY_INTRO, true );
+		return getBoolean( KEY_INTRO, false );
 	}
 	
 	public static void lastClass( int value ) {

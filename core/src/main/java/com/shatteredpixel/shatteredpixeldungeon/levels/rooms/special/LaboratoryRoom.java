@@ -73,16 +73,17 @@ public class LaboratoryRoom extends SpecialRoom {
 		} while (
 				level.map[pos] != Terrain.EMPTY_SP ||
 						level.heaps.get( pos ) != null);
-		level.drop( new EnergyCrystal().quantity(3 + Random.Int(3)), pos );
 
+		int amt = Random.Int(3, (6 + Dungeon.depth / 5));
+
+		if (Random.Float() < 0.1f) level.drop( new EnergyCrystal().quantity(amt), pos );
 		Item ingredient = Random.Float() < 0.5f ? new EmptyBottle() : new BlankScroll();
-		int quantity = Random.Int(2, (5 + Dungeon.depth / 5));
 		do {
 			pos = level.pointToCell(random());
 		} while (
 				level.map[pos] != Terrain.EMPTY_SP ||
 						level.heaps.get( pos ) != null);
-		level.drop( ingredient.quantity(quantity), pos );
+		level.drop( ingredient.quantity(amt), pos );
 
 		int n = Random.NormalIntRange( 1, 2 );
 		for (int i=0; i < n; i++) {

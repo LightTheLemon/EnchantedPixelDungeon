@@ -437,7 +437,7 @@ public abstract class Scroll extends Item {
 					cost -= 2;
 				}
 				if (i instanceof ScrollOfUpgrade) {
-					cost += 6;
+					cost += 10;
 				} else if (i instanceof ScrollOfTransmutation) {
 					cost += 4;
 				}

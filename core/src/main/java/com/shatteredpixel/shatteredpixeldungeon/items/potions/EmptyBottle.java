@@ -72,5 +72,9 @@ public class EmptyBottle extends Item {
     public int value() {
         return 15 * quantity;
     }
+    @Override
+    public int energyVal() {
+        return 2 * quantity;
+    }
 
 }

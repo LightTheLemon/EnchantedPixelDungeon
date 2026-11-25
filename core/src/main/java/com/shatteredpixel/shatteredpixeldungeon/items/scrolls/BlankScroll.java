@@ -28,4 +28,9 @@ public class BlankScroll extends Item {
         return 15 * quantity;
     }
 
+    @Override
+    public int energyVal() {
+        return 2 * quantity;
+    }
+
 }

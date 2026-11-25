@@ -297,6 +297,8 @@ public class Dungeon {
 		choosePotions();
 		chooseScrolls();
 
+		//Badges.validateClassUnlock();
+
 		Actor.clear();
 		Actor.resetNextID();
 

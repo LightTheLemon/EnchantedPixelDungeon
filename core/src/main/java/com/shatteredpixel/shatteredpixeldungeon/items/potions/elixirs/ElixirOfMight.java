@@ -54,7 +54,7 @@ public class ElixirOfMight extends Elixir {
 		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.STRENGTH);
 		GLog.p( Messages.get(this, "msg", hero.STR()) );
 
-		Buff.affect(hero, AdrenalineSurge.class).reset(2, AdrenalineSurge.DURATION / 4);
+		Buff.affect(hero, AdrenalineSurge.class).reset(2, AdrenalineSurge.DURATION - 50);
 		hero.HP = Math.round(Math.min(hero.HT, hero.HP + hero.HT * 0.1f));
 
 		Badges.validateStrengthAttained();
@@ -68,7 +68,7 @@ public class ElixirOfMight extends Elixir {
 			inputs =  new Class[]{PotionOfStrength.class};
 			inQuantity = new int[]{1};
 			
-			cost = 10;
+			cost = 8;
 			
 			output = ElixirOfMight.class;
 			outQuantity = 1;
