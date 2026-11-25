@@ -6,6 +6,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -24,10 +25,16 @@ public class RingOfConservation extends Ring {
     public static void detachProc (Item item, int amount) {
         if (item == null) return;
 
-        if (!(item instanceof PotionOfStrength) || Random.Float() < 0.5)  {
+        if (!(item instanceof PotionOfStrength) || Random.Float() < 0.4)  {
             if (recycleProc()) {
                 //keep the item
             } else if (recycleCurseProc()) {
+
+                if (!item.isIdentified()) {
+                    item.identify();
+                    GLog.i(Messages.get(ScrollOfIdentify.class, "it_is", item.title()));
+                }
+
                 item.detach(Dungeon.hero.belongings.backpack);
                 item.detach(Dungeon.hero.belongings.backpack);
             } else {
@@ -46,9 +53,6 @@ public class RingOfConservation extends Ring {
     }
 
     public String statsInfo() {
-        //System.out.println("level: " + soloBuffedBonus());
-        //System.out.println("recycleChance: " + RingOfConservation.recycleChance(Dungeon.hero));
-        //System.out.println("cursedProc: " + RingOfConservation.curseChance(Dungeon.hero));
 
         if ( isIdentified() && !visiblyCursed() ){
             String info = Messages.get(this, "stats",

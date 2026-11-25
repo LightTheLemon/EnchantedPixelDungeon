@@ -586,19 +586,19 @@ public class Item implements Bundlable {
 		@Override
 		public Item brew(ArrayList<Item> ingredients) {
 
-			Item energizable = ingredients.get(0);
-			Dungeon.energy += energizable.energyVal();
+			Item e = ingredients.get(0);
+			Dungeon.energy += e.energyVal();
 			((AlchemyScene) ShatteredPixelDungeon.scene()).createEnergy();
 
-			energizable.quantity(energizable.quantity - 1 );
+			e.quantity(e.quantity - 1 );
 
-			if (!energizable.isIdentified()){
-				((AlchemyScene) ShatteredPixelDungeon.scene()).showIdentify(energizable);
+			if (!e.isIdentified()){
+				((AlchemyScene) ShatteredPixelDungeon.scene()).showIdentify(e);
 				//Gain a bonus when unidentified
 				Dungeon.energy += 2;
 			}
 
-			return new EnergyCrystal().quantity(energizable.energyVal());
+			return new EnergyCrystal().duplicate().quantity(e.energyVal());
 		}
 
 		@Override
@@ -637,7 +637,7 @@ public class Item implements Bundlable {
 		@Override
 		public Item brew(ArrayList<Item> ingredients) {
 			ingredients.get(0).identify();
-			return ingredients.get(0);
+			return ingredients.get(0).duplicate().quantity(0);
 		}
 
 		@Override

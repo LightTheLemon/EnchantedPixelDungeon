@@ -60,7 +60,6 @@ public class ScrollOfTeleportation extends Scroll {
 	@Override
 	public void doRead() {
 
-		//detach(curUser.belongings.backpack);
 		RingOfConservation.detachProc(curItem, 1);
 		Sample.INSTANCE.play( Assets.Sounds.READ );
 		

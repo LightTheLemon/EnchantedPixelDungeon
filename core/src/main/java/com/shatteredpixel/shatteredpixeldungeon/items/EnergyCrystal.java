@@ -50,6 +50,8 @@ public class EnergyCrystal extends Item {
 
 	@Override
 	public ArrayList<String> actions(Hero hero ) {
+		//To-do: remove crafting bug so we never get this in our inventory
+		ArrayList<String> actions = super.actions( hero );
 		return new ArrayList<>();
 	}
 

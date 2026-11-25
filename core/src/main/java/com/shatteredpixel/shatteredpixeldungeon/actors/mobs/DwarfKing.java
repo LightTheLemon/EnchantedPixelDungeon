@@ -24,7 +24,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -73,7 +72,6 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -82,7 +80,7 @@ public class DwarfKing extends Mob {
 	{
 		spriteClass = KingSprite.class;
 
-		HP = HT = Math.round(350 * Dungeon.bossDifficultyMultiplier());
+		HP = HT = Dungeon.difficulty > 1 ? 450 : 300;
 		EXP = 40;
 		defenseSkill = 22;
 
@@ -110,8 +108,8 @@ public class DwarfKing extends Mob {
 
 	private float summonCooldown = 0;
 	private float abilityCooldown = 0;
-	private final int MIN_COOLDOWN = Math.round(10 / Dungeon.bossDifficultyMultiplier());
-	private final int MAX_COOLDOWN = Math.round(13 / Dungeon.bossDifficultyMultiplier());
+	private final int MIN_COOLDOWN = Dungeon.difficulty > 1 ? 8 : 10;
+	private final int MAX_COOLDOWN = Dungeon.difficulty > 1 ? 10 : 14;
 
 	private int lastAbility = 0;
 	private static final int NONE = 0;
@@ -158,7 +156,7 @@ public class DwarfKing extends Mob {
 
 		if (phase == 1) {
 
-			if (summonCooldown <= 0 && summonSubject( Dungeon.difficulty > 2 ? 3 : 2 )){
+			if (summonCooldown <= 0 && summonSubject(Dungeon.difficulty > 1 ? 2 : 3)){
 				summonsMade++;
 				summonCooldown += Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 			} else if (summonCooldown > 0){
@@ -200,7 +198,7 @@ public class DwarfKing extends Mob {
 
 		} else if (phase == 2){
 
-			if (Dungeon.difficulty > 2){
+			if (Dungeon.difficulty > 1){
 				//challenge logic
 				if (summonsMade < 6){
 					if (summonsMade == 0) {
@@ -294,24 +292,14 @@ public class DwarfKing extends Mob {
 				}
 			}
 		} else if (phase == 3 && buffs(Summoning.class).size() < 4){
-			if (summonSubject(Dungeon.difficulty > 2 ? 2 : 3)) summonsMade++;
+			if (summonSubject(Dungeon.difficulty > 1 ? 2 : 3)) summonsMade++;
 		}
 
 		return super.act();
 	}
+
 	private boolean summonSubject( int delay ){
-		//every 3rd summon is always a monk or warlock, otherwise ghoul
-		//except every 9th summon, which is a golem!
-		if (summonsMade % 3 == 2) {
-			if (summonsMade % 9 == 8){
-				return summonSubject(delay, DKGolem.class);
-			} else {
-				return summonSubject(delay, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
-			}
-		} else {
-			return summonSubject(delay, DKGhoul.class);
-		}
-/*		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
+		if (Dungeon.difficulty > 1) {
 			//every 3rd summon is always a monk or warlock, otherwise ghoul
 			//except every 9th summon, which is a golem!
 			if (summonsMade % 3 == 2) {
@@ -331,7 +319,7 @@ public class DwarfKing extends Mob {
 			} else {
 				return summonSubject(delay, DKGhoul.class);
 			}
-		}*/
+		}
 	}
 
 	private boolean summonSubject( int delay, Class<?extends Mob> type ){
@@ -403,7 +391,7 @@ public class DwarfKing extends Mob {
 			if (Actor.findChar(targetCell) == null && !Dungeon.level.solid[targetCell]){
 				bestPos = targetCell;
 
-			//Otherwise go to the neighbour cell that's open and is furthest
+				//Otherwise go to the neighbour cell that's open and is furthest
 			} else {
 				bestDist = Dungeon.level.trueDistance(pos, enemy.pos);
 
@@ -467,12 +455,12 @@ public class DwarfKing extends Mob {
 		//hero counts as unarmed if they aren't attacking with a weapon and aren't benefiting from force
 		if (src == Dungeon.hero && (!RingOfForce.fightingUnarmed(Dungeon.hero) || Dungeon.hero.buff(RingOfForce.Force.class) != null)){
 			Statistics.qualifiedForBossChallengeBadge = false;
-		//Corrosion, corruption, and regrowth do no direct damage and so have their own custom logic
-		//Transfusion damages DK and so doesn't need custom logic
-		//Lightning has custom logic so that chaining it doesn't DQ for the badge
+			//Corrosion, corruption, and regrowth do no direct damage and so have their own custom logic
+			//Transfusion damages DK and so doesn't need custom logic
+			//Lightning has custom logic so that chaining it doesn't DQ for the badge
 		} else if (src instanceof Wand && !(src instanceof WandOfLightning)){
 			Statistics.qualifiedForBossChallengeBadge = false;
-		//Only damage-dealing spells from the Cleric
+			//Only damage-dealing spells from the Cleric
 		} else if (src instanceof ClericSpell){
 			Statistics.qualifiedForBossChallengeBadge = false;
 		}
@@ -494,15 +482,16 @@ public class DwarfKing extends Mob {
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			lock.addTime(dmg / (2 + Dungeon.difficulty) );
+			if (Dungeon.difficulty > 1)   lock.addTime(dmg/5f);
+			else                                                    lock.addTime(dmg/3f);
 		}
 
 		if (phase == 1) {
 			int dmgTaken = preHP - HP;
 			abilityCooldown -= dmgTaken/8f;
 			summonCooldown -= dmgTaken/8f;
-			if (HP <= Math.round(60 * Dungeon.bossDifficultyMultiplier()) ) {
-				HP = Math.round(60 * Dungeon.bossDifficultyMultiplier());
+			if (HP <= (Dungeon.difficulty > 1 ? 100 : 50)) {
+				HP = (Dungeon.difficulty > 1 ? 100 : 50);
 				sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 				ScrollOfTeleportation.appear(this, CityBossLevel.throne);
 				properties.add(Property.IMMOVABLE);
@@ -716,7 +705,11 @@ public class DwarfKing extends Mob {
 					Char ch = Actor.findChar(pos);
 					ch.damage(Random.NormalIntRange(20, 40), this);
 					if (((DwarfKing)target).phase == 2){
-						target.damage(target.HT / Math.round(12 * ( Math.max(0.3f, Dungeon.difficulty) * 2)), new KingDamager());
+						if (Dungeon.difficulty > 1){
+							target.damage(target.HT/18, new KingDamager());
+						} else {
+							target.damage(target.HT/12, new KingDamager());
+						}
 					}
 					if (!ch.isAlive() && ch == Dungeon.hero) {
 						Dungeon.fail(DwarfKing.class);
@@ -792,7 +785,7 @@ public class DwarfKing extends Mob {
 			super.detach();
 			for (Mob m : Dungeon.level.mobs){
 				if (m instanceof DwarfKing){
-					int damage = Math.round(m.HT / ( 12 + (Dungeon.difficulty * 2)));
+					int damage = m.HT / (Dungeon.difficulty > 1 ? 18 : 12);
 					m.damage(damage, this);
 				}
 			}

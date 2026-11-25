@@ -122,7 +122,7 @@ public class Monk extends Mob {
 			if (sprite != null && sprite.visible) {
 				Sample.INSTANCE.play(Assets.Sounds.HIT_PARRY, 1, Random.Float(0.96f, 1.05f));
 			}
-			focusCooldown = Random.NormalFloat( 6, 7 );
+			focusCooldown = 7;
 			return Messages.get(this, "parried");
 		}
 	}
@@ -141,7 +141,7 @@ public class Monk extends Mob {
 		focusCooldown = bundle.getInt( FOCUS_COOLDOWN );
 	}
 
-	public static class Focus extends FlavourBuff {
+	public class Focus extends FlavourBuff {
 		
 		{
 			type = buffType.POSITIVE;
@@ -156,6 +156,12 @@ public class Monk extends Mob {
 		@Override
 		public void tintIcon(Image icon) {
 			icon.hardlight(0.25f, 1.5f, 1f);
+		}
+
+		@Override
+		public void detach() {
+			focusCooldown = 7;
+			super.detach();
 		}
 	}
 }

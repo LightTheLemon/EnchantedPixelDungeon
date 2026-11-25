@@ -455,9 +455,9 @@ public class WndUpgrade extends Window {
 
 				if ( !force ) {
 
-					if ( Random.Float() < 0.5f && RingOfConservation.recycleProc() ) {
+					if ( Random.Float() < 0.4f && RingOfConservation.recycleProc() ) {
 
-					} else if ( Random.Float() < 0.5f && RingOfConservation.recycleCurseProc() ) {
+					} else if ( Random.Float() < 0.4f && RingOfConservation.recycleCurseProc() ) {
 
 						upgrader.detach(Dungeon.hero.belongings.backpack);
 						upgrader.detach(Dungeon.hero.belongings.backpack);
