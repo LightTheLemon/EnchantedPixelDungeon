@@ -260,6 +260,7 @@ public class Armor extends EquipableItem {
 			activate(hero);
 			Talent.onItemEquipped(hero, this);
 			hero.spend( timeToEquip( hero ) );
+			Badges.validateWarriorUnlock();
 
 			if (Dungeon.hero.heroClass == HeroClass.WARRIOR && checkSeal() == null){
 				BrokenSeal seal = oldArmor != null ? oldArmor.checkSeal() : null;

@@ -88,7 +88,7 @@ abstract public class RangedWeapon extends Weapon {
                 image = loadedTexture();
                 updateQuickslot();
                 Sample.INSTANCE.play(Assets.Sounds.UNLOCK);
-                hero.spendAndNext(1);
+                hero.spendAndNext(super.delayFactor(hero));
                 defaultAction = "SHOOT";
                 hero.sprite.operate(hero.pos);
             }
@@ -269,17 +269,17 @@ abstract public class RangedWeapon extends Weapon {
         }
     }
     @Override
-    public int min(int lvl) {
-        return  (tier / 2)  +                      //base
-                lvl;                         //level scaling
-    }
-    @Override
     public int max() {
         if (Dungeon.hero != null){
             return Math.max(0, max( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
         } else {
             return Math.max(0 , max( buffedLvl() ));
         }
+    }
+    @Override
+    public int min(int lvl) {
+        return  (tier / 2)  +                            //base
+                lvl;                                     //level scaling
     }
     @Override
     public int max(int lvl) {

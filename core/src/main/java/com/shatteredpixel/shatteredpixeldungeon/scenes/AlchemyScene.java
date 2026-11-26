@@ -763,6 +763,7 @@ public class AlchemyScene extends PixelScene {
 
 		Statistics.itemsCrafted++;
 		Badges.validateItemsCrafted();
+		Badges.validateMageUnlock();
 
 		saveNeeded = false;
 		try {

@@ -206,25 +206,22 @@ public enum HeroClass {
 
 		Dungeon.quickslot.setSlot(0, staff);
 
-		// TODO: remove these
+		if (DeviceCompat.isDebug()) {
+			ScrollOfUpgrade up = new ScrollOfUpgrade();
+			up.quantity(100);
+			up.identify().collect();
 
+			ScrollOfTeleportation tele = new ScrollOfTeleportation();
+			tele.quantity(100);
+			tele.identify().collect();
+
+
+		}
 //		Pickaxe pickaxe = new Pickaxe();
 //		pickaxe.collect();
 
 //		ScrollOfMetamorphosis meta = new ScrollOfMetamorphosis();
 //		meta.identify().collect();
-
-//		ExoticCrystals ex = new ExoticCrystals();
-//		ex.collect();
-//
-//		VialOfBlood vial = new VialOfBlood();
-//		vial.collect();
-//
-//		EmptyBottle bottle = new EmptyBottle();
-//		bottle.collect();
-//
-//		BlankScroll blank = new BlankScroll();
-//		blank.collect();
 
 //		RingOfMana mana = new RingOfMana();
 //		mana.identify().collect();
@@ -238,10 +235,6 @@ public enum HeroClass {
 
 //		HailMary hail = new HailMary();
 //		hail.collect();
-
-//		ScrollOfDivination div = new ScrollOfDivination();
-//		div.quantity(100);
-//		div.collect();
 
 //		UnstableSpellbook spellbook = new UnstableSpellbook();
 //		spellbook.collect();
@@ -374,7 +367,7 @@ public enum HeroClass {
 
 	public String splashArt(){
 		switch (this) {
-			case WARRIOR: default:
+			case WARRIOR:
 				return Assets.Splashes.WARRIOR;
 			case MAGE:
 				return Assets.Splashes.MAGE;
@@ -384,14 +377,14 @@ public enum HeroClass {
 				return Assets.Splashes.HUNTRESS;
 			case DUELIST:
 				return Assets.Splashes.DUELIST;
-			case CLERIC:
+			case CLERIC: default:
 				return Assets.Splashes.CLERIC;
 		}
 	}
 	
 	public boolean isUnlocked(){
-		//always unlock on debug builds
-		if (DeviceCompat.isDebug() || SPDSettings.intro()) return true;
+		//If all of the classes are locked, then you can select any of them to unlock with to start.
+		if ( DeviceCompat.isDebug() || (!Badges.isUnlocked(Badges.Badge.UNLOCK_WARRIOR) && !Badges.isUnlocked(Badges.Badge.UNLOCK_MAGE) && !Badges.isUnlocked(Badges.Badge.UNLOCK_ROGUE) && !Badges.isUnlocked(Badges.Badge.UNLOCK_HUNTRESS) && !Badges.isUnlocked(Badges.Badge.UNLOCK_DUELIST) && !Badges.isUnlocked(Badges.Badge.UNLOCK_CLERIC)) ) return true;
 
 		switch (this){
 			case WARRIOR:

@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
@@ -34,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.RemainsItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
@@ -566,8 +568,10 @@ public class Badges {
 			return;
 		}
 
-		if (item instanceof MeleeWeapon){
+		if (item instanceof Weapon){
 			validateDuelistUnlock();
+		} else if (item instanceof Armor){
+			validateWarriorUnlock();
 		}
 		
 		Badge badge = null;
@@ -965,55 +969,65 @@ public class Badges {
 		unlock(Badge.FOUND_RATMOGRIFY);
 	}
 
-	public static void validateClassUnlock(){
-		switch (Dungeon.hero.heroClass) {
+	public static void validateClassUnlock(HeroClass heroClass){
+		switch (heroClass) {
 			case WARRIOR:
-				validateWarriorUnlock();
+				unlock(Badge.UNLOCK_WARRIOR);
 				break;
 			case MAGE:
-				validateMageUnlock();
+				unlock(Badge.UNLOCK_MAGE);
 				break;
 			case ROGUE:
-				validateRogueUnlock();
+				unlock(Badge.UNLOCK_ROGUE);
 				break;
 			case HUNTRESS:
-				validateHuntressUnlock();
+				unlock(Badge.UNLOCK_HUNTRESS);
 				break;
 			case DUELIST:
-				validateDuelistUnlock();
+				unlock(Badge.UNLOCK_DUELIST);
 				break;
 			case CLERIC:
-				validateClericUnlock();
+				unlock(Badge.UNLOCK_CLERIC);
 				break;
 		}
 	}
 	public static void validateWarriorUnlock(){
-		if (Statistics.foodEaten >= 20 && !isUnlocked(Badge.UNLOCK_WARRIOR)){
-			displayBadge( Badge.UNLOCK_WARRIOR );
+		if (!isUnlocked(Badge.UNLOCK_WARRIOR) && Dungeon.hero != null
+				&& (Dungeon.hero.belongings.armor).tier >= 3
+				&& (Dungeon.hero.belongings.armor).STRReq() <= Dungeon.hero.STR()){
+
+			if (Dungeon.hero.belongings.armor.isIdentified() &&
+					(Dungeon.hero.belongings.armor).STRReq() <= Dungeon.hero.STR()) {
+				displayBadge(Badge.UNLOCK_WARRIOR);
+
+			} else if (!Dungeon.hero.belongings.armor.isIdentified() &&
+					(Dungeon.hero.belongings.armor).STRReq(0) <= Dungeon.hero.STR()){
+				displayBadge(Badge.UNLOCK_WARRIOR);
+			}
 		}
 	}
 	public static void validateMageUnlock(){
-		if (Statistics.upgradesUsed >= 1 && !isUnlocked(Badge.UNLOCK_MAGE)){
+		if (Statistics.itemsCrafted >= 1 && !isUnlocked(Badge.UNLOCK_MAGE)){
 			displayBadge( Badge.UNLOCK_MAGE );
 		}
 	}
 	
 	public static void validateRogueUnlock(){
-		if (Statistics.sneakAttacks >= 10 && !isUnlocked(Badge.UNLOCK_ROGUE)){
+		if (Statistics.sneakAttacks >= 25 && !isUnlocked(Badge.UNLOCK_ROGUE)){
 			displayBadge( Badge.UNLOCK_ROGUE );
 		}
 	}
 	
 	public static void validateHuntressUnlock(){
-		if (Statistics.thrownAttacks >= 10 && !isUnlocked(Badge.UNLOCK_HUNTRESS)){
+		if (Statistics.thrownAttacks >= 25 && !isUnlocked(Badge.UNLOCK_HUNTRESS)){
 			displayBadge( Badge.UNLOCK_HUNTRESS );
 		}
 	}
 
 	public static void validateDuelistUnlock(){
 		if (!isUnlocked(Badge.UNLOCK_DUELIST) && Dungeon.hero != null
-				&& Dungeon.hero.belongings.weapon instanceof MeleeWeapon
-				&& ((MeleeWeapon) Dungeon.hero.belongings.weapon).tier >= 2
+				&& Dungeon.hero.belongings.weapon instanceof Weapon
+				&& ((MeleeWeapon) Dungeon.hero.belongings.weapon).tier >= 3
 				&& ((MeleeWeapon) Dungeon.hero.belongings.weapon).STRReq() <= Dungeon.hero.STR()){
 
 			if (Dungeon.hero.belongings.weapon.isIdentified() &&

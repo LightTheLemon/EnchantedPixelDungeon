@@ -118,15 +118,15 @@ public class Blacksmith extends NPC {
 
 							Quest.given = true;
 							Quest.completed = false;
-							Item pick = Quest.pickaxe != null ? Quest.pickaxe : new Pickaxe();
-                            if (Random.Float() < 0.20f) {
-                                if (pick.doPickUp( Dungeon.hero )) {
-                                    GLog.i( Messages.capitalize(Messages.get(Dungeon.hero, "you_now_have", pick.name()) ));
-                                } else {
-                                    Dungeon.level.drop( pick, Dungeon.hero.pos ).sprite.drop();
-                                }
-                                Quest.pickaxe = null;
-                            }
+							//Item pick = Quest.pickaxe != null ? Quest.pickaxe : new Pickaxe();
+//                            if (Random.Float() < 0.20f) {
+//                                if (pick.doPickUp( Dungeon.hero )) {
+//                                    GLog.i( Messages.capitalize(Messages.get(Dungeon.hero, "you_now_have", pick.name()) ));
+//                                } else {
+//                                    Dungeon.level.drop( pick, Dungeon.hero.pos ).sprite.drop();
+//                                }
+//                                Quest.pickaxe = null;
+//                            }
 
                             if (msg2Final != ""){
 								GameScene.show(new WndQuest(Blacksmith.this, msg2Final));
@@ -260,7 +260,6 @@ public class Blacksmith extends NPC {
 
 		private static final String FAVOR	    = "favor";
 		private static final String PICKAXE	    = "pickaxe";
-		private static final String FREE_PICKAXE= "free_pickaxe";
 		private static final String REFORGES	= "reforges";
 		private static final String HARDENS	    = "hardens";
 		private static final String UPGRADES	= "upgrades";
@@ -460,9 +459,6 @@ public class Blacksmith extends NPC {
 
 			Statistics.questScores[2] += favor;
 
-//			if (favor >= 2500){
-//				freePickaxe = true;
-//			}
 		}
 
 		public static boolean rewardsAvailable(){

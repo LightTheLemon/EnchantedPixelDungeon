@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -79,7 +80,7 @@ public class Ankh extends Item {
 				GLog.p( Messages.get(this, "bless") );
 				hero.spend( 1f );
 				hero.busy();
-
+				Badges.validateClericUnlock();
 
 				Sample.INSTANCE.play( Assets.Sounds.DRINK );
 				CellEmitter.get(hero.pos).start(Speck.factory(Speck.LIGHT), 0.2f, 3);

@@ -59,6 +59,8 @@ public class ElixirOfMight extends Elixir {
 
 		Badges.validateStrengthAttained();
 		Badges.validateDuelistUnlock();
+		Badges.validateWarriorUnlock();
+
 	}
 
 	

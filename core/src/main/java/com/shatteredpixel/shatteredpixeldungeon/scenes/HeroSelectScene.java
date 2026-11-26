@@ -882,14 +882,14 @@ public class HeroSelectScene extends PixelScene {
 				@Override
 				protected void onClick() {
 
-//					if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
-//						ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage(
-//								Icons.get(Icons.CHALLENGE_GREY),
-//								Messages.get(WndDifficulty.class, "title"),
-//								Messages.get(HeroSelectScene.class, "difficulty_nowin")
-//						));
-//						return;
-//					}
+					if (!Badges.isUnlocked(Badges.Badge.BOSS_SLAIN_2) && !DeviceCompat.isDebug()){
+						ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage(
+								Icons.get(Icons.CHALLENGE_GREY),
+								Messages.get(WndDifficulty.class, "title"),
+								Messages.get(HeroSelectScene.class, "difficulty_locked")
+						));
+						return;
+					}
 
 					ShatteredPixelDungeon.scene().addToFront(new WndDifficulty( SPDSettings.difficulty(), true ) {
 						public void onBackPressed() {

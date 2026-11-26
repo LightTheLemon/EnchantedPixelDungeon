@@ -216,7 +216,7 @@ public class SewerLevel extends RegularLevel {
 
 			//Bombs and empty barrels are more common on higher difficulty
 			float dm = Dungeon.difficulty / 4f + 0.75f;
-			int lootTable = Random.chances(new float[]{1, 2, 2, 3, 1, 1, 5 * dm, 1, 10 * dm, 1, 1});
+			int lootTable = Random.chances(new float[]{1, 2, 2, 3, 1, 1, 5 * dm, 3, 10 * dm, 1, 1});
 
 			switch (lootTable) {
 				case 0:
@@ -259,7 +259,7 @@ public class SewerLevel extends RegularLevel {
 					break;
 				case 7:
 					set(pos, Terrain.WATER);
-					Dungeon.level.drop( new AquaBrew().quantity(Random.Int(1,4)), pos).sprite.drop(pos);
+					Dungeon.level.drop( new AquaBrew().quantity(Random.Int(1,3)), pos).sprite.drop(pos);
 					Splash.at(pos, 0xFF507B5D, 5);
 					break;
 				case 8:

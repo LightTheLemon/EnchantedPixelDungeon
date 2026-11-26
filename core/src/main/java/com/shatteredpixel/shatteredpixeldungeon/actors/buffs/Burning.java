@@ -102,10 +102,10 @@ public class Burning extends Buff implements Hero.Doom, Buff.DOTbuff {
 
 			acted = true;
 			if (nextHit == 0){
-				nextHit = Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 );
+				nextHit = Random.NormalIntRange( 1, 2 + Dungeon.scalingDepth()/4 );
 			}
 			int damage = nextHit;
-			nextHit = Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 );
+			nextHit = Random.NormalIntRange( 1, 2 + Dungeon.scalingDepth()/4 );
 			Buff.detach( target, Chill.class);
 
 			if (target instanceof Hero

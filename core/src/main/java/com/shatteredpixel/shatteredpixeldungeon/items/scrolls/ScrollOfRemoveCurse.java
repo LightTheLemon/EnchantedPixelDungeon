@@ -160,8 +160,6 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 				hero.updateHT(false); //for ring of vitality
 				updateQuickslot();
 			}
-
-			Badges.validateClericUnlock();
 		}
 		
 		return proceed;
