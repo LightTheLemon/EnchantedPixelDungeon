@@ -206,52 +206,6 @@ public enum HeroClass {
 
 		Dungeon.quickslot.setSlot(0, staff);
 
-		if (DeviceCompat.isDebug()) {
-			ScrollOfUpgrade up = new ScrollOfUpgrade();
-			up.quantity(100);
-			up.identify().collect();
-
-			ScrollOfTeleportation tele = new ScrollOfTeleportation();
-			tele.quantity(100);
-			tele.identify().collect();
-
-
-		}
-//		Pickaxe pickaxe = new Pickaxe();
-//		pickaxe.collect();
-
-//		ScrollOfMetamorphosis meta = new ScrollOfMetamorphosis();
-//		meta.identify().collect();
-
-//		RingOfMana mana = new RingOfMana();
-//		mana.identify().collect();
-
-//		CurseInfusion curse = new CurseInfusion();
-//		curse.quantity(10);
-//		curse.collect();
-
-//		DriedRose rose = new DriedRose();
-//		rose.identify().collect();
-
-//		HailMary hail = new HailMary();
-//		hail.collect();
-
-//		UnstableSpellbook spellbook = new UnstableSpellbook();
-//		spellbook.collect();
-
-//		CapeOfThorns cape = new CapeOfThorns();
-//		cape.collect();
-
-//		WandOfCharm charm = new WandOfCharm();
-//		charm.identify().collect();
-
-//		PhantomStopwatch watch = new PhantomStopwatch();
-//		watch.identify().collect();
-
-//		TimekeepersHourglass time = new TimekeepersHourglass();
-//		time.identify().collect();
-//		time.cursed = true;
-
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
 	}

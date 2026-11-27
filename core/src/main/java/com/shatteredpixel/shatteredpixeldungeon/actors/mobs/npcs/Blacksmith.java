@@ -51,12 +51,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Blacksmith extends NPC {
-	
+
 	{
 		spriteClass = BlacksmithSprite.class;
 
 		properties.add(Property.IMMOVABLE);
 	}
+	private boolean shownRewards = false;
 
 	@Override
 	public Notes.Landmark landmark() {
@@ -147,7 +148,8 @@ public class Blacksmith extends NPC {
 			}
 			tell(msg);
 
-		} else if (Quest.rewardsAvailable()) {
+		} else if (Quest.rewardsAvailable() && !shownRewards) {
+			if (Quest.favor == 0) shownRewards = true;
 
 			Game.runOnRenderThread(new Callback() {
 				@Override

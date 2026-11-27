@@ -72,9 +72,9 @@ public class ScrollOfPsionicBlast extends Scroll {
 		}
 
 		//Lowers with the number of targets and as well as percentage of remaining health
-		curUser.damage(Math.max(0, Math.round(curUser.HT*(0.5f)
-				* (float)Math.pow(0.85, targets.size())
-				* (curUser.HP + (float) curUser.HT / 2) / curUser.HT)), this);
+		curUser.damage(Math.max(1, Math.round(curUser.HT*(0.50f)
+				* (float)Math.pow(0.95, targets.size())
+				* 0.5f * (curUser.HP / curUser.HT) + 0.5f) ), this);
 		if (curUser.isAlive()) {
 			Buff.prolong(curUser, Blindness.class, Blindness.DURATION);
 			Buff.prolong(curUser, Weakness.class, Weakness.DURATION);
