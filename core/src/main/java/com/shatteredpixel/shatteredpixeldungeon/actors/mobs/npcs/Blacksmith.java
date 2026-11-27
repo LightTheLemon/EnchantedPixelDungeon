@@ -462,8 +462,7 @@ public class Blacksmith extends NPC {
 		}
 
 		public static boolean rewardsAvailable(){
-			return favor > 0
-					|| (Quest.smithRewards != null && Quest.smiths > 0);
+			return favor > 0 || Quest.smithRewards != null;
 		}
 
 	}

@@ -125,10 +125,10 @@ public class Item implements Bundlable {
 	
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = new ArrayList<>();
-		actions.add( AC_THROW );
 		if (quantity > 1) {
 			actions.add( AC_DROP_ALL );
 		}
+		actions.add( AC_THROW );
 		return actions;
 	}
 

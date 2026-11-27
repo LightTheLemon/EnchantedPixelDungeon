@@ -50,7 +50,7 @@ public class HailMary extends Trinket {
         if (level == -1){
             return 1;
         } else {
-            return 1.04f + 0.04f*level;
+            return 1.03f + 0.03f*level;
         }
     }
 
